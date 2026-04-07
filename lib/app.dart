@@ -24,8 +24,8 @@ class App extends ConsumerWidget {
         routerConfig: router,
         theme: AppTheme.light(),
         darkTheme: AppTheme.dark(),
-        // themeMode: themeMode,
-        themeMode: ThemeMode.light,
+        themeMode: themeMode,
+        // themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
         localizationsDelegates: [
           S.delegate,

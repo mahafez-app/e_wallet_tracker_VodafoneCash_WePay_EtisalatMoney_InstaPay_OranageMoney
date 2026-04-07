@@ -65,7 +65,8 @@ abstract final class AppColors {
   static const Color outline = Color(0xFF64748B);
   static const Color outlineVariant = Color(0xFFCBD5E1);
 
-  static const Color inverseSurface = Color(0xFF1E293B);
+  // Updated to Slate 900 (0xFF0F172A) for a deeper, more modern dark background
+  static const Color inverseSurface = Color(0xFF0F172A);
   static const Color onInverseSurface = Color(0xFFE2E8F0);
   static const Color inversePrimary = Color(0xFF93C5FD);
   static const Color surfaceTint = Color(0xFF3B82F6);

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>467978053763-7eodibhj5n58oaedudmmq48uv6r4l7s8.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.467978053763-7eodibhj5n58oaedudmmq48uv6r4l7s8</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCEcJReAfMO9JejZzRRJgTbtMKq49ApTZ8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>467978053763</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.walletTracker</string>
+	<key>PROJECT_ID</key>
+	<string>wallet-tracker-radyhaggag</string>
+	<key>STORAGE_BUCKET</key>
+	<string>wallet-tracker-radyhaggag.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:467978053763:ios:dae8db17a3b8172b5dd3b6</string>
+</dict>
+</plist>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "467978053763",
+    "project_id": "wallet-tracker-radyhaggag",
+    "storage_bucket": "wallet-tracker-radyhaggag.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467978053763:android:e4863e0e095e4fc75dd3b6",
+        "android_client_info": {
+          "package_name": "com.example.wallet_tracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaCIVvmOsJ3riqbe_J5GJjYhIIaBFZPco"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

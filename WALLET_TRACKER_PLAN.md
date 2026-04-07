@@ -35,17 +35,11 @@ When adding any new user-facing string, follow these rules:
 
 ## 🧭 Overview
 
-A shared e-wallet transaction tracker. Multiple Android devices each listen to incoming SMS from Vodafone Cash and InstaPay, parse transactions automatically, and sync them in real-time to a shared Firebase backend. All family members — including iOS users — see all transactions, can mark received ones as paid/unpaid, add notes, and review full status history.
+A shared e-wallet transaction tracker for businesses. Multiple Android devices each listen to incoming SMS from Vodafone Cash and InstaPay, parse transactions automatically, and sync them in real-time to a shared Firebase backend. All team members — including iOS users — see all transactions, can mark received ones as paid/unpaid, add notes, and review full status history.
 
 New required view: users can see all registered wallets (phone numbers/providers) with each wallet's latest known balance, and drill into all transactions linked to that wallet/provider/number.
 
 ---
-
-## 🧩 SpecKit Development Phases
-
-This plan is phase-based only (no time estimates). Each phase should be
-implemented, reviewed, and accepted before moving to the next.
-
 ### Phase 0 — Foundation & Project Bootstrap
 Goal: prepare stable architecture and tooling baseline before feature work.
 

@@ -4,20 +4,32 @@
 
 ---
 
-## 🏷️ App Name Candidates
-Choose one before generation starts — hardcode nothing until decided:
+## 🏷️ Final App Naming
 
-| Name | Arabic | Meaning |
-|------|--------|---------|
-| **Raseed** | رصيد | Balance — direct, everyone knows this word |
-| **Hawel** | حوّل | Transfer — action-based |
-| **Masraf** | مصرف | Wallet/bank — familiar |
-| **Fulus** | فلوس | Money — casual, friendly |
-| **Tahweel** | تحويل | Transfer — formal |
+| Locale | App Name |
+|--------|----------|
+| English (`en`) | **Mahafez** |
+| Arabic (`ar`)  | **محافظ** |
 
-> Recommendation: **Raseed (رصيد)** — universally understood, short, works in both Arabic and English contexts.
+All branding and user-facing naming must use this mapping only.
+No fallback to "Wallet Tracker" or other temporary names.
 
-The app name, package ID, and all branding strings must reference the chosen name. Zero hardcoded fallbacks to "family" or "wallet tracker".
+## 🌐 Localization String Rules
+
+When adding any new user-facing string, follow these rules:
+
+1. Add the key to both `lib/l10n/intl_en.arb` and `lib/l10n/intl_ar.arb`
+  in the same change.
+2. Never hardcode user-facing text in widgets, providers, or domain/data code.
+  Use `S.of(context).<key>` (or `S.current.<key>` only when no context exists).
+3. If a key has placeholders, keep placeholder names/types consistent across
+  locales and define metadata (`@key.placeholders`) in both ARB files.
+4. Keep messages semantic and translation-ready; avoid embedding business logic
+  in strings.
+5. Regenerate localization outputs after ARB updates and keep generated files
+  committed.
+6. Preserve RTL quality for Arabic: concise wording, natural punctuation, and
+  no forced LTR formatting in localized copy.
 
 ---
 
@@ -29,52 +41,143 @@ New required view: users can see all registered wallets (phone numbers/providers
 
 ---
 
-## 🏗️ Architecture
+## 🧩 SpecKit Development Phases
 
-### Pattern
-- Clean Architecture, feature-based folder structure
-- Riverpod (`@riverpod` code generation) for all state — no business logic in widgets
-- Repository pattern with abstract interfaces
-- All UI strings in ARB files — zero hardcoded text anywhere
-- All colors via `AppColors` constants or `Theme.of(context)` — zero hardcoded hex in widgets
-- All spacing/sizing via `AppSizes` constants — zero hardcoded numbers in widgets
+This plan is phase-based only (no time estimates). Each phase should be
+implemented, reviewed, and accepted before moving to the next.
 
-### Folder Structure
-```
-lib/
-├── core/
-│   ├── constants/        # AppColors, AppSizes, AmountTier enum
-│   ├── extensions/       # DateTime, String, double
-│   ├── theme/            # AppTheme light/dark
-│   ├── sms/
-│   │   ├── sms_format.dart              # Abstract SmsFormat interface
-│   │   ├── sms_parser_registry.dart     # Registry — add/remove formats here
-│   │   └── formats/
-│   │       ├── vf_cash_arabic_received.dart
-│   │       ├── vf_cash_arabic_sent.dart
-│   │       ├── vf_cash_english.dart     # handles both directions
-│   │       ├── instapay_arabic_received.dart
-│   │       └── instapay_arabic_sent.dart
-│   ├── utils/            # ArabicNumeralNormalizer, DateGrouper, SmsDeepLink
-│   └── widgets/          # AmountBadge, SourceBadge, EmptyState, etc.
-├── features/
-│   ├── auth/
-│   │   ├── data/
-│   │   ├── domain/
-│   │   └── presentation/
-│   ├── transactions/
-│   │   ├── data/
-│   │   ├── domain/
-│   │   └── presentation/
-│   └── settings/
-│       ├── data/
-│       ├── domain/
-│       └── presentation/
-├── l10n/
-│   ├── app_ar.arb
-│   └── app_en.arb
-└── main.dart
-```
+### Phase 0 — Foundation & Project Bootstrap
+Goal: prepare stable architecture and tooling baseline before feature work.
+
+Scope:
+- Create clean architecture folders and core modules
+- Configure localization (`ar`, `en`) and RTL/LTR support
+- Configure theme system (system/light/dark)
+- Configure Firebase project integration in app
+- Configure static analysis, formatting, test scaffolding
+
+Exit criteria:
+- App boots on Android and iOS
+- `flutter analyze` passes with zero issues
+- Base router, theme, localization, and provider wiring are working
+
+### Phase 1 — Authentication & User Profile Seed
+Goal: enable secure sign-in and complete user profile identity fields.
+
+Scope:
+- Google Sign-In
+- Email/Password Sign-In + Sign-Up
+- Name confirmation step (`nameConfirmed` flow)
+- Persist user profile in `users/{uid}`
+
+Exit criteria:
+- Auth session persists across app restarts
+- First login always completes name confirmation
+- `users/{uid}` doc is created/updated correctly
+
+### Phase 2 — SMS Ingestion Pipeline (Android)
+Goal: capture incoming SMS transactions and push normalized records.
+
+Scope:
+- SMS listener using `another_telephony` (Android only)
+- Parser registry + pluggable format handlers
+- Arabic numeral normalization
+- Deduplication strategy via transaction document IDs
+- Unrecognized SMS logging to `sms_unrecognized`
+
+Exit criteria:
+- Supported SMS samples produce valid transactions
+- Duplicate SMS does not create duplicate transaction docs
+- iOS builds compile with no telephony references
+
+### Phase 3 — Transaction Storage, Sync, and Query Readiness
+Goal: ensure Firestore model supports real-time views and scaling.
+
+Scope:
+- Finalize `transactions/{id}` shape
+- Configure offline persistence behavior and validation
+- Add required Firestore indexes for wallet/provider/date filters
+- Validate security rules for read/create/update restrictions
+
+Exit criteria:
+- Offline write then reconnect sync works correctly
+- Transaction queries used by UI are indexed and stable
+- Rules allow intended operations and block forbidden ones
+
+### Phase 4 — Core Transactions Experience
+Goal: deliver Received/Sent tabs with operational workflows.
+
+Scope:
+- Received tab real-time stream + date grouping
+- Sent tab real-time stream + read-only behavior
+- Transaction cards (amount tier, source badge, wallet metadata)
+- Status change interactions (paid/unpaid + undo)
+- Detail bottom sheet sections (header, parties, status, history, notes, SMS deep link)
+
+Exit criteria:
+- Received/Sent flows are fully usable end-to-end
+- Status history and notes are persisted correctly
+- UI renders localized strings and proper RTL/LTR behavior
+
+### Phase 5 — Wallets Feature (New)
+Goal: provide wallet-level monitoring and wallet-scoped transaction exploration.
+
+Scope:
+- Wallets tab in bottom navigation
+- Wallet summary cards: wallet number, provider, latest known balance,
+  last operation date, transaction count
+- Wallet Transaction Explorer screen
+- Filtering by provider and direction inside wallet explorer
+
+Exit criteria:
+- All registered wallets appear from transaction-derived grouping
+- Each wallet displays latest known balance from latest balance-bearing SMS
+- Tapping wallet opens full wallet-linked transaction list
+
+### Phase 6 — Settings, Preferences, and Cross-Device Consistency
+Goal: finish user controls and persistence behavior.
+
+Scope:
+- Edit display name
+- Edit wallet number (Android) / iOS info state
+- Language and theme pickers
+- Preference persistence in local storage and Firestore
+- Sign-out flow
+
+Exit criteria:
+- Preference changes apply immediately and survive restart/reinstall
+- Profile updates reflect in both Firebase Auth and Firestore
+
+### Phase 7 — Quality Hardening & Release Readiness
+Goal: ship confidence with tests, performance checks, and regression safety.
+
+Scope:
+- Unit tests for use cases and repositories
+- Provider tests for success/failure paths
+- Parser fixture tests for all supported SMS formats
+- Manual verification matrix (Android SMS paths + iOS read-only paths)
+
+Exit criteria:
+- `flutter analyze` zero issues
+- Test suite passes
+- Security rules and key user journeys verified end-to-end
+
+### Phase Dependency Order
+1. Phase 0 -> Phase 1 -> Phase 2 -> Phase 3 -> Phase 4 -> Phase 5 ->
+   Phase 6 -> Phase 7
+2. Phase 5 depends on Phase 3 and Phase 4 data/query outputs.
+3. No phase is marked done unless its exit criteria are satisfied.
+
+---
+
+## 🏗️ Technical Governance Source
+
+Architecture, layering, state management, routing, theming, UI, serialization,
+error handling, dependency policy, and testing standards are governed by the
+`.claude/rules/` files and related skills in `.claude/skills/`.
+
+This plan focuses on product scope, behavior, data contracts, and delivery
+phases only.
 
 ---
 

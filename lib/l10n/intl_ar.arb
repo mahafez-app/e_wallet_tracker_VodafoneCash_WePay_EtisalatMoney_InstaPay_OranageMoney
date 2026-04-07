@@ -28,5 +28,8 @@
       }
     }
   },
-  "errorUnknown": "حدث خطأ غير متوقع."
+  "errorUnknown": "حدث خطأ غير متوقع.",
+  "notFoundStatusCode": "404",
+  "notFoundPageTitle": "الصفحة غير موجودة",
+  "appName": "محافظ"
 }

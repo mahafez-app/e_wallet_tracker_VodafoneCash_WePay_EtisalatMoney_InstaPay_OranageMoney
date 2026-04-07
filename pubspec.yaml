@@ -48,6 +48,7 @@ dependencies:
   flutter_secure_storage: ^10.0.0
   cached_network_image: ^3.4.1
   flutter_svg: ^2.2.4
+  flutter_screenutil: ^5.9.3
   intl: ^0.20.2
 
 dev_dependencies:
@@ -70,6 +71,23 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
+
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo/Cairo-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Cairo/Cairo-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Cairo/Cairo-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Cairo/Cairo-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Cairo/Cairo-ExtraBold.ttf
+          weight: 800
 
 flutter_intl:
   enabled: true

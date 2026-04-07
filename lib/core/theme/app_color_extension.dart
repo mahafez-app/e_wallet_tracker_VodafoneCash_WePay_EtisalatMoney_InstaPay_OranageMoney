@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'app_colors.dart';
 
 final class AppColorExtension extends ThemeExtension<AppColorExtension> {
@@ -15,23 +16,23 @@ final class AppColorExtension extends ThemeExtension<AppColorExtension> {
 
   const AppColorExtension.light()
     : success = AppColors.success,
-      successContainer = const Color(0xFFE6F4EA),
+      successContainer = AppColors.secondaryContainer,
       warning = AppColors.warning,
-      warningContainer = const Color(0xFFFEF7E0),
+      warningContainer = AppColors.tertiaryContainer,
       danger = AppColors.danger,
-      dangerContainer = const Color(0xFFFCE8E6),
+      dangerContainer = AppColors.errorContainer,
       info = AppColors.info,
-      infoContainer = const Color(0xFFE8F0FE);
+      infoContainer = AppColors.primaryContainer;
 
   const AppColorExtension.dark()
-    : success = const Color(0xFF81C995),
-      successContainer = const Color(0xFF1E3A26),
-      warning = const Color(0xFFFDD663),
-      warningContainer = const Color(0xFF3A2E00),
-      danger = const Color(0xFFF28B82),
-      dangerContainer = const Color(0xFF3B1614),
-      info = const Color(0xFF8AB4F8),
-      infoContainer = const Color(0xFF0D2A6B);
+    : success = AppColors.success,
+      successContainer = AppColors.onSecondaryFixedVariant,
+      warning = AppColors.warning,
+      warningContainer = AppColors.onTertiaryFixedVariant,
+      danger = AppColors.danger,
+      dangerContainer = AppColors.onErrorContainer,
+      info = AppColors.info,
+      infoContainer = AppColors.onPrimaryFixedVariant;
 
   final Color success;
   final Color successContainer;

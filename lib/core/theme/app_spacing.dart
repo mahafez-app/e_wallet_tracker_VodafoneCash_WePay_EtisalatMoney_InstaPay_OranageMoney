@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'app_responsive.dart';
+
 abstract final class AppSpacing {
   static const double xs = 4.0;
   static const double sm = 8.0;
@@ -19,4 +21,6 @@ abstract final class AppSpacing {
     horizontal: lg,
     vertical: md,
   );
+
+  static double adaptive(double value) => AppResponsive.width(value);
 }

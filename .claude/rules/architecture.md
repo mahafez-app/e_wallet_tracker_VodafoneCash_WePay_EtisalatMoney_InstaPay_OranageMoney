@@ -149,9 +149,9 @@ widget. No business logic, no provider declarations, no theme setup.
 
 Every feature has exactly two provider files:
 
-| File | Contents |
-|------|----------|
-| `features/feature_name/providers/feature_name_providers.dart` | Data sources, repository impl, use case wiring |
+| File                                                             | Contents                                                                  |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `features/feature_name/providers/feature_name_providers.dart`    | Data sources, repository impl, use case wiring                            |
 | `features/feature_name/presentation/providers/*_controller.dart` | UI state: `AsyncNotifierProvider` / `NotifierProvider` / `StreamProvider` |
 
 Mixing DI wiring with UI state in a single file is forbidden.
@@ -298,6 +298,14 @@ abstract interface class NoParamsStreamUseCase<T> {
   and tightly coupled to parent. This is the exception.
 - **Extract to `widgets/`:** as soon as a widget is used more than once,
   exceeds ~30 lines, or represents a named UI concept.
+- **Hard cap per screen file:** if any screen file exceeds 200 lines,
+  extract all non-trivial UI sections into dedicated files under the
+  feature's `presentation/widgets/` folder.
+- **Small component preference:** even below 200 lines, prefer small,
+  named widgets over large in-file component stacks.
+- **Multiple screens organization:** when a feature has more than one
+  screen, group screens under `presentation/screens/<group>/` instead of
+  keeping all screen files flat in `screens/`.
 - **Group by concern** in subfolders — never dump all widgets flat:
 
 ```

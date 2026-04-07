@@ -28,5 +28,8 @@
       }
     }
   },
-  "errorUnknown": "An unexpected error occurred."
+  "errorUnknown": "An unexpected error occurred.",
+  "notFoundStatusCode": "404",
+  "notFoundPageTitle": "Page Not Found",
+  "appName": "Mahafez"
 }

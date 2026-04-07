@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'app_routes.dart';
+
+import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../widgets/not_found_screen.dart';
+import 'app_routes.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -12,9 +14,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: AppRoutes.splash,
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Splash Screen - To be implemented')),
-        ),
+        builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         path: AppRoutes.home,

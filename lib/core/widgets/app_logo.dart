@@ -1,0 +1,23 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../theme/app_responsive.dart';
+import '../utils/app_assets.dart';
+
+class AppLogo extends StatelessWidget {
+  const AppLogo({
+    super.key,
+    this.size,
+  });
+
+  final double? size;
+
+  @override
+  Widget build(BuildContext context) {
+    return SvgPicture.asset(
+      AppAssets.appLogo,
+      width: size ?? 140.responsiveWidth,
+      height: size ?? 140.responsiveHeight,
+    );
+  }
+}

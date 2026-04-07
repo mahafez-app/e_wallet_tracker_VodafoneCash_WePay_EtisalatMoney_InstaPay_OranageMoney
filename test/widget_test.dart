@@ -13,8 +13,15 @@ void main() {
   testWidgets('App starts with splash screen', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const ProviderScope(child: App()));
+    await tester.pump();
 
-    // Verify that splash screen placeholder is shown
-    expect(find.text('Splash Screen - To be implemented'), findsOneWidget);
+    // Verify that splash branding is shown
+    expect(find.text('محافظ'), findsOneWidget);
+    expect(find.text('MAHAFEZ'), findsOneWidget);
+
+    // Verify that splash transitions to home screen
+    await tester.pump(const Duration(milliseconds: 1800));
+    await tester.pump();
+    expect(find.text('Home Screen - To be implemented'), findsOneWidget);
   });
 }

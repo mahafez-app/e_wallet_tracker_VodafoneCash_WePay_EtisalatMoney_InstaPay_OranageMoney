@@ -26,17 +26,20 @@
 
 ## Forbidden Packages (no exceptions, no justification accepted)
 
-| Package | Reason |
-|---------|--------|
-| `get` / GetX | Global state, implicit routing, violates Clean Architecture |
-| `provider` | Use Riverpod instead |
-| `mobx` | Reactive magic, mutable observable state, incompatible with sealed state |
-| `injectable` | Code-gen DI, replaced by manual Riverpod composition |
-| `get_it` | Service locator anti-pattern |
-| `freezed` | Unnecessary code gen; manual immutable classes are preferred |
-| `auto_route` | Use `go_router` |
-| `riverpod_generator` | Use manual provider declarations |
-| `hive_generator` | Use manual or `shared_preferences` / `flutter_secure_storage` |
+| Package              | Reason                                                                   |
+| -------------------- | ------------------------------------------------------------------------ |
+| `get` / GetX         | Global state, implicit routing, violates Clean Architecture              |
+| `provider`           | Use Riverpod instead                                                     |
+| `mobx`               | Reactive magic, mutable observable state, incompatible with sealed state |
+| `injectable`         | Code-gen DI, replaced by manual Riverpod composition                     |
+| `get_it`             | Service locator anti-pattern                                             |
+| `freezed`            | Unnecessary code gen; manual immutable classes are preferred             |
+| `auto_route`         | Use `go_router`                                                          |
+| `riverpod_generator` | Use manual provider declarations                                         |
+| `hive_generator`     | Use manual or `shared_preferences` / `flutter_secure_storage`            |
+
+Exceptions are not allowed unless project governance files are formally updated
+first (`.claude/CLAUDE.md` and `.claude/rules/*`).
 
 ---
 
@@ -47,78 +50,79 @@ deprecated. Versions are minimum baselines — always use latest stable.
 
 ### State & DI
 
-| Purpose | Package |
-|---------|---------|
+| Purpose               | Package            |
+| --------------------- | ------------------ |
 | State management & DI | `flutter_riverpod` |
 
 ### Navigation
 
-| Purpose | Package |
-|---------|---------|
+| Purpose | Package     |
+| ------- | ----------- |
 | Routing | `go_router` |
 
 ### Firebase
 
-| Purpose | Package |
-|---------|---------|
-| Firebase init | `firebase_core` |
-| Authentication | `firebase_auth` |
-| Cloud Firestore | `cloud_firestore` |
-| Cloud Storage | `firebase_storage` |
-| Push Notifications | `firebase_messaging` |
-| Remote Config | `firebase_remote_config` |
-| Analytics | `firebase_analytics` |
-| Crashlytics | `firebase_crashlytics` |
-| Performance | `firebase_performance` |
-| App Check | `firebase_app_check` |
+| Purpose            | Package                  |
+| ------------------ | ------------------------ |
+| Firebase init      | `firebase_core`          |
+| Authentication     | `firebase_auth`          |
+| Cloud Firestore    | `cloud_firestore`        |
+| Cloud Storage      | `firebase_storage`       |
+| Push Notifications | `firebase_messaging`     |
+| Remote Config      | `firebase_remote_config` |
+| Analytics          | `firebase_analytics`     |
+| Crashlytics        | `firebase_crashlytics`   |
+| Performance        | `firebase_performance`   |
+| App Check          | `firebase_app_check`     |
 
 Add only the Firebase packages the project actively uses. Do not add the
 entire Firebase suite by default.
 
 ### Networking
 
-| Purpose | Package |
-|---------|---------|
-| HTTP client | `dio` |
+| Purpose                | Package              |
+| ---------------------- | -------------------- |
+| HTTP client            | `dio`                |
 | WebSockets (if needed) | `web_socket_channel` |
 
 ### Serialization
 
-| Purpose | Package |
-|---------|---------|
+| Purpose      | Package                                |
+| ------------ | -------------------------------------- |
 | JSON codegen | `json_serializable`, `json_annotation` |
 
 ### Storage
 
-| Purpose | Package |
-|---------|---------|
-| Key-value storage | `shared_preferences` |
-| Secure storage | `flutter_secure_storage` |
+| Purpose           | Package                  |
+| ----------------- | ------------------------ |
+| Key-value storage | `shared_preferences`     |
+| Secure storage    | `flutter_secure_storage` |
 
 ### UI
 
-| Purpose | Package |
-|---------|---------|
-| Network images | `cached_network_image` |
-| SVG rendering | `flutter_svg` |
+| Purpose           | Package                |
+| ----------------- | ---------------------- |
+| Network images    | `cached_network_image` |
+| SVG rendering     | `flutter_svg`          |
+| Responsive sizing | `flutter_screenutil`   |
 
 ### Utilities
 
-| Purpose | Package |
-|---------|---------|
-| Value equality | `equatable` |
+| Purpose            | Package                                          |
+| ------------------ | ------------------------------------------------ |
+| Value equality     | `equatable`                                      |
 | Environment config | `flutter_dotenv` or compile-time `--dart-define` |
 
 ---
 
 ## Dev / Test Dependencies
 
-| Purpose | Package |
-|---------|---------|
-| Build runner | `build_runner` |
-| Mocking | `mocktail` |
-| Riverpod testing | `riverpod_test` |
-| Widget testing | `flutter_test` (SDK) |
+| Purpose             | Package                  |
+| ------------------- | ------------------------ |
+| Build runner        | `build_runner`           |
+| Mocking             | `mocktail`               |
+| Riverpod testing    | `riverpod_test`          |
+| Widget testing      | `flutter_test` (SDK)     |
 | Integration testing | `integration_test` (SDK) |
 
 ---

@@ -11,6 +11,25 @@
 - **`LayoutBuilder` for constraint-based decisions.** Use when layout
   depends on available parent space (columns, breakpoints, card sizes).
   Never use `MediaQuery.of(context).size` for this.
+- **ScreenUtil is the responsive scaling package.** Initialize once at app
+  root with `ScreenUtilInit`. Access scaling through `AppResponsive`
+  (`width`, `height`, `radius`, `font`) and project extensions instead of
+  calling `.w`, `.h`, `.r`, or `.sp` directly in widget files.
+
+- **Single responsive gateway.** `core/theme/app_responsive.dart` is the
+  only place where `.w`, `.h`, `.r`, and `.sp` are allowed. UI/widget files
+  must use `AppResponsive` APIs or `AppResponsiveNumExtension` getters only.
+
+- **Use LayoutBuilder with ScreenUtil for layout choices.** Use
+  `LayoutBuilder` for structural breakpoint decisions and ScreenUtil for
+  scalar dimension adaptation.
+
+- **Migration mapping through AppResponsive:**
+  - fixed width/height -> `AppResponsive.width(16)` / `AppResponsive.height(16)`
+  - fixed font size -> `AppResponsive.font(14)`
+  - fixed radius -> `AppResponsive.radius(12)`
+  - extension style -> `16.responsiveWidth`, `14.responsiveFont`
+  - edge insets -> `AppResponsive.symmetric(...)` or `AppResponsive.all(...)`
 
 - **`MediaQuery` for device-level data only.** Legal uses:
   - `MediaQuery.paddingOf(context)` — safe area insets
@@ -149,18 +168,18 @@ abstract final class AppAssets {
 
 ## Material 3 Component Usage
 
-| Action type | Component |
-|-------------|-----------|
-| Primary CTA | `FilledButton` |
-| Secondary action | `OutlinedButton` |
-| Tertiary / low emphasis | `TextButton` |
-| Icon-only primary | `IconButton.filled` |
-| Icon-only standard | `IconButton` |
-| Floating action | `FloatingActionButton` |
-| Persistent bottom nav | `NavigationBar` (M3) |
-| Drawer nav | `NavigationDrawer` (M3) |
-| Top nav tabs | `TabBar` with `TabBarView` |
-| Alerts / feedback | `SnackBar` via `ScaffoldMessenger` |
+| Action type             | Component                          |
+| ----------------------- | ---------------------------------- |
+| Primary CTA             | `FilledButton`                     |
+| Secondary action        | `OutlinedButton`                   |
+| Tertiary / low emphasis | `TextButton`                       |
+| Icon-only primary       | `IconButton.filled`                |
+| Icon-only standard      | `IconButton`                       |
+| Floating action         | `FloatingActionButton`             |
+| Persistent bottom nav   | `NavigationBar` (M3)               |
+| Drawer nav              | `NavigationDrawer` (M3)            |
+| Top nav tabs            | `TabBar` with `TabBarView`         |
+| Alerts / feedback       | `SnackBar` via `ScaffoldMessenger` |
 
 Never use raw `ElevatedButton` for primary CTAs in M3 apps. Never use
 `BottomNavigationBar` — use `NavigationBar`.
@@ -171,16 +190,16 @@ Never use raw `ElevatedButton` for primary CTAs in M3 apps. Never use
 
 Every screen must establish a clear visual hierarchy:
 
-| Role | TextTheme token |
-|------|----------------|
-| Page title / hero | `displaySmall` or `headlineMedium` |
-| Section heading | `headlineSmall` or `titleLarge` |
-| Card title | `titleMedium` |
-| Body content | `bodyLarge` |
-| Secondary body | `bodyMedium` |
-| Caption / metadata | `bodySmall` |
-| Button label | `labelLarge` |
-| Chip / tag | `labelMedium` |
+| Role               | TextTheme token                    |
+| ------------------ | ---------------------------------- |
+| Page title / hero  | `displaySmall` or `headlineMedium` |
+| Section heading    | `headlineSmall` or `titleLarge`    |
+| Card title         | `titleMedium`                      |
+| Body content       | `bodyLarge`                        |
+| Secondary body     | `bodyMedium`                       |
+| Caption / metadata | `bodySmall`                        |
+| Button label       | `labelLarge`                       |
+| Chip / tag         | `labelMedium`                      |
 
 Never use the same style for all text on a screen. Never use deprecated M2
 style names (`headline1–6`, `bodyText1–2`, `subtitle1–2`).
@@ -189,20 +208,21 @@ style names (`headline1–6`, `bodyText1–2`, `subtitle1–2`).
 
 ## Spacing Rhythm
 
-| Gap context | Constant |
-|-------------|----------|
-| Between major page sections | `AppSpacing.xl` (24) |
-| Between grouped related items | `AppSpacing.md` (12) |
-| Between tight related items | `AppSpacing.sm` (8) |
+| Gap context                        | Constant             |
+| ---------------------------------- | -------------------- |
+| Between major page sections        | `AppSpacing.xl` (24) |
+| Between grouped related items      | `AppSpacing.md` (12) |
+| Between tight related items        | `AppSpacing.sm` (8)  |
 | Page horizontal / vertical padding | `AppSpacing.lg` (16) |
-| Inside card / container | `AppSpacing.lg` (16) |
-| Between icon and label | `AppSpacing.sm` (8) |
+| Inside card / container            | `AppSpacing.lg` (16) |
+| Between icon and label             | `AppSpacing.sm` (8)  |
 
 ---
 
 ## Interactive Feedback
 
 Every tappable element must provide visual feedback:
+
 - Material buttons (all variants) have ripple by default.
 - `InkWell` for custom tappable containers. Provide `borderRadius` matching
   the container shape.
@@ -257,12 +277,12 @@ ExcludeSemantics(child: Image.asset(AppAssets.onboardingHero))
 
 ### Contrast Requirements (WCAG 2.1 AA)
 
-| Text type | Minimum contrast ratio |
-|-----------|----------------------|
-| Normal text (< 18pt / 14pt bold) | 4.5:1 |
-| Large text (≥ 18pt / ≥ 14pt bold) | 3:1 |
-| Interactive component boundaries | 3:1 |
-| Decorative elements | No requirement |
+| Text type                         | Minimum contrast ratio |
+| --------------------------------- | ---------------------- |
+| Normal text (< 18pt / 14pt bold)  | 4.5:1                  |
+| Large text (≥ 18pt / ≥ 14pt bold) | 3:1                    |
+| Interactive component boundaries  | 3:1                    |
+| Decorative elements               | No requirement         |
 
 Verify **both** light and dark themes. `ColorScheme.fromSeed` with M3
 typically meets AA by default — verify after any color customization.
@@ -279,6 +299,7 @@ typically meets AA by default — verify after any color customization.
 ### Screen Reader Verification
 
 Every new screen must be validated with:
+
 - **TalkBack** (Android) before merging.
 - **VoiceOver** (iOS) before merging.
 

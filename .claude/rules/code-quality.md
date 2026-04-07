@@ -31,7 +31,7 @@
 - `camelCase` for variables, functions, parameters, named constructors.
 - `snake_case` for file names and directory names.
 - `SCREAMING_SNAKE_CASE` for compile-time constants.
-- No abbreviations. `userAuthenticationController` not `uac`. 
+- No abbreviations. `userAuthenticationController` not `uac`.
   `authRepository` not `repo`.
 - Private widgets in a file use a `_` prefix: `_LoginForm`, `_HeaderSection`.
 - Feature-specific widgets use feature context: `_DownloadCard`, `_HistoryItem`.
@@ -113,6 +113,7 @@ Text(AppLocalizations.of(context)!.continueButton)
 ### `StatelessWidget` by Default
 
 Upgrade to `StatefulWidget` only for local ephemeral state:
+
 - `AnimationController` / `Animation<T>`
 - `TextEditingController`
 - `FocusNode`
@@ -129,13 +130,18 @@ form, and a button list has three responsibilities from line one.
 
 ### Private vs Separate File
 
-| Condition | Decision |
-|-----------|----------|
-| < ~30 lines, used once, tightly coupled to parent | Private in same file (`_WidgetName`) |
-| > ~30 lines | Extract to `widgets/` file |
-| Used more than once | Extract to `widgets/` file |
-| Represents a named UI concept | Extract to `widgets/` file |
-| Feature has many widgets | Group in `widgets/concern/` subfolders |
+| Condition                                         | Decision                                        |
+| ------------------------------------------------- | ----------------------------------------------- |
+| < ~30 lines, used once, tightly coupled to parent | Private in same file (`_WidgetName`)            |
+| > ~30 lines                                       | Extract to `widgets/` file                      |
+| Used more than once                               | Extract to `widgets/` file                      |
+| Represents a named UI concept                     | Extract to `widgets/` file                      |
+| Screen file > 200 lines                           | Mandatory extraction to `presentation/widgets/` |
+| Feature has many widgets                          | Group in `widgets/concern/` subfolders          |
+
+When a feature contains multiple screens, do not keep all files directly
+under `presentation/screens/`. Create grouping folders under `screens/`
+and place related screens together.
 
 ### No Private Helper Methods Returning Widgets
 

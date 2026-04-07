@@ -4,10 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../theme/app_responsive.dart';
 import '../utils/app_assets.dart';
 
-enum AppLogoShape {
-  roundedRectangle,
-  circle,
-}
+enum AppLogoShape { roundedRectangle, circle }
 
 class AppLogo extends StatelessWidget {
   const AppLogo({
@@ -37,11 +34,11 @@ class AppLogo extends StatelessWidget {
       child: switch (shape) {
         AppLogoShape.circle => ClipOval(child: logo),
         AppLogoShape.roundedRectangle => ClipRRect(
-            borderRadius: BorderRadius.circular(
-              roundedRectangleRadius ?? AppResponsive.radius(24),
-            ),
-            child: logo,
+          borderRadius: BorderRadius.circular(
+            roundedRectangleRadius ?? AppResponsive.radius(24),
           ),
+          child: logo,
+        ),
       },
     );
   }

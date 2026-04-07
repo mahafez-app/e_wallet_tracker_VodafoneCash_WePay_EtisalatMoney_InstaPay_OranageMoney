@@ -24,50 +24,103 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "appName": MessageLookupByLibrary.simpleMessage("محافظ"),
-        "errorAuthEmailInUse": MessageLookupByLibrary.simpleMessage(
-            "هذا البريد الإلكتروني مسجل بالفعل."),
-        "errorAuthGeneric": MessageLookupByLibrary.simpleMessage(
-            "فشل المصادقة. يرجى المحاولة مرة أخرى."),
-        "errorAuthInvalidEmail": MessageLookupByLibrary.simpleMessage(
-            "عنوان البريد الإلكتروني غير صحيح."),
-        "errorAuthTooManyRequests": MessageLookupByLibrary.simpleMessage(
-            "عدد محاولات كبير جداً. يرجى المحاولة لاحقاً."),
-        "errorAuthUserDisabled":
-            MessageLookupByLibrary.simpleMessage("تم تعطيل هذا الحساب."),
-        "errorAuthUserNotFound": MessageLookupByLibrary.simpleMessage(
-            "المستخدم غير موجود. يرجى التحقق من بيانات الاعتماد الخاصة بك."),
-        "errorAuthWeakPassword": MessageLookupByLibrary.simpleMessage(
-            "كلمة المرور ضعيفة جداً. يرجى اختيار كلمة مرور أقوى."),
-        "errorAuthWrongPassword": MessageLookupByLibrary.simpleMessage(
-            "كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى."),
-        "errorCache": MessageLookupByLibrary.simpleMessage(
-            "خطأ في التخزين المحلي. يرجى المحاولة مرة أخرى."),
-        "errorConflict": MessageLookupByLibrary.simpleMessage(
-            "تضارب المورد. يرجى المحاولة مرة أخرى."),
-        "errorForbidden": MessageLookupByLibrary.simpleMessage("الوصول ممنوع."),
-        "errorNetwork": MessageLookupByLibrary.simpleMessage(
-            "لا توجد اتصالات إنترنت. يرجى التحقق من شبكتك."),
-        "errorNotFound":
-            MessageLookupByLibrary.simpleMessage("المورد غير موجود."),
-        "errorPermissionDenied":
-            MessageLookupByLibrary.simpleMessage("تم رفض الإذن."),
-        "errorServer": MessageLookupByLibrary.simpleMessage(
-            "خطأ في الخادم. يرجى المحاولة لاحقاً."),
-        "errorServerGeneric": MessageLookupByLibrary.simpleMessage(
-            "حدث خطأ ما. يرجى المحاولة مرة أخرى."),
-        "errorStorage":
-            MessageLookupByLibrary.simpleMessage("خطأ في تخزين الملفات."),
-        "errorUnauthorized": MessageLookupByLibrary.simpleMessage(
-            "وصول غير مصرح. يرجى تسجيل الدخول مرة أخرى."),
-        "errorUnknown":
-            MessageLookupByLibrary.simpleMessage("حدث خطأ غير متوقع."),
-        "errorUnprocessable":
-            MessageLookupByLibrary.simpleMessage("تعذر معالجة طلبك."),
-        "errorValidation": MessageLookupByLibrary.simpleMessage("فشل التحقق."),
-        "errorValidationWithCode": m0,
-        "notFoundPageTitle":
-            MessageLookupByLibrary.simpleMessage("الصفحة غير موجودة"),
-        "notFoundStatusCode": MessageLookupByLibrary.simpleMessage("404")
-      };
+    "alreadyHaveAccount": MessageLookupByLibrary.simpleMessage(
+      "لديك حساب بالفعل؟",
+    ),
+    "appName": MessageLookupByLibrary.simpleMessage("محافظ"),
+    "appTagline": MessageLookupByLibrary.simpleMessage(
+      "إدارة محافظك الخاصة بالأعمال بسهولة",
+    ),
+    "confirm": MessageLookupByLibrary.simpleMessage("تأكيد"),
+    "confirmName": MessageLookupByLibrary.simpleMessage("تأكيد الاسم"),
+    "confirmNameMessage": MessageLookupByLibrary.simpleMessage(
+      "يرجى تأكيد اسمك للمتابعة",
+    ),
+    "continueWithGoogle": MessageLookupByLibrary.simpleMessage(
+      "المتابعة باستخدام جوجل",
+    ),
+    "createAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
+    "displayName": MessageLookupByLibrary.simpleMessage("الاسم"),
+    "displayNameHint": MessageLookupByLibrary.simpleMessage("أدخل اسمك"),
+    "dontHaveAccount": MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟"),
+    "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
+    "emailHint": MessageLookupByLibrary.simpleMessage("أدخل بريدك الإلكتروني"),
+    "emailPlaceholder": MessageLookupByLibrary.simpleMessage(
+      "example@email.com",
+    ),
+    "errorAuthEmailInUse": MessageLookupByLibrary.simpleMessage(
+      "هذا البريد الإلكتروني مسجل بالفعل.",
+    ),
+    "errorAuthGeneric": MessageLookupByLibrary.simpleMessage(
+      "فشل المصادقة. يرجى المحاولة مرة أخرى.",
+    ),
+    "errorAuthInvalidEmail": MessageLookupByLibrary.simpleMessage(
+      "عنوان البريد الإلكتروني غير صحيح.",
+    ),
+    "errorAuthTooManyRequests": MessageLookupByLibrary.simpleMessage(
+      "عدد محاولات كبير جداً. يرجى المحاولة لاحقاً.",
+    ),
+    "errorAuthUserDisabled": MessageLookupByLibrary.simpleMessage(
+      "تم تعطيل هذا الحساب.",
+    ),
+    "errorAuthUserNotFound": MessageLookupByLibrary.simpleMessage(
+      "المستخدم غير موجود. يرجى التحقق من بيانات الاعتماد الخاصة بك.",
+    ),
+    "errorAuthWeakPassword": MessageLookupByLibrary.simpleMessage(
+      "كلمة المرور ضعيفة جداً. يرجى اختيار كلمة مرور أقوى.",
+    ),
+    "errorAuthWrongPassword": MessageLookupByLibrary.simpleMessage(
+      "كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.",
+    ),
+    "errorCache": MessageLookupByLibrary.simpleMessage(
+      "خطأ في التخزين المحلي. يرجى المحاولة مرة أخرى.",
+    ),
+    "errorConflict": MessageLookupByLibrary.simpleMessage(
+      "تضارب المورد. يرجى المحاولة مرة أخرى.",
+    ),
+    "errorForbidden": MessageLookupByLibrary.simpleMessage("الوصول ممنوع."),
+    "errorNetwork": MessageLookupByLibrary.simpleMessage(
+      "لا توجد اتصالات إنترنت. يرجى التحقق من شبكتك.",
+    ),
+    "errorNotFound": MessageLookupByLibrary.simpleMessage("المورد غير موجود."),
+    "errorPermissionDenied": MessageLookupByLibrary.simpleMessage(
+      "تم رفض الإذن.",
+    ),
+    "errorServer": MessageLookupByLibrary.simpleMessage(
+      "خطأ في الخادم. يرجى المحاولة لاحقاً.",
+    ),
+    "errorServerGeneric": MessageLookupByLibrary.simpleMessage(
+      "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+    ),
+    "errorStorage": MessageLookupByLibrary.simpleMessage(
+      "خطأ في تخزين الملفات.",
+    ),
+    "errorUnauthorized": MessageLookupByLibrary.simpleMessage(
+      "وصول غير مصرح. يرجى تسجيل الدخول مرة أخرى.",
+    ),
+    "errorUnknown": MessageLookupByLibrary.simpleMessage("حدث خطأ غير متوقع."),
+    "errorUnprocessable": MessageLookupByLibrary.simpleMessage(
+      "تعذر معالجة طلبك.",
+    ),
+    "errorValidation": MessageLookupByLibrary.simpleMessage("فشل التحقق."),
+    "errorValidationWithCode": m0,
+    "forgotPassword": MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور؟"),
+    "notFoundPageTitle": MessageLookupByLibrary.simpleMessage(
+      "الصفحة غير موجودة",
+    ),
+    "notFoundStatusCode": MessageLookupByLibrary.simpleMessage("404"),
+    "or": MessageLookupByLibrary.simpleMessage("أو"),
+    "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
+    "passwordHint": MessageLookupByLibrary.simpleMessage("أدخل كلمة المرور"),
+    "signIn": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
+    "signInWithEmail": MessageLookupByLibrary.simpleMessage(
+      "تسجيل الدخول بالبريد الإلكتروني",
+    ),
+    "signInWithGoogle": MessageLookupByLibrary.simpleMessage(
+      "تسجيل الدخول بواسطة جوجل",
+    ),
+    "signUp": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
+    "signUpNow": MessageLookupByLibrary.simpleMessage("اشترك الآن"),
+    "yourName": MessageLookupByLibrary.simpleMessage("اسمك"),
+  };
 }

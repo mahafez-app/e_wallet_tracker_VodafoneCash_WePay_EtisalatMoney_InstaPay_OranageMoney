@@ -37,3 +37,9 @@ extension FailureMessaging on BuildContext {
     };
   }
 }
+
+extension FailureToLocalizedString on Failure {
+  String toLocalizedString(BuildContext context) {
+    return context.failureMessage(this);
+  }
+}

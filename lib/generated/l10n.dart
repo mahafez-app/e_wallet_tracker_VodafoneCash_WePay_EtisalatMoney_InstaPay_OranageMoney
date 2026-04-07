@@ -18,8 +18,10 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(_current != null,
-        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+    assert(
+      _current != null,
+      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
+    );
     return _current!;
   }
 
@@ -41,8 +43,10 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(instance != null,
-        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    assert(
+      instance != null,
+      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
+    );
     return instance!;
   }
 
@@ -272,12 +276,7 @@ class S {
 
   /// `404`
   String get notFoundStatusCode {
-    return Intl.message(
-      '404',
-      name: 'notFoundStatusCode',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('404', name: 'notFoundStatusCode', desc: '', args: []);
   }
 
   /// `الصفحة غير موجودة`
@@ -292,9 +291,184 @@ class S {
 
   /// `محافظ`
   String get appName {
+    return Intl.message('محافظ', name: 'appName', desc: '', args: []);
+  }
+
+  /// `تسجيل الدخول`
+  String get signIn {
+    return Intl.message('تسجيل الدخول', name: 'signIn', desc: '', args: []);
+  }
+
+  /// `إنشاء حساب`
+  String get signUp {
+    return Intl.message('إنشاء حساب', name: 'signUp', desc: '', args: []);
+  }
+
+  /// `البريد الإلكتروني`
+  String get email {
+    return Intl.message('البريد الإلكتروني', name: 'email', desc: '', args: []);
+  }
+
+  /// `كلمة المرور`
+  String get password {
+    return Intl.message('كلمة المرور', name: 'password', desc: '', args: []);
+  }
+
+  /// `الاسم`
+  String get displayName {
+    return Intl.message('الاسم', name: 'displayName', desc: '', args: []);
+  }
+
+  /// `اسمك`
+  String get yourName {
+    return Intl.message('اسمك', name: 'yourName', desc: '', args: []);
+  }
+
+  /// `تأكيد`
+  String get confirm {
+    return Intl.message('تأكيد', name: 'confirm', desc: '', args: []);
+  }
+
+  /// `تسجيل الدخول بواسطة جوجل`
+  String get signInWithGoogle {
     return Intl.message(
-      'محافظ',
-      name: 'appName',
+      'تسجيل الدخول بواسطة جوجل',
+      name: 'signInWithGoogle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تسجيل الدخول بالبريد الإلكتروني`
+  String get signInWithEmail {
+    return Intl.message(
+      'تسجيل الدخول بالبريد الإلكتروني',
+      name: 'signInWithEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ليس لديك حساب؟`
+  String get dontHaveAccount {
+    return Intl.message(
+      'ليس لديك حساب؟',
+      name: 'dontHaveAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لديك حساب بالفعل؟`
+  String get alreadyHaveAccount {
+    return Intl.message(
+      'لديك حساب بالفعل؟',
+      name: 'alreadyHaveAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إنشاء حساب`
+  String get createAccount {
+    return Intl.message(
+      'إنشاء حساب',
+      name: 'createAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أدخل بريدك الإلكتروني`
+  String get emailHint {
+    return Intl.message(
+      'أدخل بريدك الإلكتروني',
+      name: 'emailHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أدخل كلمة المرور`
+  String get passwordHint {
+    return Intl.message(
+      'أدخل كلمة المرور',
+      name: 'passwordHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أدخل اسمك`
+  String get displayNameHint {
+    return Intl.message(
+      'أدخل اسمك',
+      name: 'displayNameHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تأكيد الاسم`
+  String get confirmName {
+    return Intl.message('تأكيد الاسم', name: 'confirmName', desc: '', args: []);
+  }
+
+  /// `يرجى تأكيد اسمك للمتابعة`
+  String get confirmNameMessage {
+    return Intl.message(
+      'يرجى تأكيد اسمك للمتابعة',
+      name: 'confirmNameMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أو`
+  String get or {
+    return Intl.message('أو', name: 'or', desc: '', args: []);
+  }
+
+  /// `إدارة محافظك الخاصة بالأعمال بسهولة`
+  String get appTagline {
+    return Intl.message(
+      'إدارة محافظك الخاصة بالأعمال بسهولة',
+      name: 'appTagline',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المتابعة باستخدام جوجل`
+  String get continueWithGoogle {
+    return Intl.message(
+      'المتابعة باستخدام جوجل',
+      name: 'continueWithGoogle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `نسيت كلمة المرور؟`
+  String get forgotPassword {
+    return Intl.message(
+      'نسيت كلمة المرور؟',
+      name: 'forgotPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اشترك الآن`
+  String get signUpNow {
+    return Intl.message('اشترك الآن', name: 'signUpNow', desc: '', args: []);
+  }
+
+  /// `example@email.com`
+  String get emailPlaceholder {
+    return Intl.message(
+      'example@email.com',
+      name: 'emailPlaceholder',
       desc: '',
       args: [],
     );

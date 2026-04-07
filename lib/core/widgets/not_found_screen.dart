@@ -41,5 +41,3 @@ class NotFoundScreen extends StatelessWidget {
     ),
   );
 }
-
-

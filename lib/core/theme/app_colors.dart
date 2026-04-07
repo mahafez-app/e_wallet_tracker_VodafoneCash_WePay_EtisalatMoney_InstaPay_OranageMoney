@@ -75,4 +75,22 @@ abstract final class AppColors {
   static const Color onBackground = onSurface;
 
   static const Color black = Color(0xFF000000);
+
+  // Sign-in screen custom colors from Figma design
+  static const Color signInBackground = Color(0xFFF9F9FF);
+  // Input fields custom colors from Figma design
+  static const Color inputFill = Color(0xFFF0F3FF);
+  static const Color inputBorder = Color(0x7FC2C6D6);
+  static const Color inputHint = Color(0x7F727785);
+  static const Color signInBlueBubble = Color(0x0C2170E4);
+  static const Color signInGreenBubble = Color(0x196CF8BB);
+  static const Color signInLogoBg = Color(0x192170E4);
+  static const Color signInFieldBg = Color(0xFFF0F3FF);
+  static const Color signInFieldBorder = Color(0x7FC2C6D6);
+  static const Color signInTextSecondary = Color(0xFF424754);
+  static const Color signInTextPlaceholder = Color(0x7F727785);
+  static const Color signInDivider = Color(0x66C2C6D6);
+  static const Color signInButtonBorder = Color(0x4CC2C6D6);
+  static const Color signInButtonText = Color(0xFF111C2D);
+  static const Color signInSuccessGreen = Color(0xFF006C49);
 }

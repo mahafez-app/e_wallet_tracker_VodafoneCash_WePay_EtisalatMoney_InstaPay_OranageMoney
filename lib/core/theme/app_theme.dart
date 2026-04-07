@@ -60,13 +60,52 @@ final class AppTheme {
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      border: const UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        borderSide: BorderSide(color: AppColors.inputBorder, width: 1),
+      ),
+      enabledBorder: const UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        borderSide: BorderSide(color: AppColors.inputBorder, width: 1),
+      ),
+      focusedBorder: const UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        borderSide: BorderSide(color: AppColors.primary, width: 2),
+      ),
+      errorBorder: const UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        borderSide: BorderSide(color: AppColors.error, width: 1),
+      ),
+      focusedErrorBorder: const UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        borderSide: BorderSide(color: AppColors.error, width: 2),
+      ),
       contentPadding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
-        vertical: AppSpacing.md,
+        vertical: AppSpacing.lg,
       ),
       filled: true,
-      fillColor: AppColors.surfaceContainerLow,
+      fillColor: AppColors.inputFill,
+      hintStyle: const TextStyle(
+        color: AppColors.inputHint,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      ),
     ),
     cardTheme: const CardThemeData(
       elevation: 0,
@@ -133,13 +172,54 @@ final class AppTheme {
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      border: const UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        borderSide: BorderSide(color: AppColors.inputBorder, width: 1),
+      ),
+      enabledBorder: const UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        borderSide: BorderSide(color: AppColors.inputBorder, width: 1),
+      ),
+      focusedBorder: const UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        borderSide: BorderSide(color: AppColors.primary, width: 2),
+      ),
+      errorBorder: const UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        borderSide: BorderSide(color: AppColors.errorContainer, width: 1),
+      ),
+      focusedErrorBorder: const UnderlineInputBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        borderSide: BorderSide(color: AppColors.errorContainer, width: 2),
+      ),
       contentPadding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
-        vertical: AppSpacing.md,
+        vertical: AppSpacing.lg,
       ),
       filled: true,
-      fillColor: AppColors.onPrimaryFixedVariant,
+      fillColor: AppColors.inputFill.withValues(
+        alpha: 0.1,
+      ), // Slightly different for dark mode
+      hintStyle: const TextStyle(
+        color: AppColors.inputHint,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      ),
     ),
     cardTheme: const CardThemeData(
       elevation: 0,
@@ -154,90 +234,91 @@ final class AppTheme {
   );
 
   // Shared text theme — same scale for both themes, color resolved by brightness
+  // Cairo font family for all text styles (RTL-optimized Arabic font)
   static const TextTheme _textTheme = TextTheme(
     displayLarge: TextStyle(
       fontSize: 57,
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w800,
       letterSpacing: -0.25,
-      fontFamily: 'BeVietnamPro',
+      fontFamily: 'Cairo',
     ),
     displayMedium: TextStyle(
       fontSize: 45,
-      fontWeight: FontWeight.w700,
-      fontFamily: 'BeVietnamPro',
+      fontWeight: FontWeight.w800,
+      fontFamily: 'Cairo',
     ),
     displaySmall: TextStyle(
       fontSize: 36,
-      fontWeight: FontWeight.w600,
-      fontFamily: 'BeVietnamPro',
+      fontWeight: FontWeight.w800,
+      fontFamily: 'Cairo',
     ),
     headlineLarge: TextStyle(
       fontSize: 32,
       fontWeight: FontWeight.w700,
-      fontFamily: 'BeVietnamPro',
+      fontFamily: 'Cairo',
     ),
     headlineMedium: TextStyle(
       fontSize: 28,
-      fontWeight: FontWeight.w600,
-      fontFamily: 'BeVietnamPro',
+      fontWeight: FontWeight.w700,
+      fontFamily: 'Cairo',
     ),
     headlineSmall: TextStyle(
       fontSize: 24,
       fontWeight: FontWeight.w600,
-      fontFamily: 'BeVietnamPro',
+      fontFamily: 'Cairo',
     ),
     titleLarge: TextStyle(
       fontSize: 22,
-      fontWeight: FontWeight.w500,
-      fontFamily: 'Inter',
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Cairo',
     ),
     titleMedium: TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w500,
       letterSpacing: 0.15,
-      fontFamily: 'Inter',
+      fontFamily: 'Cairo',
     ),
     titleSmall: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w500,
       letterSpacing: 0.1,
-      fontFamily: 'Inter',
+      fontFamily: 'Cairo',
     ),
     bodyLarge: TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w400,
       letterSpacing: 0.5,
-      fontFamily: 'Inter',
+      fontFamily: 'Cairo',
     ),
     bodyMedium: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w400,
       letterSpacing: 0.25,
-      fontFamily: 'Inter',
+      fontFamily: 'Cairo',
     ),
     bodySmall: TextStyle(
       fontSize: 12,
       fontWeight: FontWeight.w400,
       letterSpacing: 0.4,
-      fontFamily: 'Inter',
+      fontFamily: 'Cairo',
     ),
     labelLarge: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w700,
       letterSpacing: 0.1,
-      fontFamily: 'Inter',
+      fontFamily: 'Cairo',
     ),
     labelMedium: TextStyle(
       fontSize: 12,
       fontWeight: FontWeight.w700,
       letterSpacing: 0.5,
-      fontFamily: 'Inter',
+      fontFamily: 'Cairo',
     ),
     labelSmall: TextStyle(
       fontSize: 11,
       fontWeight: FontWeight.w700,
       letterSpacing: 0.5,
-      fontFamily: 'Inter',
+      fontFamily: 'Cairo',
     ),
   );
 }

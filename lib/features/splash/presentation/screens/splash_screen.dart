@@ -75,7 +75,10 @@ class _SplashBodyState extends ConsumerState<_SplashBody>
         children: [
           ScaleTransition(
             scale: _logoScale,
-            child: AppLogo(size: 128.responsiveWidth),
+            child: AppLogo(
+              size: 128.responsiveWidth,
+              shape: AppLogoShape.circle,
+            ),
           ),
           SizedBox(height: 40.responsiveHeight),
           FadeTransition(

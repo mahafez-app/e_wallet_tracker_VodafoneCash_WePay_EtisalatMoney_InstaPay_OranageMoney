@@ -23,8 +23,9 @@ class SignInScreen extends StatelessWidget {
       backgroundColor: AppColors.signInBackground,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: 884.responsiveHeight),
+          child: SizedBox(
+            height: 884.responsiveHeight,
+            width: double.infinity,
             child: Stack(
               children: [
                 const SignInBackgroundDecoration(),

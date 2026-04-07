@@ -4,20 +4,32 @@
 
 ---
 
-## 🏷️ App Name Candidates
-Choose one before generation starts — hardcode nothing until decided:
+## 🏷️ Final App Naming
 
-| Name | Arabic | Meaning |
-|------|--------|---------|
-| **Raseed** | رصيد | Balance — direct, everyone knows this word |
-| **Hawel** | حوّل | Transfer — action-based |
-| **Masraf** | مصرف | Wallet/bank — familiar |
-| **Fulus** | فلوس | Money — casual, friendly |
-| **Tahweel** | تحويل | Transfer — formal |
+| Locale | App Name |
+|--------|----------|
+| English (`en`) | **Mahafez** |
+| Arabic (`ar`)  | **محافظ** |
 
-> Recommendation: **Raseed (رصيد)** — universally understood, short, works in both Arabic and English contexts.
+All branding and user-facing naming must use this mapping only.
+No fallback to "Wallet Tracker" or other temporary names.
 
-The app name, package ID, and all branding strings must reference the chosen name. Zero hardcoded fallbacks to "family" or "wallet tracker".
+## 🌐 Localization String Rules
+
+When adding any new user-facing string, follow these rules:
+
+1. Add the key to both `lib/l10n/intl_en.arb` and `lib/l10n/intl_ar.arb`
+  in the same change.
+2. Never hardcode user-facing text in widgets, providers, or domain/data code.
+  Use `S.of(context).<key>` (or `S.current.<key>` only when no context exists).
+3. If a key has placeholders, keep placeholder names/types consistent across
+  locales and define metadata (`@key.placeholders`) in both ARB files.
+4. Keep messages semantic and translation-ready; avoid embedding business logic
+  in strings.
+5. Regenerate localization outputs after ARB updates and keep generated files
+  committed.
+6. Preserve RTL quality for Arabic: concise wording, natural punctuation, and
+  no forced LTR formatting in localized copy.
 
 ---
 

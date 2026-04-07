@@ -1,191 +1,195 @@
 # Architecture — Feature-First Clean Architecture
 
 All projects follow strict **Feature-First Clean Architecture**.
-This structure is non-negotiable.
+This structure is non-negotiable and applies to every feature without exception.
+
+---
+
+## Directory Structure
 
 ```
-├── assets/
-│   ├── images/
-│   └── icons/
-└── lib/
-    ├── core/
-    │   ├── providers/   # App-wide providers and wiring
-    │   ├── error/       # Result<T>, Failure hierarchy, FailureMapper
-    │   ├── usecase/     # Base UseCase interfaces (UseCase, NoParamsUseCase)
-    │   ├── network/     # Shared Dio client, interceptors, and base API config
-    │   ├── router/      # GoRouter definition, route constants, refresh stream
-    │   ├── theme/       # AppTheme, AppColors, AppSpacing, AppBreakpoints,
-    │   │                # ThemeExtensions
-    │   ├── widgets/     # Shared UI components used across multiple features
-    │   │                # (AppButton, AppTextField, AppDialog, AppLoader, etc.)
-    │   └── utils/       # Extensions, pure Dart helpers,
-    │                    # repository_handler.dart, app_assets.dart
-    ├── l10n/            # Localization ARB files and AppLocalizations setup
-    ├── features/
-    │   └── feature_name/
-    │       ├── providers/
-    │       │   └── feature_name_providers.dart   # Data/Domain DI wiring only
-    │       ├── data/
-    │       │   ├── datasources/   # Remote & local data sources
-    │       │   ├── mappers/       # Mapper classes for complex DTO → Entity
-    │       │   │                  # transformations involving multiple models
-    │       │   ├── models/        # DTOs with serialization + toEntity()
-    │       │   └── repositories/  # Repository implementations
-    │       ├── domain/
-    │       │   ├── entities/      # Pure Dart business objects
-    │       │   ├── repositories/  # Abstract repository interfaces
-    │       │   └── usecases/      # Single-responsibility use cases
-    │       └── presentation/
-    │           ├── providers/     # Riverpod Notifier/AsyncNotifier logic
-    │           ├── screens/       # Screen entry points
-    │           └── widgets/       # Feature-specific UI components.
-    │               │              # Group by concern in subfolders when
-    │               │              # the feature has many widgets:
-    │               │              # widgets/history/, widgets/download/
-    └── main.dart
+lib/
+├── core/
+│   ├── di/               # Imperative async init (Firebase, Hive, etc.)
+│   ├── providers/        # App-wide Riverpod provider declarations
+│   ├── error/            # Result<T>, Failure hierarchy, FailureMapper
+│   ├── usecase/          # Base UseCase interfaces
+│   ├── network/          # Dio client, interceptors, base API config
+│   ├── router/           # GoRouter, route constants, refresh stream
+│   ├── theme/            # AppTheme, AppColors, AppSpacing, ThemeExtension
+│   ├── widgets/          # Shared UI components (AppButton, AppTextField…)
+│   └── utils/            # Extensions, pure Dart helpers, app_assets.dart,
+│                         # execute_and_handle_errors.dart
+├── l10n/                 # ARB files, AppLocalizations setup
+├── features/
+│   └── feature_name/
+│       ├── providers/
+│       │   └── feature_name_providers.dart  # Data + Domain DI wiring only
+│       ├── data/
+│       │   ├── datasources/   # Remote (Firestore/REST) and local sources
+│       │   ├── mappers/       # Complex multi-model DTO → Entity transforms
+│       │   ├── models/        # DTOs: serialization + toEntity()
+│       │   └── repositories/  # Repository implementations
+│       ├── domain/
+│       │   ├── entities/      # Pure Dart business objects (no Flutter)
+│       │   ├── repositories/  # Abstract repository interfaces
+│       │   └── usecases/      # Single-responsibility use cases
+│       └── presentation/
+│           ├── providers/     # Riverpod Notifier / AsyncNotifier providers
+│           ├── screens/       # Screen entry points (Scaffold + body split)
+│           └── widgets/       # Feature-specific UI components
+│               ├── history/
+│               └── form/
+└── main.dart
 ```
 
-## Dependency Rule
+---
 
-Dependencies always point inwards.
+## Dependency Rule (strictly enforced)
 
-- Presentation depends on Domain.
-- Data depends on Domain.
-- Presentation may reference Data only in the feature DI provider file
-  (`features/feature_name/providers/feature_name_providers.dart`) to wire
-  implementations to interfaces.
-- Domain depends on nothing from Presentation/Data/Flutter.
+```
+Presentation  →  Domain  (use cases only — never repositories or data sources)
+Data          →  Domain  (implements repository interfaces)
+Data          →  Core    (Dio, Firebase instances, storage)
+Domain        →  nothing (pure Dart — zero Flutter or infrastructure imports)
+
+❌  Presentation → Data
+❌  Presentation → Repository (even through a provider)
+❌  Domain       → Data
+❌  UseCase      → another UseCase directly
+❌  Notifier     → Repository
+❌  Notifier     → DataSource
+```
+
+The **only** location where Presentation is allowed to reference Data is
+`features/feature_name/providers/feature_name_providers.dart`, exclusively to
+wire implementations to interfaces.
+
+---
 
 ## Layer Rules
 
-- **Domain Purity:** The domain layer must be independent of Flutter and all
-  infrastructure. It contains only entities, repository interfaces, and use
-  cases. The only permitted external package is `equatable` (value comparison).
-  No exceptions.
-- **Repository Pattern:** All data access is abstracted via interfaces defined
-  in the domain layer. API clients, database logic, and third-party SDK calls
-  (Firebase, Supabase, etc.) belong exclusively in the data layer.
-- **Use Case Strictness:** Notifiers must interact only with use cases — never
-  with repositories or data sources directly. This keeps the presentation layer
-  decoupled from business orchestration.
-- **Base Use Case & Result Pattern:** All use cases implement the standard
-  interface defined in `core/usecase/` and return `Result<T>` (defined in
-  `core/error/`) untouched. Use cases never fold, switch, or inspect the
-  result — that is the presentation provider's responsibility.
+### Domain Layer (purest layer)
 
-- **Riverpod State Shape:** Prefer `AsyncValue<T>` in providers over Cubit-style
-  sealed state class trees. Do not create dedicated `*_state.dart` files unless
-  there is a strong, documented need that `AsyncValue` cannot express cleanly.
+- Contains only: entities, repository interfaces, use cases, value objects.
+- Zero imports from Flutter SDK, Firebase, Dio, or any infrastructure package.
+- The only permitted external package: `equatable` for value comparison.
+- Entities are immutable, extend `Equatable`, have no serialization logic.
+- Repository interfaces define the contract — no implementation detail leaks.
+
+### Data Layer
+
+- Implements domain repository interfaces.
+- All Firebase SDK calls, Dio calls, and third-party SDK calls live here.
+- Firebase types (`Timestamp`, `DocumentSnapshot`, `DocumentReference`,
+  `GeoPoint`, `QuerySnapshot`) are confined to this layer exclusively.
+- DTOs handle serialization. Entities handle business logic. Never merge.
+- Every DTO implements `toEntity()` for simple mappings. Complex multi-model
+  transforms use a dedicated `Mapper` class in `data/mappers/`.
+- All exceptions are caught here, mapped to `Failure` objects, returned as
+  `Result<T>`. Raw exceptions never escape this layer.
+
+### Presentation Layer
+
+- Notifiers call use cases only. Never repositories or data sources.
+- Screens are dumb: read state with `ref.watch`, trigger actions with
+  `ref.read(provider.notifier).method()`.
+- State shape: prefer `AsyncValue<T>`. Custom sealed state only when
+  `AsyncValue` genuinely cannot express the requirements (see state-management.md).
+- `ref.listen` for side effects (snackbars, navigation). `ref.watch` for UI.
+
+### Core Layer
+
+- `core/di/` — imperative init code only (Firebase init, plugin setup).
+  No Riverpod providers here.
+- `core/providers/` — Riverpod provider declarations wrapping initialized
+  instances. No business logic here.
+- `core/network/` — shared Dio client, auth interceptor, token refresh,
+  logging interceptor, base URL config. Feature-specific API methods belong
+  in the feature's data layer.
+- `core/widgets/` — shared UI component library. Rules enforced in
+  `code-quality.md`.
+
+---
+
+## Application Initialization (`core/di/`)
+
+Firebase requires async initialization before `runApp`. All imperative setup
+lives in `core/di/app_initializer.dart`.
 
 ```dart
-// core/usecase/usecase.dart
-abstract class UseCase<T, P> {
-  Future<Result<T>> call(P params);
-}
+// core/di/app_initializer.dart
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/widgets.dart';
+import '../../firebase_options.dart';
 
-abstract class NoParamsUseCase<T> {
-  Future<Result<T>> call();
+Future<void> initializeApp() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  // Add other async init here: Hive.initFlutter(), etc.
 }
 ```
 
-- **Network Layer:** `core/network/` contains only the shared Dio client
-  instance, interceptors (auth, logging, token refresh), and base API
-  configuration. Feature-specific API methods belong in the feature's
-  data layer, not here.
-- **DTO Mapping:** Every DTO must implement `toEntity()` for straightforward
-  single-model mappings. For complex transformations that combine multiple
-  models or require additional business context, use a dedicated mapper class
-  in `data/mappers/`. Entities must never contain `fromJson`, `toJson`, or
-  any serialization logic.
-- **Atomic Use Cases:** Each use case has one public `call()` method and a
-  single responsibility. For multi-step data operations, delegate to the
-  repository. For independent business flows, compose separate use cases.
-- **Feature Isolation:** Features are self-contained. Cross-feature
-  communication happens exclusively through the target feature's domain layer.
-- **Provider Organization:** Separate feature DI wiring from UI state:
-  - `features/feature_name/providers/feature_name_providers.dart` wires data
-    sources, repositories, and use cases.
-  - `presentation/providers/*_controller.dart` or
-    `presentation/providers/*_provider.dart` contains UI state providers
-    (`AsyncNotifierProvider`/`NotifierProvider`/`StateNotifierProvider`) and
-    logic.
-    This separation is mandatory.
+```dart
+// main.dart
+void main() async {
+  await initializeApp();
+  runApp(const ProviderScope(child: App()));
+}
+```
 
-## Core Shared Widgets (`core/widgets/`)
+`main.dart` contains only the `main()` function and the top-level `App`
+widget. No business logic, no provider declarations, no theme setup.
 
-`core/widgets/` is the shared UI component library for the entire app.
-These rules are non-negotiable.
+---
 
-- **Check before building.** Before writing any UI component, check
-  `core/widgets/` first. If a suitable component exists, use it. Never
-  duplicate a component that already exists in core.
-- **What belongs in `core/widgets/`.** Any widget used in two or more
-  features belongs here. Typical candidates: `AppButton`, `AppTextField`,
-  `AppLoader`, `AppDialog`, `AppEmptyState`, `AppErrorView`, `AppCard`.
-- **Customization policy.** If a core widget needs customization for a
-  specific use case, add an optional parameter to the core widget — but only
-  if the change does not break or alter any existing usage. If the
-  customization is feature-specific and would pollute the core widget,
-  create a feature-level wrapper instead.
-- **Naming.** Core widgets are prefixed with `App` (e.g., `AppButton`,
-  `AppTextField`). Feature-specific widgets use the feature context
-  (e.g., `_DownloadCard`, `_HistoryItem`).
-- **Core widgets follow all rules.** Every widget in `core/widgets/` must
-  follow `code-quality.md` and `ui.md` — `super.key`, `const` constructors,
-  `AppLocalizations` for strings, `AppSpacing` for spacing, `textTheme` for
-  typography. No exceptions.
+## Provider Organization (mandatory split)
 
-## Feature Widget File Placement
+Every feature has exactly two provider files:
 
-- **Private widgets in the same file** are acceptable only when the widget
-  is small (under ~30 lines), used only once, and tightly coupled to its
-  parent. This is the exception, not the default.
-- **Extract to `widgets/`** as a separate file as soon as a widget is used
-  more than once, exceeds ~30 lines, or represents a distinct UI concept
-  (a card, a list item, a form section, a status view).
-- **Group by concern in subfolders** when a feature has many widgets.
-  Do not dump all widgets in a flat `widgets/` directory. Group them:
+| File | Contents |
+|------|----------|
+| `features/feature_name/providers/feature_name_providers.dart` | Data sources, repository impl, use case wiring |
+| `features/feature_name/presentation/providers/*_controller.dart` | UI state: `AsyncNotifierProvider` / `NotifierProvider` / `StreamProvider` |
 
-  ```
-  widgets/
-  ├── history/
-  │   ├── download_history_list.dart
-  │   └── download_history_item.dart
-  ├── download/
-  │   ├── download_progress_view.dart
-  │   └── download_success_view.dart
-  └── form/
-      ├── url_input_field.dart
-      └── source_selector.dart
-  ```
-
-## Dependency Wiring
-
-Each feature owns its provider wiring in
-`features/feature_name/providers/feature_name_providers.dart`. Core providers
-(Dio, theme, router dependencies) are
-declared in `core/providers/`. Use Riverpod providers for composition; avoid
-service-locator style access. All classes must receive dependencies via
-constructor injection. Accessing global singletons inside classes is forbidden.
+Mixing DI wiring with UI state in a single file is forbidden.
 
 ```dart
-// core/providers/core_providers.dart
-final dioProvider = Provider<Dio>((ref) => Dio(...));
-
 // features/auth/providers/auth_providers.dart
+// — DI wiring only. No UI state. No Notifier classes.
+
+final firebaseAuthProvider = Provider<FirebaseAuth>(
+  (ref) => FirebaseAuth.instance,
+);
+
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>(
-  (ref) => AuthRemoteDataSourceImpl(ref.watch(dioProvider)),
+  (ref) => AuthRemoteDataSourceImpl(
+    firebaseAuth: ref.watch(firebaseAuthProvider),
+    firestore: ref.watch(firestoreProvider),
+  ),
 );
 
 final authRepositoryProvider = Provider<AuthRepository>(
-  (ref) => AuthRepositoryImpl(ref.watch(authRemoteDataSourceProvider)),
+  (ref) => AuthRepositoryImpl(
+    remote: ref.watch(authRemoteDataSourceProvider),
+    failureMapper: const FailureMapper(),
+  ),
 );
 
 final loginUseCaseProvider = Provider<LoginUseCase>(
   (ref) => LoginUseCase(ref.watch(authRepositoryProvider)),
 );
 
+final signOutUseCaseProvider = Provider<SignOutUseCase>(
+  (ref) => SignOutUseCase(ref.watch(authRepositoryProvider)),
+);
+```
+
+```dart
 // features/auth/presentation/providers/auth_controller.dart
+// — UI state only. No data source or repository references.
 
 final authControllerProvider =
     AsyncNotifierProvider<AuthController, User?>(AuthController.new);
@@ -200,12 +204,117 @@ class AuthController extends AsyncNotifier<User?> {
   }) async {
     state = const AsyncLoading();
     final result = await ref.read(loginUseCaseProvider)(
-      LoginParams(email, password),
+      LoginParams(email: email, password: password),
     );
     result.fold(
       (failure) => state = AsyncError(failure, StackTrace.current),
       (user) => state = AsyncData(user),
     );
   }
+
+  Future<void> signOut() async {
+    state = const AsyncLoading();
+    final result = await ref.read(signOutUseCaseProvider)();
+    result.fold(
+      (failure) => state = AsyncError(failure, StackTrace.current),
+      (_) => state = const AsyncData(null),
+    );
+  }
 }
 ```
+
+---
+
+## Core App-Wide Providers (`core/providers/`)
+
+```dart
+// core/providers/firebase_providers.dart
+final firebaseAuthProvider = Provider<FirebaseAuth>(
+  (ref) => FirebaseAuth.instance,
+);
+
+final firestoreProvider = Provider<FirebaseFirestore>(
+  (ref) => FirebaseFirestore.instance,
+);
+
+final firebaseStorageProvider = Provider<FirebaseStorage>(
+  (ref) => FirebaseStorage.instance,
+);
+
+// core/providers/network_providers.dart
+final dioProvider = Provider<Dio>((ref) {
+  final dio = Dio(BaseOptions(baseUrl: Env.apiBaseUrl));
+  dio.interceptors.addAll([
+    AuthInterceptor(ref),
+    LogInterceptor(requestBody: true, responseBody: true),
+  ]);
+  return dio;
+});
+```
+
+These are the **only** providers features may import from outside their
+own feature directory (besides `core/error/` types).
+
+---
+
+## Base Use Case Interfaces (`core/usecase/usecase.dart`)
+
+```dart
+abstract interface class UseCase<T, P> {
+  Future<Result<T>> call(P params);
+}
+
+abstract interface class NoParamsUseCase<T> {
+  Future<Result<T>> call();
+}
+
+abstract interface class StreamUseCase<T, P> {
+  Stream<Result<T>> call(P params);
+}
+
+abstract interface class NoParamsStreamUseCase<T> {
+  Stream<Result<T>> call();
+}
+```
+
+---
+
+## Core Shared Widgets (`core/widgets/`)
+
+- Check `core/widgets/` **before** building any UI component. If suitable,
+  use it. Never duplicate.
+- Anything used in two or more features belongs here.
+- Core widgets are prefixed with `App`: `AppButton`, `AppTextField`,
+  `AppLoader`, `AppDialog`, `AppCard`, `AppEmptyState`, `AppErrorView`.
+- Every core widget must follow `code-quality.md` and `ui.md` without exception.
+- Customization: add an optional parameter if it does not break existing
+  usages. If the change is feature-specific, create a feature-level wrapper.
+
+---
+
+## Feature Widget File Placement
+
+- **Private in same file:** only when under ~30 lines, used exactly once,
+  and tightly coupled to parent. This is the exception.
+- **Extract to `widgets/`:** as soon as a widget is used more than once,
+  exceeds ~30 lines, or represents a named UI concept.
+- **Group by concern** in subfolders — never dump all widgets flat:
+
+```
+widgets/
+├── history/
+│   ├── download_history_list.dart
+│   └── download_history_item.dart
+└── form/
+    ├── url_input_field.dart
+    └── source_selector.dart
+```
+
+---
+
+## Feature Isolation
+
+Features are self-contained. Cross-feature communication happens only through
+the target feature's **domain layer** (entity types or repository interfaces).
+A feature's presentation layer never imports from another feature's
+presentation or data layers.

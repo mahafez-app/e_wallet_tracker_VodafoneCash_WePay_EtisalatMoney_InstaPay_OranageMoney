@@ -1,62 +1,67 @@
-# State Management: Riverpod
+# State Management — Riverpod
 
-- **Primary Pattern:** Use Riverpod for all feature state management.
-- **Single Logic File by Default:** Keep feature state logic in one provider
-  file (for example, `login_controller.dart`). Do not create separate
-  `*_state.dart` files by default.
-- **AsyncValue First:** Prefer `AsyncNotifierProvider` + `AsyncValue<T>` for
-  loading, data, and error states.
-- **Notifier Compatibility:** `NotifierProvider` and `StateNotifierProvider`
-  are valid when a feature needs explicit custom state modeling.
-- **No Codegen for State:** If custom state is needed, define immutable Dart
-  state classes manually in the same provider file. Do not use `freezed`.
-- **Reference Feature Pattern:** For action-driven features (auth/form flows),
-  use `NotifierProvider<FeatureNotifier, FeatureState>` where `FeatureState`
-  is a manual immutable class in the same provider file with `copyWith`.
-- **Screen Simplicity:** Screens are dumb widgets. They read state with
-  `ref.watch`, trigger actions through `ref.read(provider.notifier)`, and keep
-  business orchestration in providers.
-- **NotifierProvider for Synchronous UI State:** Use `NotifierProvider` only
-  for simple synchronous state that does not need async loading/error semantics.
-- **No Cubit-Style State Trees:** Do not model UI state as many sealed classes
-  (`Initial/Loading/Success/Failure`) unless there is a documented reason that
-  `AsyncValue` cannot express cleanly.
-- **Allowed Exceptions for `*_state.dart`:** A dedicated state file is allowed
-  only when one of these is true and the reason is documented above the
-  provider declaration:
-  - Multiple independent UI sub-states must coexist at once.
-  - Complex form workflows need structured validation/submission metadata.
-  - Multi-step wizard flows require explicit transition state.
-  - The same state type is reused by multiple providers/screens.
-  - The provider file becomes unreadable without extraction.
-    In these cases, keep the state immutable, manual (no codegen), and focused
-    on UI data only.
-- **Failure Object in Error State:** Keep `Failure` typed in error paths.
-  For `AsyncValue`, set `AsyncError(failure, stackTrace)` where `failure` is a
-  `Failure` subtype.
-- **Thin Notifiers:** Notifiers orchestrate use cases only. Business logic
-  belongs in use cases and repositories — never in a notifier.
-- **Provider Wiring:** Build repositories/use cases through Riverpod provider
-  composition in `features/feature_name/providers/feature_name_providers.dart`.
-- **DI vs UI Provider Split:**
-  - Keep dependency wiring in
-    `features/feature_name/providers/feature_name_providers.dart`.
-  - Keep UI state providers in `presentation/providers/*_controller.dart` or
-    `presentation/providers/*_provider.dart`.
-    Do not mix both concerns in one file.
-- **No Service Locator in Features:** Do not read dependencies from global
-  singletons (`getIt`, static globals) inside feature classes.
+---
 
-## Async Notifier Definition
+## Provider Type Selection
+
+| Scenario | Provider Type |
+|----------|--------------|
+| One-shot async (login, fetch, submit) | `AsyncNotifierProvider` |
+| Real-time stream (Firestore, Auth state) | `StreamProvider` |
+| Synchronous UI state (form, wizard, tabs) | `NotifierProvider` |
+| Simple derived / computed value | `Provider` |
+| DI wiring (data source, repo, use case) | `Provider` |
+| Auth guard stream | `StreamProvider` |
+
+**`StateNotifierProvider` is forbidden.** Use `NotifierProvider` or
+`AsyncNotifierProvider` for all new code. Legacy `StateNotifier` code must
+be migrated on first touch.
+
+**No code generation.** `riverpod_generator`, `@riverpod` annotation, and
+`build_runner` Riverpod output are not used in this project. All providers
+are declared manually.
+
+---
+
+## Provider Declaration Rules
+
+- Use `autoDispose` on any feature-level provider that should not outlive its
+  screen. Omit `autoDispose` only for app-lifecycle providers (auth state,
+  theme, connectivity) or when keepAlive behavior is explicitly required.
+- Never access providers from global singletons. All providers are composed
+  through Riverpod's `ref`.
+- Provider `build()` must be a pure, side-effect-free initialization.
+  Side effects (logging, analytics) belong in methods, not `build()`.
+
+### keepAlive Policy
+
+| Provider | `autoDispose` | Notes |
+|----------|--------------|-------|
+| Dio / HTTP client | No | App lifetime |
+| Firebase instances | No | App lifetime |
+| Auth state stream | No | App lifetime |
+| Theme notifier | No | App lifetime |
+| Feature notifiers | Yes | Scoped to screen |
+| Feature stream providers | Yes | Cancel subscription on exit |
+| Use case providers | Yes | Stateless, cheap to recreate |
+| Repository providers | Yes | Stateless, cheap to recreate |
+
+---
+
+## `AsyncNotifierProvider` — One-Shot Async Operations
+
+Use for login, registration, data fetch, form submission, delete, upload.
 
 ```dart
 // features/auth/presentation/providers/auth_controller.dart
 final authControllerProvider =
-    AsyncNotifierProvider<AuthController, User?>(AuthController.new);
+    AsyncNotifierProvider.autoDispose<AuthController, UserEntity?>(
+  AuthController.new,
+);
 
-class AuthController extends AsyncNotifier<User?> {
+class AuthController extends AutoDisposeAsyncNotifier<UserEntity?> {
   @override
-  Future<User?> build() async => null;
+  Future<UserEntity?> build() async => null;
 
   Future<void> login({
     required String email,
@@ -64,140 +69,218 @@ class AuthController extends AsyncNotifier<User?> {
   }) async {
     state = const AsyncLoading();
     final result = await ref.read(loginUseCaseProvider)(
-      LoginParams(email, password),
+      LoginParams(email: email, password: password),
     );
     result.fold(
       (failure) => state = AsyncError(failure, StackTrace.current),
       (user) => state = AsyncData(user),
     );
   }
+
+  Future<void> signOut() async {
+    state = const AsyncLoading();
+    final result = await ref.read(signOutUseCaseProvider)();
+    result.fold(
+      (failure) => state = AsyncError(failure, StackTrace.current),
+      (_) => state = const AsyncData(null),
+    );
+  }
 }
 ```
 
-## Notifier + Custom State Definition
+---
+
+## `StreamProvider` — Real-Time Data (Firestore, Auth)
+
+Use for any data that arrives as an ongoing stream. `StreamProvider`
+automatically converts stream events to `AsyncValue<T>` — no manual loading
+state management.
 
 ```dart
-// features/auth/presentation/providers/auth_provider.dart
-class AuthState {
-  final bool isAuthenticated;
-  final bool isLoading;
-  final UserEntity? user;
-  final String? errorMessage;
+// core/providers/auth_state_provider.dart
+// App-lifetime — no autoDispose. Used by the router guard.
+final authStateProvider = StreamProvider<UserEntity?>((ref) {
+  return ref.watch(watchAuthStateUseCaseProvider)().map(
+    (result) => result.fold(
+      (failure) => throw failure,      // → AsyncError
+      (user) => user,                  // → AsyncData
+    ),
+  );
+});
 
-  const AuthState({
-    this.isAuthenticated = false,
-    this.isLoading = false,
-    this.user,
-    this.errorMessage,
+// features/messages/presentation/providers/messages_provider.dart
+final messagesProvider =
+    StreamProvider.autoDispose<List<MessageEntity>>((ref) {
+  return ref.watch(watchMessagesUseCaseProvider)().map(
+    (result) => result.fold(
+      (failure) => throw failure,
+      (messages) => messages,
+    ),
+  );
+});
+```
+
+---
+
+## `NotifierProvider` — Synchronous / Custom UI State
+
+Use only when `AsyncValue` cannot cleanly express the state. Documented
+exceptions only (see Allowed Custom State section below).
+
+```dart
+// features/onboarding/presentation/providers/onboarding_controller.dart
+final onboardingControllerProvider =
+    NotifierProvider.autoDispose<OnboardingController, OnboardingState>(
+  OnboardingController.new,
+);
+
+class OnboardingController extends AutoDisposeNotifier<OnboardingState> {
+  @override
+  OnboardingState build() => const OnboardingState();
+
+  void nextPage() {
+    if (state.currentPage >= state.totalPages - 1) return;
+    state = state.copyWith(currentPage: state.currentPage + 1);
+  }
+
+  void previousPage() {
+    if (state.currentPage <= 0) return;
+    state = state.copyWith(currentPage: state.currentPage - 1);
+  }
+
+  void complete() {
+    state = state.copyWith(isCompleted: true);
+  }
+}
+```
+
+---
+
+## Custom State Shape
+
+Prefer `AsyncValue<T>`. A separate `*_state.dart` file is allowed **only**
+when one of the following is true, and the reason is documented in a comment
+above the provider declaration:
+
+- Multiple independent UI sub-states coexist simultaneously.
+- Complex form workflows require structured validation / submission metadata.
+- Multi-step wizard flows require explicit transition state.
+- The same state type is reused by multiple providers or screens.
+- The provider file becomes unreadable without extraction.
+
+Custom state must be:
+- Immutable — all fields `final`.
+- Manually written — no `freezed` or code generation.
+- Defined in the same file as the notifier, or extracted to `*_state.dart`
+  only when the file becomes too large.
+- Implemented with `copyWith` for updates.
+
+```dart
+// Correct — manual immutable state in same file
+final class OnboardingState extends Equatable {
+  const OnboardingState({
+    this.currentPage = 0,
+    this.totalPages = 4,
+    this.isCompleted = false,
   });
 
-  AuthState copyWith({
-    bool? isAuthenticated,
-    bool? isLoading,
-    UserEntity? user,
-    String? errorMessage,
-  }) {
-    return AuthState(
-      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
-      isLoading: isLoading ?? this.isLoading,
-      user: user ?? this.user,
-      errorMessage: errorMessage,
-    );
-  }
-}
+  final int currentPage;
+  final int totalPages;
+  final bool isCompleted;
 
-class AuthNotifier extends Notifier<AuthState> {
+  OnboardingState copyWith({
+    int? currentPage,
+    int? totalPages,
+    bool? isCompleted,
+  }) => OnboardingState(
+    currentPage: currentPage ?? this.currentPage,
+    totalPages: totalPages ?? this.totalPages,
+    isCompleted: isCompleted ?? this.isCompleted,
+  );
+
+  bool get isLastPage => currentPage >= totalPages - 1;
+
   @override
-  AuthState build() => const AuthState();
+  List<Object?> get props => [currentPage, totalPages, isCompleted];
+}
+```
 
-  Future<void> login({required String email, required String password}) async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
-    final result = await ref.read(loginUseCaseProvider)(
-      LoginParams(email, password),
-    );
+---
 
-    result.fold(
-      (failure) => state = state.copyWith(
-        isLoading: false,
-        isAuthenticated: false,
-        errorMessage: failure.technicalMessage,
-      ),
-      (user) => state = state.copyWith(
-        isLoading: false,
-        isAuthenticated: true,
-        user: user,
-        errorMessage: null,
-      ),
-    );
+## Thin Notifiers
+
+Notifiers orchestrate use cases only. Business rules, data transformation,
+and domain decisions belong in use cases and repositories.
+
+```dart
+// ❌ Business logic in notifier — forbidden
+Future<void> fetchUser(String id) async {
+  final raw = await _api.getUser(id);
+  if (raw['role'] == 'admin') {
+    // applying business rule in presentation layer — wrong
   }
 }
 
-final authProvider = NotifierProvider<AuthNotifier, AuthState>(
-  AuthNotifier.new,
-);
-```
-
-## Providing State
-
-Wrap the app with `ProviderScope` at the top of the tree. Feature providers
-are declared near their feature and consumed by screens/widgets.
-
-```dart
-void main() {
-  runApp(const ProviderScope(child: App()));
+// ✅ Notifier delegates to use case
+Future<void> fetchUser(String id) async {
+  state = const AsyncLoading();
+  final result = await ref.read(getUserUseCaseProvider)(GetUserParams(id: id));
+  result.fold(
+    (failure) => state = AsyncError(failure, StackTrace.current),
+    (user) => state = AsyncData(user),
+  );
 }
 ```
 
-## Consuming State
+---
 
-Use `ConsumerWidget`/`ConsumerStatefulWidget` with `ref.watch` for UI and
-`ref.listen` for side effects.
+## Consuming State in Widgets
 
 ```dart
-class LoginBody extends ConsumerWidget {
-  const LoginBody({super.key});
+// ConsumerWidget for stateless screens
+class ProfileScreen extends ConsumerWidget {
+  const ProfileScreen({super.key, required this.userId});
+
+  final String userId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) =>
+      const Scaffold(body: SafeArea(child: _ProfileBody()));
+}
+
+class _ProfileBody extends ConsumerWidget {
+  const _ProfileBody({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<User?>>(authControllerProvider, (previous, next) {
+    // Side effects — navigation, snackbars, dialogs
+    ref.listen<AsyncValue<UserEntity?>>(authControllerProvider, (_, next) {
       if (next.hasError && next.error is Failure) {
-        final failure = next.error! as Failure;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.failureMessage(failure))),
+          SnackBar(
+            content: Text(context.failureMessage(next.error! as Failure)),
+          ),
         );
       }
     });
 
-    final authState = ref.watch(authControllerProvider);
+    final userState = ref.watch(profileProvider);
 
-    return switch (authState) {
-      AsyncLoading() => const CircularProgressIndicator.adaptive(),
-      AsyncData(:final value) when value != null => const HomeScreen(),
-      AsyncData() => const LoginForm(),
-      AsyncError() => const LoginForm(),
+    return switch (userState) {
+      AsyncLoading()         => const AppLoader(),
+      AsyncData(:final value) => _ProfileContent(user: value),
+      AsyncError()           => AppErrorView(
+          message: context.failureMessage(userState.error! as Failure),
+          onRetry: () => ref.invalidate(profileProvider),
+        ),
     };
   }
 }
 ```
 
-## UI Integration Pattern
-
-When integrating providers into screens, follow these patterns:
-
-- Use `ConsumerWidget` for stateless screens.
-- Use `ConsumerStatefulWidget` only when local UI controllers are required
-  (form key, text controllers, animation/scroll controllers, visibility
-  toggles).
-- Call `ref.watch(provider)` near the top of `build()` and derive all UI from
-  that state.
-- Trigger actions from handlers with `ref.read(provider.notifier).action()`.
-- Use `ref.listen(provider, ...)` for one-off side effects like snackbars,
-  navigation, or dialogs.
-- Disable submit/action buttons while loading to prevent duplicate requests.
-- Do not store provider state in local mutable fields; always read/watch from
-  Riverpod.
-
 ```dart
+// ConsumerStatefulWidget — only when local controllers are required
+// (TextEditingController, FocusNode, AnimationController, ScrollController)
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
@@ -208,36 +291,87 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
-
-    ref.listen<AuthState>(authProvider, (previous, next) {
-      if (next.errorMessage != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next.errorMessage!)),
-        );
-      }
-    });
-
-    return FilledButton(
-      onPressed: authState.isLoading
-          ? null
-          : () => ref.read(authProvider.notifier).login(
-                email: _emailController.text,
-                password: '***',
-              ),
-      child: authState.isLoading
-          ? const CircularProgressIndicator.adaptive()
-          : const Text('Login'),
-    );
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    body: SafeArea(child: _LoginBody(
+      formKey: _formKey,
+      emailController: _emailController,
+      passwordController: _passwordController,
+    )),
+  );
 }
 ```
 
-## Exception Pattern (Custom State)
+---
 
-If `AsyncValue` is not sufficient, use a custom immutable state type with a
-`NotifierProvider` or `StateNotifierProvider`. Keep the state in the same file
-unless one of the allowed exception criteria requires extraction.
+## ref Rules
+
+| Method | When to use |
+|--------|-------------|
+| `ref.watch(provider)` | Inside `build()` to react to state changes |
+| `ref.read(provider)` | Inside callbacks, methods, event handlers |
+| `ref.listen(provider, ...)` | Inside `build()` for side effects only |
+| `ref.invalidate(provider)` | To force a provider to re-initialize |
+| `ref.watch(provider.notifier)` | Never — use `ref.read(provider.notifier).method()` |
+
+```dart
+// ❌ ref.watch inside async method — forbidden
+Future<void> refresh() async {
+  final data = ref.watch(someProvider); // widget lifecycle violation
+}
+
+// ❌ ref.watch in callback — forbidden
+onPressed: () => ref.watch(counterProvider.notifier).increment()
+
+// ✅ ref.read in callbacks
+onPressed: () => ref.read(counterProvider.notifier).increment()
+
+// ✅ ref.watch in build
+final state = ref.watch(profileProvider);
+```
+
+---
+
+## `ProviderScope` Setup
+
+```dart
+// main.dart
+void main() async {
+  await initializeApp();
+  runApp(const ProviderScope(child: App()));
+}
+```
+
+Override providers only at the `ProviderScope` level. Never use
+`ProviderContainer` inside widget trees.
+
+```dart
+// Testing
+ProviderScope(
+  overrides: [
+    authRepositoryProvider.overrideWithValue(MockAuthRepository()),
+    loginUseCaseProvider.overrideWithValue(MockLoginUseCase()),
+  ],
+  child: const App(),
+)
+```
+
+---
+
+## DI vs UI Provider Split (mandatory)
+
+| File | Contains |
+|------|---------|
+| `features/x/providers/x_providers.dart` | `Provider<DataSource>`, `Provider<Repository>`, `Provider<UseCase>` |
+| `features/x/presentation/providers/x_controller.dart` | `AsyncNotifierProvider`, `NotifierProvider`, `StreamProvider` with UI state |
+
+Mixing DI wiring and UI state in one file is forbidden without exception.

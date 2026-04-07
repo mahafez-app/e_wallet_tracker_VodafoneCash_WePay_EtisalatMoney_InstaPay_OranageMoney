@@ -1,0 +1,32 @@
+{
+  "@@locale": "en",
+  "errorNetwork": "No internet connection. Please check your network.",
+  "errorAuthUserNotFound": "User not found. Please check your credentials.",
+  "errorAuthWrongPassword": "Incorrect password. Please try again.",
+  "errorAuthEmailInUse": "This email is already registered.",
+  "errorAuthTooManyRequests": "Too many attempts. Please try again later.",
+  "errorAuthUserDisabled": "This account has been disabled.",
+  "errorAuthWeakPassword": "Password is too weak. Please choose a stronger password.",
+  "errorAuthInvalidEmail": "Invalid email address.",
+  "errorUnauthorized": "Unauthorized access. Please log in again.",
+  "errorAuthGeneric": "Authentication failed. Please try again.",
+  "errorForbidden": "Access forbidden.",
+  "errorNotFound": "Resource not found.",
+  "errorConflict": "Resource conflict. Please try again.",
+  "errorUnprocessable": "Unable to process your request.",
+  "errorServer": "Server error. Please try again later.",
+  "errorServerGeneric": "Something went wrong. Please try again.",
+  "errorPermissionDenied": "Permission denied.",
+  "errorCache": "Local storage error. Please try again.",
+  "errorStorage": "File storage error.",
+  "errorValidation": "Validation failed.",
+  "errorValidationWithCode": "Validation failed: {code}",
+  "@errorValidationWithCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUnknown": "An unexpected error occurred."
+}

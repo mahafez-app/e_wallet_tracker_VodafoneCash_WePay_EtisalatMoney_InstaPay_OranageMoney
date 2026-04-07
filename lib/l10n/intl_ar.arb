@@ -1,0 +1,32 @@
+{
+  "@@locale": "ar",
+  "errorNetwork": "لا توجد اتصالات إنترنت. يرجى التحقق من شبكتك.",
+  "errorAuthUserNotFound": "المستخدم غير موجود. يرجى التحقق من بيانات الاعتماد الخاصة بك.",
+  "errorAuthWrongPassword": "كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.",
+  "errorAuthEmailInUse": "هذا البريد الإلكتروني مسجل بالفعل.",
+  "errorAuthTooManyRequests": "عدد محاولات كبير جداً. يرجى المحاولة لاحقاً.",
+  "errorAuthUserDisabled": "تم تعطيل هذا الحساب.",
+  "errorAuthWeakPassword": "كلمة المرور ضعيفة جداً. يرجى اختيار كلمة مرور أقوى.",
+  "errorAuthInvalidEmail": "عنوان البريد الإلكتروني غير صحيح.",
+  "errorUnauthorized": "وصول غير مصرح. يرجى تسجيل الدخول مرة أخرى.",
+  "errorAuthGeneric": "فشل المصادقة. يرجى المحاولة مرة أخرى.",
+  "errorForbidden": "الوصول ممنوع.",
+  "errorNotFound": "المورد غير موجود.",
+  "errorConflict": "تضارب المورد. يرجى المحاولة مرة أخرى.",
+  "errorUnprocessable": "تعذر معالجة طلبك.",
+  "errorServer": "خطأ في الخادم. يرجى المحاولة لاحقاً.",
+  "errorServerGeneric": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+  "errorPermissionDenied": "تم رفض الإذن.",
+  "errorCache": "خطأ في التخزين المحلي. يرجى المحاولة مرة أخرى.",
+  "errorStorage": "خطأ في تخزين الملفات.",
+  "errorValidation": "فشل التحقق.",
+  "errorValidationWithCode": "فشل التحقق: {code}",
+  "@errorValidationWithCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUnknown": "حدث خطأ غير متوقع."
+}

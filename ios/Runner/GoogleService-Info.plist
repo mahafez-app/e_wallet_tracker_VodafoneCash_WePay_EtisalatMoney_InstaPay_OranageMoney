@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>467978053763-7eodibhj5n58oaedudmmq48uv6r4l7s8.apps.googleusercontent.com</string>
+	<string>467978053763-lnua67h7mt2edjgjihp1i0vplb5g48bj.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.467978053763-7eodibhj5n58oaedudmmq48uv6r4l7s8</string>
+	<string>com.googleusercontent.apps.467978053763-lnua67h7mt2edjgjihp1i0vplb5g48bj</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCEcJReAfMO9JejZzRRJgTbtMKq49ApTZ8</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.walletTracker</string>
+	<string>com.radyhaggag.mahafez</string>
 	<key>PROJECT_ID</key>
 	<string>wallet-tracker-radyhaggag</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:467978053763:ios:dae8db17a3b8172b5dd3b6</string>
+	<string>1:467978053763:ios:af7dab33bf161ca05dd3b6</string>
 </dict>
 </plist>

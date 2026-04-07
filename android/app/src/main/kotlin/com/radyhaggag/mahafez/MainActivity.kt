@@ -1,4 +1,4 @@
-package com.example.wallet_tracker
+package com.radyhaggag.mahafez
 
 import io.flutter.embedding.android.FlutterActivity
 

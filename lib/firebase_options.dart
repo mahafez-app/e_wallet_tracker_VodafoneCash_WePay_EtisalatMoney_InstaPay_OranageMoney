@@ -20,8 +20,8 @@ final class DefaultFirebaseOptions {
       TargetPlatform.iOS => ios,
       TargetPlatform.macOS => ios,
       _ => throw UnsupportedError(
-          'DefaultFirebaseOptions are not supported for this platform.',
-        ),
+        'DefaultFirebaseOptions are not supported for this platform.',
+      ),
     };
   }
 
@@ -39,6 +39,6 @@ final class DefaultFirebaseOptions {
     messagingSenderId: '467978053763',
     projectId: 'wallet-tracker-radyhaggag',
     storageBucket: 'wallet-tracker-radyhaggag.firebasestorage.app',
-    iosBundleId: 'com.example.walletTracker',
+    iosBundleId: 'com.radyhaggag.mahafez',
   );
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'app.dart';
 import 'core/di/app_initializer.dart';
-import 'core/widgets/app.dart';
 
 void main() async {
   await initializeApp();

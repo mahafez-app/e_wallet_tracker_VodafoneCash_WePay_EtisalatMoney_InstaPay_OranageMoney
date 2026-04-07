@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/theme/app_responsive.dart';
+import 'package:wallet_tracker/core/utils/app_constants.dart';
 
-import '../theme/app_responsive.dart';
-import '../utils/app_constants.dart';
 
 class AppLogoName extends StatelessWidget {
   const AppLogoName({super.key});

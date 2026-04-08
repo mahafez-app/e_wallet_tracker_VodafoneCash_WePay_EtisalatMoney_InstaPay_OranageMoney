@@ -22,6 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(code) => "فشل التحقق: ${code}";
 
+  static String m1(count) =>
+      "${Intl.plural(count, zero: 'لا توجد محافظ نشطة', one: 'محفظة واحدة نشطة', two: 'محفظتان نشطتان', few: '${count} محافظ نشطة', many: '${count} محفظة نشطة', other: '${count} محفظة نشطة')}";
+
+  static String m2(minutes) => "منذ ${minutes} دقيقة";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "alreadyHaveAccount":
@@ -91,6 +96,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "fullName": MessageLookupByLibrary.simpleMessage("الاسم الكامل"),
         "fullNamePlaceholder":
             MessageLookupByLibrary.simpleMessage("مثلاً: أحمد محمود"),
+        "homeActiveWallets": m1,
+        "homeAddWallet": MessageLookupByLibrary.simpleMessage("إضافة محفظة"),
+        "homeCurrency": MessageLookupByLibrary.simpleMessage("ج.م"),
+        "homeEGP": MessageLookupByLibrary.simpleMessage("EGP"),
+        "homeJustNow": MessageLookupByLibrary.simpleMessage("الآن"),
+        "homeLastActivity": MessageLookupByLibrary.simpleMessage("آخر نشاط"),
+        "homeMinutesAgo": m2,
+        "homeTotalIn": MessageLookupByLibrary.simpleMessage("إجمالي الوارد"),
+        "homeTotalOut": MessageLookupByLibrary.simpleMessage("إجمالي الصادر"),
+        "homeTotalWallets":
+            MessageLookupByLibrary.simpleMessage("إجمالي المحافظ"),
+        "homeViewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+        "homeWelcome": MessageLookupByLibrary.simpleMessage("مرحباً بك"),
+        "homeWorkspaces": MessageLookupByLibrary.simpleMessage("مساحات العمل"),
+        "homeYourWallets": MessageLookupByLibrary.simpleMessage("محافظك"),
         "nameWillBeDisplayed": MessageLookupByLibrary.simpleMessage(
             "سيظهر اسمك عند تحديث حالة الدفع لتسهيل تتبع العمليات المالية"),
         "notFoundPageTitle":
@@ -110,6 +130,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "signUpNow": MessageLookupByLibrary.simpleMessage("اشترك الآن"),
         "signUpSubtitle": MessageLookupByLibrary.simpleMessage(
             "إنشاء حساب جديد للبدء في إدارة أعمالك"),
+        "walletStatusActive": MessageLookupByLibrary.simpleMessage("نشط"),
         "whatIsYourName": MessageLookupByLibrary.simpleMessage("ما اسمك؟"),
         "yourName": MessageLookupByLibrary.simpleMessage("اسمك")
       };

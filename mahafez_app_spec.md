@@ -114,9 +114,11 @@ Wallet data:
 - provider
 - deviceId
 - ownerUid
-- createdAt
 - currentBalance
+- totalReceived
+- totalSent
 - lastBalanceAt
+- createdAt
 
 ### 5.3 Workspace
 
@@ -125,6 +127,10 @@ A workspace is a business space.
 Workspace data:
 - name
 - ownerUid
+- walletsCount
+- totalReceived
+- totalSent
+- latestActivityAt
 - createdAt
 
 ### 5.4 Workspace member
@@ -135,6 +141,7 @@ Members should not be stored as a plain list in the workspace document.
 Use a subcollection for scalability.
 
 Member data:
+- uid
 - joinedAt
 
 ### 5.5 Invite
@@ -220,10 +227,19 @@ History data:
 #### wallets/{walletId}
 
 - `phoneNumber`: string (11 digits, Egypt format)  
-- `provider`: string (`vodafone_cash | orange_money | etisalat_cash | instapay`)  
+- `provider`: string. Accepted values:
+  - `vodafone_cash`
+  - `orange_money`
+  - `etisalat_cash`
+  - `instapay`
+  - `we_pay`
+  - `fawry`
+  - `bank`
 - `deviceId`: string  
 - `ownerUid`: string (reference to user)  
 - `currentBalance`: number  
+- `totalReceived`: number
+- `totalSent`: number
 - `lastBalanceAt`: timestamp  
 - `createdAt`: timestamp  
 
@@ -261,19 +277,25 @@ History data:
 #### workspaces/{workspaceId}
 
 - `name`: string  
-- `ownerUid`: string (uid)  
+- `ownerUid`: string (uid)
+- `walletsCount`: number
+- `totalReceived`: number
+- `totalSent`: number
+- `latestActivityAt`: timestamp (nullable)
 - `createdAt`: timestamp  
 
 ---
 
 #### workspaces/{workspaceId}/members/{uid}
 
+- `uid`: string (uid of the member)
 - `joinedAt`: timestamp  
 
 ---
 
 #### workspaces/{workspaceId}/wallets/{walletId}
 
+- `walletId`: string (reference to wallet)
 - `addedAt`: timestamp  
 
 ---
@@ -665,7 +687,8 @@ Show:
 - total received across all user wallets
 - total sent across all user wallets
 - wallet count
-
+- total received across all user wallets (NOT from workspaces to avoid duplication)
+- total sent across all user wallets (NOT from workspaces to avoid duplication)
 ---
 
 ## 18. App Flow

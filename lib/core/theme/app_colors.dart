@@ -94,4 +94,21 @@ abstract final class AppColors {
   static const Color signInButtonBorder = Color(0x4CC2C6D6);
   static const Color signInButtonText = Color(0xFF111C2D);
   static const Color signInSuccessGreen = Color(0xFF006C49);
+
+  // Home Screen specific mappings
+  static const Color addWalletBg = Color(0xFFE7EEFF);
+  static const Color addWalletBorder = Color(0xFFC2C6D5);
+  static const Color workspaceCardBorder = Color(0x33D8E3FB);
+  static const Color workspaceIconBg = Color(0xFF9AF2C5);
+  static const Color shadowColor = Color(0x0C000000);
+
+  // Wallet Provider Brands
+  static const Color vodafoneRed = Color(0xFFE60000);
+  static const Color orangeMoney = Color(0xFFFF7900);
+  static const Color etisalatGreen = Color(0xFF7CB342);
+  static const Color instaPayNavy = Color(0xFF003C71);
+  static const Color wePayPurple = Color(0xFF5D1D50);
+  static const Color fawryYellow = Color(0xFFFACC15);
+  static const Color bankSlate = Color(0xFF64748B);
+  static const Color providerUnknownNeutral = Color(0xFF94A3B8);
 }

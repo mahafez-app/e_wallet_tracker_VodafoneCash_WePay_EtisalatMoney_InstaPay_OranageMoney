@@ -22,6 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(code) => "Validation failed: ${code}";
 
+  static String m1(count) =>
+      "${Intl.plural(count, zero: 'No active wallets', one: '1 active wallet', other: '${count} active wallets')}";
+
+  static String m2(minutes) => "${minutes} mins ago";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "alreadyHaveAccount":
@@ -93,6 +98,22 @@ class MessageLookup extends MessageLookupByLibrary {
         "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
         "fullNamePlaceholder":
             MessageLookupByLibrary.simpleMessage("e.g. John Doe"),
+        "homeActiveWallets": m1,
+        "homeAddWallet": MessageLookupByLibrary.simpleMessage("Add Wallet"),
+        "homeCurrency": MessageLookupByLibrary.simpleMessage("EGP"),
+        "homeEGP": MessageLookupByLibrary.simpleMessage("EGP"),
+        "homeJustNow": MessageLookupByLibrary.simpleMessage("Just Now"),
+        "homeLastActivity":
+            MessageLookupByLibrary.simpleMessage("Last Activity"),
+        "homeMinutesAgo": m2,
+        "homeTotalIn": MessageLookupByLibrary.simpleMessage("Total In"),
+        "homeTotalOut": MessageLookupByLibrary.simpleMessage("Total Out"),
+        "homeTotalWallets":
+            MessageLookupByLibrary.simpleMessage("Total Wallets"),
+        "homeViewAll": MessageLookupByLibrary.simpleMessage("View All"),
+        "homeWelcome": MessageLookupByLibrary.simpleMessage("Welcome"),
+        "homeWorkspaces": MessageLookupByLibrary.simpleMessage("Workspaces"),
+        "homeYourWallets": MessageLookupByLibrary.simpleMessage("Your Wallets"),
         "nameWillBeDisplayed": MessageLookupByLibrary.simpleMessage(
             "Your name will be displayed when updating payment status to facilitate tracking financial transactions"),
         "notFoundPageTitle":
@@ -112,6 +133,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "signUpNow": MessageLookupByLibrary.simpleMessage("Sign Up Now"),
         "signUpSubtitle": MessageLookupByLibrary.simpleMessage(
             "Create a new account to start managing your business"),
+        "walletStatusActive": MessageLookupByLibrary.simpleMessage("Active"),
         "whatIsYourName":
             MessageLookupByLibrary.simpleMessage("What is your name?"),
         "yourName": MessageLookupByLibrary.simpleMessage("Your Name")

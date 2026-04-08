@@ -41,7 +41,9 @@ class _ConfirmNameFormState extends ConsumerState<ConfirmNameForm> {
     if (_formKey.currentState?.validate() ?? false) {
       final user = ref.read(currentUserProvider);
       if (user != null) {
-        ref.read(authNotifierProvider.notifier).updateDisplayName(
+        ref
+            .read(authNotifierProvider.notifier)
+            .updateDisplayName(
               uid: user.uid,
               displayName: _nameController.text.trim(),
             );
@@ -83,7 +85,7 @@ class _ConfirmNameFormState extends ConsumerState<ConfirmNameForm> {
             onPressed: _submit,
             isLoading: isLoading,
           ),
-          
+
           AppSpacing.xl.verticalSpace,
         ],
       ),

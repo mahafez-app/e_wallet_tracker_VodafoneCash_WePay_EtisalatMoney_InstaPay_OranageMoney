@@ -589,6 +589,162 @@ class S {
       args: [],
     );
   }
+
+  /// `مرحباً بك`
+  String get homeWelcome {
+    return Intl.message(
+      'مرحباً بك',
+      name: 'homeWelcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إجمالي المحافظ`
+  String get homeTotalWallets {
+    return Intl.message(
+      'إجمالي المحافظ',
+      name: 'homeTotalWallets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ج.م`
+  String get homeCurrency {
+    return Intl.message(
+      'ج.م',
+      name: 'homeCurrency',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إجمالي الصادر`
+  String get homeTotalOut {
+    return Intl.message(
+      'إجمالي الصادر',
+      name: 'homeTotalOut',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إجمالي الوارد`
+  String get homeTotalIn {
+    return Intl.message(
+      'إجمالي الوارد',
+      name: 'homeTotalIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `محافظك`
+  String get homeYourWallets {
+    return Intl.message(
+      'محافظك',
+      name: 'homeYourWallets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عرض الكل`
+  String get homeViewAll {
+    return Intl.message(
+      'عرض الكل',
+      name: 'homeViewAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مساحات العمل`
+  String get homeWorkspaces {
+    return Intl.message(
+      'مساحات العمل',
+      name: 'homeWorkspaces',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة محفظة`
+  String get homeAddWallet {
+    return Intl.message(
+      'إضافة محفظة',
+      name: 'homeAddWallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `نشط`
+  String get walletStatusActive {
+    return Intl.message(
+      'نشط',
+      name: 'walletStatusActive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count, plural, =0{لا توجد محافظ نشطة} =1{محفظة واحدة نشطة} =2{محفظتان نشطتان} few{{count} محافظ نشطة} many{{count} محفظة نشطة} other{{count} محفظة نشطة}}`
+  String homeActiveWallets(num count) {
+    return Intl.plural(
+      count,
+      zero: 'لا توجد محافظ نشطة',
+      one: 'محفظة واحدة نشطة',
+      two: 'محفظتان نشطتان',
+      few: '$count محافظ نشطة',
+      many: '$count محفظة نشطة',
+      other: '$count محفظة نشطة',
+      name: 'homeActiveWallets',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `آخر نشاط`
+  String get homeLastActivity {
+    return Intl.message(
+      'آخر نشاط',
+      name: 'homeLastActivity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الآن`
+  String get homeJustNow {
+    return Intl.message(
+      'الآن',
+      name: 'homeJustNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `منذ {minutes} دقيقة`
+  String homeMinutesAgo(Object minutes) {
+    return Intl.message(
+      'منذ $minutes دقيقة',
+      name: 'homeMinutesAgo',
+      desc: '',
+      args: [minutes],
+    );
+  }
+
+  /// `EGP`
+  String get homeEGP {
+    return Intl.message(
+      'EGP',
+      name: 'homeEGP',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

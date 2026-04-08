@@ -5,10 +5,7 @@ import '../../../../core/usecase/usecase.dart';
 import '../repositories/auth_repository.dart';
 
 final class UpdateDisplayNameParams extends Equatable {
-  const UpdateDisplayNameParams({
-    required this.uid,
-    required this.displayName,
-  });
+  const UpdateDisplayNameParams({required this.uid, required this.displayName});
 
   final String uid;
   final String displayName;

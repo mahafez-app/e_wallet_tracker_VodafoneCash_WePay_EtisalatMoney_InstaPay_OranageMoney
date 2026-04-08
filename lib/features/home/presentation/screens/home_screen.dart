@@ -1,57 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../generated/l10n.dart';
-import '../../../auth/presentation/providers/auth_notifier.dart';
-import '../../../auth/presentation/providers/auth_providers.dart';
+import '../providers/home_controller.dart';
+import '../widgets/home_global_stats_widget.dart';
+import '../widgets/home_header_widget.dart';
+import '../widgets/home_wallets_section.dart';
+import '../widgets/home_workspaces_section.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final s = S.of(context);
-    final user = ref.watch(currentUserProvider);
-    final authNotifier = ref.read(authNotifierProvider.notifier);
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      backgroundColor: AppColors.signInBackground,
+      body: SafeArea(child: _HomeBody()),
+    );
+  }
+}
 
-    return Scaffold(
-      appBar: AppBar(title: Text(s.appName)),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(AppSpacing.lg),
+class _HomeBody extends ConsumerWidget {
+  const _HomeBody();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dashboardState = ref.watch(homeDashboardProvider);
+
+    return switch (dashboardState) {
+      AsyncLoading() => const Center(child: CircularProgressIndicator()),
+      AsyncData(:final value) => RefreshIndicator(
+        onRefresh: () async => ref.refresh(homeDashboardProvider),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          // padding: const EdgeInsets.only(bottom: AppSpacing.md),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Welcome, ${user?.name ?? 'User'}!',
-                style: Theme.of(context).textTheme.headlineMedium,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: AppSpacing.md),
-              Text(
-                'Email: ${user?.email ?? 'N/A'}',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              SizedBox(height: AppSpacing.md),
-              Text(
-                'UID: ${user?.uid ?? 'N/A'}',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              SizedBox(height: AppSpacing.xl),
-              const Divider(),
-              SizedBox(height: AppSpacing.md),
-              const Text('Home Screen - To be implemented in Phase 4'),
-              SizedBox(height: AppSpacing.xl),
-              FilledButton.icon(
-                onPressed: () => authNotifier.signOut(),
-                icon: const Icon(Icons.logout),
-                label: const Text('Sign Out'),
+              HomeHeaderWidget(invitationsCount: value.invitationsCount),
+              Padding(
+                padding: AppSpacing.pagePadding,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: AppSpacing.xxl,
+                  children: [
+                    HomeGlobalStatsWidget(
+                      totalBalance: value.totalBalance,
+                      totalSent: value.totalSent,
+                      totalReceived: value.totalReceived,
+                    ),
+                    HomeWalletsSection(wallets: value.wallets),
+                    HomeWorkspacesSection(workspaces: value.workspaces),
+                  ],
+                ),
               ),
             ],
           ),
         ),
       ),
-    );
+      AsyncError(:final error) => Center(child: Text(error.toString())),
+    };
   }
 }

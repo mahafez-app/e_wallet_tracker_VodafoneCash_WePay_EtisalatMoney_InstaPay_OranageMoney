@@ -98,7 +98,10 @@ LayoutBuilder(
   `FractionallySizedBox`.
 - For required fixed layouts (like avatars, logos, explicit fixed UI components), never use raw double/int values (e.g., `width: 96`). Always use the extensions from `AppResponsive` (e.g., `96.responsiveWidth`, `96.responsiveHeight`, `24.responsiveRadius`).
 - Icon sizes must always use `.responsiveRadius` (e.g., `size: 48.responsiveRadius`).
-- Colors inside the widget tree must not use built-in colors (`Colors.white`, `Colors.black`, `Colors.blue`). Always use properties from `Theme.of(context)` or constants stored in `AppColors` (e.g., `AppColors.white`, `AppColors.black`). If a needed primitive color isn't there, add it to `AppColors` first.
+- **ZERO HARDCODED STYLES/COLORS:**
+  - **Never** instantiate `TextStyle(...)` directly in any widget file. **Always** use `Theme.of(context).textTheme...` followed by `.copyWith(...)` if necessary.
+  - **Never** instantiate raw colors such as `Color(0xFF...)` or `Colors.red` directly inside the widget tree.
+  - **Always** use properties from `Theme.of(context)` or constants mapped in `AppColors` (e.g., `AppColors.white`, `AppColors.walletCardBg`). If a needed color or semantic mapping is missing from the theme, **add it to `AppColors` first** before referring to it.
 - Always handle text overflow: every `Text` that could overflow must have
   `overflow: TextOverflow.ellipsis` (single line) or `maxLines` +
   `TextOverflow.ellipsis` (multiline).

@@ -35,7 +35,10 @@ class AppTextField extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: labelStyle ?? Theme.of(context).textTheme.labelLarge),
+        Text(
+          label,
+          style: labelStyle ?? Theme.of(context).textTheme.labelLarge,
+        ),
         AppSpacing.sm.verticalSpace,
         TextFormField(
           controller: controller,

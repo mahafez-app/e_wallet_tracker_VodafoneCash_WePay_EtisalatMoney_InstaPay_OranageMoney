@@ -76,7 +76,7 @@ These apply without exception across all files and tasks.
 - **No Firebase types outside the data layer.** `Timestamp`, `DocumentSnapshot`,
   `DocumentReference`, `QuerySnapshot` belong only in DTOs and data sources.
 - **No `dynamic`.** Use generics, `Object?`, sealed types, or explicit casts.
-- **No hardcoded strings, colors, spacing, or font sizes in widget trees.**
+- **No hardcoded strings, colors (`Color(0xFF...)`), spacing, or font sizes (`TextStyle(...)`) in widget trees.** Period. All `TextStyle` instances MUST be extracted from `Theme.of(context).textTheme`. All hex colors MUST be in `AppColors`.
 - **No `print`.** Use `dart:developer`'s `log()`.
 - **No empty `catch` blocks.** Every error is handled explicitly.
 - **No `!` operator** unless non-null is structurally guaranteed at that point.

@@ -54,7 +54,7 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         yield null;
         return;
       }
-      
+
       // Listen to Firestore document changes for realtime profile updates
       yield* _firestore
           .collection(_usersCollection)
@@ -62,7 +62,10 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           .snapshots()
           // Only emit when the profile has been successfully created
           .where((doc) => doc.exists && doc.data() != null)
-          .map((doc) => UserDto.fromJson({'uid': firebaseUser.uid, ...doc.data()!}));
+          .map(
+            (doc) =>
+                UserDto.fromJson({'uid': firebaseUser.uid, ...doc.data()!}),
+          );
     });
   }
 
@@ -136,8 +139,9 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     await firebaseUser.updateDisplayName(displayName);
 
     return await _createOrUpdateUserProfile(
-        _firebaseAuth.currentUser ?? firebaseUser,
-        providedDisplayName: displayName);
+      _firebaseAuth.currentUser ?? firebaseUser,
+      providedDisplayName: displayName,
+    );
   }
 
   @override
@@ -192,7 +196,8 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         .doc(firebaseUser.uid);
     final docSnapshot = await userDoc.get();
 
-    final effDisplayName = providedDisplayName ?? firebaseUser.displayName ?? '';
+    final effDisplayName =
+        providedDisplayName ?? firebaseUser.displayName ?? '';
 
     if (!docSnapshot.exists) {
       // Create new user profile

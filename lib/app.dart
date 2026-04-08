@@ -24,8 +24,8 @@ class App extends ConsumerWidget {
         routerConfig: router,
         theme: AppTheme.light(),
         darkTheme: AppTheme.dark(),
-        themeMode: themeMode,
-        // themeMode: ThemeMode.light,
+        // themeMode: themeMode,
+        themeMode: ThemeMode.dark,
         debugShowCheckedModeBanner: false,
         localizationsDelegates: [
           S.delegate,
@@ -34,6 +34,7 @@ class App extends ConsumerWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: S.delegate.supportedLocales,
+        locale: const Locale('ar'),
       ),
     );
   }

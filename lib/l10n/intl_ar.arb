@@ -60,5 +60,19 @@
   "fullNamePlaceholder": "مثلاً: أحمد محمود",
   "signUpSubtitle": "إنشاء حساب جديد للبدء في إدارة أعمالك",
   "whatIsYourName": "ما اسمك؟",
-  "nameWillBeDisplayed": "سيظهر اسمك عند تحديث حالة الدفع لتسهيل تتبع العمليات المالية"
+  "nameWillBeDisplayed": "سيظهر اسمك عند تحديث حالة الدفع لتسهيل تتبع العمليات المالية",
+  "homeWelcome": "مرحباً بك",
+  "homeTotalWallets": "إجمالي المحافظ",
+  "homeCurrency": "ج.م",
+  "homeTotalOut": "إجمالي الصادر",
+  "homeTotalIn": "إجمالي الوارد",
+  "homeYourWallets": "محافظك",
+  "homeViewAll": "عرض الكل",
+  "homeWorkspaces": "مساحات العمل",
+  "homeAddWallet": "إضافة محفظة",
+  "walletStatusActive": "نشط", "homeActiveWallets": "{count, plural, =0{لا توجد محافظ نشطة} =1{محفظة واحدة نشطة} =2{محفظتان نشطتان} few{{count} محافظ نشطة} many{{count} محفظة نشطة} other{{count} محفظة نشطة}}",
+  "homeLastActivity": "آخر نشاط",
+  "homeJustNow": "الآن",
+  "homeMinutesAgo": "منذ {minutes} دقيقة",
+  "homeEGP": "EGP"
 }

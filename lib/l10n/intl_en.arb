@@ -60,5 +60,19 @@
   "fullNamePlaceholder": "e.g. John Doe",
   "signUpSubtitle": "Create a new account to start managing your business",
   "whatIsYourName": "What is your name?",
-  "nameWillBeDisplayed": "Your name will be displayed when updating payment status to facilitate tracking financial transactions"
+  "nameWillBeDisplayed": "Your name will be displayed when updating payment status to facilitate tracking financial transactions",
+  "homeWelcome": "Welcome",
+  "homeTotalWallets": "Total Wallets",
+  "homeCurrency": "EGP",
+  "homeTotalOut": "Total Out",
+  "homeTotalIn": "Total In",
+  "homeYourWallets": "Your Wallets",
+  "homeViewAll": "View All",
+  "homeWorkspaces": "Workspaces",
+  "homeAddWallet": "Add Wallet",
+  "walletStatusActive": "Active", "walletStatusActiveAr": "نشط", "homeActiveWallets": "{count, plural, =0{No active wallets} =1{1 active wallet} other{{count} active wallets}}",
+  "homeLastActivity": "Last Activity",
+  "homeJustNow": "Just Now",
+  "homeMinutesAgo": "{minutes} mins ago",
+  "homeEGP": "EGP"
 }

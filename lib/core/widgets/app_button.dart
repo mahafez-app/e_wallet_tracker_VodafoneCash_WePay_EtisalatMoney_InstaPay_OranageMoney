@@ -48,16 +48,12 @@ class AppButton extends StatelessWidget {
             ),
           )
         : trailingIcon != null
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(label),
-                  const SizedBox(width: 8),
-                  trailingIcon!,
-                ],
-              )
-            : Text(label);
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text(label), const SizedBox(width: 8), trailingIcon!],
+          )
+        : Text(label);
 
     final ButtonStyle? customStyle =
         foregroundColor != null || backgroundColor != null

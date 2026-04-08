@@ -105,6 +105,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorValidation": MessageLookupByLibrary.simpleMessage("فشل التحقق."),
     "errorValidationWithCode": m0,
     "forgotPassword": MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور؟"),
+    "fullName": MessageLookupByLibrary.simpleMessage("الاسم الكامل"),
+    "fullNamePlaceholder": MessageLookupByLibrary.simpleMessage(
+      "مثلاً: أحمد محمود",
+    ),
     "notFoundPageTitle": MessageLookupByLibrary.simpleMessage(
       "الصفحة غير موجودة",
     ),
@@ -112,6 +116,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "or": MessageLookupByLibrary.simpleMessage("أو"),
     "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
     "passwordHint": MessageLookupByLibrary.simpleMessage("أدخل كلمة المرور"),
+    "passwordPlaceholder": MessageLookupByLibrary.simpleMessage("••••••••"),
     "signIn": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
     "signInWithEmail": MessageLookupByLibrary.simpleMessage(
       "تسجيل الدخول بالبريد الإلكتروني",
@@ -121,6 +126,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "signUp": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
     "signUpNow": MessageLookupByLibrary.simpleMessage("اشترك الآن"),
+    "signUpSubtitle": MessageLookupByLibrary.simpleMessage(
+      "إنشاء حساب جديد للبدء في إدارة أعمالك",
+    ),
     "yourName": MessageLookupByLibrary.simpleMessage("اسمك"),
   };
 }

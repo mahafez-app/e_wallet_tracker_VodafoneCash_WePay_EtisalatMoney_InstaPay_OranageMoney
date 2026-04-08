@@ -473,6 +473,41 @@ class S {
       args: [],
     );
   }
+
+  /// `••••••••`
+  String get passwordPlaceholder {
+    return Intl.message(
+      '••••••••',
+      name: 'passwordPlaceholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الاسم الكامل`
+  String get fullName {
+    return Intl.message('الاسم الكامل', name: 'fullName', desc: '', args: []);
+  }
+
+  /// `مثلاً: أحمد محمود`
+  String get fullNamePlaceholder {
+    return Intl.message(
+      'مثلاً: أحمد محمود',
+      name: 'fullNamePlaceholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إنشاء حساب جديد للبدء في إدارة أعمالك`
+  String get signUpSubtitle {
+    return Intl.message(
+      'إنشاء حساب جديد للبدء في إدارة أعمالك',
+      name: 'signUpSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

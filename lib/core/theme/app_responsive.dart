@@ -29,4 +29,8 @@ extension AppResponsiveNumExtension on num {
   double get responsiveRadius => AppResponsive.radius(this);
 
   double get responsiveFont => AppResponsive.font(this);
+
+  Widget get verticalSpace => SizedBox(height: responsiveHeight);
+
+  Widget get horizontalSpace => SizedBox(width: responsiveWidth);
 }

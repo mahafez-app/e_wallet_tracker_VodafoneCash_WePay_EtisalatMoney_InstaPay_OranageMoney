@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_responsive.dart';
 import '../theme/app_spacing.dart';
 
 class AppTextField extends StatelessWidget {
@@ -31,7 +32,7 @@ class AppTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: Theme.of(context).textTheme.labelLarge),
-        const SizedBox(height: AppSpacing.sm),
+        AppSpacing.sm.verticalSpace,
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,

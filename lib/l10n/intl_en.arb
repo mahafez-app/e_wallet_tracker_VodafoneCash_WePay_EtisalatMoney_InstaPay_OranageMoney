@@ -54,5 +54,9 @@
   "continueWithGoogle": "Continue with Google",
   "forgotPassword": "Forgot password?",
   "signUpNow": "Sign Up Now",
-  "emailPlaceholder": "example@email.com"
+  "emailPlaceholder": "example@email.com",
+  "passwordPlaceholder": "••••••••",
+  "fullName": "Full Name",
+  "fullNamePlaceholder": "e.g. John Doe",
+  "signUpSubtitle": "Create a new account to start managing your business"
 }

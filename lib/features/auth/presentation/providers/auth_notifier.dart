@@ -57,13 +57,19 @@ final class AuthNotifier extends Notifier<AuthState> {
   }
 
   Future<Result<AppUser>> signInWithGoogle() async {
-    state = state.copyWith(loadingMethod: AuthLoadingMethod.google, error: null);
+    state = state.copyWith(
+      loadingMethod: AuthLoadingMethod.google,
+      error: null,
+    );
 
     final result = await _signInWithGoogle();
 
     result.fold(
       (failure) {
-        state = state.copyWith(loadingMethod: AuthLoadingMethod.none, error: failure);
+        state = state.copyWith(
+          loadingMethod: AuthLoadingMethod.none,
+          error: failure,
+        );
       },
       (_) {
         state = state.copyWith(loadingMethod: AuthLoadingMethod.none);
@@ -85,7 +91,10 @@ final class AuthNotifier extends Notifier<AuthState> {
 
     result.fold(
       (failure) {
-        state = state.copyWith(loadingMethod: AuthLoadingMethod.none, error: failure);
+        state = state.copyWith(
+          loadingMethod: AuthLoadingMethod.none,
+          error: failure,
+        );
       },
       (_) {
         state = state.copyWith(loadingMethod: AuthLoadingMethod.none);
@@ -112,7 +121,10 @@ final class AuthNotifier extends Notifier<AuthState> {
 
     result.fold(
       (failure) {
-        state = state.copyWith(loadingMethod: AuthLoadingMethod.none, error: failure);
+        state = state.copyWith(
+          loadingMethod: AuthLoadingMethod.none,
+          error: failure,
+        );
       },
       (_) {
         state = state.copyWith(loadingMethod: AuthLoadingMethod.none);
@@ -126,7 +138,10 @@ final class AuthNotifier extends Notifier<AuthState> {
     required String uid,
     required String displayName,
   }) async {
-    state = state.copyWith(loadingMethod: AuthLoadingMethod.confirmName, error: null);
+    state = state.copyWith(
+      loadingMethod: AuthLoadingMethod.confirmName,
+      error: null,
+    );
 
     final result = await _confirmUserName(
       ConfirmUserNameParams(uid: uid, displayName: displayName),
@@ -134,7 +149,10 @@ final class AuthNotifier extends Notifier<AuthState> {
 
     result.fold(
       (failure) {
-        state = state.copyWith(loadingMethod: AuthLoadingMethod.none, error: failure);
+        state = state.copyWith(
+          loadingMethod: AuthLoadingMethod.none,
+          error: failure,
+        );
       },
       (_) {
         state = state.copyWith(loadingMethod: AuthLoadingMethod.none);
@@ -145,13 +163,19 @@ final class AuthNotifier extends Notifier<AuthState> {
   }
 
   Future<Result<void>> signOut() async {
-    state = state.copyWith(loadingMethod: AuthLoadingMethod.none, error: null); // signOut handled locally without massive spinner on login screens normally
+    state = state.copyWith(
+      loadingMethod: AuthLoadingMethod.none,
+      error: null,
+    ); // signOut handled locally without massive spinner on login screens normally
 
     final result = await _signOut();
 
     result.fold(
       (failure) {
-        state = state.copyWith(loadingMethod: AuthLoadingMethod.none, error: failure);
+        state = state.copyWith(
+          loadingMethod: AuthLoadingMethod.none,
+          error: failure,
+        );
       },
       (_) {
         state = state.copyWith(loadingMethod: AuthLoadingMethod.none);

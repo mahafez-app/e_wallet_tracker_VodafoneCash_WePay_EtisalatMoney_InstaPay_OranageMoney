@@ -54,5 +54,9 @@
   "continueWithGoogle": "المتابعة باستخدام جوجل",
   "forgotPassword": "نسيت كلمة المرور؟",
   "signUpNow": "اشترك الآن",
-  "emailPlaceholder": "example@email.com"
+  "emailPlaceholder": "example@email.com",
+  "passwordPlaceholder": "••••••••",
+  "fullName": "الاسم الكامل",
+  "fullNamePlaceholder": "مثلاً: أحمد محمود",
+  "signUpSubtitle": "إنشاء حساب جديد للبدء في إدارة أعمالك"
 }

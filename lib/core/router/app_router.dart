@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 // import '../../features/auth/presentation/screens/confirm_name_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
-// import '../../features/auth/presentation/screens/sign_up_screen.dart';
+import '../../features/auth/presentation/screens/sign_up_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../widgets/not_found_screen.dart';
@@ -66,10 +66,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
       ),
-      // GoRoute(
-      //   path: AppRoutes.register,
-      //   builder: (context, state) => const SignUpScreen(),
-      // ),
+      GoRoute(
+        path: AppRoutes.register,
+        builder: (context, state) => const SignUpScreen(),
+      ),
       // GoRoute(
       //   path: AppRoutes.confirmName,
       //   builder: (context, state) => const ConfirmNameScreen(),

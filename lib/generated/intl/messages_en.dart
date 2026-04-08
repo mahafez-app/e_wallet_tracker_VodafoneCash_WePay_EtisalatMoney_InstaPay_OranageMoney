@@ -111,11 +111,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "errorValidationWithCode": m0,
     "forgotPassword": MessageLookupByLibrary.simpleMessage("Forgot password?"),
+    "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
+    "fullNamePlaceholder": MessageLookupByLibrary.simpleMessage(
+      "e.g. John Doe",
+    ),
     "notFoundPageTitle": MessageLookupByLibrary.simpleMessage("Page Not Found"),
     "notFoundStatusCode": MessageLookupByLibrary.simpleMessage("404"),
     "or": MessageLookupByLibrary.simpleMessage("OR"),
     "password": MessageLookupByLibrary.simpleMessage("Password"),
     "passwordHint": MessageLookupByLibrary.simpleMessage("Enter your password"),
+    "passwordPlaceholder": MessageLookupByLibrary.simpleMessage("••••••••"),
     "signIn": MessageLookupByLibrary.simpleMessage("Sign In"),
     "signInWithEmail": MessageLookupByLibrary.simpleMessage(
       "Sign in with Email",
@@ -125,6 +130,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
     "signUpNow": MessageLookupByLibrary.simpleMessage("Sign Up Now"),
+    "signUpSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Create a new account to start managing your business",
+    ),
     "yourName": MessageLookupByLibrary.simpleMessage("Your Name"),
   };
 }

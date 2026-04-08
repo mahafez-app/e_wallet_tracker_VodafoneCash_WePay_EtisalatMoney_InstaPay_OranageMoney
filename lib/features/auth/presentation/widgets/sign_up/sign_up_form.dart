@@ -9,36 +9,37 @@ import '../../../../../core/widgets/app_text_field.dart';
 import '../../../../../generated/l10n.dart';
 import '../../providers/auth_notifier.dart';
 
-class LoginForm extends ConsumerStatefulWidget {
-  const LoginForm({super.key});
+class SignUpForm extends ConsumerStatefulWidget {
+  const SignUpForm({super.key});
 
   @override
-  ConsumerState<LoginForm> createState() => _LoginFormState();
+  ConsumerState<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _LoginFormState extends ConsumerState<LoginForm> {
+class _SignUpFormState extends ConsumerState<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  Future<void> _submit() async {
+  void _submit() {
     if (_formKey.currentState!.validate()) {
-      FocusScope.of(context).unfocus();
-      await ref
+      ref
           .read(authNotifierProvider.notifier)
-          .signInWithEmailPassword(
+          .signUpWithEmailPassword(
             email: _emailController.text.trim(),
             password: _passwordController.text,
+            displayName: _nameController.text.trim(),
           );
-      // Navigation is handled via GoRouterRefreshStream listening to authStateProvider
     }
   }
 
@@ -51,7 +52,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = S.of(context);
-    final theme = Theme.of(context);
     final authState = ref.watch(authNotifierProvider);
 
     return Form(
@@ -60,45 +60,38 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AppTextField(
+            label: l10n.fullName,
+            hintText: l10n.fullNamePlaceholder,
+            controller: _nameController,
+            keyboardType: TextInputType.name,
+            validator: (value) => AppValidators.required(context, value),
+          ),
+          SizedBox(height: AppSpacing.xl),
+          AppTextField(
             label: l10n.email,
             hintText: l10n.emailPlaceholder,
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             validator: (value) => AppValidators.email(context, value),
           ),
-          AppSpacing.lg.verticalSpace,
+          SizedBox(height: AppSpacing.xl),
           AppTextField(
             label: l10n.password,
-            hintText: '••••••',
+            hintText: l10n.passwordPlaceholder,
             controller: _passwordController,
             obscureText: _obscurePassword,
             suffixIcon: IconButton(
               icon: Icon(
                 _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
               onPressed: _togglePasswordVisibility,
             ),
-            validator: (value) => AppValidators.required(context, value),
+            validator: (value) => AppValidators.password(context, value),
           ),
-          AppSpacing.sm.verticalSpace,
-          // Align(
-          //   alignment: AlignmentDirectional.centerEnd,
-          //   child: TextButton(
-          //     onPressed: () {
-          //       // Implement forgot password functionality
-          //     },
-          //     child: Text(
-          //       l10n.forgotPassword,
-          //       style: theme.textTheme.labelLarge?.copyWith(
-          //         color: theme.colorScheme.primary,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          AppSpacing.xl.verticalSpace,
+          SizedBox(height: 32.responsiveHeight),
           AppButton(
-            label: l10n.signIn,
+            label: l10n.createAccount,
             onPressed: _submit,
             isLoading: authState.loadingMethod == AuthLoadingMethod.email,
           ),

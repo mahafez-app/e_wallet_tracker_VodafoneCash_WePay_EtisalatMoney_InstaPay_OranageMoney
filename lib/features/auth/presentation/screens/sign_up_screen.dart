@@ -3,36 +3,54 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/failure_extension.dart';
+import '../../../../core/widgets/app_logo.dart';
 import '../../../../generated/l10n.dart';
 import '../providers/auth_notifier.dart';
-import '../widgets/login/google_sign_in_button.dart';
-import '../widgets/login/login_form.dart';
+import '../widgets/sign_up/sign_up_form.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final l10n = S.of(context);
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const AppLogo(size: 32),
+            AppSpacing.sm.horizontalSpace,
+            Text(
+              l10n.appName,
+              style: theme.textTheme.titleLarge?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.xl,
           ),
-          child: _LoginBody(),
+          child: const _SignUpBody(),
         ),
       ),
     );
   }
 }
 
-class _LoginBody extends ConsumerWidget {
-  const _LoginBody();
+class _SignUpBody extends ConsumerWidget {
+  const _SignUpBody();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,88 +69,50 @@ class _LoginBody extends ConsumerWidget {
     final l10n = S.of(context);
     final theme = Theme.of(context);
 
-    // Using layout from Figma constraints
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AppSpacing.lg.verticalSpace,
 
-          // Logo & Header
-          Container(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            decoration: const BoxDecoration(
-              color: AppColors.primaryContainer,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.account_balance_wallet,
-              color: AppColors.primary,
-              size: 48,
-            ),
-          ),
-          AppSpacing.lg.verticalSpace,
+          // Titles
           Text(
-            l10n.appName,
+            l10n.createAccount,
             textAlign: TextAlign.center,
             style: theme.textTheme.displaySmall?.copyWith(
-              color: theme.colorScheme.primary,
-              fontWeight: FontWeight.w800,
+              color: theme.colorScheme.onSurface,
+              fontWeight: FontWeight.bold,
             ),
           ),
           AppSpacing.sm.verticalSpace,
           Text(
-            l10n.appTagline,
+            l10n.signUpSubtitle,
             textAlign: TextAlign.center,
             style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
 
-          AppSpacing.xxl.verticalSpace,
+          AppSpacing.xxxl.verticalSpace,
 
-          // Google Button
-          const GoogleSignInButton(),
-
-          AppSpacing.xl.verticalSpace,
-
-          // Divider
-          Row(
-            children: [
-              const Expanded(child: Divider()),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-                child: Text(
-                  l10n.or,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
-              const Expanded(child: Divider()),
-            ],
-          ),
-
-          AppSpacing.xl.verticalSpace,
-
-          // Login Form
-          const LoginForm(),
+          // Form
+          const SignUpForm(),
 
           AppSpacing.xxl.verticalSpace,
 
-          // Sign up link
-          const _SignUpPrompt(),
+          // Sign In Link
+          const _SignInPrompt(),
         ],
       ),
     );
   }
 }
 
-class _SignUpPrompt extends StatelessWidget {
-  const _SignUpPrompt();
+class _SignInPrompt extends StatelessWidget {
+  const _SignInPrompt();
 
-  void _navigateToSignUp(BuildContext context) {
-    context.push(AppRoutes.register);
+  void _navigateToLogin(BuildContext context) {
+    context.go(AppRoutes.login);
   }
 
   @override
@@ -144,14 +124,14 @@ class _SignUpPrompt extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          l10n.dontHaveAccount,
+          l10n.alreadyHaveAccount,
           style: theme.textTheme.bodyLarge?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
         AppSpacing.xs.horizontalSpace,
         InkWell(
-          onTap: () => _navigateToSignUp(context),
+          onTap: () => _navigateToLogin(context),
           borderRadius: BorderRadius.circular(AppSpacing.sm),
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -159,9 +139,9 @@ class _SignUpPrompt extends StatelessWidget {
               vertical: AppSpacing.xs,
             ),
             child: Text(
-              l10n.signUpNow,
+              l10n.signIn,
               style: theme.textTheme.labelLarge?.copyWith(
-                color: theme.colorScheme.secondary,
+                color: theme.colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),

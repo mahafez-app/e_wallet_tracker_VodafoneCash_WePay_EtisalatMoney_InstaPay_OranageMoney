@@ -42,7 +42,13 @@ final class AppTheme {
     ),
     textTheme: _textTheme,
     extensions: const [AppColorExtension.light()],
-    appBarTheme: const AppBarTheme(centerTitle: false, elevation: 0),
+    appBarTheme: const AppBarTheme(
+      centerTitle: true,
+      elevation: 0,
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.white,
+      iconTheme: IconThemeData(color: AppColors.primary),
+    ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         minimumSize: const Size(double.infinity, 52),
@@ -154,7 +160,14 @@ final class AppTheme {
     ),
     textTheme: _textTheme,
     extensions: const [AppColorExtension.dark()],
-    appBarTheme: const AppBarTheme(centerTitle: false, elevation: 0),
+    scaffoldBackgroundColor: AppColors.inverseSurface,
+    appBarTheme: const AppBarTheme(
+      centerTitle: true,
+      elevation: 0,
+      backgroundColor: AppColors.neutral,
+      surfaceTintColor: AppColors.neutral,
+      iconTheme: IconThemeData(color: AppColors.primaryFixedDim),
+    ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         minimumSize: const Size(double.infinity, 52),
@@ -228,7 +241,6 @@ final class AppTheme {
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
     ),
-    scaffoldBackgroundColor: AppColors.inverseSurface,
     canvasColor: AppColors.inverseSurface,
     dividerColor: AppColors.outline,
   );

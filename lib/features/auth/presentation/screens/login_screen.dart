@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/failure_extension.dart';
@@ -50,8 +49,8 @@ class _LoginBody extends ConsumerWidget {
 
     final l10n = S.of(context);
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
-    // Using layout from Figma constraints
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -59,16 +58,18 @@ class _LoginBody extends ConsumerWidget {
           AppSpacing.lg.verticalSpace,
 
           // Logo & Header
-          Container(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            decoration: const BoxDecoration(
-              color: AppColors.primaryContainer,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.account_balance_wallet,
-              color: AppColors.primary,
-              size: 48,
+          Center(
+            child: Container(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              decoration: BoxDecoration(
+                color: colorScheme.primaryContainer,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.account_balance_wallet,
+                color: colorScheme.primary,
+                size: 48,
+              ),
             ),
           ),
           AppSpacing.lg.verticalSpace,
@@ -76,7 +77,7 @@ class _LoginBody extends ConsumerWidget {
             l10n.appName,
             textAlign: TextAlign.center,
             style: theme.textTheme.displaySmall?.copyWith(
-              color: theme.colorScheme.primary,
+              color: colorScheme.primary,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -85,7 +86,7 @@ class _LoginBody extends ConsumerWidget {
             l10n.appTagline,
             textAlign: TextAlign.center,
             style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
 
@@ -105,7 +106,7 @@ class _LoginBody extends ConsumerWidget {
                 child: Text(
                   l10n.or,
                   style: theme.textTheme.labelLarge?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
               ),
@@ -115,12 +116,10 @@ class _LoginBody extends ConsumerWidget {
 
           AppSpacing.xl.verticalSpace,
 
-          // Login Form
           const LoginForm(),
 
           AppSpacing.xxl.verticalSpace,
 
-          // Sign up link
           const _SignUpPrompt(),
         ],
       ),
@@ -130,10 +129,6 @@ class _LoginBody extends ConsumerWidget {
 
 class _SignUpPrompt extends StatelessWidget {
   const _SignUpPrompt();
-
-  void _navigateToSignUp(BuildContext context) {
-    context.push(AppRoutes.register);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +146,7 @@ class _SignUpPrompt extends StatelessWidget {
         ),
         AppSpacing.xs.horizontalSpace,
         InkWell(
-          onTap: () => _navigateToSignUp(context),
+          onTap: () => context.push(AppRoutes.register),
           borderRadius: BorderRadius.circular(AppSpacing.sm),
           child: Padding(
             padding: const EdgeInsets.symmetric(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../generated/l10n.dart';
 import '../domain/enums/wallet_provider.dart';
-import '../theme/app_colors.dart';
+import '../theme/app_color_extension.dart';
 import '../theme/app_responsive.dart';
 import '../theme/app_spacing.dart';
 
@@ -21,12 +21,23 @@ class AppWalletCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final theme = Theme.of(context);
+    final colors = context.appColors;
+
     return Container(
       width: 288.responsiveWidth,
       padding: AppResponsive.all(AppSpacing.xl),
       decoration: BoxDecoration(
-        color: AppColors.signInFieldBg,
+        color: colors.cardBackground,
         borderRadius: BorderRadius.circular(24.responsiveRadius),
+        border: Border.all(color: colors.cardBorder, width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: colors.cardShadow,
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,10 +46,7 @@ class AppWalletCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _WalletProviderInfo(
-                provider: provider,
-                phoneNumber: phoneNumber,
-              ),
+              _WalletProviderInfo(provider: provider, phoneNumber: phoneNumber),
               _WalletStatusBadge(provider: provider),
             ],
           ),
@@ -47,7 +55,9 @@ class AppWalletCard extends StatelessWidget {
             children: [
               Text(
                 s.homeTotalWallets,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.outline),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.outline,
+                ),
               ),
               _WalletBalance(balance: balance),
             ],
@@ -91,14 +101,14 @@ class _WalletProviderInfo extends StatelessWidget {
             Text(
               provider.displayName,
               style: theme.textTheme.titleMedium?.copyWith(
-                color: AppColors.onSurface,
+                color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w700,
               ),
             ),
             Text(
               phoneNumber,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: AppColors.outline,
+                color: theme.colorScheme.outline,
               ),
             ),
           ],
@@ -146,13 +156,14 @@ class _WalletBalance extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = S.of(context);
     final theme = Theme.of(context);
+    final primary = theme.colorScheme.primary;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
           balance.toStringAsFixed(2),
           style: theme.textTheme.titleLarge?.copyWith(
-            color: AppColors.primary,
+            color: primary,
             fontSize: 24.responsiveFont,
             fontWeight: FontWeight.w700,
           ),
@@ -163,7 +174,7 @@ class _WalletBalance extends StatelessWidget {
           child: Text(
             s.homeCurrency,
             style: theme.textTheme.labelSmall?.copyWith(
-              color: AppColors.primary,
+              color: primary,
               fontSize: 12.responsiveFont,
               fontWeight: FontWeight.w700,
             ),

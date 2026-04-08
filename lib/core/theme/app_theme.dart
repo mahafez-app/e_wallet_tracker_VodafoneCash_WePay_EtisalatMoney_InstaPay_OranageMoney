@@ -30,6 +30,7 @@ final class AppTheme {
       surface: AppColors.surface,
       onSurface: AppColors.onSurface,
       surfaceContainerHighest: AppColors.surfaceContainerHighest,
+      surfaceContainer: AppColors.surfaceContainer,
       onSurfaceVariant: AppColors.onSurfaceVariant,
       outline: AppColors.outline,
       outlineVariant: AppColors.outlineVariant,
@@ -42,11 +43,12 @@ final class AppTheme {
     ),
     textTheme: _textTheme,
     extensions: const [AppColorExtension.light()],
+    scaffoldBackgroundColor: AppColors.surface,
     appBarTheme: const AppBarTheme(
       centerTitle: true,
       elevation: 0,
-      backgroundColor: Colors.white,
-      surfaceTintColor: Colors.white,
+      backgroundColor: AppColors.white,
+      surfaceTintColor: AppColors.white,
       iconTheme: IconThemeData(color: AppColors.primary),
     ),
     filledButtonTheme: FilledButtonThemeData(
@@ -71,14 +73,14 @@ final class AppTheme {
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
-        borderSide: BorderSide(color: AppColors.inputBorder, width: 1),
+        borderSide: BorderSide(color: Color(0x7FC2C6D6), width: 1),
       ),
       enabledBorder: const UnderlineInputBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
-        borderSide: BorderSide(color: AppColors.inputBorder, width: 1),
+        borderSide: BorderSide(color: Color(0x7FC2C6D6), width: 1),
       ),
       focusedBorder: const UnderlineInputBorder(
         borderRadius: BorderRadius.only(
@@ -106,9 +108,9 @@ final class AppTheme {
         vertical: AppSpacing.lg,
       ),
       filled: true,
-      fillColor: AppColors.inputFill,
+      fillColor: const Color(0xFFF0F3FF),
       hintStyle: const TextStyle(
-        color: AppColors.inputHint,
+        color: Color(0x7F727785),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       ),
@@ -120,7 +122,6 @@ final class AppTheme {
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
     ),
-    scaffoldBackgroundColor: AppColors.background,
     canvasColor: AppColors.surface,
     dividerColor: AppColors.outlineVariant,
   );
@@ -141,16 +142,19 @@ final class AppTheme {
       onTertiary: AppColors.onTertiaryFixed,
       tertiaryContainer: AppColors.onTertiaryFixedVariant,
       onTertiaryContainer: AppColors.tertiaryFixed,
-      error: AppColors.errorContainer,
-      onError: AppColors.onErrorContainer,
-      errorContainer: AppColors.error,
-      onErrorContainer: AppColors.onError,
-      surface: AppColors.inverseSurface,
-      onSurface: AppColors.onInverseSurface,
-      surfaceContainerHighest: AppColors.onPrimaryFixedVariant,
-      onSurfaceVariant: AppColors.primaryFixed,
-      outline: AppColors.outlineVariant,
-      outlineVariant: AppColors.outline,
+      // Dark error: use the actual red, not the light container (which is cream/white)
+      error: AppColors.error,
+      onError: AppColors.onError,
+      errorContainer: AppColors.onErrorContainer,
+      onErrorContainer: AppColors.errorContainer,
+      surface: AppColors.darkSurface,
+      onSurface: AppColors.darkOnSurface,
+      // Fixed: was wrongly set to onPrimaryFixedVariant (a blue)
+      surfaceContainerHighest: AppColors.darkSurfaceContainerHighest,
+      surfaceContainer: AppColors.darkSurfaceContainer,
+      onSurfaceVariant: AppColors.darkOnSurfaceVariant,
+      outline: AppColors.darkOutline,
+      outlineVariant: AppColors.darkOutlineVariant,
       shadow: Color(0xCC000000),
       scrim: Color(0xFF000000),
       inverseSurface: AppColors.surface,
@@ -160,12 +164,12 @@ final class AppTheme {
     ),
     textTheme: _textTheme,
     extensions: const [AppColorExtension.dark()],
-    scaffoldBackgroundColor: AppColors.inverseSurface,
+    scaffoldBackgroundColor: AppColors.darkSurface,
     appBarTheme: const AppBarTheme(
       centerTitle: true,
       elevation: 0,
-      backgroundColor: AppColors.neutral,
-      surfaceTintColor: AppColors.neutral,
+      backgroundColor: AppColors.darkSurface,
+      surfaceTintColor: AppColors.darkSurface,
       iconTheme: IconThemeData(color: AppColors.primaryFixedDim),
     ),
     filledButtonTheme: FilledButtonThemeData(
@@ -190,21 +194,21 @@ final class AppTheme {
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
-        borderSide: BorderSide(color: AppColors.inputBorder, width: 1),
+        borderSide: BorderSide(color: Color(0x4FCBD5E1), width: 1),
       ),
       enabledBorder: const UnderlineInputBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
-        borderSide: BorderSide(color: AppColors.inputBorder, width: 1),
+        borderSide: BorderSide(color: Color(0x4FCBD5E1), width: 1),
       ),
       focusedBorder: const UnderlineInputBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
-        borderSide: BorderSide(color: AppColors.primary, width: 2),
+        borderSide: BorderSide(color: AppColors.primaryFixedDim, width: 2),
       ),
       errorBorder: const UnderlineInputBorder(
         borderRadius: BorderRadius.only(
@@ -225,112 +229,40 @@ final class AppTheme {
         vertical: AppSpacing.lg,
       ),
       filled: true,
-      fillColor: AppColors.inputFill.withValues(
-        alpha: 0.1,
-      ), // Slightly different for dark mode
+      fillColor: const Color(0x1AF0F3FF),
       hintStyle: const TextStyle(
-        color: AppColors.inputHint,
+        color: Color(0x7F94A3B8),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       ),
     ),
     cardTheme: const CardThemeData(
       elevation: 0,
-      color: AppColors.onSecondaryFixedVariant,
+      color: AppColors.darkSurfaceContainer,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
     ),
-    canvasColor: AppColors.inverseSurface,
-    dividerColor: AppColors.outline,
+    canvasColor: AppColors.darkSurface,
+    dividerColor: AppColors.darkOutlineVariant,
   );
 
-  // Shared text theme — same scale for both themes, color resolved by brightness
-  // Cairo font family for all text styles (RTL-optimized Arabic font)
+  // Cairo font — same scale, color resolved by brightness automatically
   static const TextTheme _textTheme = TextTheme(
-    displayLarge: TextStyle(
-      fontSize: 57,
-      fontWeight: FontWeight.w800,
-      letterSpacing: -0.25,
-      fontFamily: 'Cairo',
-    ),
-    displayMedium: TextStyle(
-      fontSize: 45,
-      fontWeight: FontWeight.w800,
-      fontFamily: 'Cairo',
-    ),
-    displaySmall: TextStyle(
-      fontSize: 36,
-      fontWeight: FontWeight.w800,
-      fontFamily: 'Cairo',
-    ),
-    headlineLarge: TextStyle(
-      fontSize: 32,
-      fontWeight: FontWeight.w700,
-      fontFamily: 'Cairo',
-    ),
-    headlineMedium: TextStyle(
-      fontSize: 28,
-      fontWeight: FontWeight.w700,
-      fontFamily: 'Cairo',
-    ),
-    headlineSmall: TextStyle(
-      fontSize: 24,
-      fontWeight: FontWeight.w600,
-      fontFamily: 'Cairo',
-    ),
-    titleLarge: TextStyle(
-      fontSize: 22,
-      fontWeight: FontWeight.w600,
-      fontFamily: 'Cairo',
-    ),
-    titleMedium: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-      letterSpacing: 0.15,
-      fontFamily: 'Cairo',
-    ),
-    titleSmall: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      letterSpacing: 0.1,
-      fontFamily: 'Cairo',
-    ),
-    bodyLarge: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.5,
-      fontFamily: 'Cairo',
-    ),
-    bodyMedium: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.25,
-      fontFamily: 'Cairo',
-    ),
-    bodySmall: TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.4,
-      fontFamily: 'Cairo',
-    ),
-    labelLarge: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w700,
-      letterSpacing: 0.1,
-      fontFamily: 'Cairo',
-    ),
-    labelMedium: TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.w700,
-      letterSpacing: 0.5,
-      fontFamily: 'Cairo',
-    ),
-    labelSmall: TextStyle(
-      fontSize: 11,
-      fontWeight: FontWeight.w700,
-      letterSpacing: 0.5,
-      fontFamily: 'Cairo',
-    ),
+    displayLarge: TextStyle(fontSize: 57, fontWeight: FontWeight.w800, letterSpacing: -0.25, fontFamily: 'Cairo'),
+    displayMedium: TextStyle(fontSize: 45, fontWeight: FontWeight.w800, fontFamily: 'Cairo'),
+    displaySmall: TextStyle(fontSize: 36, fontWeight: FontWeight.w800, fontFamily: 'Cairo'),
+    headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w700, fontFamily: 'Cairo'),
+    headlineMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, fontFamily: 'Cairo'),
+    headlineSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, fontFamily: 'Cairo'),
+    titleLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, fontFamily: 'Cairo'),
+    titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.15, fontFamily: 'Cairo'),
+    titleSmall: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1, fontFamily: 'Cairo'),
+    bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5, fontFamily: 'Cairo'),
+    bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25, fontFamily: 'Cairo'),
+    bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4, fontFamily: 'Cairo'),
+    labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 0.1, fontFamily: 'Cairo'),
+    labelMedium: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.5, fontFamily: 'Cairo'),
+    labelSmall: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.5, fontFamily: 'Cairo'),
   );
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/failure_extension.dart';
@@ -68,23 +67,23 @@ class _ConfirmNameBody extends ConsumerWidget {
 
     final l10n = S.of(context);
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AppSpacing.xxl.verticalSpace,
 
-        // Profile Avatar Icon
         Center(
           child: Container(
             width: 96.responsiveWidth,
             height: 96.responsiveHeight,
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary,
+              color: colorScheme.primary,
               borderRadius: BorderRadius.circular(24.responsiveRadius),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.black.withValues(alpha: 0.1),
+                  color: colorScheme.shadow.withValues(alpha: 0.25),
                   blurRadius: 15.responsiveRadius,
                   offset: Offset(0, 10.responsiveHeight),
                   spreadRadius: (-3).responsiveRadius,
@@ -93,7 +92,7 @@ class _ConfirmNameBody extends ConsumerWidget {
             ),
             child: Icon(
               Icons.person,
-              color: AppColors.white,
+              color: colorScheme.onPrimary,
               size: 48.responsiveRadius,
             ),
           ),
@@ -101,26 +100,24 @@ class _ConfirmNameBody extends ConsumerWidget {
 
         AppSpacing.xxl.verticalSpace,
 
-        // Title
         Text(
           l10n.whatIsYourName,
           textAlign: TextAlign.center,
           style: theme.textTheme.headlineMedium?.copyWith(
-            color: theme.colorScheme.onSurface,
+            color: colorScheme.onSurface,
             fontWeight: FontWeight.bold,
           ),
         ),
 
         AppSpacing.md.verticalSpace,
 
-        // Subtitle
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Text(
             l10n.nameWillBeDisplayed,
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyLarge?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+              color: colorScheme.onSurfaceVariant,
               height: 1.6,
             ),
           ),
@@ -128,7 +125,6 @@ class _ConfirmNameBody extends ConsumerWidget {
 
         40.responsiveHeight.verticalSpace,
 
-        // Form
         const ConfirmNameForm(),
       ],
     );

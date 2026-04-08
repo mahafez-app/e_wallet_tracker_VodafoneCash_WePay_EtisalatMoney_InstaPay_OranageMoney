@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../generated/l10n.dart';
@@ -20,6 +20,7 @@ class HomeGlobalStatsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final colors = context.appColors;
 
     return Container(
       width: double.infinity,
@@ -29,7 +30,7 @@ class HomeGlobalStatsWidget extends StatelessWidget {
         gradient: LinearGradient(
           begin: const Alignment(0.18, -0.18),
           end: const Alignment(0.82, 1.18),
-          colors: [AppColors.primary, AppColors.onPrimaryFixedVariant],
+          colors: [colors.statsGradientStart, colors.statsGradientEnd],
         ),
       ),
       child: Column(
@@ -41,13 +42,13 @@ class HomeGlobalStatsWidget extends StatelessWidget {
               Text(
                 s.homeTotalWallets,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: AppColors.primaryContainer,
+                  color: colors.statsOnGradient,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              const Icon(
+              Icon(
                 Icons.account_balance_wallet_outlined,
-                color: AppColors.primaryContainer,
+                color: colors.statsOnGradient,
               ),
             ],
           ),
@@ -60,7 +61,7 @@ class HomeGlobalStatsWidget extends StatelessWidget {
                 child: _StatBox(
                   title: s.homeTotalOut,
                   amount: '- ${totalSent.toStringAsFixed(0)}',
-                  amountColor: AppColors.errorContainer,
+                  amountColor: colors.statsSentColor,
                 ),
               ),
               SizedBox(width: AppSpacing.lg.responsiveWidth),
@@ -68,8 +69,7 @@ class HomeGlobalStatsWidget extends StatelessWidget {
                 child: _StatBox(
                   title: s.homeTotalIn,
                   amount: '+ ${totalReceived.toStringAsFixed(0)}',
-                  amountColor:
-                      AppColors.secondaryFixedDim, // 0xFF9DF4C8 alternative
+                  amountColor: colors.statsReceivedColor,
                 ),
               ),
             ],
@@ -88,13 +88,14 @@ class _BalanceDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final colors = context.appColors;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
           amount.toStringAsFixed(2),
           style: Theme.of(context).textTheme.displaySmall?.copyWith(
-            color: AppColors.primaryContainer,
+            color: colors.statsOnGradient,
             fontSize: 36.responsiveFont,
             fontWeight: FontWeight.w700,
           ),
@@ -105,7 +106,7 @@ class _BalanceDisplay extends StatelessWidget {
           child: Text(
             s.homeCurrency,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: AppColors.primaryContainer,
+              color: colors.statsOnGradient,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -128,10 +129,11 @@ class _StatBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: AppResponsive.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: AppColors.white.withValues(alpha: 0.1),
+        color: colors.statsOnGradient.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16.responsiveRadius),
       ),
       child: Column(
@@ -139,9 +141,9 @@ class _StatBox extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: AppColors.primaryContainer),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: colors.statsOnGradient,
+            ),
           ),
           SizedBox(height: AppSpacing.xs.responsiveHeight),
           Text(

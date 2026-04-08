@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../generated/l10n.dart';
@@ -41,14 +40,17 @@ class _UserAvatarAndName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           width: 48.responsiveRadius,
           height: 48.responsiveRadius,
-          decoration: const BoxDecoration(
-            color: AppColors.primaryContainer,
+          decoration: BoxDecoration(
+            color: colorScheme.primaryContainer,
             shape: BoxShape.circle,
           ),
           alignment: Alignment.center,
@@ -56,8 +58,8 @@ class _UserAvatarAndName extends StatelessWidget {
             userName != null && userName!.isNotEmpty
                 ? userName!.substring(0, 1).toUpperCase()
                 : 'U',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: AppColors.primary,
+            style: theme.textTheme.titleLarge?.copyWith(
+              color: colorScheme.primary,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -69,15 +71,15 @@ class _UserAvatarAndName extends StatelessWidget {
           children: [
             Text(
               s.homeWelcome,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.outline,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: colorScheme.outline,
                 fontWeight: FontWeight.w700,
               ),
             ),
             Text(
               userName ?? s.yourName,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: AppColors.primary,
+              style: theme.textTheme.titleLarge?.copyWith(
+                color: colorScheme.primary,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -95,14 +97,14 @@ class _InvitationsIconBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
         IconButton(
-          onPressed: () {
-            // Navigate to invitations
-          },
-          icon: const Icon(Icons.mail_outline, color: AppColors.onSurface),
+          onPressed: () {},
+          icon: Icon(Icons.mail_outline, color: colorScheme.onSurface),
         ),
         if (count > 0)
           Positioned(
@@ -113,14 +115,14 @@ class _InvitationsIconBadge extends StatelessWidget {
                 horizontal: 6.responsiveWidth,
                 vertical: 2.responsiveHeight,
               ),
-              decoration: const BoxDecoration(
-                color: AppColors.error,
+              decoration: BoxDecoration(
+                color: colorScheme.error,
                 shape: BoxShape.circle,
               ),
               child: Text(
                 count.toString(),
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: AppColors.white,
+                  color: colorScheme.onError,
                   fontSize: 10.responsiveFont,
                   fontWeight: FontWeight.bold,
                 ),

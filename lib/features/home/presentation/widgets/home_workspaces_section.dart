@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/domain/entities/workspace_entity.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/date_extensions.dart';
@@ -17,6 +17,7 @@ class HomeWorkspacesSection extends StatelessWidget {
     if (workspaces.isEmpty) return const SizedBox.shrink();
 
     final s = S.of(context);
+    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,8 +27,8 @@ class HomeWorkspacesSection extends StatelessWidget {
           children: [
             Text(
               s.homeWorkspaces,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: AppColors.onSurface,
+              style: theme.textTheme.titleLarge?.copyWith(
+                color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -41,9 +42,8 @@ class HomeWorkspacesSection extends StatelessWidget {
           itemCount: workspaces.length,
           separatorBuilder: (_, _) =>
               SizedBox(height: AppSpacing.md.responsiveHeight),
-          itemBuilder: (context, index) {
-            return _WorkspaceCard(workspace: workspaces[index]);
-          },
+          itemBuilder: (context, index) =>
+              _WorkspaceCard(workspace: workspaces[index]),
         ),
       ],
     );
@@ -58,17 +58,21 @@ class _WorkspaceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final theme = Theme.of(context);
+    final colors = context.appColors;
+    final colorScheme = theme.colorScheme;
+
     return Container(
       padding: AppResponsive.all(AppSpacing.xl),
       decoration: BoxDecoration(
-        color: AppColors.white,
-        border: Border.all(color: AppColors.workspaceCardBorder),
+        color: colors.cardBackground,
+        border: Border.all(color: colors.cardBorder),
         borderRadius: BorderRadius.circular(16.responsiveRadius),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: AppColors.shadowColor,
+            color: colors.cardShadow,
             blurRadius: 2,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -95,7 +99,7 @@ class _WorkspaceCard extends StatelessWidget {
                   title: s.homeTotalIn,
                   amount:
                       '${workspace.totalReceived.toStringAsFixed(0)} ${s.homeCurrency}',
-                  amountColor: AppColors.secondary,
+                  amountColor: colorScheme.secondary,
                 ),
               ),
               SizedBox(width: AppSpacing.md.responsiveWidth),
@@ -104,7 +108,7 @@ class _WorkspaceCard extends StatelessWidget {
                   title: s.homeTotalOut,
                   amount:
                       '${workspace.totalSent.toStringAsFixed(0)} ${s.homeCurrency}',
-                  amountColor: AppColors.error,
+                  amountColor: colorScheme.error,
                 ),
               ),
             ],
@@ -116,7 +120,10 @@ class _WorkspaceCard extends StatelessWidget {
 }
 
 class _WorkspaceHeader extends StatelessWidget {
-  const _WorkspaceHeader({required this.name, required this.walletsCount});
+  const _WorkspaceHeader({
+    required this.name,
+    required this.walletsCount,
+  });
 
   final String name;
   final int walletsCount;
@@ -124,18 +131,21 @@ class _WorkspaceHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final theme = Theme.of(context);
+    final colors = context.appColors;
+
     return Row(
       children: [
         Container(
           width: 40.responsiveRadius,
           height: 40.responsiveRadius,
           decoration: BoxDecoration(
-            color: AppColors.workspaceIconBg,
+            color: colors.workspaceIconBackground,
             borderRadius: BorderRadius.circular(12.responsiveRadius),
           ),
-          child: const Icon(
+          child: Icon(
             Icons.storefront,
-            color: AppColors.onSecondaryContainer,
+            color: colors.workspaceIconForeground,
           ),
         ),
         SizedBox(width: AppSpacing.md.responsiveWidth),
@@ -144,16 +154,16 @@ class _WorkspaceHeader extends StatelessWidget {
           children: [
             Text(
               name,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: AppColors.onSurface,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w700,
               ),
             ),
             Text(
               s.homeActiveWallets(walletsCount),
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: AppColors.outline),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.outline,
+              ),
             ),
           ],
         ),
@@ -170,20 +180,22 @@ class _WorkspaceLastActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final theme = Theme.of(context);
     final timeStr = latestActivityAt?.toTimeAgo(context) ?? s.homeJustNow;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
           s.homeLastActivity,
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: AppColors.outline),
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.outline,
+          ),
         ),
         Text(
           timeStr,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: AppColors.onSurface,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurface,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -205,10 +217,12 @@ class _WorkspaceStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: AppResponsive.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: AppColors.signInFieldBg, // F0F3FF
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12.responsiveRadius),
       ),
       child: Column(
@@ -216,14 +230,14 @@ class _WorkspaceStat extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: AppColors.outline),
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.outline,
+            ),
           ),
           SizedBox(height: AppSpacing.xs.responsiveHeight),
           Text(
             amount,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            style: theme.textTheme.bodyMedium?.copyWith(
               color: amountColor,
               fontSize: 14.responsiveFont,
               fontWeight: FontWeight.w700,

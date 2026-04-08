@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/domain/entities/wallet_entity.dart';
 
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/app_wallet_card.dart';
 import '../../../../generated/l10n.dart';
-import 'package:wallet_tracker/core/domain/entities/wallet_entity.dart';
 
 class HomeWalletsSection extends StatelessWidget {
   const HomeWalletsSection({super.key, required this.wallets});
@@ -15,6 +15,7 @@ class HomeWalletsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,8 +25,8 @@ class HomeWalletsSection extends StatelessWidget {
           children: [
             Text(
               s.homeYourWallets,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: AppColors.onSurface,
+              style: theme.textTheme.titleLarge?.copyWith(
+                color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -33,8 +34,8 @@ class HomeWalletsSection extends StatelessWidget {
               onPressed: () {},
               child: Text(
                 s.homeViewAll,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: AppColors.primary,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.primary,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -46,13 +47,11 @@ class HomeWalletsSection extends StatelessWidget {
           height: 151.responsiveHeight,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: wallets.length + 1, // Add Wallet Button
+            itemCount: wallets.length + 1,
             separatorBuilder: (_, _) =>
                 SizedBox(width: AppSpacing.md.responsiveWidth),
             itemBuilder: (context, index) {
-              if (index == wallets.length) {
-                return const _AddWalletCard();
-              }
+              if (index == wallets.length) return const _AddWalletCard();
               return AppWalletCard(
                 provider: wallets[index].provider,
                 phoneNumber: wallets[index].phoneNumber,
@@ -72,6 +71,9 @@ class _AddWalletCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final theme = Theme.of(context);
+    final colors = context.appColors;
+    final primary = theme.colorScheme.primary;
 
     return Container(
       width: 192.responsiveWidth,
@@ -80,11 +82,8 @@ class _AddWalletCard extends StatelessWidget {
         vertical: 33.responsiveHeight,
       ),
       decoration: BoxDecoration(
-        color: AppColors.addWalletBg,
-        border: Border.all(
-          width: 2.responsiveWidth,
-          color: AppColors.addWalletBorder,
-        ),
+        color: colors.addWalletBackground,
+        border: Border.all(width: 2.responsiveWidth, color: colors.addWalletBorderColor),
         borderRadius: BorderRadius.circular(24.responsiveRadius),
       ),
       child: Column(
@@ -94,17 +93,17 @@ class _AddWalletCard extends StatelessWidget {
             width: 48.responsiveRadius,
             height: 48.responsiveRadius,
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
+              color: primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.add, color: AppColors.primary),
+            child: Icon(Icons.add, color: primary),
           ),
           SizedBox(height: AppSpacing.md.responsiveHeight),
           Text(
             s.homeAddWallet,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: AppColors.onSurfaceVariant,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: theme.colorScheme.onSurface,
               fontWeight: FontWeight.w700,
             ),
           ),

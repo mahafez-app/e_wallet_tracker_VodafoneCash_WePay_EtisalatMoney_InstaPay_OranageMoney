@@ -24,115 +24,96 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-    "alreadyHaveAccount": MessageLookupByLibrary.simpleMessage(
-      "Already have an account?",
-    ),
-    "appName": MessageLookupByLibrary.simpleMessage("Mahafez"),
-    "appTagline": MessageLookupByLibrary.simpleMessage(
-      "Manage your business wallets easily",
-    ),
-    "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
-    "confirmName": MessageLookupByLibrary.simpleMessage("Confirm Name"),
-    "confirmNameMessage": MessageLookupByLibrary.simpleMessage(
-      "Please confirm your name to continue",
-    ),
-    "continueWithGoogle": MessageLookupByLibrary.simpleMessage(
-      "Continue with Google",
-    ),
-    "createAccount": MessageLookupByLibrary.simpleMessage("Create Account"),
-    "displayName": MessageLookupByLibrary.simpleMessage("Name"),
-    "displayNameHint": MessageLookupByLibrary.simpleMessage("Enter your name"),
-    "dontHaveAccount": MessageLookupByLibrary.simpleMessage(
-      "Don\'t have an account?",
-    ),
-    "email": MessageLookupByLibrary.simpleMessage("Email"),
-    "emailHint": MessageLookupByLibrary.simpleMessage("Enter your email"),
-    "emailPlaceholder": MessageLookupByLibrary.simpleMessage(
-      "example@email.com",
-    ),
-    "errorAuthEmailInUse": MessageLookupByLibrary.simpleMessage(
-      "This email is already registered.",
-    ),
-    "errorAuthGeneric": MessageLookupByLibrary.simpleMessage(
-      "Authentication failed. Please try again.",
-    ),
-    "errorAuthInvalidEmail": MessageLookupByLibrary.simpleMessage(
-      "Invalid email address.",
-    ),
-    "errorAuthTooManyRequests": MessageLookupByLibrary.simpleMessage(
-      "Too many attempts. Please try again later.",
-    ),
-    "errorAuthUserDisabled": MessageLookupByLibrary.simpleMessage(
-      "This account has been disabled.",
-    ),
-    "errorAuthUserNotFound": MessageLookupByLibrary.simpleMessage(
-      "User not found. Please check your credentials.",
-    ),
-    "errorAuthWeakPassword": MessageLookupByLibrary.simpleMessage(
-      "Password is too weak. Please choose a stronger password.",
-    ),
-    "errorAuthWrongPassword": MessageLookupByLibrary.simpleMessage(
-      "Incorrect password. Please try again.",
-    ),
-    "errorCache": MessageLookupByLibrary.simpleMessage(
-      "Local storage error. Please try again.",
-    ),
-    "errorConflict": MessageLookupByLibrary.simpleMessage(
-      "Resource conflict. Please try again.",
-    ),
-    "errorForbidden": MessageLookupByLibrary.simpleMessage("Access forbidden."),
-    "errorNetwork": MessageLookupByLibrary.simpleMessage(
-      "No internet connection. Please check your network.",
-    ),
-    "errorNotFound": MessageLookupByLibrary.simpleMessage(
-      "Resource not found.",
-    ),
-    "errorPermissionDenied": MessageLookupByLibrary.simpleMessage(
-      "Permission denied.",
-    ),
-    "errorServer": MessageLookupByLibrary.simpleMessage(
-      "Server error. Please try again later.",
-    ),
-    "errorServerGeneric": MessageLookupByLibrary.simpleMessage(
-      "Something went wrong. Please try again.",
-    ),
-    "errorStorage": MessageLookupByLibrary.simpleMessage("File storage error."),
-    "errorUnauthorized": MessageLookupByLibrary.simpleMessage(
-      "Unauthorized access. Please log in again.",
-    ),
-    "errorUnknown": MessageLookupByLibrary.simpleMessage(
-      "An unexpected error occurred.",
-    ),
-    "errorUnprocessable": MessageLookupByLibrary.simpleMessage(
-      "Unable to process your request.",
-    ),
-    "errorValidation": MessageLookupByLibrary.simpleMessage(
-      "Validation failed.",
-    ),
-    "errorValidationWithCode": m0,
-    "forgotPassword": MessageLookupByLibrary.simpleMessage("Forgot password?"),
-    "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
-    "fullNamePlaceholder": MessageLookupByLibrary.simpleMessage(
-      "e.g. John Doe",
-    ),
-    "notFoundPageTitle": MessageLookupByLibrary.simpleMessage("Page Not Found"),
-    "notFoundStatusCode": MessageLookupByLibrary.simpleMessage("404"),
-    "or": MessageLookupByLibrary.simpleMessage("OR"),
-    "password": MessageLookupByLibrary.simpleMessage("Password"),
-    "passwordHint": MessageLookupByLibrary.simpleMessage("Enter your password"),
-    "passwordPlaceholder": MessageLookupByLibrary.simpleMessage("••••••••"),
-    "signIn": MessageLookupByLibrary.simpleMessage("Sign In"),
-    "signInWithEmail": MessageLookupByLibrary.simpleMessage(
-      "Sign in with Email",
-    ),
-    "signInWithGoogle": MessageLookupByLibrary.simpleMessage(
-      "Sign in with Google",
-    ),
-    "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
-    "signUpNow": MessageLookupByLibrary.simpleMessage("Sign Up Now"),
-    "signUpSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Create a new account to start managing your business",
-    ),
-    "yourName": MessageLookupByLibrary.simpleMessage("Your Name"),
-  };
+        "alreadyHaveAccount":
+            MessageLookupByLibrary.simpleMessage("Already have an account?"),
+        "appName": MessageLookupByLibrary.simpleMessage("Mahafez"),
+        "appTagline": MessageLookupByLibrary.simpleMessage(
+            "Manage your business wallets easily"),
+        "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "confirmName": MessageLookupByLibrary.simpleMessage("Confirm Name"),
+        "confirmNameMessage": MessageLookupByLibrary.simpleMessage(
+            "Please confirm your name to continue"),
+        "continueWithGoogle":
+            MessageLookupByLibrary.simpleMessage("Continue with Google"),
+        "createAccount": MessageLookupByLibrary.simpleMessage("Create Account"),
+        "displayName": MessageLookupByLibrary.simpleMessage("Name"),
+        "displayNameHint":
+            MessageLookupByLibrary.simpleMessage("Enter your name"),
+        "dontHaveAccount":
+            MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
+        "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "emailHint": MessageLookupByLibrary.simpleMessage("Enter your email"),
+        "emailPlaceholder":
+            MessageLookupByLibrary.simpleMessage("example@email.com"),
+        "errorAuthEmailInUse": MessageLookupByLibrary.simpleMessage(
+            "This email is already registered."),
+        "errorAuthGeneric": MessageLookupByLibrary.simpleMessage(
+            "Authentication failed. Please try again."),
+        "errorAuthInvalidEmail":
+            MessageLookupByLibrary.simpleMessage("Invalid email address."),
+        "errorAuthTooManyRequests": MessageLookupByLibrary.simpleMessage(
+            "Too many attempts. Please try again later."),
+        "errorAuthUserDisabled": MessageLookupByLibrary.simpleMessage(
+            "This account has been disabled."),
+        "errorAuthUserNotFound": MessageLookupByLibrary.simpleMessage(
+            "User not found. Please check your credentials."),
+        "errorAuthWeakPassword": MessageLookupByLibrary.simpleMessage(
+            "Password is too weak. Please choose a stronger password."),
+        "errorAuthWrongPassword": MessageLookupByLibrary.simpleMessage(
+            "Incorrect password. Please try again."),
+        "errorCache": MessageLookupByLibrary.simpleMessage(
+            "Local storage error. Please try again."),
+        "errorConflict": MessageLookupByLibrary.simpleMessage(
+            "Resource conflict. Please try again."),
+        "errorForbidden":
+            MessageLookupByLibrary.simpleMessage("Access forbidden."),
+        "errorNetwork": MessageLookupByLibrary.simpleMessage(
+            "No internet connection. Please check your network."),
+        "errorNotFound":
+            MessageLookupByLibrary.simpleMessage("Resource not found."),
+        "errorPermissionDenied":
+            MessageLookupByLibrary.simpleMessage("Permission denied."),
+        "errorServer": MessageLookupByLibrary.simpleMessage(
+            "Server error. Please try again later."),
+        "errorServerGeneric": MessageLookupByLibrary.simpleMessage(
+            "Something went wrong. Please try again."),
+        "errorStorage":
+            MessageLookupByLibrary.simpleMessage("File storage error."),
+        "errorUnauthorized": MessageLookupByLibrary.simpleMessage(
+            "Unauthorized access. Please log in again."),
+        "errorUnknown": MessageLookupByLibrary.simpleMessage(
+            "An unexpected error occurred."),
+        "errorUnprocessable": MessageLookupByLibrary.simpleMessage(
+            "Unable to process your request."),
+        "errorValidation":
+            MessageLookupByLibrary.simpleMessage("Validation failed."),
+        "errorValidationWithCode": m0,
+        "forgotPassword":
+            MessageLookupByLibrary.simpleMessage("Forgot password?"),
+        "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
+        "fullNamePlaceholder":
+            MessageLookupByLibrary.simpleMessage("e.g. John Doe"),
+        "nameWillBeDisplayed": MessageLookupByLibrary.simpleMessage(
+            "Your name will be displayed when updating payment status to facilitate tracking financial transactions"),
+        "notFoundPageTitle":
+            MessageLookupByLibrary.simpleMessage("Page Not Found"),
+        "notFoundStatusCode": MessageLookupByLibrary.simpleMessage("404"),
+        "or": MessageLookupByLibrary.simpleMessage("OR"),
+        "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "passwordHint":
+            MessageLookupByLibrary.simpleMessage("Enter your password"),
+        "passwordPlaceholder": MessageLookupByLibrary.simpleMessage("••••••••"),
+        "signIn": MessageLookupByLibrary.simpleMessage("Sign In"),
+        "signInWithEmail":
+            MessageLookupByLibrary.simpleMessage("Sign in with Email"),
+        "signInWithGoogle":
+            MessageLookupByLibrary.simpleMessage("Sign in with Google"),
+        "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
+        "signUpNow": MessageLookupByLibrary.simpleMessage("Sign Up Now"),
+        "signUpSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Create a new account to start managing your business"),
+        "whatIsYourName":
+            MessageLookupByLibrary.simpleMessage("What is your name?"),
+        "yourName": MessageLookupByLibrary.simpleMessage("Your Name")
+      };
 }

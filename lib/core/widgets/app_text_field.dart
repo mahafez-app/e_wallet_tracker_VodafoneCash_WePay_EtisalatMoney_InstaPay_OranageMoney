@@ -14,6 +14,8 @@ class AppTextField extends StatelessWidget {
     this.suffixIcon,
     this.prefixIcon,
     this.validator,
+    this.fillColor,
+    this.labelStyle,
   });
 
   final String label;
@@ -24,6 +26,8 @@ class AppTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final String? Function(String?)? validator;
+  final Color? fillColor;
+  final TextStyle? labelStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,7 @@ class AppTextField extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: Theme.of(context).textTheme.labelLarge),
+        Text(label, style: labelStyle ?? Theme.of(context).textTheme.labelLarge),
         AppSpacing.sm.verticalSpace,
         TextFormField(
           controller: controller,
@@ -42,6 +46,8 @@ class AppTextField extends StatelessWidget {
             hintText: hintText,
             suffixIcon: suffixIcon,
             prefixIcon: prefixIcon,
+            fillColor: fillColor,
+            filled: fillColor != null,
           ),
         ),
       ],

@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/error/result.dart';
 import '../../domain/entities/app_user.dart';
-import '../../domain/usecases/confirm_user_name_usecase.dart';
 import '../../domain/usecases/sign_in_with_email_password_usecase.dart';
 import '../../domain/usecases/sign_in_with_google_usecase.dart';
 import '../../domain/usecases/sign_out_usecase.dart';
 import '../../domain/usecases/sign_up_with_email_password_usecase.dart';
+import '../../domain/usecases/update_display_name_usecase.dart';
 import 'auth_providers.dart';
 
 enum AuthLoadingMethod { none, email, google, confirmName }
@@ -38,7 +38,7 @@ final class AuthNotifier extends Notifier<AuthState> {
   late final SignInWithGoogleUseCase _signInWithGoogle;
   late final SignInWithEmailPasswordUseCase _signInWithEmailPassword;
   late final SignUpWithEmailPasswordUseCase _signUpWithEmailPassword;
-  late final ConfirmUserNameUseCase _confirmUserName;
+  late final UpdateDisplayNameUseCase _updateDisplayName;
   late final SignOutUseCase _signOut;
 
   @override
@@ -46,7 +46,7 @@ final class AuthNotifier extends Notifier<AuthState> {
     _signInWithGoogle = ref.read(signInWithGoogleUseCaseProvider);
     _signInWithEmailPassword = ref.read(signInWithEmailPasswordUseCaseProvider);
     _signUpWithEmailPassword = ref.read(signUpWithEmailPasswordUseCaseProvider);
-    _confirmUserName = ref.read(confirmUserNameUseCaseProvider);
+    _updateDisplayName = ref.read(updateDisplayNameUseCaseProvider);
     _signOut = ref.read(signOutUseCaseProvider);
 
     return const AuthState();
@@ -134,7 +134,7 @@ final class AuthNotifier extends Notifier<AuthState> {
     return result;
   }
 
-  Future<Result<void>> confirmUserName({
+  Future<Result<void>> updateDisplayName({
     required String uid,
     required String displayName,
   }) async {
@@ -143,8 +143,8 @@ final class AuthNotifier extends Notifier<AuthState> {
       error: null,
     );
 
-    final result = await _confirmUserName(
-      ConfirmUserNameParams(uid: uid, displayName: displayName),
+    final result = await _updateDisplayName(
+      UpdateDisplayNameParams(uid: uid, displayName: displayName),
     );
 
     result.fold(

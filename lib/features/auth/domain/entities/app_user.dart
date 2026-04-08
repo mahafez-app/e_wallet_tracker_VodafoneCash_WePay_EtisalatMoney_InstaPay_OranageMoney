@@ -7,49 +7,33 @@ final class AppUser extends Equatable {
     required this.uid,
     required this.displayName,
     required this.email,
-    required this.isAndroid,
-    required this.nameConfirmed,
-    required this.preferredLocale,
-    required this.preferredTheme,
     required this.createdAt,
-    this.walletNumber,
-    this.photoUrl,
+    this.walletNumbers = const [],
+    this.nameConfirmed = true,
   });
 
   final String uid;
   final String displayName;
   final String? email;
-  final String? walletNumber;
-  final bool isAndroid;
-  final bool nameConfirmed;
-  final String preferredLocale;
-  final String preferredTheme;
+  final List<String> walletNumbers;
   final DateTime createdAt;
-  final String? photoUrl;
+  final bool nameConfirmed;
 
   AppUser copyWith({
     String? uid,
     String? displayName,
     String? email,
-    String? walletNumber,
-    bool? isAndroid,
-    bool? nameConfirmed,
-    String? preferredLocale,
-    String? preferredTheme,
+    List<String>? walletNumbers,
     DateTime? createdAt,
-    String? photoUrl,
+    bool? nameConfirmed,
   }) {
     return AppUser(
       uid: uid ?? this.uid,
       displayName: displayName ?? this.displayName,
       email: email ?? this.email,
-      walletNumber: walletNumber ?? this.walletNumber,
-      isAndroid: isAndroid ?? this.isAndroid,
-      nameConfirmed: nameConfirmed ?? this.nameConfirmed,
-      preferredLocale: preferredLocale ?? this.preferredLocale,
-      preferredTheme: preferredTheme ?? this.preferredTheme,
+      walletNumbers: walletNumbers ?? this.walletNumbers,
       createdAt: createdAt ?? this.createdAt,
-      photoUrl: photoUrl ?? this.photoUrl,
+      nameConfirmed: nameConfirmed ?? this.nameConfirmed,
     );
   }
 
@@ -58,12 +42,8 @@ final class AppUser extends Equatable {
     uid,
     displayName,
     email,
-    walletNumber,
-    isAndroid,
-    nameConfirmed,
-    preferredLocale,
-    preferredTheme,
+    walletNumbers,
     createdAt,
-    photoUrl,
+    nameConfirmed,
   ];
 }

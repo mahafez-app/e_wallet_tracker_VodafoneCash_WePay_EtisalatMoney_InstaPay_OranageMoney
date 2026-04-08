@@ -1,7 +1,7 @@
-import '../../domain/entities/app_user.dart';
-import '../../domain/repositories/auth_repository.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
+import '../../domain/entities/app_user.dart';
+import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_data_source.dart';
 
 final class AuthRepositoryImpl implements AuthRepository {
@@ -74,44 +74,16 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<void>> confirmUserName({
+  Future<Result<void>> updateWalletNumbers({
     required String uid,
-    required String displayName,
+    required List<String> walletNumbers,
   }) {
     return executeAndHandleErrors(() async {
-      await _remoteDataSource.confirmUserName(
+      await _remoteDataSource.updateWalletNumbers(
         uid: uid,
-        displayName: displayName,
+        walletNumbers: walletNumbers,
       );
-    }, tag: 'confirmUserName');
-  }
-
-  @override
-  Future<Result<void>> updateUserPreferences({
-    required String uid,
-    String? preferredLocale,
-    String? preferredTheme,
-  }) {
-    return executeAndHandleErrors(() async {
-      await _remoteDataSource.updateUserPreferences(
-        uid: uid,
-        preferredLocale: preferredLocale,
-        preferredTheme: preferredTheme,
-      );
-    }, tag: 'updateUserPreferences');
-  }
-
-  @override
-  Future<Result<void>> updateWalletNumber({
-    required String uid,
-    required String walletNumber,
-  }) {
-    return executeAndHandleErrors(() async {
-      await _remoteDataSource.updateWalletNumber(
-        uid: uid,
-        walletNumber: walletNumber,
-      );
-    }, tag: 'updateWalletNumber');
+    }, tag: 'updateWalletNumbers');
   }
 
   @override

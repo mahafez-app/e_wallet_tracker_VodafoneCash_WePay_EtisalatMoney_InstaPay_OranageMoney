@@ -58,5 +58,7 @@
   "passwordPlaceholder": "••••••••",
   "fullName": "الاسم الكامل",
   "fullNamePlaceholder": "مثلاً: أحمد محمود",
-  "signUpSubtitle": "إنشاء حساب جديد للبدء في إدارة أعمالك"
+  "signUpSubtitle": "إنشاء حساب جديد للبدء في إدارة أعمالك",
+  "whatIsYourName": "ما اسمك؟",
+  "nameWillBeDisplayed": "سيظهر اسمك عند تحديث حالة الدفع لتسهيل تتبع العمليات المالية"
 }

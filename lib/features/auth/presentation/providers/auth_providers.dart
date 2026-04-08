@@ -6,12 +6,12 @@ import '../../data/datasources/auth_remote_data_source.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/entities/app_user.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../../domain/usecases/confirm_user_name_usecase.dart';
 import '../../domain/usecases/get_user_profile_usecase.dart';
 import '../../domain/usecases/sign_in_with_email_password_usecase.dart';
 import '../../domain/usecases/sign_in_with_google_usecase.dart';
 import '../../domain/usecases/sign_out_usecase.dart';
 import '../../domain/usecases/sign_up_with_email_password_usecase.dart';
+import '../../domain/usecases/update_display_name_usecase.dart';
 
 /// Google Sign-In instance provider
 final googleSignInProvider = Provider<GoogleSignIn>((ref) => GoogleSignIn());
@@ -48,8 +48,8 @@ final signUpWithEmailPasswordUseCaseProvider =
           SignUpWithEmailPasswordUseCase(ref.watch(authRepositoryProvider)),
     );
 
-final confirmUserNameUseCaseProvider = Provider<ConfirmUserNameUseCase>(
-  (ref) => ConfirmUserNameUseCase(ref.watch(authRepositoryProvider)),
+final updateDisplayNameUseCaseProvider = Provider<UpdateDisplayNameUseCase>(
+  (ref) => UpdateDisplayNameUseCase(ref.watch(authRepositoryProvider)),
 );
 
 final getUserProfileUseCaseProvider = Provider<GetUserProfileUseCase>(

@@ -18,10 +18,8 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(
-      _current != null,
-      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
-    );
+    assert(_current != null,
+        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
     return _current!;
   }
 
@@ -43,10 +41,8 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(
-      instance != null,
-      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
-    );
+    assert(instance != null,
+        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
     return instance!;
   }
 
@@ -276,7 +272,12 @@ class S {
 
   /// `404`
   String get notFoundStatusCode {
-    return Intl.message('404', name: 'notFoundStatusCode', desc: '', args: []);
+    return Intl.message(
+      '404',
+      name: 'notFoundStatusCode',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `الصفحة غير موجودة`
@@ -291,42 +292,82 @@ class S {
 
   /// `محافظ`
   String get appName {
-    return Intl.message('محافظ', name: 'appName', desc: '', args: []);
+    return Intl.message(
+      'محافظ',
+      name: 'appName',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `تسجيل الدخول`
   String get signIn {
-    return Intl.message('تسجيل الدخول', name: 'signIn', desc: '', args: []);
+    return Intl.message(
+      'تسجيل الدخول',
+      name: 'signIn',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `إنشاء حساب`
   String get signUp {
-    return Intl.message('إنشاء حساب', name: 'signUp', desc: '', args: []);
+    return Intl.message(
+      'إنشاء حساب',
+      name: 'signUp',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `البريد الإلكتروني`
   String get email {
-    return Intl.message('البريد الإلكتروني', name: 'email', desc: '', args: []);
+    return Intl.message(
+      'البريد الإلكتروني',
+      name: 'email',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `كلمة المرور`
   String get password {
-    return Intl.message('كلمة المرور', name: 'password', desc: '', args: []);
+    return Intl.message(
+      'كلمة المرور',
+      name: 'password',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `الاسم`
   String get displayName {
-    return Intl.message('الاسم', name: 'displayName', desc: '', args: []);
+    return Intl.message(
+      'الاسم',
+      name: 'displayName',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `اسمك`
   String get yourName {
-    return Intl.message('اسمك', name: 'yourName', desc: '', args: []);
+    return Intl.message(
+      'اسمك',
+      name: 'yourName',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `تأكيد`
   String get confirm {
-    return Intl.message('تأكيد', name: 'confirm', desc: '', args: []);
+    return Intl.message(
+      'تأكيد',
+      name: 'confirm',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `تسجيل الدخول بواسطة جوجل`
@@ -411,7 +452,12 @@ class S {
 
   /// `تأكيد الاسم`
   String get confirmName {
-    return Intl.message('تأكيد الاسم', name: 'confirmName', desc: '', args: []);
+    return Intl.message(
+      'تأكيد الاسم',
+      name: 'confirmName',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `يرجى تأكيد اسمك للمتابعة`
@@ -426,7 +472,12 @@ class S {
 
   /// `أو`
   String get or {
-    return Intl.message('أو', name: 'or', desc: '', args: []);
+    return Intl.message(
+      'أو',
+      name: 'or',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `إدارة محافظك الخاصة بالأعمال بسهولة`
@@ -461,7 +512,12 @@ class S {
 
   /// `اشترك الآن`
   String get signUpNow {
-    return Intl.message('اشترك الآن', name: 'signUpNow', desc: '', args: []);
+    return Intl.message(
+      'اشترك الآن',
+      name: 'signUpNow',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `example@email.com`
@@ -486,7 +542,12 @@ class S {
 
   /// `الاسم الكامل`
   String get fullName {
-    return Intl.message('الاسم الكامل', name: 'fullName', desc: '', args: []);
+    return Intl.message(
+      'الاسم الكامل',
+      name: 'fullName',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `مثلاً: أحمد محمود`
@@ -504,6 +565,26 @@ class S {
     return Intl.message(
       'إنشاء حساب جديد للبدء في إدارة أعمالك',
       name: 'signUpSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ما اسمك؟`
+  String get whatIsYourName {
+    return Intl.message(
+      'ما اسمك؟',
+      name: 'whatIsYourName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيظهر اسمك عند تحديث حالة الدفع لتسهيل تتبع العمليات المالية`
+  String get nameWillBeDisplayed {
+    return Intl.message(
+      'سيظهر اسمك عند تحديث حالة الدفع لتسهيل تتبع العمليات المالية',
+      name: 'nameWillBeDisplayed',
       desc: '',
       args: [],
     );

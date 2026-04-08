@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../../core/theme/app_responsive.dart';
+import '../../../../../core/theme/app_spacing.dart';
+import '../../../../../core/widgets/app_button.dart';
+import '../../../../../core/widgets/app_text_field.dart';
+import '../../../../../generated/l10n.dart';
+import '../../providers/auth_notifier.dart';
+import '../../providers/auth_providers.dart';
+
+class ConfirmNameForm extends ConsumerStatefulWidget {
+  const ConfirmNameForm({super.key});
+
+  @override
+  ConsumerState<ConfirmNameForm> createState() => _ConfirmNameFormState();
+}
+
+class _ConfirmNameFormState extends ConsumerState<ConfirmNameForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final user = ref.read(currentUserProvider);
+      if (user != null && user.displayName.isNotEmpty) {
+        _nameController.text = user.displayName;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    if (_formKey.currentState?.validate() ?? false) {
+      final user = ref.read(currentUserProvider);
+      if (user != null) {
+        ref.read(authNotifierProvider.notifier).updateDisplayName(
+              uid: user.uid,
+              displayName: _nameController.text.trim(),
+            );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = S.of(context);
+    final authState = ref.watch(authNotifierProvider);
+    final isLoading = authState.loadingMethod == AuthLoadingMethod.confirmName;
+
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Name Field
+          AppTextField(
+            controller: _nameController,
+            label: l10n.fullName,
+            hintText: l10n.fullNamePlaceholder,
+            prefixIcon: const Icon(Icons.person_outline),
+            keyboardType: TextInputType.name,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Please enter your name';
+              }
+              return null;
+            },
+          ),
+
+          40.responsiveHeight.verticalSpace,
+
+          // Submit Button
+          AppButton(
+            label: l10n.confirm,
+            onPressed: _submit,
+            isLoading: isLoading,
+          ),
+          
+          AppSpacing.xl.verticalSpace,
+        ],
+      ),
+    );
+  }
+}

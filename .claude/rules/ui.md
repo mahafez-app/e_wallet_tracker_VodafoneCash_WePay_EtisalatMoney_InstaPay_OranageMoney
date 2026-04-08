@@ -96,6 +96,9 @@ LayoutBuilder(
 - Buttons, cards, inputs, and containers must never have hardcoded `width`
   or `height`. Use `double.infinity`, `Flexible`, `Expanded`, or
   `FractionallySizedBox`.
+- For required fixed layouts (like avatars, logos, explicit fixed UI components), never use raw double/int values (e.g., `width: 96`). Always use the extensions from `AppResponsive` (e.g., `96.responsiveWidth`, `96.responsiveHeight`, `24.responsiveRadius`).
+- Icon sizes must always use `.responsiveRadius` (e.g., `size: 48.responsiveRadius`).
+- Colors inside the widget tree must not use built-in colors (`Colors.white`, `Colors.black`, `Colors.blue`). Always use properties from `Theme.of(context)` or constants stored in `AppColors` (e.g., `AppColors.white`, `AppColors.black`). If a needed primitive color isn't there, add it to `AppColors` first.
 - Always handle text overflow: every `Text` that could overflow must have
   `overflow: TextOverflow.ellipsis` (single line) or `maxLines` +
   `TextOverflow.ellipsis` (multiline).

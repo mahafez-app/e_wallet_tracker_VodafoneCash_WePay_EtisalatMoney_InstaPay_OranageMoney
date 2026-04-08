@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -26,18 +24,9 @@ abstract interface class AuthRemoteDataSource {
     required String uid,
     required String displayName,
   });
-  Future<void> confirmUserName({
+  Future<void> updateWalletNumbers({
     required String uid,
-    required String displayName,
-  });
-  Future<void> updateUserPreferences({
-    required String uid,
-    String? preferredLocale,
-    String? preferredTheme,
-  });
-  Future<void> updateWalletNumber({
-    required String uid,
-    required String walletNumber,
+    required List<String> walletNumbers,
   });
   Future<void> signOut();
   Future<UserDto> getUserProfile(String uid);
@@ -60,13 +49,20 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Stream<UserDto?> get authStateChanges {
-    return _firebaseAuth.authStateChanges().asyncMap((firebaseUser) async {
-      if (firebaseUser == null) return null;
-      try {
-        return await getUserProfile(firebaseUser.uid);
-      } catch (_) {
-        return null;
+    return _firebaseAuth.authStateChanges().asyncExpand((firebaseUser) async* {
+      if (firebaseUser == null) {
+        yield null;
+        return;
       }
+      
+      // Listen to Firestore document changes for realtime profile updates
+      yield* _firestore
+          .collection(_usersCollection)
+          .doc(firebaseUser.uid)
+          .snapshots()
+          // Only emit when the profile has been successfully created
+          .where((doc) => doc.exists && doc.data() != null)
+          .map((doc) => UserDto.fromJson({'uid': firebaseUser.uid, ...doc.data()!}));
     });
   }
 
@@ -138,28 +134,14 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
 
     await firebaseUser.updateDisplayName(displayName);
-    await firebaseUser.reload();
 
-    return await _createOrUpdateUserProfile(firebaseUser);
+    return await _createOrUpdateUserProfile(
+        _firebaseAuth.currentUser ?? firebaseUser,
+        providedDisplayName: displayName);
   }
 
   @override
   Future<void> updateDisplayName({
-    required String uid,
-    required String displayName,
-  }) async {
-    final firebaseUser = _firebaseAuth.currentUser;
-    if (firebaseUser != null && firebaseUser.uid == uid) {
-      await firebaseUser.updateDisplayName(displayName);
-    }
-
-    await _firestore.collection(_usersCollection).doc(uid).update({
-      'displayName': displayName,
-    });
-  }
-
-  @override
-  Future<void> confirmUserName({
     required String uid,
     required String displayName,
   }) async {
@@ -175,27 +157,12 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> updateUserPreferences({
+  Future<void> updateWalletNumbers({
     required String uid,
-    String? preferredLocale,
-    String? preferredTheme,
-  }) async {
-    final updates = <String, dynamic>{};
-    if (preferredLocale != null) updates['preferredLocale'] = preferredLocale;
-    if (preferredTheme != null) updates['preferredTheme'] = preferredTheme;
-
-    if (updates.isNotEmpty) {
-      await _firestore.collection(_usersCollection).doc(uid).update(updates);
-    }
-  }
-
-  @override
-  Future<void> updateWalletNumber({
-    required String uid,
-    required String walletNumber,
+    required List<String> walletNumbers,
   }) async {
     await _firestore.collection(_usersCollection).doc(uid).update({
-      'walletNumber': walletNumber,
+      'walletNumbers': walletNumbers,
     });
   }
 
@@ -216,40 +183,31 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   /// Create or update user profile in Firestore from Firebase User.
-  Future<UserDto> _createOrUpdateUserProfile(User firebaseUser) async {
+  Future<UserDto> _createOrUpdateUserProfile(
+    User firebaseUser, {
+    String? providedDisplayName,
+  }) async {
     final userDoc = _firestore
         .collection(_usersCollection)
         .doc(firebaseUser.uid);
     final docSnapshot = await userDoc.get();
 
-    final isAndroid = Platform.isAndroid;
+    final effDisplayName = providedDisplayName ?? firebaseUser.displayName ?? '';
 
     if (!docSnapshot.exists) {
       // Create new user profile
+      // If providedDisplayName is null (Google sign-in), force them to confirm name.
       final newUser = UserDto.createNew(
         uid: firebaseUser.uid,
-        displayName: firebaseUser.displayName ?? '',
+        displayName: effDisplayName,
         email: firebaseUser.email,
-        isAndroid: isAndroid,
-        photoUrl: firebaseUser.photoURL,
+        nameConfirmed: providedDisplayName != null,
       );
 
       await userDoc.set(newUser.toJson());
       return newUser;
     } else {
-      // Update existing user if needed
-      final updates = <String, dynamic>{};
-      if (firebaseUser.displayName != null) {
-        updates['displayName'] = firebaseUser.displayName;
-      }
-      if (firebaseUser.photoURL != null) {
-        updates['photoUrl'] = firebaseUser.photoURL;
-      }
-
-      if (updates.isNotEmpty) {
-        await userDoc.update(updates);
-      }
-
+      // Return the existing
       return await getUserProfile(firebaseUser.uid);
     }
   }
@@ -260,8 +218,6 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       uid: firebaseUser.uid,
       displayName: firebaseUser.displayName ?? '',
       email: firebaseUser.email,
-      isAndroid: Platform.isAndroid,
-      photoUrl: firebaseUser.photoURL,
     );
   }
 }

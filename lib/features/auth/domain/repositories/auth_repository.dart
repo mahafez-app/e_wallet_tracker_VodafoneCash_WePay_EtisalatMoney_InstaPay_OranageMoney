@@ -1,5 +1,5 @@
-import '../entities/app_user.dart';
 import '../../../../core/error/result.dart';
+import '../entities/app_user.dart';
 
 /// Repository interface for authentication operations.
 /// Domain layer contract — data layer implements it.
@@ -34,23 +34,10 @@ abstract interface class AuthRepository {
     required String displayName,
   });
 
-  /// Mark user name as confirmed in Firestore.
-  Future<Result<void>> confirmUserName({
+  /// Update wallet numbers (Android only).
+  Future<Result<void>> updateWalletNumbers({
     required String uid,
-    required String displayName,
-  });
-
-  /// Update user preferences (locale, theme) in Firestore.
-  Future<Result<void>> updateUserPreferences({
-    required String uid,
-    String? preferredLocale,
-    String? preferredTheme,
-  });
-
-  /// Update wallet number (Android only).
-  Future<Result<void>> updateWalletNumber({
-    required String uid,
-    required String walletNumber,
+    required List<String> walletNumbers,
   });
 
   /// Sign out current user.

@@ -51,7 +51,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = S.of(context);
-    final theme = Theme.of(context);
     final authState = ref.watch(authNotifierProvider);
 
     return Form(

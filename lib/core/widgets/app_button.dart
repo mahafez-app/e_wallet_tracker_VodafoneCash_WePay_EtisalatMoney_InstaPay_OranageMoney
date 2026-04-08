@@ -10,6 +10,7 @@ class AppButton extends StatelessWidget {
     this.type = AppButtonType.primary,
     this.isLoading = false,
     this.icon,
+    this.trailingIcon,
     this.foregroundColor,
     this.backgroundColor,
   });
@@ -19,6 +20,7 @@ class AppButton extends StatelessWidget {
   final AppButtonType type;
   final bool isLoading;
   final Widget? icon;
+  final Widget? trailingIcon;
   final Color? foregroundColor;
   final Color? backgroundColor;
 
@@ -45,7 +47,17 @@ class AppButton extends StatelessWidget {
               valueColor: AlwaysStoppedAnimation<Color>(indicatorColor),
             ),
           )
-        : Text(label);
+        : trailingIcon != null
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(label),
+                  const SizedBox(width: 8),
+                  trailingIcon!,
+                ],
+              )
+            : Text(label);
 
     final ButtonStyle? customStyle =
         foregroundColor != null || backgroundColor != null

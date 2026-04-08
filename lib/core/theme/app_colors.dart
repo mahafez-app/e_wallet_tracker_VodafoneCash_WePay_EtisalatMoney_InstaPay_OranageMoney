@@ -75,6 +75,7 @@ abstract final class AppColors {
   static const Color onBackground = onSurface;
 
   static const Color black = Color(0xFF000000);
+  static const Color white = Color(0xFFFFFFFF);
 
   // Sign-in screen custom colors from Figma design
   static const Color signInBackground = Color(0xFFF9F9FF);

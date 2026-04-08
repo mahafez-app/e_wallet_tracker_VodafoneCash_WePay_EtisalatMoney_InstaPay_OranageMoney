@@ -3,60 +3,98 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/presentation/providers/auth_providers.dart';
-// import '../../features/auth/presentation/screens/confirm_name_screen.dart';
+import '../../features/auth/presentation/screens/confirm_name_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/sign_up_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../widgets/not_found_screen.dart';
 import 'app_routes.dart';
-import 'go_router_refresh_stream.dart';
+
+// ---------------------------------------------------------------------------
+// RouterNotifier
+// ---------------------------------------------------------------------------
+// Extends AsyncNotifier<void> so it can watch async providers.
+// Implements Listenable so GoRouter can subscribe to it via refreshListenable.
+// When either authStateChangesProvider or firestoreUserProfileProvider emits,
+// GoRouter re-runs redirect() without recreating the router instance.
+// ---------------------------------------------------------------------------
+
+final routerNotifierProvider = AsyncNotifierProvider<RouterNotifier, void>(
+  RouterNotifier.new,
+);
+
+class RouterNotifier extends AsyncNotifier<void> implements Listenable {
+  VoidCallback? _routerListener;
+
+  @override
+  Future<void> build() async {
+    // Any auth change (sign in / sign out) triggers redirect re-evaluation.
+    ref.listen(authStateChangesProvider, (_, _) => _notify());
+  }
+
+  void _notify() => _routerListener?.call();
+
+  @override
+  void addListener(VoidCallback listener) => _routerListener = listener;
+
+  @override
+  void removeListener(VoidCallback listener) => _routerListener = null;
+
+  String? redirect(BuildContext context, GoRouterState state) {
+    // Use ref.read — not ref.watch — inside redirect to avoid
+    // accidentally creating subscriptions during redirect evaluation.
+    final authAsync = ref.read(authStateChangesProvider);
+
+    final location = state.matchedLocation;
+    final isSplash = location == AppRoutes.splash;
+    final isLogin = location == AppRoutes.login;
+    final isRegister = location == AppRoutes.register;
+    final isConfirmName = location == AppRoutes.confirmName;
+    final isAuthPage = isLogin || isRegister || isConfirmName;
+
+    if (authAsync.isLoading) return null;
+
+    final appUser = authAsync.value;
+    final isAuthenticated = appUser != null;
+
+    if (isSplash) return null;
+
+    if (!isAuthenticated) {
+      if (isSplash || isAuthPage) return null;
+      return AppRoutes.login;
+    }
+
+    final isNameConfirmed = appUser.nameConfirmed;
+
+    if (!isNameConfirmed && !isConfirmName) {
+      return AppRoutes.confirmName;
+    }
+
+    if (isNameConfirmed && (isSplash || isAuthPage)) {
+      return AppRoutes.home;
+    }
+
+    return null;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Router Provider
+// ---------------------------------------------------------------------------
+// GoRouter instance is created once and never recreated.
+// refreshListenable = RouterNotifier → redirect re-runs on any notify().
+// ---------------------------------------------------------------------------
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authStateChangesProvider);
+  final notifier = ref.watch(routerNotifierProvider.notifier);
 
   return GoRouter(
     initialLocation: AppRoutes.splash,
-    debugLogDiagnostics: false,
+    debugLogDiagnostics: true,
+    refreshListenable: notifier,
+    redirect: notifier.redirect,
     errorBuilder: (context, state) => const NotFoundScreen(),
-    refreshListenable: GoRouterRefreshStream(
-      ref.watch(authStateChangesProvider.future).asStream(),
-    ),
-    redirect: (context, state) {
-      final isInitializing = authState.isLoading;
-      final user = authState.value;
-      final isAuthenticated = user != null;
-      final nameConfirmed = user?.nameConfirmed ?? false;
-
-      final isSplash = state.matchedLocation == AppRoutes.splash;
-      final isLogin = state.matchedLocation == AppRoutes.login;
-      final isRegister = state.matchedLocation == AppRoutes.register;
-      final isConfirmName = state.matchedLocation == AppRoutes.confirmName;
-
-      // Still loading auth state, stay on splash
-      if (isInitializing && !isSplash) {
-        return AppRoutes.splash;
-      }
-
-      // Not authenticated, redirect to login (except if already on auth pages)
-      if (!isAuthenticated && !isLogin && !isRegister && !isSplash) {
-        return AppRoutes.login;
-      }
-
-      // Authenticated but name not confirmed, redirect to confirm name
-      if (isAuthenticated && !nameConfirmed && !isConfirmName) {
-        return AppRoutes.confirmName;
-      }
-
-      // Authenticated with confirmed name, redirect from auth pages to home
-      if (isAuthenticated && nameConfirmed) {
-        if (isLogin || isRegister || isConfirmName || isSplash) {
-          return AppRoutes.home;
-        }
-      }
-
-      return null;
-    },
     routes: [
       GoRoute(
         path: AppRoutes.splash,
@@ -70,10 +108,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.register,
         builder: (context, state) => const SignUpScreen(),
       ),
-      // GoRoute(
-      //   path: AppRoutes.confirmName,
-      //   builder: (context, state) => const ConfirmNameScreen(),
-      // ),
+      GoRoute(
+        path: AppRoutes.confirmName,
+        builder: (context, state) => const ConfirmNameScreen(),
+      ),
       GoRoute(
         path: AppRoutes.home,
         builder: (context, state) => const HomeScreen(),

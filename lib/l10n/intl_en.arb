@@ -58,5 +58,7 @@
   "passwordPlaceholder": "••••••••",
   "fullName": "Full Name",
   "fullNamePlaceholder": "e.g. John Doe",
-  "signUpSubtitle": "Create a new account to start managing your business"
+  "signUpSubtitle": "Create a new account to start managing your business",
+  "whatIsYourName": "What is your name?",
+  "nameWillBeDisplayed": "Your name will be displayed when updating payment status to facilitate tracking financial transactions"
 }

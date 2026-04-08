@@ -25,8 +25,8 @@ class _ConfirmNameFormState extends ConsumerState<ConfirmNameForm> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final user = ref.read(currentUserProvider);
-      if (user != null && user.displayName.isNotEmpty) {
-        _nameController.text = user.displayName;
+      if (user != null && user.name.isNotEmpty) {
+        _nameController.text = user.name;
       }
     });
   }

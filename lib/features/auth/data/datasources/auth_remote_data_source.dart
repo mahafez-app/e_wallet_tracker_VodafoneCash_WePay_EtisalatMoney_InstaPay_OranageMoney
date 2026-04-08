@@ -199,7 +199,7 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // If providedDisplayName is null (Google sign-in), force them to confirm name.
       final newUser = UserDto.createNew(
         uid: firebaseUser.uid,
-        displayName: effDisplayName,
+        name: effDisplayName,
         email: firebaseUser.email,
         nameConfirmed: providedDisplayName != null,
       );
@@ -216,7 +216,7 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   UserDto _mapFirebaseUserToDto(User firebaseUser) {
     return UserDto.createNew(
       uid: firebaseUser.uid,
-      displayName: firebaseUser.displayName ?? '',
+      name: firebaseUser.displayName ?? '',
       email: firebaseUser.email,
     );
   }

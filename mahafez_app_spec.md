@@ -202,14 +202,152 @@ History data:
 - `workspaces/{workspaceId}/wallets/{walletId}`
 - `invites/{inviteId}`
 
-### 6.2 Why this structure
+---
 
-This structure is used because:
-- it is easy to scale
-- it avoids large list fields in a single document
-- it keeps wallets and workspaces separate
-- it supports many users, many wallets, and many businesses
+### 6.2 Document Fields
 
+#### users/{uid}
+
+- `name`: string  
+- `email`: string (nullable)  
+- `createdAt`: timestamp  
+- `updatedAt`: timestamp (nullable)  
+- `lastSeenAt`: timestamp (nullable)  
+- `nameConfirmed`: boolean (default: true)  
+
+---
+
+#### wallets/{walletId}
+
+- `phoneNumber`: string (11 digits, Egypt format)  
+- `provider`: string (`vodafone_cash | orange_money | etisalat_cash | instapay`)  
+- `deviceId`: string  
+- `ownerUid`: string (reference to user)  
+- `currentBalance`: number  
+- `lastBalanceAt`: timestamp  
+- `createdAt`: timestamp  
+
+---
+
+#### wallets/{walletId}/transactions/{txId}
+
+- `type`: string (`send | receive`)  
+- `amount`: number  
+- `message`: string (full SMS text)  
+- `isPaid`: boolean  
+- `externalId`: string (unique per SMS)  
+- `createdAt`: timestamp  
+
+---
+
+#### wallets/{walletId}/transactions/{txId}/notes/{noteId}
+
+- `text`: string  
+- `createdBy`: string (uid)  
+- `updatedBy`: string (uid)  
+- `createdAt`: timestamp  
+- `updatedAt`: timestamp  
+
+---
+
+#### wallets/{walletId}/transactions/{txId}/history/{eventId}
+
+- `action`: string (`paid | unpaid`)  
+- `changedBy`: string (uid)  
+- `createdAt`: timestamp  
+
+---
+
+#### workspaces/{workspaceId}
+
+- `name`: string  
+- `ownerUid`: string (uid)  
+- `createdAt`: timestamp  
+
+---
+
+#### workspaces/{workspaceId}/members/{uid}
+
+- `joinedAt`: timestamp  
+
+---
+
+#### workspaces/{workspaceId}/wallets/{walletId}
+
+- `addedAt`: timestamp  
+
+---
+
+#### invites/{inviteId}
+
+- `workspaceId`: string  
+- `email`: string  
+- `status`: string (`pending | accepted | rejected`)  
+- `createdBy`: string (uid)  
+- `createdAt`: timestamp  
+- `respondedAt`: timestamp  
+
+---
+
+### 6.3 Relationships
+
+#### User → Wallets
+- One user can own multiple wallets  
+- `wallets.ownerUid → users.uid`
+
+---
+
+#### Wallet → Transactions
+- One wallet has many transactions  
+- `wallets/{walletId}/transactions`
+
+---
+
+#### Transaction → Notes
+- One transaction has many notes  
+- `transactions/{txId}/notes`
+
+---
+
+#### Transaction → History
+- One transaction has many history records  
+- Used to track paid/unpaid changes  
+
+---
+
+#### Workspace → Members
+- One workspace has many users  
+- Stored in subcollection  
+- `members/{uid}`
+
+---
+
+#### Workspace → Wallets
+- One workspace has many wallets  
+- A wallet can belong to multiple workspaces  
+
+---
+
+#### User → Workspace (via members)
+- A user can join multiple workspaces  
+- Access controlled by membership  
+
+---
+
+#### Workspace → Invites
+- One workspace can send many invites  
+- Invite is linked by `workspaceId`  
+
+---
+
+### 6.4 Why this structure
+
+- avoids large arrays (better scalability)  
+- supports many users and many wallets  
+- allows wallet sharing across workspaces  
+- keeps transactions isolated per wallet  
+- supports history and notes cleanly  
+- easy to extend later without breaking structure  
 ---
 
 ## 7. Relationship Rules

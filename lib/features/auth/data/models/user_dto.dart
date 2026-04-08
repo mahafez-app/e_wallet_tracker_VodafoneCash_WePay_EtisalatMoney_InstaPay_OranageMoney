@@ -9,17 +9,15 @@ part 'user_dto.g.dart';
 class UserDto {
   const UserDto({
     required this.uid,
-    required this.displayName,
+    required this.name,
     required this.email,
     required this.createdAt,
-    this.walletNumbers = const [],
     this.nameConfirmed = true,
   });
 
   final String uid;
-  final String displayName;
+  final String name;
   final String? email;
-  final List<String> walletNumbers;
   @TimestampConverter()
   final Timestamp createdAt;
   @JsonKey(defaultValue: true)
@@ -33,9 +31,8 @@ class UserDto {
   AppUser toEntity() {
     return AppUser(
       uid: uid,
-      displayName: displayName,
+      name: name,
       email: email,
-      walletNumbers: walletNumbers,
       createdAt: createdAt.toDate(),
       nameConfirmed: nameConfirmed,
     );
@@ -44,9 +41,8 @@ class UserDto {
   factory UserDto.fromEntity(AppUser user) {
     return UserDto(
       uid: user.uid,
-      displayName: user.displayName,
+      name: user.name,
       email: user.email,
-      walletNumbers: user.walletNumbers,
       createdAt: Timestamp.fromDate(user.createdAt),
       nameConfirmed: user.nameConfirmed,
     );
@@ -54,16 +50,15 @@ class UserDto {
 
   factory UserDto.createNew({
     required String uid,
-    required String displayName,
+    required String name,
     required String? email,
     List<String>? walletNumbers,
     bool nameConfirmed = true,
   }) {
     return UserDto(
       uid: uid,
-      displayName: displayName,
+      name: name,
       email: email,
-      walletNumbers: walletNumbers ?? [],
       createdAt: Timestamp.now(),
       nameConfirmed: nameConfirmed,
     );

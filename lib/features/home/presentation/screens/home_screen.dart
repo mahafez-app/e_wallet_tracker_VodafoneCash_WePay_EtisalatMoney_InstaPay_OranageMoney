@@ -24,7 +24,7 @@ class HomeScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Welcome, ${user?.displayName ?? 'User'}!',
+                'Welcome, ${user?.name ?? 'User'}!',
                 style: Theme.of(context).textTheme.headlineMedium,
                 textAlign: TextAlign.center,
               ),

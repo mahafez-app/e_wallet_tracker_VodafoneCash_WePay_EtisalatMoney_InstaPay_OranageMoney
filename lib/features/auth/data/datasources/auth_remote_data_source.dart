@@ -24,10 +24,6 @@ abstract interface class AuthRemoteDataSource {
     required String uid,
     required String displayName,
   });
-  Future<void> updateWalletNumbers({
-    required String uid,
-    required List<String> walletNumbers,
-  });
   Future<void> signOut();
   Future<UserDto> getUserProfile(String uid);
 }
@@ -157,16 +153,6 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     await _firestore.collection(_usersCollection).doc(uid).update({
       'displayName': displayName,
       'nameConfirmed': true,
-    });
-  }
-
-  @override
-  Future<void> updateWalletNumbers({
-    required String uid,
-    required List<String> walletNumbers,
-  }) async {
-    await _firestore.collection(_usersCollection).doc(uid).update({
-      'walletNumbers': walletNumbers,
     });
   }
 

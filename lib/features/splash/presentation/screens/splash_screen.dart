@@ -88,7 +88,7 @@ class _SplashBodyState extends ConsumerState<_SplashBody>
               shape: AppLogoShape.circle,
             ),
           ),
-          SizedBox(height: 40.responsiveHeight),
+          40.verticalSpace,
           FadeTransition(
             opacity: _textOpacity,
             child: SlideTransition(

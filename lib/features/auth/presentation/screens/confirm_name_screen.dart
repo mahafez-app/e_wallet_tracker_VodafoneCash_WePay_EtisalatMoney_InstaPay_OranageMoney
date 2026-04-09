@@ -5,9 +5,9 @@ import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/failure_extension.dart';
 import '../../../../core/widgets/app_logo.dart';
-import '../../../../generated/l10n.dart';
-import '../providers/auth_notifier.dart';
 import '../../../../core/widgets/app_snackbar.dart';
+import '../../../../generated/l10n.dart';
+import '../providers/auth_controller.dart';
 import '../widgets/confirm_name/confirm_name_form.dart';
 
 class ConfirmNameScreen extends StatelessWidget {
@@ -38,9 +38,9 @@ class ConfirmNameScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
+          padding: AppResponsive.symmetricPadding(
             horizontal: AppSpacing.lg,
-            vertical: 40.responsiveHeight,
+            vertical: 40,
           ),
           child: const _ConfirmNameBody(),
         ),
@@ -112,7 +112,7 @@ class _ConfirmNameBody extends ConsumerWidget {
         AppSpacing.md.verticalSpace,
 
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+          padding: AppResponsive.symmetricPadding(horizontal: AppSpacing.md),
           child: Text(
             l10n.nameWillBeDisplayed,
             textAlign: TextAlign.center,

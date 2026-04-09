@@ -6,9 +6,9 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/failure_extension.dart';
-import '../../../../generated/l10n.dart';
-import '../providers/auth_notifier.dart';
 import '../../../../core/widgets/app_snackbar.dart';
+import '../../../../generated/l10n.dart';
+import '../providers/auth_controller.dart';
 import '../widgets/login/google_sign_in_button.dart';
 import '../widgets/login/login_form.dart';
 
@@ -17,10 +17,10 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
+          padding: AppResponsive.symmetricPadding(
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.xl,
           ),
@@ -60,7 +60,7 @@ class _LoginBody extends ConsumerWidget {
           // Logo & Header
           Center(
             child: Container(
-              padding: const EdgeInsets.all(AppSpacing.md),
+              padding: AppResponsive.allPadding(AppSpacing.md),
               decoration: BoxDecoration(
                 color: colorScheme.primaryContainer,
                 shape: BoxShape.circle,
@@ -68,7 +68,7 @@ class _LoginBody extends ConsumerWidget {
               child: Icon(
                 Icons.account_balance_wallet,
                 color: colorScheme.primary,
-                size: 48,
+                size: 48.responsiveRadius,
               ),
             ),
           ),
@@ -102,7 +102,7 @@ class _LoginBody extends ConsumerWidget {
             children: [
               const Expanded(child: Divider()),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                padding: AppResponsive.horizontalPadding(AppSpacing.md),
                 child: Text(
                   l10n.or,
                   style: theme.textTheme.labelLarge?.copyWith(
@@ -147,9 +147,9 @@ class _SignUpPrompt extends StatelessWidget {
         AppSpacing.xs.horizontalSpace,
         InkWell(
           onTap: () => context.push(AppRoutes.register),
-          borderRadius: BorderRadius.circular(AppSpacing.sm),
+          borderRadius: BorderRadius.circular(AppSpacing.sm.responsiveRadius),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
+            padding: AppResponsive.symmetricPadding(
               horizontal: AppSpacing.xs,
               vertical: AppSpacing.xs,
             ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/data/models/wallet_dto.dart';
+import '../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../core/error/failures.dart';
 
 abstract interface class WalletRemoteDataSource {
@@ -19,8 +20,8 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   const WalletRemoteDataSourceImpl({
     required FirebaseFirestore firestore,
     required FirebaseAuth auth,
-  })  : _firestore = firestore,
-        _auth = auth;
+  }) : _firestore = firestore,
+       _auth = auth;
 
   @override
   Future<List<WalletDto>> addWallets({
@@ -65,7 +66,7 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       final walletDto = WalletDto(
         id: docRef.id,
         phoneNumber: phoneNumber,
-        provider: providerStr,
+        provider: WalletProvider.fromString(providerStr),
         deviceId: deviceId,
         ownerUid: currentUser.uid,
         currentBalance: 0.0,

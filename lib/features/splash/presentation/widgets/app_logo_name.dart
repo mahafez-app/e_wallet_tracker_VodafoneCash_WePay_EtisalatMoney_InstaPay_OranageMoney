@@ -22,7 +22,7 @@ class AppLogoName extends StatelessWidget {
             letterSpacing: -1.20.responsiveWidth,
           ),
         ),
-        SizedBox(height: 8.responsiveHeight),
+        8.verticalSpace,
         Text(
           AppConstants.appNameEnglish,
           textAlign: TextAlign.center,

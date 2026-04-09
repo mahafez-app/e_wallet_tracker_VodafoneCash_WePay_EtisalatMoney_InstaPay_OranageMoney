@@ -44,14 +44,13 @@ class HomeWalletsSection extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: AppSpacing.md.responsiveHeight),
+        AppSpacing.md.verticalSpace,
         SizedBox(
           height: 151.responsiveHeight,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: wallets.length + 1,
-            separatorBuilder: (_, _) =>
-                SizedBox(width: AppSpacing.md.responsiveWidth),
+            separatorBuilder: (_, _) => AppSpacing.md.horizontalSpace,
             itemBuilder: (context, index) {
               if (index == wallets.length) return const _AddWalletCard();
               return AppWalletCard(
@@ -81,10 +80,7 @@ class _AddWalletCard extends StatelessWidget {
       onTap: () => context.push(AppRoutes.addWallet),
       child: Container(
         width: 192.responsiveWidth,
-        padding: EdgeInsets.symmetric(
-          horizontal: 20.responsiveWidth,
-          vertical: 33.responsiveHeight,
-        ),
+        padding: AppResponsive.symmetricPadding(horizontal: 20, vertical: 33),
         decoration: BoxDecoration(
           color: colors.addWalletBackground,
           border: Border.all(
@@ -105,7 +101,7 @@ class _AddWalletCard extends StatelessWidget {
               ),
               child: Icon(Icons.add, color: primary),
             ),
-            SizedBox(height: AppSpacing.md.responsiveHeight),
+            AppSpacing.md.verticalSpace,
             Text(
               s.addWallet,
               textAlign: TextAlign.center,

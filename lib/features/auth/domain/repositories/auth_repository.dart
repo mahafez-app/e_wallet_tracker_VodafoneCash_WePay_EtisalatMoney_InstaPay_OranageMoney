@@ -1,28 +1,28 @@
 import '../../../../core/error/result.dart';
-import '../entities/app_user.dart';
+import '../entities/user_entity.dart';
 
 /// Repository interface for authentication operations.
 /// Domain layer contract — data layer implements it.
 abstract interface class AuthRepository {
   /// Stream of current authenticated user state.
   /// Returns null when user is signed out.
-  Stream<AppUser?> get authStateChanges;
+  Stream<UserEntity?> get authStateChanges;
 
   /// Get current user synchronously (if available).
   /// Returns null if no user is signed in.
-  AppUser? get currentUser;
+  UserEntity? get currentUser;
 
   /// Sign in with Google OAuth.
-  Future<Result<AppUser>> signInWithGoogle();
+  Future<Result<UserEntity>> signInWithGoogle();
 
   /// Sign in with email and password.
-  Future<Result<AppUser>> signInWithEmailPassword({
+  Future<Result<UserEntity>> signInWithEmailPassword({
     required String email,
     required String password,
   });
 
   /// Create new account with email and password.
-  Future<Result<AppUser>> signUpWithEmailPassword({
+  Future<Result<UserEntity>> signUpWithEmailPassword({
     required String email,
     required String password,
     required String displayName,
@@ -34,15 +34,9 @@ abstract interface class AuthRepository {
     required String displayName,
   });
 
-  /// Update wallet numbers (Android only).
-  Future<Result<void>> updateWalletNumbers({
-    required String uid,
-    required List<String> walletNumbers,
-  });
-
   /// Sign out current user.
   Future<Result<void>> signOut();
 
   /// Get user profile from Firestore by UID.
-  Future<Result<AppUser>> getUserProfile(String uid);
+  Future<Result<UserEntity>> getUserProfile(String uid);
 }

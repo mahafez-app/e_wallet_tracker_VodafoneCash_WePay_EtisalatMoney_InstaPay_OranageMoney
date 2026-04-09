@@ -26,17 +26,15 @@ final class AddWalletState {
   }
 }
 
-final addWalletControllerProvider = NotifierProvider.autoDispose<AddWalletController, AddWalletState>(
-  AddWalletController.new,
-);
+final addWalletControllerProvider =
+    NotifierProvider.autoDispose<AddWalletController, AddWalletState>(
+      AddWalletController.new,
+    );
 
 class AddWalletController extends Notifier<AddWalletState> {
   @override
   AddWalletState build() {
-    return const AddWalletState(
-      phoneNumber: '',
-      selectedProviders: {},
-    );
+    return const AddWalletState(phoneNumber: '', selectedProviders: {});
   }
 
   void updatePhoneNumber(String newNumber) {
@@ -75,22 +73,22 @@ class AddWalletController extends Notifier<AddWalletState> {
   }
 
   void reset() {
-    state = const AddWalletState(
-      phoneNumber: '',
-      selectedProviders: {},
-    );
+    state = const AddWalletState(phoneNumber: '', selectedProviders: {});
   }
 }
 
-final addWalletSubmitProvider = AsyncNotifierProvider.autoDispose<AddWalletSubmitController, void>(AddWalletSubmitController.new);
+final addWalletSubmitProvider =
+    AsyncNotifierProvider.autoDispose<AddWalletSubmitController, void>(
+      AddWalletSubmitController.new,
+    );
 
 class AddWalletSubmitController extends AsyncNotifier<void> {
   @override
-  void build() {}
+  Future<void> build() => Future.value();
 
   Future<void> submit() async {
     state = const AsyncLoading();
-    
+
     final walletState = ref.read(addWalletControllerProvider);
     if (walletState.phoneNumber.isEmpty) {
       state = AsyncError(
@@ -119,12 +117,11 @@ class AddWalletSubmitController extends AsyncNotifier<void> {
     );
 
     final result = await addUseCase(params);
-    result.fold(
-      (failure) => state = AsyncError(failure, StackTrace.current),
-      (_) {
-        state = const AsyncData(null);
-        ref.read(addWalletControllerProvider.notifier).reset();
-      },
-    );
+    result.fold((failure) => state = AsyncError(failure, StackTrace.current), (
+      _,
+    ) {
+      state = const AsyncData(null);
+      ref.read(addWalletControllerProvider.notifier).reset();
+    });
   }
 }

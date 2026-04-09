@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_color_extension.dart';
 import '../theme/app_responsive.dart';
 import '../theme/app_spacing.dart';
@@ -57,32 +58,32 @@ class AppDialog extends StatelessWidget {
 
     final (backgroundColor, foregroundColor, icon) = switch (type) {
       AppDialogType.success => (
-          colors.successContainer,
-          colors.success,
-          Icons.check_circle_outline_rounded,
-        ),
+        colors.successContainer,
+        colors.success,
+        Icons.check_circle_outline_rounded,
+      ),
       AppDialogType.error => (
-          colors.dangerContainer,
-          colors.danger,
-          Icons.error_outline_rounded,
-        ),
+        colors.dangerContainer,
+        colors.danger,
+        Icons.error_outline_rounded,
+      ),
       AppDialogType.warning => (
-          colors.warningContainer,
-          colors.warning,
-          Icons.warning_amber_rounded,
-        ),
+        colors.warningContainer,
+        colors.warning,
+        Icons.warning_amber_rounded,
+      ),
       AppDialogType.info => (
-          colors.infoContainer,
-          colors.info,
-          Icons.info_outline_rounded,
-        ),
+        colors.infoContainer,
+        colors.info,
+        Icons.info_outline_rounded,
+      ),
     };
 
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: EdgeInsets.all(AppSpacing.xl.responsiveRadius),
+      insetPadding: AppResponsive.allPadding(AppSpacing.xl),
       child: Container(
-        padding: EdgeInsets.all(AppSpacing.xl.responsiveRadius),
+        padding: AppResponsive.allPadding(AppSpacing.xl),
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(28.responsiveRadius),
@@ -90,7 +91,7 @@ class AppDialog extends StatelessWidget {
             BoxShadow(
               color: colors.cardShadow,
               blurRadius: 24.responsiveRadius,
-              offset: const Offset(0, 12),
+              offset: Offset(0, 12.responsiveHeight),
             ),
           ],
         ),
@@ -98,7 +99,7 @@ class AppDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: EdgeInsets.all(AppSpacing.lg.responsiveRadius),
+              padding: AppResponsive.allPadding(AppSpacing.lg),
               decoration: BoxDecoration(
                 color: backgroundColor.withAlpha(50),
                 shape: BoxShape.circle,
@@ -131,13 +132,15 @@ class AppDialog extends StatelessWidget {
                 if (cancelLabel != null)
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsetsDirectional.only(end: AppSpacing.sm.responsiveWidth),
+                      padding: AppResponsive.onlyPadding(right: AppSpacing.sm),
                       child: OutlinedButton(
                         onPressed: onCancel ?? () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 16.responsiveHeight),
+                          padding: AppResponsive.verticalPadding(16),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.responsiveRadius),
+                            borderRadius: BorderRadius.circular(
+                              16.responsiveRadius,
+                            ),
                           ),
                         ),
                         child: Text(cancelLabel!),

@@ -33,88 +33,50 @@ enum WalletProvider {
     }
   }
 
-  String get toValue {
-    switch (this) {
-      case WalletProvider.vodafoneCash:
-        return 'vodafone_cash';
-      case WalletProvider.orangeMoney:
-        return 'orange_money';
-      case WalletProvider.etisalatCash:
-        return 'etisalat_cash';
-      case WalletProvider.instaPay:
-        return 'instapay';
-      case WalletProvider.wePay:
-        return 'we_pay';
-
-      case WalletProvider.unknown:
-        return 'unknown';
-    }
-  }
+  String get toValue => switch (this) {
+    WalletProvider.vodafoneCash => 'vodafone_cash',
+    WalletProvider.orangeMoney => 'orange_money',
+    WalletProvider.etisalatCash => 'etisalat_cash',
+    WalletProvider.instaPay => 'instapay',
+    WalletProvider.wePay => 'we_pay',
+    WalletProvider.unknown => 'unknown',
+  };
 }
 
 extension WalletProviderExt on WalletProvider {
-  String displayName(BuildContext context) {
-    final s = S.of(context);
-    switch (this) {
-      case WalletProvider.vodafoneCash:
-        return s.providerVodafone;
-      case WalletProvider.orangeMoney:
-        return s.providerOrange;
-      case WalletProvider.etisalatCash:
-        return s.providerEtisalat;
-      case WalletProvider.instaPay:
-        return s.providerInstapay;
-      case WalletProvider.wePay:
-        return s.providerWePay;
+  String displayName(BuildContext context) => switch (this) {
+    WalletProvider.vodafoneCash => S.of(context).providerVodafone,
+    WalletProvider.orangeMoney => S.of(context).providerOrange,
+    WalletProvider.etisalatCash => S.of(context).providerEtisalat,
+    WalletProvider.instaPay => S.of(context).providerInstapay,
+    WalletProvider.wePay => S.of(context).providerWePay,
+    WalletProvider.unknown => S.of(context).providerUnknown,
+  };
 
-      case WalletProvider.unknown:
-        return s.providerUnknown;
-    }
-  }
+  Color get brandColor => switch (this) {
+    WalletProvider.vodafoneCash => AppColors.vodafoneRed,
+    WalletProvider.orangeMoney => AppColors.orangeMoney,
+    WalletProvider.etisalatCash => AppColors.etisalatGreen,
+    WalletProvider.instaPay => AppColors.instaPayNavy,
+    WalletProvider.wePay => AppColors.wePayPurple,
+    WalletProvider.unknown => AppColors.providerUnknownNeutral,
+  };
 
-  Color get brandColor {
-    switch (this) {
-      case WalletProvider.vodafoneCash:
-        return AppColors.vodafoneRed;
-      case WalletProvider.orangeMoney:
-        return AppColors.orangeMoney;
-      case WalletProvider.etisalatCash:
-        return AppColors.etisalatGreen;
-      case WalletProvider.instaPay:
-        return AppColors.instaPayNavy;
-      case WalletProvider.wePay:
-        return AppColors.wePayPurple;
+  Color get onBrandColor => switch (this) {
+    WalletProvider.vodafoneCash => AppColors.white,
+    WalletProvider.etisalatCash => AppColors.white,
+    WalletProvider.instaPay => AppColors.white,
+    WalletProvider.wePay => AppColors.white,
+    WalletProvider.orangeMoney => AppColors.black,
+    WalletProvider.unknown => AppColors.black,
+  };
 
-      case WalletProvider.unknown:
-        return AppColors.providerUnknownNeutral;
-    }
-  }
-  
-  Color get onBrandColor {
-        switch (this) {
-      case WalletProvider.vodafoneCash:
-      case WalletProvider.etisalatCash:
-      case WalletProvider.instaPay:
-      case WalletProvider.wePay:
-      case WalletProvider.unknown:
-        return AppColors.white;
-      case WalletProvider.orangeMoney:
-        return AppColors.black;
-    }
-  }
-
-  IconData get icon {
-    switch (this) {
-      case WalletProvider.vodafoneCash:
-      case WalletProvider.orangeMoney:
-      case WalletProvider.etisalatCash:
-      case WalletProvider.wePay:
-        return Icons.phone_android;
-      case WalletProvider.instaPay:
-        return Icons.flash_on;
-
-      case WalletProvider.unknown:
-        return Icons.account_balance_wallet;
-    }
-  }
+  IconData get icon => switch (this) {
+    WalletProvider.vodafoneCash => Icons.phone_android,
+    WalletProvider.orangeMoney => Icons.phone_android,
+    WalletProvider.etisalatCash => Icons.phone_android,
+    WalletProvider.wePay => Icons.phone_android,
+    WalletProvider.instaPay => Icons.flash_on,
+    WalletProvider.unknown => Icons.account_balance_wallet,
+  };
 }

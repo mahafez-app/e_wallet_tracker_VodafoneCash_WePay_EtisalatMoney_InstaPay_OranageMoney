@@ -5,11 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/widgets/app_button.dart';
-import '../../../../generated/l10n.dart';
-
 import '../../../../core/utils/failure_extension.dart';
+import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_snackbar.dart';
+import '../../../../generated/l10n.dart';
 import '../../providers/wallets_providers.dart';
 
 class SmsPermissionsScreen extends StatelessWidget {
@@ -29,19 +28,18 @@ class _SmsPermissionsBody extends ConsumerWidget {
     final s = S.of(context);
     final theme = Theme.of(context);
 
-
     return Column(
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(AppSpacing.xl.responsiveRadius),
+            padding: AppResponsive.allPadding(AppSpacing.xl),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 AppSpacing.xxxl.verticalSpace,
                 // Header Icon
                 Container(
-                  padding: EdgeInsets.all(AppSpacing.xl.responsiveRadius),
+                  padding: AppResponsive.allPadding(AppSpacing.xl),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary.withAlpha(20),
                     shape: BoxShape.circle,
@@ -60,7 +58,7 @@ class _SmsPermissionsBody extends ConsumerWidget {
                           -12.responsiveHeight,
                         ),
                         child: Container(
-                          padding: EdgeInsets.all(4.responsiveRadius),
+                          padding: AppResponsive.allPadding(4),
                           decoration: BoxDecoration(
                             color: theme.colorScheme.tertiaryContainer,
                             shape: BoxShape.circle,
@@ -107,16 +105,18 @@ class _SmsPermissionsBody extends ConsumerWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.all(AppSpacing.xl.responsiveRadius),
+          padding: AppResponsive.allPadding(AppSpacing.xl),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               AppButton(
                 label: s.allowAndContinue,
                 onPressed: () async {
-                  final requestPerm = ref.read(requestSmsPermissionUseCaseProvider);
+                  final requestPerm = ref.read(
+                    requestSmsPermissionUseCaseProvider,
+                  );
                   final result = await requestPerm();
-                  
+
                   if (context.mounted) {
                     result.fold(
                       (failure) => AppSnackbar.show(
@@ -164,7 +164,7 @@ class _FeatureItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: EdgeInsets.all(AppSpacing.md.responsiveRadius),
+      padding: AppResponsive.allPadding(AppSpacing.md),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withAlpha(50),
         borderRadius: BorderRadius.circular(16.responsiveRadius),
@@ -172,7 +172,7 @@ class _FeatureItem extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(AppSpacing.sm.responsiveRadius),
+            padding: AppResponsive.allPadding(AppSpacing.sm),
             decoration: BoxDecoration(
               color: theme.colorScheme.primaryContainer,
               borderRadius: BorderRadius.circular(12.responsiveRadius),

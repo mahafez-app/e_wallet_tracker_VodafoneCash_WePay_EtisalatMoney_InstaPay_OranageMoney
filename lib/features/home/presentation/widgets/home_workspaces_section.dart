@@ -35,13 +35,12 @@ class HomeWorkspacesSection extends StatelessWidget {
             IconButton(onPressed: () {}, icon: const Icon(Icons.tune)),
           ],
         ),
-        SizedBox(height: AppSpacing.md.responsiveHeight),
+        AppSpacing.md.verticalSpace,
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: workspaces.length,
-          separatorBuilder: (_, _) =>
-              SizedBox(height: AppSpacing.md.responsiveHeight),
+          separatorBuilder: (_, _) => AppSpacing.md.verticalSpace,
           itemBuilder: (context, index) =>
               _WorkspaceCard(workspace: workspaces[index]),
         ),
@@ -63,7 +62,7 @@ class _WorkspaceCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Container(
-      padding: AppResponsive.all(AppSpacing.xl),
+      padding: AppResponsive.allPadding(AppSpacing.xl),
       decoration: BoxDecoration(
         color: colors.cardBackground,
         border: Border.all(color: colors.cardBorder),
@@ -91,7 +90,7 @@ class _WorkspaceCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: AppSpacing.lg.responsiveHeight),
+          AppSpacing.lg.verticalSpace,
           Row(
             children: [
               Expanded(
@@ -102,7 +101,7 @@ class _WorkspaceCard extends StatelessWidget {
                   amountColor: colorScheme.secondary,
                 ),
               ),
-              SizedBox(width: AppSpacing.md.responsiveWidth),
+              AppSpacing.md.horizontalSpace,
               Expanded(
                 child: _WorkspaceStat(
                   title: s.totalOut,
@@ -148,7 +147,7 @@ class _WorkspaceHeader extends StatelessWidget {
             color: colors.workspaceIconForeground,
           ),
         ),
-        SizedBox(width: AppSpacing.md.responsiveWidth),
+        AppSpacing.md.horizontalSpace,
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -220,7 +219,7 @@ class _WorkspaceStat extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.all(AppSpacing.md),
+      padding: AppResponsive.allPadding(AppSpacing.md),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12.responsiveRadius),
@@ -234,7 +233,7 @@ class _WorkspaceStat extends StatelessWidget {
               color: theme.colorScheme.outline,
             ),
           ),
-          SizedBox(height: AppSpacing.xs.responsiveHeight),
+          AppSpacing.xs.verticalSpace,
           Text(
             amount,
             style: theme.textTheme.bodyMedium?.copyWith(

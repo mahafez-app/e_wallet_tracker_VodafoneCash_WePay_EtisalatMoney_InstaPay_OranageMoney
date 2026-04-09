@@ -65,32 +65,6 @@
 
 ---
 
-## Responsive Breakpoints
-
-Define as named constants. Never hardcode inline. Use `LayoutBuilder` to
-select layout variants.
-
-```dart
-// core/theme/app_breakpoints.dart
-abstract final class AppBreakpoints {
-  static const double compact  = 600;   // phone portrait
-  static const double medium   = 840;   // phone landscape / small tablet
-  static const double expanded = 1200;  // tablet / desktop
-}
-```
-
-```dart
-LayoutBuilder(
-  builder: (context, constraints) => switch (constraints.maxWidth) {
-    >= AppBreakpoints.expanded => const _DesktopLayout(),
-    >= AppBreakpoints.medium   => const _TabletLayout(),
-    _                          => const _MobileLayout(),
-  },
-)
-```
-
----
-
 ## No Fixed Pixel Dimensions on Adaptive Elements
 
 - Buttons, cards, inputs, and containers must never have hardcoded `width`

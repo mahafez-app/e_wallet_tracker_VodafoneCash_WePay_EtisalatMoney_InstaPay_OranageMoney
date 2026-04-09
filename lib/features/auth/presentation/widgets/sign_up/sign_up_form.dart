@@ -7,7 +7,7 @@ import '../../../../../core/utils/app_validators.dart';
 import '../../../../../core/widgets/app_button.dart';
 import '../../../../../core/widgets/app_text_field.dart';
 import '../../../../../generated/l10n.dart';
-import '../../providers/auth_notifier.dart';
+import '../../providers/auth_controller.dart';
 
 class SignUpForm extends ConsumerStatefulWidget {
   const SignUpForm({super.key});
@@ -66,7 +66,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
             keyboardType: TextInputType.name,
             validator: (value) => AppValidators.required(context, value),
           ),
-          SizedBox(height: AppSpacing.xl),
+          AppSpacing.xl.verticalSpace,
           AppTextField(
             label: l10n.email,
             hintText: l10n.emailPlaceholder,
@@ -74,7 +74,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
             keyboardType: TextInputType.emailAddress,
             validator: (value) => AppValidators.email(context, value),
           ),
-          SizedBox(height: AppSpacing.xl),
+          AppSpacing.xl.verticalSpace,
           AppTextField(
             label: l10n.password,
             hintText: l10n.passwordPlaceholder,
@@ -89,7 +89,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
             ),
             validator: (value) => AppValidators.password(context, value),
           ),
-          SizedBox(height: 32.responsiveHeight),
+          32.verticalSpace,
           AppButton(
             label: l10n.createAccount,
             onPressed: _submit,

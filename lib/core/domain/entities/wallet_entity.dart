@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import '../enums/wallet_provider.dart';
 
-final class WalletEntity extends Equatable {
+class WalletEntity extends Equatable {
   const WalletEntity({
     required this.id,
     required this.phoneNumber,

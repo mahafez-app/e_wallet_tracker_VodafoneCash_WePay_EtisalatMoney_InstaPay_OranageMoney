@@ -1,6 +1,6 @@
 import '../../../../core/error/result.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
-import '../../domain/entities/app_user.dart';
+import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_data_source.dart';
 
@@ -10,20 +10,20 @@ final class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
 
   @override
-  Stream<AppUser?> get authStateChanges {
+  Stream<UserEntity?> get authStateChanges {
     return _remoteDataSource.authStateChanges.map(
       (userDto) => userDto?.toEntity(),
     );
   }
 
   @override
-  AppUser? get currentUser {
+  UserEntity? get currentUser {
     final userDto = _remoteDataSource.currentUser;
     return userDto?.toEntity();
   }
 
   @override
-  Future<Result<AppUser>> signInWithGoogle() {
+  Future<Result<UserEntity>> signInWithGoogle() {
     return executeAndHandleErrors(() async {
       final userDto = await _remoteDataSource.signInWithGoogle();
       return userDto.toEntity();
@@ -31,7 +31,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<AppUser>> signInWithEmailPassword({
+  Future<Result<UserEntity>> signInWithEmailPassword({
     required String email,
     required String password,
   }) {
@@ -45,7 +45,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<AppUser>> signUpWithEmailPassword({
+  Future<Result<UserEntity>> signUpWithEmailPassword({
     required String email,
     required String password,
     required String displayName,
@@ -74,19 +74,6 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<void>> updateWalletNumbers({
-    required String uid,
-    required List<String> walletNumbers,
-  }) {
-    return executeAndHandleErrors(() async {
-      await _remoteDataSource.updateWalletNumbers(
-        uid: uid,
-        walletNumbers: walletNumbers,
-      );
-    }, tag: 'updateWalletNumbers');
-  }
-
-  @override
   Future<Result<void>> signOut() {
     return executeAndHandleErrors(() async {
       await _remoteDataSource.signOut();
@@ -94,7 +81,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<AppUser>> getUserProfile(String uid) {
+  Future<Result<UserEntity>> getUserProfile(String uid) {
     return executeAndHandleErrors(() async {
       final userDto = await _remoteDataSource.getUserProfile(uid);
       return userDto.toEntity();

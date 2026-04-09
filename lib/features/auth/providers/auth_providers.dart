@@ -1,20 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../../../../core/providers/firebase_providers.dart';
-import '../../data/datasources/auth_remote_data_source.dart';
-import '../../data/repositories/auth_repository_impl.dart';
-import '../../domain/entities/app_user.dart';
-import '../../domain/repositories/auth_repository.dart';
-import '../../domain/usecases/get_user_profile_usecase.dart';
-import '../../domain/usecases/sign_in_with_email_password_usecase.dart';
-import '../../domain/usecases/sign_in_with_google_usecase.dart';
-import '../../domain/usecases/sign_out_usecase.dart';
-import '../../domain/usecases/sign_up_with_email_password_usecase.dart';
-import '../../domain/usecases/update_display_name_usecase.dart';
+import '../../../core/providers/firebase_providers.dart';
+import '../data/datasources/auth_remote_data_source.dart';
+import '../data/repositories/auth_repository_impl.dart';
+import '../domain/entities/user_entity.dart';
+import '../domain/repositories/auth_repository.dart';
+import '../domain/usecases/get_user_profile_usecase.dart';
+import '../domain/usecases/sign_in_with_email_password_usecase.dart';
+import '../domain/usecases/sign_in_with_google_usecase.dart';
+import '../domain/usecases/sign_out_usecase.dart';
+import '../domain/usecases/sign_up_with_email_password_usecase.dart';
+import '../domain/usecases/update_display_name_usecase.dart';
 
 /// Google Sign-In instance provider
-final googleSignInProvider = Provider<GoogleSignIn>((ref) => GoogleSignIn());
+final googleSignInProvider = Provider<GoogleSignIn>((_) => GoogleSignIn());
 
 /// Auth remote data source provider
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>(
@@ -63,15 +63,14 @@ final signOutUseCaseProvider = Provider<SignOutUseCase>(
 // ========== Auth State ==========
 
 /// Stream of authenticated user state changes.
-/// Returns null when signed out, AppUser when signed in.
-final authStateChangesProvider = StreamProvider<AppUser?>(
+/// Returns null when signed out, UserEntity when signed in.
+final authStateChangesProvider = StreamProvider<UserEntity?>(
   (ref) => ref.watch(authRepositoryProvider).authStateChanges,
 );
 
 /// Current authenticated user (synchronous).
 /// Returns null if no user is signed in.
-final currentUserProvider = Provider<AppUser?>((ref) {
-  // Watch the stream to keep this provider reactive
+final currentUserProvider = Provider<UserEntity?>((ref) {
   ref.watch(authStateChangesProvider);
   return ref.watch(authRepositoryProvider).currentUser;
 });

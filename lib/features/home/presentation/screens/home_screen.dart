@@ -33,7 +33,6 @@ class _HomeBody extends ConsumerWidget {
         onRefresh: () async => ref.refresh(homeDashboardProvider),
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          // padding: const EdgeInsets.only(bottom: AppSpacing.md),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

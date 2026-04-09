@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import 'failures.dart';
 
 sealed class Result<T> extends Equatable {

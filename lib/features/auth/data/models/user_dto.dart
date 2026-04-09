@@ -1,49 +1,48 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-import '../../domain/entities/app_user.dart';
+import '../../domain/entities/user_entity.dart';
 
-part 'user_dto.g.dart';
-
-@JsonSerializable()
-class UserDto {
+class UserDto extends UserEntity {
   const UserDto({
-    required this.uid,
-    required this.name,
-    required this.email,
-    required this.createdAt,
-    this.nameConfirmed = true,
+    required super.uid,
+    required super.name,
+    required super.email,
+    required super.createdAt,
+    super.nameConfirmed = true,
   });
 
-  final String uid;
-  final String name;
-  final String? email;
-  @TimestampConverter()
-  final Timestamp createdAt;
-  @JsonKey(defaultValue: true)
-  final bool nameConfirmed;
+  factory UserDto.fromJson(Map<String, dynamic> json) => UserDto(
+    uid: json['uid'] as String,
+    name: json['name'] as String,
+    email: json['email'] as String?,
+    createdAt: (json['createdAt'] as Timestamp).toDate(),
+    nameConfirmed: json['nameConfirmed'] as bool? ?? true,
+  );
 
-  factory UserDto.fromJson(Map<String, dynamic> json) =>
-      _$UserDtoFromJson(json);
+  Map<String, dynamic> toJson() => {
+    'uid': uid,
+    'name': name,
+    'email': email,
+    'createdAt': createdAt,
+    'nameConfirmed': nameConfirmed,
+  };
 
-  Map<String, dynamic> toJson() => _$UserDtoToJson(this);
-
-  AppUser toEntity() {
-    return AppUser(
+  UserEntity toEntity() {
+    return UserEntity(
       uid: uid,
       name: name,
       email: email,
-      createdAt: createdAt.toDate(),
+      createdAt: createdAt,
       nameConfirmed: nameConfirmed,
     );
   }
 
-  factory UserDto.fromEntity(AppUser user) {
+  factory UserDto.fromEntity(UserEntity user) {
     return UserDto(
       uid: user.uid,
       name: user.name,
       email: user.email,
-      createdAt: Timestamp.fromDate(user.createdAt),
+      createdAt: user.createdAt,
       nameConfirmed: user.nameConfirmed,
     );
   }
@@ -59,24 +58,8 @@ class UserDto {
       uid: uid,
       name: name,
       email: email,
-      createdAt: Timestamp.now(),
+      createdAt: DateTime.now(),
       nameConfirmed: nameConfirmed,
     );
   }
-}
-
-class TimestampConverter implements JsonConverter<Timestamp, dynamic> {
-  const TimestampConverter();
-
-  @override
-  Timestamp fromJson(dynamic json) {
-    if (json is Timestamp) return json;
-    if (json is Map<String, dynamic>) {
-      return Timestamp(json['_seconds'] as int, json['_nanoseconds'] as int);
-    }
-    throw ArgumentError('Cannot convert $json to Timestamp');
-  }
-
-  @override
-  dynamic toJson(Timestamp object) => object;
 }

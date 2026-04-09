@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../core/utils/app_assets.dart';
 import '../../../../../core/widgets/app_button.dart';
 import '../../../../../generated/l10n.dart';
-import '../../providers/auth_notifier.dart';
+import '../../providers/auth_controller.dart';
 
 class GoogleSignInButton extends ConsumerWidget {
   const GoogleSignInButton({super.key});

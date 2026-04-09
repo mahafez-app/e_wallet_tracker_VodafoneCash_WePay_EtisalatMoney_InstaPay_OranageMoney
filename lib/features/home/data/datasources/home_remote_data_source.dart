@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:wallet_tracker/core/data/models/wallet_dto.dart';
+
 import '../../../../core/data/models/workspace_dto.dart';
 
 abstract interface class HomeRemoteDataSource {
@@ -40,9 +40,6 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Stream<List<WorkspaceDto>> watchUserWorkspaces() {
-    // FIX: Firestore does NOT support querying collectionGroup by documentId without the full path
-    // (this is what caused the IllegalArgumentException).
-    // To query collection groups, you MUST add a normal 'uid' field to the members documents.
     return _firestore
         .collectionGroup('members')
         .where('uid', isEqualTo: _uid)
@@ -56,8 +53,6 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
           if (workspaceIds.isEmpty) return <WorkspaceDto>[];
 
-          // Firestore has a limit of 30 items for 'whereIn'.
-          // We fetch them in chunks to avoid N+1 and limit errors.
           final chunks = <List<String>>[];
           for (var i = 0; i < workspaceIds.length; i += 30) {
             chunks.add(
@@ -86,7 +81,6 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Stream<int> watchPendingInvitationsCount() {
-    // Query invites where email is current user email and status == 'pending'
     final email = _auth.currentUser?.email;
     if (email == null) return Stream.value(0);
 

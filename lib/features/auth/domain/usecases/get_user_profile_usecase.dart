@@ -1,6 +1,6 @@
 import '../../../../core/error/result.dart';
 import '../../../../core/usecase/usecase.dart';
-import '../entities/app_user.dart';
+import '../entities/user_entity.dart';
 import '../repositories/auth_repository.dart';
 
 final class GetUserProfileParams {
@@ -10,13 +10,13 @@ final class GetUserProfileParams {
 }
 
 final class GetUserProfileUseCase
-    implements UseCase<AppUser, GetUserProfileParams> {
+    implements UseCase<UserEntity, GetUserProfileParams> {
   const GetUserProfileUseCase(this._repository);
 
   final AuthRepository _repository;
 
   @override
-  Future<Result<AppUser>> call(GetUserProfileParams params) {
+  Future<Result<UserEntity>> call(GetUserProfileParams params) {
     return _repository.getUserProfile(params.uid);
   }
 }

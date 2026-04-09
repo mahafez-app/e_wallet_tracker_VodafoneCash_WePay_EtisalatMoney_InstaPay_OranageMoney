@@ -2,26 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../domain/entities/workspace_entity.dart';
 
-final class WorkspaceDto {
+final class WorkspaceDto extends WorkspaceEntity {
   const WorkspaceDto({
-    required this.id,
-    required this.name,
-    required this.ownerUid,
-    required this.createdAt,
-    this.totalReceived = 0.0,
-    this.totalSent = 0.0,
-    this.walletsCount = 0,
-    this.latestActivityAt,
+    required super.id,
+    required super.name,
+    required super.ownerUid,
+    required super.createdAt,
+    super.totalReceived = 0.0,
+    super.totalSent = 0.0,
+    super.walletsCount = 0,
+    super.latestActivityAt,
   });
-
-  final String id;
-  final String name;
-  final String ownerUid;
-  final DateTime createdAt;
-  final double totalReceived;
-  final double totalSent;
-  final int walletsCount;
-  final DateTime? latestActivityAt;
 
   factory WorkspaceDto.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;

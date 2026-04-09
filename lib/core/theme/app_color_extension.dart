@@ -30,7 +30,7 @@ final class AppColorExtension extends ThemeExtension<AppColorExtension> {
     // ── Workspace icon chip ──────────────────────────────────────────────────
     required this.workspaceIconBackground,
     required this.workspaceIconForeground,
-    // ── Stats gradient card (intentionally always dark-blue) ─────────────────
+    // ── Stats gradient card (always dark-blue) ───────────────────────────────
     required this.statsGradientStart,
     required this.statsGradientEnd,
     required this.statsOnGradient,
@@ -199,10 +199,16 @@ final class AppColorExtension extends ThemeExtension<AppColorExtension> {
       inputFill: Color.lerp(inputFill, other.inputFill, t)!,
       inputBorder: Color.lerp(inputBorder, other.inputBorder, t)!,
       inputHint: Color.lerp(inputHint, other.inputHint, t)!,
-      addWalletBackground:
-          Color.lerp(addWalletBackground, other.addWalletBackground, t)!,
-      addWalletBorderColor:
-          Color.lerp(addWalletBorderColor, other.addWalletBorderColor, t)!,
+      addWalletBackground: Color.lerp(
+        addWalletBackground,
+        other.addWalletBackground,
+        t,
+      )!,
+      addWalletBorderColor: Color.lerp(
+        addWalletBorderColor,
+        other.addWalletBorderColor,
+        t,
+      )!,
       workspaceIconBackground: Color.lerp(
         workspaceIconBackground,
         other.workspaceIconBackground,
@@ -213,20 +219,35 @@ final class AppColorExtension extends ThemeExtension<AppColorExtension> {
         other.workspaceIconForeground,
         t,
       )!,
-      statsGradientStart:
-          Color.lerp(statsGradientStart, other.statsGradientStart, t)!,
-      statsGradientEnd:
-          Color.lerp(statsGradientEnd, other.statsGradientEnd, t)!,
+      statsGradientStart: Color.lerp(
+        statsGradientStart,
+        other.statsGradientStart,
+        t,
+      )!,
+      statsGradientEnd: Color.lerp(
+        statsGradientEnd,
+        other.statsGradientEnd,
+        t,
+      )!,
       statsOnGradient: Color.lerp(statsOnGradient, other.statsOnGradient, t)!,
       statsSentColor: Color.lerp(statsSentColor, other.statsSentColor, t)!,
-      statsReceivedColor:
-          Color.lerp(statsReceivedColor, other.statsReceivedColor, t)!,
+      statsReceivedColor: Color.lerp(
+        statsReceivedColor,
+        other.statsReceivedColor,
+        t,
+      )!,
       success: Color.lerp(success, other.success, t)!,
-      successContainer:
-          Color.lerp(successContainer, other.successContainer, t)!,
+      successContainer: Color.lerp(
+        successContainer,
+        other.successContainer,
+        t,
+      )!,
       warning: Color.lerp(warning, other.warning, t)!,
-      warningContainer:
-          Color.lerp(warningContainer, other.warningContainer, t)!,
+      warningContainer: Color.lerp(
+        warningContainer,
+        other.warningContainer,
+        t,
+      )!,
       danger: Color.lerp(danger, other.danger, t)!,
       dangerContainer: Color.lerp(dangerContainer, other.dangerContainer, t)!,
       info: Color.lerp(info, other.info, t)!,

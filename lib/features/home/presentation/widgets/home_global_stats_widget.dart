@@ -26,7 +26,7 @@ class HomeGlobalStatsWidget extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: AppResponsive.all(AppSpacing.xl),
+      padding: AppResponsive.allPadding(AppSpacing.xl),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(32.responsiveRadius),
         gradient: LinearGradient(
@@ -54,16 +54,16 @@ class HomeGlobalStatsWidget extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: AppSpacing.sm.responsiveHeight),
+          AppSpacing.sm.verticalSpace,
           _BalanceDisplay(amount: totalBalance),
-          SizedBox(height: AppSpacing.xs.responsiveHeight),
+          AppSpacing.xs.verticalSpace,
           Text(
             s.activeWalletsHint(walletCount),
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
               color: colors.statsOnGradient.withValues(alpha: 0.8),
             ),
           ),
-          SizedBox(height: AppSpacing.lg.responsiveHeight),
+          AppSpacing.lg.verticalSpace,
           Row(
             children: [
               Expanded(
@@ -73,7 +73,7 @@ class HomeGlobalStatsWidget extends StatelessWidget {
                   amountColor: colors.statsSentColor,
                 ),
               ),
-              SizedBox(width: AppSpacing.lg.responsiveWidth),
+              AppSpacing.lg.horizontalSpace,
               Expanded(
                 child: _StatBox(
                   title: s.totalIn,
@@ -109,9 +109,9 @@ class _BalanceDisplay extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        SizedBox(width: AppSpacing.xs.responsiveWidth),
+        AppSpacing.xs.horizontalSpace,
         Padding(
-          padding: const EdgeInsets.only(bottom: 6),
+          padding: AppResponsive.onlyPadding(bottom: 6),
           child: Text(
             s.currency,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -140,7 +140,7 @@ class _StatBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.appColors;
     return Container(
-      padding: AppResponsive.all(AppSpacing.md),
+      padding: AppResponsive.allPadding(AppSpacing.md),
       decoration: BoxDecoration(
         color: colors.statsOnGradient.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16.responsiveRadius),
@@ -150,11 +150,11 @@ class _StatBox extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: colors.statsOnGradient,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colors.statsOnGradient),
           ),
-          SizedBox(height: AppSpacing.xs.responsiveHeight),
+          AppSpacing.xs.verticalSpace,
           Text(
             amount,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(

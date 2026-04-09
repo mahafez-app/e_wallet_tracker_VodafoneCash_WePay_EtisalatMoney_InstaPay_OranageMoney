@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-final class WorkspaceEntity extends Equatable {
+class WorkspaceEntity extends Equatable {
   const WorkspaceEntity({
     required this.id,
     required this.name,

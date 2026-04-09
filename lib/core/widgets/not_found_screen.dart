@@ -11,7 +11,7 @@ class NotFoundScreen extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
     body: SafeArea(
       child: Padding(
-        padding: AppResponsive.symmetric(
+        padding: AppResponsive.symmetricPadding(
           horizontal: AppSpacing.lg,
           vertical: AppSpacing.xl,
         ),
@@ -24,12 +24,12 @@ class NotFoundScreen extends StatelessWidget {
                 size: 64.responsiveWidth,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
-              SizedBox(height: AppSpacing.lg.responsiveHeight),
+              AppSpacing.lg.verticalSpace,
               Text(
                 S.of(context).notFoundStatusCode,
                 style: Theme.of(context).textTheme.displaySmall,
               ),
-              SizedBox(height: AppSpacing.sm.responsiveHeight),
+              AppSpacing.sm.verticalSpace,
               Text(
                 S.of(context).notFoundPageTitle,
                 style: Theme.of(context).textTheme.titleMedium,

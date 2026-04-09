@@ -2,13 +2,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/error/result.dart';
-import '../../domain/entities/app_user.dart';
+import '../../domain/entities/user_entity.dart';
 import '../../domain/usecases/sign_in_with_email_password_usecase.dart';
 import '../../domain/usecases/sign_in_with_google_usecase.dart';
 import '../../domain/usecases/sign_out_usecase.dart';
 import '../../domain/usecases/sign_up_with_email_password_usecase.dart';
 import '../../domain/usecases/update_display_name_usecase.dart';
-import 'auth_providers.dart';
+import '../../providers/auth_providers.dart';
 
 enum AuthLoadingMethod { none, email, google, confirmName }
 
@@ -32,8 +32,8 @@ final class AuthState {
   }
 }
 
-final class AuthNotifier extends Notifier<AuthState> {
-  AuthNotifier();
+final class AuthController extends Notifier<AuthState> {
+  AuthController();
 
   late final SignInWithGoogleUseCase _signInWithGoogle;
   late final SignInWithEmailPasswordUseCase _signInWithEmailPassword;
@@ -56,7 +56,7 @@ final class AuthNotifier extends Notifier<AuthState> {
     state = state.clearError();
   }
 
-  Future<Result<AppUser>> signInWithGoogle() async {
+  Future<Result<UserEntity>> signInWithGoogle() async {
     state = state.copyWith(
       loadingMethod: AuthLoadingMethod.google,
       error: null,
@@ -79,7 +79,7 @@ final class AuthNotifier extends Notifier<AuthState> {
     return result;
   }
 
-  Future<Result<AppUser>> signInWithEmailPassword({
+  Future<Result<UserEntity>> signInWithEmailPassword({
     required String email,
     required String password,
   }) async {
@@ -104,7 +104,7 @@ final class AuthNotifier extends Notifier<AuthState> {
     return result;
   }
 
-  Future<Result<AppUser>> signUpWithEmailPassword({
+  Future<Result<UserEntity>> signUpWithEmailPassword({
     required String email,
     required String password,
     required String displayName,
@@ -186,6 +186,6 @@ final class AuthNotifier extends Notifier<AuthState> {
   }
 }
 
-final authNotifierProvider = NotifierProvider<AuthNotifier, AuthState>(
-  AuthNotifier.new,
+final authNotifierProvider = NotifierProvider<AuthController, AuthState>(
+  AuthController.new,
 );

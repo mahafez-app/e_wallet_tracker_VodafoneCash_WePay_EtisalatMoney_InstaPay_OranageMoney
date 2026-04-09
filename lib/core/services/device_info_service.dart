@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:device_info_plus/device_info_plus.dart';
 
 abstract interface class DeviceInfoService {
@@ -7,9 +8,9 @@ abstract interface class DeviceInfoService {
 }
 
 class DeviceInfoServiceImpl implements DeviceInfoService {
-  final DeviceInfoPlugin _deviceInfoPlugin;
-
   const DeviceInfoServiceImpl(this._deviceInfoPlugin);
+
+  final DeviceInfoPlugin _deviceInfoPlugin;
 
   @override
   Future<String> getDeviceId() async {

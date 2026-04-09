@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_color_extension.dart';
 import '../theme/app_responsive.dart';
 import '../theme/app_spacing.dart';
@@ -19,25 +20,25 @@ class AppSnackbar {
 
     final (backgroundColor, foregroundColor, icon) = switch (type) {
       AppSnackbarType.success => (
-          colors.successContainer,
-          colors.success,
-          Icons.check_circle_rounded,
-        ),
+        colors.successContainer,
+        colors.success,
+        Icons.check_circle_rounded,
+      ),
       AppSnackbarType.error => (
-          colors.dangerContainer,
-          colors.danger,
-          Icons.error_rounded,
-        ),
+        colors.dangerContainer,
+        colors.danger,
+        Icons.error_rounded,
+      ),
       AppSnackbarType.warning => (
-          colors.warningContainer,
-          colors.warning,
-          Icons.warning_rounded,
-        ),
+        colors.warningContainer,
+        colors.warning,
+        Icons.warning_rounded,
+      ),
       AppSnackbarType.info => (
-          colors.infoContainer,
-          colors.info,
-          Icons.info_rounded,
-        ),
+        colors.infoContainer,
+        colors.info,
+        Icons.info_rounded,
+      ),
     };
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -47,9 +48,9 @@ class AppSnackbar {
         backgroundColor: Colors.transparent,
         elevation: 0,
         content: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.md.responsiveWidth,
-            vertical: AppSpacing.sm.responsiveHeight,
+          padding: AppResponsive.symmetricPadding(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm,
           ),
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
@@ -59,19 +60,23 @@ class AppSnackbar {
               BoxShadow(
                 color: colors.cardShadow,
                 blurRadius: 12.responsiveRadius,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4.responsiveHeight),
               ),
             ],
           ),
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(AppSpacing.xs.responsiveRadius),
+                padding: AppResponsive.allPadding(AppSpacing.xs),
                 decoration: BoxDecoration(
                   color: backgroundColor.withAlpha(50),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(icon, color: foregroundColor, size: 20.responsiveRadius),
+                child: Icon(
+                  icon,
+                  color: foregroundColor,
+                  size: 20.responsiveRadius,
+                ),
               ),
               AppSpacing.md.horizontalSpace,
               Expanded(

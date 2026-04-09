@@ -12,15 +12,6 @@ abstract final class AppSpacing {
   static const double xxxl = 48.0;
 
   // Common EdgeInsets
-  static const EdgeInsets pagePadding = EdgeInsets.symmetric(
-    horizontal: lg,
-    vertical: xl,
-  );
-  static const EdgeInsets cardPadding = EdgeInsets.all(lg);
-  static const EdgeInsets listItemPadding = EdgeInsets.symmetric(
-    horizontal: lg,
-    vertical: md,
-  );
-
-  static double adaptive(double value) => AppResponsive.width(value);
+  static EdgeInsets get pagePadding =>
+      AppResponsive.symmetricPadding(horizontal: lg, vertical: xl);
 }

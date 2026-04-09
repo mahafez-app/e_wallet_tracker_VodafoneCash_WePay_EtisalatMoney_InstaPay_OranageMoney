@@ -6,8 +6,8 @@ import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/widgets/app_button.dart';
 import '../../../../../core/widgets/app_text_field.dart';
 import '../../../../../generated/l10n.dart';
-import '../../providers/auth_notifier.dart';
-import '../../providers/auth_providers.dart';
+import '../../../providers/auth_providers.dart';
+import '../../providers/auth_controller.dart';
 
 class ConfirmNameForm extends ConsumerStatefulWidget {
   const ConfirmNameForm({super.key});

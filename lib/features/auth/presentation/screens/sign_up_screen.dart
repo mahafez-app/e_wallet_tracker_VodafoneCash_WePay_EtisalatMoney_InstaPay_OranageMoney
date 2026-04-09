@@ -7,9 +7,9 @@ import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/failure_extension.dart';
 import '../../../../core/widgets/app_logo.dart';
-import '../../../../generated/l10n.dart';
-import '../providers/auth_notifier.dart';
 import '../../../../core/widgets/app_snackbar.dart';
+import '../../../../generated/l10n.dart';
+import '../providers/auth_controller.dart';
 import '../widgets/sign_up/sign_up_form.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -39,7 +39,7 @@ class SignUpScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
+          padding: AppResponsive.symmetricPadding(
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.xl,
           ),
@@ -134,7 +134,7 @@ class _SignInPrompt extends StatelessWidget {
           onTap: () => _navigateToLogin(context),
           borderRadius: BorderRadius.circular(AppSpacing.sm),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
+            padding: AppResponsive.symmetricPadding(
               horizontal: AppSpacing.xs,
               vertical: AppSpacing.xs,
             ),

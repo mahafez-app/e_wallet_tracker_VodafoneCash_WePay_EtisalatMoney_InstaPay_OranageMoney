@@ -34,7 +34,7 @@ class AppWalletCard extends StatelessWidget {
           BoxShadow(
             color: colors.cardShadow,
             blurRadius: 18.responsiveRadius,
-            offset: const Offset(0, 8),
+            offset: Offset(0, 8.responsiveHeight),
           ),
         ],
       ),
@@ -44,7 +44,7 @@ class AppWalletCard extends StatelessWidget {
           children: [
             // Main content (kept inside padding)
             Padding(
-              padding: AppResponsive.all(AppSpacing.xl),
+              padding: AppResponsive.allPadding(AppSpacing.xl),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,7 +107,7 @@ class _WalletProviderInfo extends StatelessWidget {
     return Row(
       children: [
         Container(
-          padding: AppResponsive.all(AppSpacing.xs),
+          padding: AppResponsive.allPadding(AppSpacing.xs),
           decoration: BoxDecoration(
             color: provider.brandColor.withValues(alpha: 0.1),
             shape: BoxShape.circle,
@@ -118,7 +118,7 @@ class _WalletProviderInfo extends StatelessWidget {
             size: 24.responsiveRadius,
           ),
         ),
-        SizedBox(width: AppSpacing.sm.responsiveWidth),
+        AppSpacing.sm.horizontalSpace,
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -152,9 +152,9 @@ class _WalletStatusBadge extends StatelessWidget {
     final s = S.of(context);
     final theme = Theme.of(context);
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.sm.responsiveWidth,
-        vertical: 4.responsiveHeight,
+      padding: AppResponsive.symmetricPadding(
+        horizontal: AppSpacing.sm,
+        vertical: 4,
       ),
       decoration: BoxDecoration(
         color: provider.brandColor,
@@ -192,9 +192,9 @@ class _WalletBalance extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        SizedBox(width: AppSpacing.xs.responsiveWidth),
+        AppSpacing.xs.horizontalSpace,
         Padding(
-          padding: const EdgeInsets.only(bottom: 4),
+          padding: AppResponsive.onlyPadding(bottom: 4),
           child: Text(
             s.currency,
             style: theme.textTheme.labelSmall?.copyWith(

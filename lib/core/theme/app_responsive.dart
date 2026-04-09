@@ -10,15 +10,31 @@ abstract final class AppResponsive {
 
   static double font(num value) => value.sp;
 
-  static EdgeInsets symmetric({
-    required num horizontal,
-    required num vertical,
-  }) => EdgeInsets.symmetric(
-    horizontal: width(horizontal),
-    vertical: height(vertical),
+  static EdgeInsets symmetricPadding({num horizontal = 0, num vertical = 0}) =>
+      EdgeInsets.symmetric(
+        horizontal: width(horizontal),
+        vertical: height(vertical),
+      );
+
+  static EdgeInsets onlyPadding({
+    num left = 0,
+    num top = 0,
+    num right = 0,
+    num bottom = 0,
+  }) => EdgeInsets.only(
+    left: width(left),
+    top: height(top),
+    right: width(right),
+    bottom: height(bottom),
   );
 
-  static EdgeInsets all(num value) => EdgeInsets.all(radius(value));
+  static EdgeInsets horizontalPadding(num value) =>
+      EdgeInsets.symmetric(horizontal: width(value));
+
+  static EdgeInsets verticalPadding(num value) =>
+      EdgeInsets.symmetric(vertical: height(value));
+
+  static EdgeInsets allPadding(num value) => EdgeInsets.all(radius(value));
 }
 
 extension AppResponsiveNumExtension on num {

@@ -1,6 +1,6 @@
 import '../../../../core/error/result.dart';
 import '../../../../core/usecase/usecase.dart';
-import '../entities/app_user.dart';
+import '../entities/user_entity.dart';
 import '../repositories/auth_repository.dart';
 
 final class SignInWithEmailPasswordParams {
@@ -14,13 +14,13 @@ final class SignInWithEmailPasswordParams {
 }
 
 final class SignInWithEmailPasswordUseCase
-    implements UseCase<AppUser, SignInWithEmailPasswordParams> {
+    implements UseCase<UserEntity, SignInWithEmailPasswordParams> {
   const SignInWithEmailPasswordUseCase(this._repository);
 
   final AuthRepository _repository;
 
   @override
-  Future<Result<AppUser>> call(SignInWithEmailPasswordParams params) {
+  Future<Result<UserEntity>> call(SignInWithEmailPasswordParams params) {
     return _repository.signInWithEmailPassword(
       email: params.email,
       password: params.password,

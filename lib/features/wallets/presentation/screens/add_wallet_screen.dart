@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wallet_tracker/core/utils/app_constants.dart';
 
 import '../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../core/error/failures.dart';
@@ -69,7 +70,7 @@ class _AddWalletBody extends ConsumerWidget {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(AppSpacing.lg.responsiveRadius),
+            padding: AppResponsive.allPadding(AppSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -77,21 +78,27 @@ class _AddWalletBody extends ConsumerWidget {
                 AppSpacing.xxl.verticalSpace,
                 AppTextField(
                   label: s.phoneNumber,
-                  hintText: '01X XXXX XXXX',
+                  hintText: AppConstants.egyptPhoneHint,
                   keyboardType: TextInputType.phone,
                   onChanged: ref
                       .read(addWalletControllerProvider.notifier)
                       .updatePhoneNumber,
                   prefixIcon: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppSpacing.md.responsiveWidth,
+                    padding: AppResponsive.symmetricPadding(
+                      horizontal: AppSpacing.md,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('+20', style: theme.textTheme.titleSmall),
+                        Text(
+                          AppConstants.egyptCountryCode,
+                          style: theme.textTheme.titleSmall,
+                        ),
                         AppSpacing.xs.horizontalSpace,
-                        Text('🇪🇬', style: theme.textTheme.titleMedium),
+                        Text(
+                          AppConstants.egyptFlag,
+                          style: theme.textTheme.titleMedium,
+                        ),
                       ],
                     ),
                   ),
@@ -105,7 +112,7 @@ class _AddWalletBody extends ConsumerWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.all(AppSpacing.lg.responsiveRadius),
+          padding: AppResponsive.allPadding(AppSpacing.lg),
           child: AppButton(
             label: s.addWalletAction,
             icon: const Icon(Icons.add_circle_outline),
@@ -129,7 +136,7 @@ class _InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: EdgeInsets.all(AppSpacing.md.responsiveRadius),
+      padding: AppResponsive.allPadding(AppSpacing.md),
       decoration: BoxDecoration(
         color: theme.colorScheme.primaryContainer.withAlpha(50),
         borderRadius: BorderRadius.circular(12.responsiveRadius),
@@ -223,7 +230,7 @@ class _ProviderCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: EdgeInsets.all(AppSpacing.sm.responsiveRadius),
+            padding: AppResponsive.allPadding(AppSpacing.sm),
             decoration: BoxDecoration(
               color: color.withAlpha(30),
               shape: BoxShape.circle,

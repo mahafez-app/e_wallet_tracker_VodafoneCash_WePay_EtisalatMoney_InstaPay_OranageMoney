@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_responsive.dart';
+import '../theme/app_spacing.dart';
+
 enum AppButtonType { primary, secondary, tertiary }
 
 class AppButton extends StatelessWidget {
@@ -39,11 +42,10 @@ class AppButton extends StatelessWidget {
     };
 
     final Widget child = isLoading
-        ? SizedBox(
-            width: 20,
-            height: 20,
+        ? SizedBox.square(
+            dimension: 20.responsiveWidth,
             child: CircularProgressIndicator(
-              strokeWidth: 2.5,
+              strokeWidth: 2.5.responsiveWidth,
               valueColor: AlwaysStoppedAnimation<Color>(indicatorColor),
             ),
           )
@@ -51,7 +53,11 @@ class AppButton extends StatelessWidget {
         ? Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text(label), const SizedBox(width: 8), trailingIcon!],
+            children: [
+              Text(label),
+              AppSpacing.sm.horizontalSpace,
+              trailingIcon!,
+            ],
           )
         : Text(label);
 

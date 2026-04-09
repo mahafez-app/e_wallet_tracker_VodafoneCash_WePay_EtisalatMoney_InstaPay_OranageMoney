@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../generated/l10n.dart';
-import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../auth/providers/auth_providers.dart';
 
 class HomeHeaderWidget extends ConsumerWidget {
   const HomeHeaderWidget({super.key, required this.invitationsCount});
@@ -17,9 +17,9 @@ class HomeHeaderWidget extends ConsumerWidget {
     final user = ref.watch(currentUserProvider);
 
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg.responsiveWidth,
-        vertical: AppSpacing.lg.responsiveHeight,
+      padding: AppResponsive.symmetricPadding(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.lg,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,7 +64,7 @@ class _UserAvatarAndName extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: AppSpacing.md.responsiveWidth),
+        AppSpacing.md.horizontalSpace,
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -108,12 +108,12 @@ class _InvitationsIconBadge extends StatelessWidget {
         ),
         if (count > 0)
           Positioned(
-            right: 4,
+            right: 4.responsiveWidth,
             top: 0,
             child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 6.responsiveWidth,
-                vertical: 2.responsiveHeight,
+              padding: AppResponsive.symmetricPadding(
+                horizontal: 6,
+                vertical: 2,
               ),
               decoration: BoxDecoration(
                 color: colorScheme.error,

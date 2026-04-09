@@ -63,7 +63,7 @@ class AppWalletCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        s.homeTotalWallets,
+                        s.currentBalance,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.outline,
                         ),
@@ -123,7 +123,7 @@ class _WalletProviderInfo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              provider.displayName,
+              provider.displayName(context),
               style: theme.textTheme.titleMedium?.copyWith(
                 color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w700,
@@ -196,7 +196,7 @@ class _WalletBalance extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 4),
           child: Text(
-            s.homeCurrency,
+            s.currency,
             style: theme.textTheme.labelSmall?.copyWith(
               color: primary,
               fontSize: 12.responsiveFont,

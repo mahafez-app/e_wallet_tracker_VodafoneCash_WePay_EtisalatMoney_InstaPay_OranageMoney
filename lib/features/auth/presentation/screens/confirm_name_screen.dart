@@ -7,6 +7,7 @@ import '../../../../core/utils/failure_extension.dart';
 import '../../../../core/widgets/app_logo.dart';
 import '../../../../generated/l10n.dart';
 import '../providers/auth_notifier.dart';
+import '../../../../core/widgets/app_snackbar.dart';
 import '../widgets/confirm_name/confirm_name_form.dart';
 
 class ConfirmNameScreen extends StatelessWidget {
@@ -55,11 +56,10 @@ class _ConfirmNameBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AuthState>(authNotifierProvider, (_, next) {
       if (!next.isLoading && next.error != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.failureMessage(next.error!)),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
+        AppSnackbar.show(
+          context,
+          message: context.failureMessage(next.error!),
+          type: AppSnackbarType.error,
         );
         ref.read(authNotifierProvider.notifier).clearError();
       }

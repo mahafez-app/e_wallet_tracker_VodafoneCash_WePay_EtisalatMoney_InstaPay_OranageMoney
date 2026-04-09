@@ -82,7 +82,7 @@ entire Firebase suite by default.
 
 | Purpose                | Package              |
 | ---------------------- | -------------------- |
-| HTTP client            | `dio`                |
+| HTTP client            | `firebase`                |
 | WebSockets (if needed) | `web_socket_channel` |
 
 ### Serialization

@@ -48,6 +48,7 @@ class _HomeBody extends ConsumerWidget {
                       totalBalance: value.totalBalance,
                       totalSent: value.totalSent,
                       totalReceived: value.totalReceived,
+                      walletCount: value.wallets.length,
                     ),
                     HomeWalletsSection(wallets: value.wallets),
                     HomeWorkspacesSection(workspaces: value.workspaces),

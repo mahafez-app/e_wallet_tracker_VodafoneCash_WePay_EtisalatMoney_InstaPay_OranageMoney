@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:wallet_tracker/generated/l10n.dart';
+
 import '../error/failures.dart';
 
 extension FailureMessaging on BuildContext {
@@ -29,10 +30,15 @@ extension FailureMessaging on BuildContext {
       PermissionFailure() => l10n.errorPermissionDenied,
       CacheFailure() => l10n.errorCache,
       StorageFailure() => l10n.errorStorage,
-      ValidationFailure(:final code) =>
-        code != null
-            ? l10n.errorValidationWithCode(code)
-            : l10n.errorValidation,
+      ValidationFailure(:final code) => switch (code) {
+        'wallet-phone-required' => l10n.errorWalletPhoneNumberRequired,
+        'wallet-provider-required' => l10n.errorWalletProviderRequired,
+        'wallet-all-exists' => l10n.errorWalletAllExists,
+        _ =>
+          code != null
+              ? l10n.errorValidationWithCode(code)
+              : l10n.errorValidation,
+      },
       UnknownFailure() => l10n.errorUnknown,
     };
   }

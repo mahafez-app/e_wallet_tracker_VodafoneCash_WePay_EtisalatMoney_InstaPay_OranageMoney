@@ -18,8 +18,10 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(_current != null,
-        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+    assert(
+      _current != null,
+      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
+    );
     return _current!;
   }
 
@@ -41,8 +43,10 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(instance != null,
-        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    assert(
+      instance != null,
+      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
+    );
     return instance!;
   }
 
@@ -272,12 +276,7 @@ class S {
 
   /// `404`
   String get notFoundStatusCode {
-    return Intl.message(
-      '404',
-      name: 'notFoundStatusCode',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('404', name: 'notFoundStatusCode', desc: '', args: []);
   }
 
   /// `الصفحة غير موجودة`
@@ -292,82 +291,42 @@ class S {
 
   /// `محافظ`
   String get appName {
-    return Intl.message(
-      'محافظ',
-      name: 'appName',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('محافظ', name: 'appName', desc: '', args: []);
   }
 
   /// `تسجيل الدخول`
   String get signIn {
-    return Intl.message(
-      'تسجيل الدخول',
-      name: 'signIn',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('تسجيل الدخول', name: 'signIn', desc: '', args: []);
   }
 
   /// `إنشاء حساب`
   String get signUp {
-    return Intl.message(
-      'إنشاء حساب',
-      name: 'signUp',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('إنشاء حساب', name: 'signUp', desc: '', args: []);
   }
 
   /// `البريد الإلكتروني`
   String get email {
-    return Intl.message(
-      'البريد الإلكتروني',
-      name: 'email',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('البريد الإلكتروني', name: 'email', desc: '', args: []);
   }
 
   /// `كلمة المرور`
   String get password {
-    return Intl.message(
-      'كلمة المرور',
-      name: 'password',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('كلمة المرور', name: 'password', desc: '', args: []);
   }
 
   /// `الاسم`
   String get displayName {
-    return Intl.message(
-      'الاسم',
-      name: 'displayName',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('الاسم', name: 'displayName', desc: '', args: []);
   }
 
   /// `اسمك`
   String get yourName {
-    return Intl.message(
-      'اسمك',
-      name: 'yourName',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('اسمك', name: 'yourName', desc: '', args: []);
   }
 
   /// `تأكيد`
   String get confirm {
-    return Intl.message(
-      'تأكيد',
-      name: 'confirm',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('تأكيد', name: 'confirm', desc: '', args: []);
   }
 
   /// `تسجيل الدخول بواسطة جوجل`
@@ -452,12 +411,7 @@ class S {
 
   /// `تأكيد الاسم`
   String get confirmName {
-    return Intl.message(
-      'تأكيد الاسم',
-      name: 'confirmName',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('تأكيد الاسم', name: 'confirmName', desc: '', args: []);
   }
 
   /// `يرجى تأكيد اسمك للمتابعة`
@@ -472,12 +426,7 @@ class S {
 
   /// `أو`
   String get or {
-    return Intl.message(
-      'أو',
-      name: 'or',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('أو', name: 'or', desc: '', args: []);
   }
 
   /// `إدارة محافظك الخاصة بالأعمال بسهولة`
@@ -512,12 +461,7 @@ class S {
 
   /// `اشترك الآن`
   String get signUpNow {
-    return Intl.message(
-      'اشترك الآن',
-      name: 'signUpNow',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('اشترك الآن', name: 'signUpNow', desc: '', args: []);
   }
 
   /// `example@email.com`
@@ -542,12 +486,7 @@ class S {
 
   /// `الاسم الكامل`
   String get fullName {
-    return Intl.message(
-      'الاسم الكامل',
-      name: 'fullName',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('الاسم الكامل', name: 'fullName', desc: '', args: []);
   }
 
   /// `مثلاً: أحمد محمود`
@@ -572,12 +511,7 @@ class S {
 
   /// `ما اسمك؟`
   String get whatIsYourName {
-    return Intl.message(
-      'ما اسمك؟',
-      name: 'whatIsYourName',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('ما اسمك؟', name: 'whatIsYourName', desc: '', args: []);
   }
 
   /// `سيظهر اسمك عند تحديث حالة الدفع لتسهيل تتبع العمليات المالية`
@@ -591,107 +525,72 @@ class S {
   }
 
   /// `مرحباً بك`
-  String get homeWelcome {
+  String get welcome {
+    return Intl.message('مرحباً بك', name: 'welcome', desc: '', args: []);
+  }
+
+  /// `إجمالي الرصيد`
+  String get totalBalance {
     return Intl.message(
-      'مرحباً بك',
-      name: 'homeWelcome',
+      'إجمالي الرصيد',
+      name: 'totalBalance',
       desc: '',
       args: [],
     );
   }
 
-  /// `إجمالي المحافظ`
-  String get homeTotalWallets {
+  /// `الرصيد الحالي`
+  String get currentBalance {
     return Intl.message(
-      'إجمالي المحافظ',
-      name: 'homeTotalWallets',
+      'الرصيد الحالي',
+      name: 'currentBalance',
       desc: '',
       args: [],
     );
   }
 
   /// `ج.م`
-  String get homeCurrency {
-    return Intl.message(
-      'ج.م',
-      name: 'homeCurrency',
-      desc: '',
-      args: [],
-    );
+  String get currency {
+    return Intl.message('ج.م', name: 'currency', desc: '', args: []);
   }
 
   /// `إجمالي الصادر`
-  String get homeTotalOut {
-    return Intl.message(
-      'إجمالي الصادر',
-      name: 'homeTotalOut',
-      desc: '',
-      args: [],
-    );
+  String get totalOut {
+    return Intl.message('إجمالي الصادر', name: 'totalOut', desc: '', args: []);
   }
 
   /// `إجمالي الوارد`
-  String get homeTotalIn {
-    return Intl.message(
-      'إجمالي الوارد',
-      name: 'homeTotalIn',
-      desc: '',
-      args: [],
-    );
+  String get totalIn {
+    return Intl.message('إجمالي الوارد', name: 'totalIn', desc: '', args: []);
   }
 
   /// `محافظك`
-  String get homeYourWallets {
-    return Intl.message(
-      'محافظك',
-      name: 'homeYourWallets',
-      desc: '',
-      args: [],
-    );
+  String get yourWallets {
+    return Intl.message('محافظك', name: 'yourWallets', desc: '', args: []);
   }
 
   /// `عرض الكل`
-  String get homeViewAll {
-    return Intl.message(
-      'عرض الكل',
-      name: 'homeViewAll',
-      desc: '',
-      args: [],
-    );
+  String get viewAll {
+    return Intl.message('عرض الكل', name: 'viewAll', desc: '', args: []);
   }
 
   /// `مساحات العمل`
-  String get homeWorkspaces {
-    return Intl.message(
-      'مساحات العمل',
-      name: 'homeWorkspaces',
-      desc: '',
-      args: [],
-    );
+  String get workspaces {
+    return Intl.message('مساحات العمل', name: 'workspaces', desc: '', args: []);
   }
 
   /// `إضافة محفظة`
-  String get homeAddWallet {
-    return Intl.message(
-      'إضافة محفظة',
-      name: 'homeAddWallet',
-      desc: '',
-      args: [],
-    );
+  String get addWallet {
+    return Intl.message('إضافة محفظة', name: 'addWallet', desc: '', args: []);
   }
 
   /// `نشط`
   String get walletStatusActive {
-    return Intl.message(
-      'نشط',
-      name: 'walletStatusActive',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('نشط', name: 'walletStatusActive', desc: '', args: []);
   }
 
   /// `{count, plural, =0{لا توجد محافظ نشطة} =1{محفظة واحدة نشطة} =2{محفظتان نشطتان} few{{count} محافظ نشطة} many{{count} محفظة نشطة} other{{count} محفظة نشطة}}`
-  String homeActiveWallets(num count) {
+  String activeWalletsCount(num count) {
     return Intl.plural(
       count,
       zero: 'لا توجد محافظ نشطة',
@@ -700,47 +599,248 @@ class S {
       few: '$count محافظ نشطة',
       many: '$count محفظة نشطة',
       other: '$count محفظة نشطة',
-      name: 'homeActiveWallets',
+      name: 'activeWalletsCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count, plural, =0{لم تقم بإضافة أي محافظ بعد} =1{إجمالي الرصيد لمحفظتك} =2{إجمالي الرصيد لمحفظتيك} few{إجمالي الرصيد لـ {count} من محافظك} many{إجمالي الرصيد لـ {count} من محافظك} other{إجمالي الرصيد لـ {count} من محافظك}}`
+  String activeWalletsHint(num count) {
+    return Intl.plural(
+      count,
+      zero: 'لم تقم بإضافة أي محافظ بعد',
+      one: 'إجمالي الرصيد لمحفظتك',
+      two: 'إجمالي الرصيد لمحفظتيك',
+      few: 'إجمالي الرصيد لـ $count من محافظك',
+      many: 'إجمالي الرصيد لـ $count من محافظك',
+      other: 'إجمالي الرصيد لـ $count من محافظك',
+      name: 'activeWalletsHint',
       desc: '',
       args: [count],
     );
   }
 
   /// `آخر نشاط`
-  String get homeLastActivity {
-    return Intl.message(
-      'آخر نشاط',
-      name: 'homeLastActivity',
-      desc: '',
-      args: [],
-    );
+  String get lastActivity {
+    return Intl.message('آخر نشاط', name: 'lastActivity', desc: '', args: []);
   }
 
   /// `الآن`
-  String get homeJustNow {
-    return Intl.message(
-      'الآن',
-      name: 'homeJustNow',
-      desc: '',
-      args: [],
-    );
+  String get justNow {
+    return Intl.message('الآن', name: 'justNow', desc: '', args: []);
   }
 
   /// `منذ {minutes} دقيقة`
-  String homeMinutesAgo(Object minutes) {
+  String minutesAgo(Object minutes) {
     return Intl.message(
       'منذ $minutes دقيقة',
-      name: 'homeMinutesAgo',
+      name: 'minutesAgo',
       desc: '',
       args: [minutes],
     );
   }
 
   /// `EGP`
-  String get homeEGP {
+  String get egp {
+    return Intl.message('EGP', name: 'egp', desc: '', args: []);
+  }
+
+  /// `إضافة محفظة`
+  String get addWalletTitle {
     return Intl.message(
-      'EGP',
-      name: 'homeEGP',
+      'إضافة محفظة',
+      name: 'addWalletTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `يجب أن تكون هذه المحفظة متاحة على هذا الجهاز. التطبيق يقرأ رسائل SMS الجديدة من هذا الهاتف فقط.`
+  String get addWalletDescription {
+    return Intl.message(
+      'يجب أن تكون هذه المحفظة متاحة على هذا الجهاز. التطبيق يقرأ رسائل SMS الجديدة من هذا الهاتف فقط.',
+      name: 'addWalletDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `رقم الهاتف`
+  String get phoneNumber {
+    return Intl.message('رقم الهاتف', name: 'phoneNumber', desc: '', args: []);
+  }
+
+  /// `اختر مزود الخدمة`
+  String get chooseProvider {
+    return Intl.message(
+      'اختر مزود الخدمة',
+      name: 'chooseProvider',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سماح ومتابعة`
+  String get allowAndContinue {
+    return Intl.message(
+      'سماح ومتابعة',
+      name: 'allowAndContinue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ليس الآن`
+  String get notNow {
+    return Intl.message('ليس الآن', name: 'notNow', desc: '', args: []);
+  }
+
+  /// `أورانج كاش`
+  String get providerOrange {
+    return Intl.message(
+      'أورانج كاش',
+      name: 'providerOrange',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `فودافون كاش`
+  String get providerVodafone {
+    return Intl.message(
+      'فودافون كاش',
+      name: 'providerVodafone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إنستا باي`
+  String get providerInstapay {
+    return Intl.message(
+      'إنستا باي',
+      name: 'providerInstapay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اتصالات كاش`
+  String get providerEtisalat {
+    return Intl.message(
+      'اتصالات كاش',
+      name: 'providerEtisalat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `وي باي`
+  String get providerWePay {
+    return Intl.message('وي باي', name: 'providerWePay', desc: '', args: []);
+  }
+
+  /// `محفظة`
+  String get providerUnknown {
+    return Intl.message('محفظة', name: 'providerUnknown', desc: '', args: []);
+  }
+
+  /// `السماح بالوصول إلى الرسائل`
+  String get smsPermissionTitle {
+    return Intl.message(
+      'السماح بالوصول إلى الرسائل',
+      name: 'smsPermissionTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `يحتاج التطبيق إلى الوصول للرسائل لمزامنة المعاملات تلقائياً من محفظتك.`
+  String get smsPermissionDescription {
+    return Intl.message(
+      'يحتاج التطبيق إلى الوصول للرسائل لمزامنة المعاملات تلقائياً من محفظتك.',
+      name: 'smsPermissionDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تحديث تلقائي`
+  String get smsPermissionAutoUpdateTitle {
+    return Intl.message(
+      'تحديث تلقائي',
+      name: 'smsPermissionAutoUpdateTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `رصد فوري للمصروفات والمدفوعات فور وصول رسالة البنك.`
+  String get smsPermissionAutoUpdateDesc {
+    return Intl.message(
+      'رصد فوري للمصروفات والمدفوعات فور وصول رسالة البنك.',
+      name: 'smsPermissionAutoUpdateDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `خصوصية تامة`
+  String get smsPermissionPrivacyTitle {
+    return Intl.message(
+      'خصوصية تامة',
+      name: 'smsPermissionPrivacyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `نقرأ فقط الرسائل المالية؛ بياناتك مشفرة ولا يتم مشاركتها أبدا.`
+  String get smsPermissionPrivacyDesc {
+    return Intl.message(
+      'نقرأ فقط الرسائل المالية؛ بياناتك مشفرة ولا يتم مشاركتها أبدا.',
+      name: 'smsPermissionPrivacyDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة المحفظة`
+  String get addWalletAction {
+    return Intl.message(
+      'إضافة المحفظة',
+      name: 'addWalletAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `يرجى إدخال رقم الهاتف`
+  String get errorWalletPhoneNumberRequired {
+    return Intl.message(
+      'يرجى إدخال رقم الهاتف',
+      name: 'errorWalletPhoneNumberRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `يرجى اختيار مزود خدمة واحد على الأقل`
+  String get errorWalletProviderRequired {
+    return Intl.message(
+      'يرجى اختيار مزود خدمة واحد على الأقل',
+      name: 'errorWalletProviderRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `جميع المحافظ المختارة مضافة بالفعل لهذا الرقم.`
+  String get errorWalletAllExists {
+    return Intl.message(
+      'جميع المحافظ المختارة مضافة بالفعل لهذا الرقم.',
+      name: 'errorWalletAllExists',
       desc: '',
       args: [],
     );

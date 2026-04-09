@@ -76,7 +76,7 @@ lib/
 │   ├── providers/        # App-wide Riverpod provider declarations
 │   ├── error/            # Result<T>, Failure hierarchy, FailureMapper
 │   ├── usecase/          # Base UseCase interfaces
-│   ├── network/          # Dio client, interceptors, base API config
+│   ├── network/          # Firebase client, interceptors, base API config
 │   ├── router/           # GoRouter, route constants, refresh stream
 │   ├── theme/            # AppTheme, AppColors, AppSpacing, ThemeExtension
 │   ├── widgets/          # Shared UI components (AppButton, AppTextField…)
@@ -112,7 +112,7 @@ lib/
 ```
 Presentation  →  Domain  (use cases only — never repositories or data sources)
 Data          →  Domain  (implements repository interfaces)
-Data          →  Core    (Dio, Firebase instances, storage)
+Data          →  Core    (Firebase, Firebase instances, storage)
 Domain        →  nothing (pure Dart — zero Flutter or infrastructure imports)
 
 ❌  Presentation → Data
@@ -134,7 +134,7 @@ wire implementations to interfaces.
 ### Domain Layer (purest layer)
 
 - Contains only: entities, repository interfaces, use cases, value objects.
-- Zero imports from Flutter SDK, Firebase, Dio, or any infrastructure package.
+- Zero imports from Flutter SDK, Firebase, Firebase, or any infrastructure package.
 - The only permitted external package: `equatable` for value comparison.
 - Entities are immutable, extend `Equatable`, have no serialization logic.
 - Repository interfaces define the contract — no implementation detail leaks.
@@ -142,7 +142,7 @@ wire implementations to interfaces.
 ### Data Layer
 
 - Implements domain repository interfaces.
-- All Firebase SDK calls, Dio calls, and third-party SDK calls live here.
+- All Firebase SDK calls, Firebase calls, and third-party SDK calls live here.
 - Firebase types (`Timestamp`, `DocumentSnapshot`, `DocumentReference`,
   `GeoPoint`, `QuerySnapshot`) are confined to this layer exclusively.
 - DTOs handle serialization. Entities handle business logic. Never merge.
@@ -166,7 +166,7 @@ wire implementations to interfaces.
   No Riverpod providers here.
 - `core/providers/` — Riverpod provider declarations wrapping initialized
   instances. No business logic here.
-- `core/network/` — shared Dio client, auth interceptor, token refresh,
+- `core/network/` — shared Firebase client, auth interceptor, token refresh,
   logging interceptor, base URL config. Feature-specific API methods belong
   in the feature's data layer.
 - `core/widgets/` — shared UI component library. Rules enforced in
@@ -304,13 +304,13 @@ final firebaseStorageProvider = Provider<FirebaseStorage>(
 );
 
 // core/providers/network_providers.dart
-final dioProvider = Provider<Dio>((ref) {
-  final dio = Dio(BaseOptions(baseUrl: Env.apiBaseUrl));
-  dio.interceptors.addAll([
+final firebaseProvider = Provider<Firebase>((ref) {
+  final firebase = Firebase(BaseOptions(baseUrl: Env.apiBaseUrl));
+  firebase.interceptors.addAll([
     AuthInterceptor(ref),
     LogInterceptor(requestBody: true, responseBody: true),
   ]);
-  return dio;
+  return firebase;
 });
 ```
 
@@ -1406,7 +1406,7 @@ entire Firebase suite by default.
 
 | Purpose                | Package              |
 | ---------------------- | -------------------- |
-| HTTP client            | `dio`                |
+| HTTP client            | `firebase`                |
 | WebSockets (if needed) | `web_socket_channel` |
 
 ### Serialization
@@ -1508,7 +1508,7 @@ dependencies:
 ## Complete Flow Summary
 
 ```
-DataSource      →  Executes Firebase / Dio / SDK call.
+DataSource      →  Executes Firebase / Firebase / SDK call.
                    Throws on error (never catches internally).
 
 RepositoryImpl  →  executeAndHandleErrors / executeStreamAndHandleErrors wraps:
@@ -1787,7 +1787,7 @@ try {
 # Error Handling — Core Types & Data Layer Policy
 
 The project follows a **Zero Leak** exception policy. Raw exceptions
-(`DioException`, `FirebaseException`, `FirebaseAuthException`, `SocketException`,
+(`FirebaseException`, `FirebaseException`, `FirebaseAuthException`, `SocketException`,
 etc.) must never reach the domain or presentation layers. All errors are caught
 in the data layer, mapped to typed `Failure` objects, and returned as
 `Result<T>`. User-facing error messages are always resolved in the presentation
@@ -1935,7 +1935,7 @@ precede their supertypes (`FirebaseException`).
 
 ```dart
 import 'dart:io';
-import 'package:dio/dio.dart';
+import 'package:firebase/firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -1945,26 +1945,26 @@ class FailureMapper {
   const FailureMapper();
 
   Failure map(Object error) => switch (error) {
-    // — Dio / REST ——————————————————————————————————————————
-    DioException e when _isNetworkError(e) =>
+    // — Firebase / REST ——————————————————————————————————————————
+    FirebaseException e when _isNetworkError(e) =>
       NetworkFailure(technicalMessage: e.type.name),
 
-    DioException e when e.response?.statusCode == 401 =>
+    FirebaseException e when e.response?.statusCode == 401 =>
       AuthFailure(
         code: '401',
-        technicalMessage: _extractDioMessage(e),
+        technicalMessage: _extractFirebaseMessage(e),
       ),
 
-    DioException e when e.response?.statusCode == 403 =>
+    FirebaseException e when e.response?.statusCode == 403 =>
       PermissionFailure(
         code: '403',
-        technicalMessage: _extractDioMessage(e),
+        technicalMessage: _extractFirebaseMessage(e),
       ),
 
-    DioException e =>
+    FirebaseException e =>
       ServerFailure(
         code: e.response?.statusCode?.toString(),
-        technicalMessage: _extractDioMessage(e),
+        technicalMessage: _extractFirebaseMessage(e),
       ),
 
     // — Firebase Auth ———————————————————————————————————————
@@ -1996,13 +1996,13 @@ class FailureMapper {
     _ => UnknownFailure(technicalMessage: error.toString()),
   };
 
-  bool _isNetworkError(DioException e) =>
-    e.type == DioExceptionType.connectionError ||
-    e.type == DioExceptionType.receiveTimeout ||
-    e.type == DioExceptionType.sendTimeout ||
-    e.type == DioExceptionType.connectionTimeout;
+  bool _isNetworkError(FirebaseException e) =>
+    e.type == FirebaseExceptionType.connectionError ||
+    e.type == FirebaseExceptionType.receiveTimeout ||
+    e.type == FirebaseExceptionType.sendTimeout ||
+    e.type == FirebaseExceptionType.connectionTimeout;
 
-  String? _extractDioMessage(DioException e) =>
+  String? _extractFirebaseMessage(FirebaseException e) =>
     e.response?.data is Map<String, dynamic>
       ? e.response?.data['message'] as String?
       : e.message;
@@ -2036,7 +2036,7 @@ Result<T> executeAndHandleErrorsSync<T>(
   }
 }
 
-/// For asynchronous repository methods (Dio, Firebase, etc.).
+/// For asynchronous repository methods (Firebase, Firebase, etc.).
 Future<Result<T>> executeAndHandleErrors<T>(
   Future<T> Function() call, {
   required String tag,
@@ -2550,7 +2550,7 @@ are declared manually.
 
 | Provider                 | `autoDispose` | Notes                        |
 | ------------------------ | ------------- | ---------------------------- |
-| Dio / HTTP client        | No            | App lifetime                 |
+| Firebase / HTTP client        | No            | App lifetime                 |
 | Firebase instances       | No            | App lifetime                 |
 | Auth state stream        | No            | App lifetime                 |
 | Theme notifier           | No            | App lifetime                 |

@@ -8,6 +8,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/failure_extension.dart';
 import '../../../../generated/l10n.dart';
 import '../providers/auth_notifier.dart';
+import '../../../../core/widgets/app_snackbar.dart';
 import '../widgets/login/google_sign_in_button.dart';
 import '../widgets/login/login_form.dart';
 
@@ -37,11 +38,10 @@ class _LoginBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AuthState>(authNotifierProvider, (_, next) {
       if (!next.isLoading && next.error != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.failureMessage(next.error!)),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
+        AppSnackbar.show(
+          context,
+          message: context.failureMessage(next.error!),
+          type: AppSnackbarType.error,
         );
         ref.read(authNotifierProvider.notifier).clearError();
       }

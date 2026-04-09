@@ -11,6 +11,10 @@ abstract final class AppRoutes {
   // Settings
   static const String settings = '/settings';
 
+  // Wallets
+  static const String addWallet = '/add-wallet';
+  static const String smsPermissions = '/sms-permissions';
+
   // Path builders — always use these for navigation, never interpolate inline
   static String profilePath(String userId) => '/profile/$userId';
 }

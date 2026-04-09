@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../generated/l10n.dart';
 import '../../theme/app_colors.dart';
 
 enum WalletProvider {
@@ -8,8 +9,6 @@ enum WalletProvider {
   etisalatCash,
   instaPay,
   wePay,
-  fawry,
-  bank,
   unknown;
 
   static WalletProvider fromString(String value) {
@@ -28,10 +27,7 @@ enum WalletProvider {
       case 'we_pay':
       case 'we':
         return WalletProvider.wePay;
-      case 'fawry':
-        return WalletProvider.fawry;
-      case 'bank':
-        return WalletProvider.bank;
+
       default:
         return WalletProvider.unknown;
     }
@@ -49,10 +45,7 @@ enum WalletProvider {
         return 'instapay';
       case WalletProvider.wePay:
         return 'we_pay';
-      case WalletProvider.fawry:
-        return 'fawry';
-      case WalletProvider.bank:
-        return 'bank';
+
       case WalletProvider.unknown:
         return 'unknown';
     }
@@ -60,24 +53,22 @@ enum WalletProvider {
 }
 
 extension WalletProviderExt on WalletProvider {
-  String get displayName {
+  String displayName(BuildContext context) {
+    final s = S.of(context);
     switch (this) {
       case WalletProvider.vodafoneCash:
-        return "Vodafone Cash";
+        return s.providerVodafone;
       case WalletProvider.orangeMoney:
-        return "Orange Money";
+        return s.providerOrange;
       case WalletProvider.etisalatCash:
-        return "Etisalat Cash";
+        return s.providerEtisalat;
       case WalletProvider.instaPay:
-        return "InstaPay";
+        return s.providerInstapay;
       case WalletProvider.wePay:
-        return "WE Pay";
-      case WalletProvider.fawry:
-        return "Fawry";
-      case WalletProvider.bank:
-        return "Bank Account";
+        return s.providerWePay;
+
       case WalletProvider.unknown:
-        return "Wallet";
+        return s.providerUnknown;
     }
   }
 
@@ -93,10 +84,7 @@ extension WalletProviderExt on WalletProvider {
         return AppColors.instaPayNavy;
       case WalletProvider.wePay:
         return AppColors.wePayPurple;
-      case WalletProvider.fawry:
-        return AppColors.fawryYellow;
-      case WalletProvider.bank:
-        return AppColors.bankSlate;
+
       case WalletProvider.unknown:
         return AppColors.providerUnknownNeutral;
     }
@@ -108,11 +96,9 @@ extension WalletProviderExt on WalletProvider {
       case WalletProvider.etisalatCash:
       case WalletProvider.instaPay:
       case WalletProvider.wePay:
-      case WalletProvider.bank:
       case WalletProvider.unknown:
         return AppColors.white;
       case WalletProvider.orangeMoney:
-      case WalletProvider.fawry:
         return AppColors.black;
     }
   }
@@ -126,10 +112,7 @@ extension WalletProviderExt on WalletProvider {
         return Icons.phone_android;
       case WalletProvider.instaPay:
         return Icons.flash_on;
-      case WalletProvider.fawry:
-        return Icons.storefront;
-      case WalletProvider.bank:
-        return Icons.account_balance;
+
       case WalletProvider.unknown:
         return Icons.account_balance_wallet;
     }

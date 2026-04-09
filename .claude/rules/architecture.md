@@ -14,7 +14,7 @@ lib/
 │   ├── providers/        # App-wide Riverpod provider declarations
 │   ├── error/            # Result<T>, Failure hierarchy, FailureMapper
 │   ├── usecase/          # Base UseCase interfaces
-│   ├── network/          # Dio client, interceptors, base API config
+│   ├── network/          # Firebase client, interceptors, base API config
 │   ├── router/           # GoRouter, route constants, refresh stream
 │   ├── theme/            # AppTheme, AppColors, AppSpacing, ThemeExtension
 │   ├── widgets/          # Shared UI components (AppButton, AppTextField…)
@@ -50,7 +50,7 @@ lib/
 ```
 Presentation  →  Domain  (use cases only — never repositories or data sources)
 Data          →  Domain  (implements repository interfaces)
-Data          →  Core    (Dio, Firebase instances, storage)
+Data          →  Core    (Firebase, Firebase instances, storage)
 Domain        →  nothing (pure Dart — zero Flutter or infrastructure imports)
 
 ❌  Presentation → Data
@@ -72,7 +72,7 @@ wire implementations to interfaces.
 ### Domain Layer (purest layer)
 
 - Contains only: entities, repository interfaces, use cases, value objects.
-- Zero imports from Flutter SDK, Firebase, Dio, or any infrastructure package.
+- Zero imports from Flutter SDK, Firebase, Firebase, or any infrastructure package.
 - The only permitted external package: `equatable` for value comparison.
 - Entities are immutable, extend `Equatable`, have no serialization logic.
 - Repository interfaces define the contract — no implementation detail leaks.
@@ -80,7 +80,7 @@ wire implementations to interfaces.
 ### Data Layer
 
 - Implements domain repository interfaces.
-- All Firebase SDK calls, Dio calls, and third-party SDK calls live here.
+- All Firebase SDK calls, Firebase calls, and third-party SDK calls live here.
 - Firebase types (`Timestamp`, `DocumentSnapshot`, `DocumentReference`,
   `GeoPoint`, `QuerySnapshot`) are confined to this layer exclusively.
 - DTOs handle serialization. Entities handle business logic. Never merge.
@@ -104,7 +104,7 @@ wire implementations to interfaces.
   No Riverpod providers here.
 - `core/providers/` — Riverpod provider declarations wrapping initialized
   instances. No business logic here.
-- `core/network/` — shared Dio client, auth interceptor, token refresh,
+- `core/network/` — shared Firebase client, auth interceptor, token refresh,
   logging interceptor, base URL config. Feature-specific API methods belong
   in the feature's data layer.
 - `core/widgets/` — shared UI component library. Rules enforced in
@@ -242,13 +242,13 @@ final firebaseStorageProvider = Provider<FirebaseStorage>(
 );
 
 // core/providers/network_providers.dart
-final dioProvider = Provider<Dio>((ref) {
-  final dio = Dio(BaseOptions(baseUrl: Env.apiBaseUrl));
-  dio.interceptors.addAll([
+final firebaseProvider = Provider<Firebase>((ref) {
+  final firebase = Firebase(BaseOptions(baseUrl: Env.apiBaseUrl));
+  firebase.interceptors.addAll([
     AuthInterceptor(ref),
     LogInterceptor(requestBody: true, responseBody: true),
   ]);
-  return dio;
+  return firebase;
 });
 ```
 

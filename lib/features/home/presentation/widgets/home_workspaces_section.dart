@@ -26,7 +26,7 @@ class HomeWorkspacesSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              s.homeWorkspaces,
+              s.workspaces,
               style: theme.textTheme.titleLarge?.copyWith(
                 color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w700,
@@ -96,18 +96,18 @@ class _WorkspaceCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _WorkspaceStat(
-                  title: s.homeTotalIn,
+                  title: s.totalIn,
                   amount:
-                      '${workspace.totalReceived.toStringAsFixed(0)} ${s.homeCurrency}',
+                      '${workspace.totalReceived.toStringAsFixed(0)} ${s.currency}',
                   amountColor: colorScheme.secondary,
                 ),
               ),
               SizedBox(width: AppSpacing.md.responsiveWidth),
               Expanded(
                 child: _WorkspaceStat(
-                  title: s.homeTotalOut,
+                  title: s.totalOut,
                   amount:
-                      '${workspace.totalSent.toStringAsFixed(0)} ${s.homeCurrency}',
+                      '${workspace.totalSent.toStringAsFixed(0)} ${s.currency}',
                   amountColor: colorScheme.error,
                 ),
               ),
@@ -160,7 +160,7 @@ class _WorkspaceHeader extends StatelessWidget {
               ),
             ),
             Text(
-              s.homeActiveWallets(walletsCount),
+              s.activeWalletsCount(walletsCount),
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.outline,
               ),
@@ -181,13 +181,13 @@ class _WorkspaceLastActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = S.of(context);
     final theme = Theme.of(context);
-    final timeStr = latestActivityAt?.toTimeAgo(context) ?? s.homeJustNow;
+    final timeStr = latestActivityAt?.toTimeAgo(context) ?? s.justNow;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          s.homeLastActivity,
+          s.lastActivity,
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.outline,
           ),

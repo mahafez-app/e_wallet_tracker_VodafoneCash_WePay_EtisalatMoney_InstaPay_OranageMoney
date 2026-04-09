@@ -10,9 +10,9 @@ extension DateFormatting on DateTime {
     final difference = now.difference(this);
 
     if (difference.inMinutes < 1) {
-      return s.homeJustNow;
+      return s.justNow;
     } else if (difference.inHours < 1) {
-      return s.homeMinutesAgo(difference.inMinutes);
+      return s.minutesAgo(difference.inMinutes);
     } else if (difference.inDays < 1) {
       return DateFormat.jm(
         Localizations.localeOf(context).languageCode,

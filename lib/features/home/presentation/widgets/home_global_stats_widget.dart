@@ -11,11 +11,13 @@ class HomeGlobalStatsWidget extends StatelessWidget {
     required this.totalBalance,
     required this.totalSent,
     required this.totalReceived,
+    required this.walletCount,
   });
 
   final double totalBalance;
   final double totalSent;
   final double totalReceived;
+  final int walletCount;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class HomeGlobalStatsWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                s.homeTotalWallets,
+                s.totalBalance,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: colors.statsOnGradient,
                   fontWeight: FontWeight.w700,
@@ -54,12 +56,19 @@ class HomeGlobalStatsWidget extends StatelessWidget {
           ),
           SizedBox(height: AppSpacing.sm.responsiveHeight),
           _BalanceDisplay(amount: totalBalance),
+          SizedBox(height: AppSpacing.xs.responsiveHeight),
+          Text(
+            s.activeWalletsHint(walletCount),
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: colors.statsOnGradient.withValues(alpha: 0.8),
+            ),
+          ),
           SizedBox(height: AppSpacing.lg.responsiveHeight),
           Row(
             children: [
               Expanded(
                 child: _StatBox(
-                  title: s.homeTotalOut,
+                  title: s.totalOut,
                   amount: '- ${totalSent.toStringAsFixed(0)}',
                   amountColor: colors.statsSentColor,
                 ),
@@ -67,7 +76,7 @@ class HomeGlobalStatsWidget extends StatelessWidget {
               SizedBox(width: AppSpacing.lg.responsiveWidth),
               Expanded(
                 child: _StatBox(
-                  title: s.homeTotalIn,
+                  title: s.totalIn,
                   amount: '+ ${totalReceived.toStringAsFixed(0)}',
                   amountColor: colors.statsReceivedColor,
                 ),
@@ -104,7 +113,7 @@ class _BalanceDisplay extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 6),
           child: Text(
-            s.homeCurrency,
+            s.currency,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: colors.statsOnGradient,
               fontWeight: FontWeight.w700,

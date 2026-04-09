@@ -8,6 +8,8 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/sign_up_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
+import '../../features/wallets/presentation/screens/add_wallet_screen.dart';
+import '../../features/wallets/presentation/screens/sms_permissions_screen.dart';
 import '../widgets/not_found_screen.dart';
 import 'app_routes.dart';
 
@@ -121,6 +123,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const Scaffold(
           body: Center(child: Text('Settings Screen - To be implemented')),
         ),
+      ),
+      GoRoute(
+        path: AppRoutes.addWallet,
+        builder: (context, state) => const AddWalletScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.smsPermissions,
+        builder: (context, state) => const SmsPermissionsScreen(),
       ),
     ],
   );

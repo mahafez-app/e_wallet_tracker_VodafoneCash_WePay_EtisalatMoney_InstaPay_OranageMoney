@@ -52,7 +52,9 @@ These apply without exception across all files and tasks.
 - **No Firebase types outside the data layer.** `Timestamp`, `DocumentSnapshot`,
   `DocumentReference`, `QuerySnapshot` belong only in DTOs and data sources.
 - **No `dynamic`.** Use generics, `Object?`, sealed types, or explicit casts.
-- **No hardcoded strings, colors (`Color(0xFF...)`), spacing, or font sizes (`TextStyle(...)`) in widget trees.** Period. All `TextStyle` instances MUST be extracted from `Theme.of(context).textTheme`. All hex colors MUST be in `AppColors`.
+- **No hardcoded strings, colors (`Color(0xFF...)`, `Colors.x`), spacing, sizes, or font sizes (`TextStyle(...)`) in widget trees.** Period. All `TextStyle` instances MUST be extracted from `Theme.of(context).textTheme`. All hex colors MUST be in `AppColors`. All material Colors MUST come from `Theme.of(context).colorScheme`.
+- **Never instantiate `TextStyle` or `Color` objects inside widgets.** This completely breaks theming and dark mode.
+- **No hardcoded `SizedBox(height: ...)` or `EdgeInsets.all(...)`.** You MUST use `AppResponsiveNumExtension` sizes: `.verticalSpace`, `.horizontalSpace`, `.responsiveWidth`, `.responsiveHeight`, `.responsiveRadius`, `.responsiveFont`.
 - **No `print`.** Use `dart:developer`'s `log()`.
 - **No empty `catch` blocks.** Every error is handled explicitly.
 - **No `!` operator** unless non-null is structurally guaranteed at that point.
@@ -76,7 +78,6 @@ lib/
 │   ├── providers/        # App-wide Riverpod provider declarations
 │   ├── error/            # Result<T>, Failure hierarchy, FailureMapper
 │   ├── usecase/          # Base UseCase interfaces
-│   ├── network/          # Dio client, interceptors, base API config
 │   ├── router/           # GoRouter, route constants, refresh stream
 │   ├── theme/            # AppTheme, AppColors, AppSpacing, ThemeExtension
 │   ├── widgets/          # Shared UI components (AppButton, AppTextField…)
@@ -112,7 +113,7 @@ lib/
 ```
 Presentation  →  Domain  (use cases only — never repositories or data sources)
 Data          →  Domain  (implements repository interfaces)
-Data          →  Core    (Dio, Firebase instances, storage)
+Data          →  Core    (Firebase instances, storage)
 Domain        →  nothing (pure Dart — zero Flutter or infrastructure imports)
 
 ❌  Presentation → Data
@@ -134,7 +135,7 @@ wire implementations to interfaces.
 ### Domain Layer (purest layer)
 
 - Contains only: entities, repository interfaces, use cases, value objects.
-- Zero imports from Flutter SDK, Firebase, Dio, or any infrastructure package.
+- Zero imports from Flutter SDK, Firebase, or any infrastructure package.
 - The only permitted external package: `equatable` for value comparison.
 - Entities are immutable, extend `Equatable`, have no serialization logic.
 - Repository interfaces define the contract — no implementation detail leaks.
@@ -142,7 +143,7 @@ wire implementations to interfaces.
 ### Data Layer
 
 - Implements domain repository interfaces.
-- All Firebase SDK calls, Dio calls, and third-party SDK calls live here.
+- All Firebase SDK calls and third-party SDK calls live here.
 - Firebase types (`Timestamp`, `DocumentSnapshot`, `DocumentReference`,
   `GeoPoint`, `QuerySnapshot`) are confined to this layer exclusively.
 - DTOs handle serialization. Entities handle business logic. Never merge.
@@ -166,9 +167,6 @@ wire implementations to interfaces.
   No Riverpod providers here.
 - `core/providers/` — Riverpod provider declarations wrapping initialized
   instances. No business logic here.
-- `core/network/` — shared Dio client, auth interceptor, token refresh,
-  logging interceptor, base URL config. Feature-specific API methods belong
-  in the feature's data layer.
 - `core/widgets/` — shared UI component library. Rules enforced in
   `code-quality.md`.
 
@@ -302,16 +300,6 @@ final firestoreProvider = Provider<FirebaseFirestore>(
 final firebaseStorageProvider = Provider<FirebaseStorage>(
   (ref) => FirebaseStorage.instance,
 );
-
-// core/providers/network_providers.dart
-final dioProvider = Provider<Dio>((ref) {
-  final dio = Dio(BaseOptions(baseUrl: Env.apiBaseUrl));
-  dio.interceptors.addAll([
-    AuthInterceptor(ref),
-    LogInterceptor(requestBody: true, responseBody: true),
-  ]);
-  return dio;
-});
 ```
 
 These are the **only** providers features may import from outside their
@@ -476,9 +464,11 @@ presentation or data layers.
 ```dart
 // ❌ Hardcoded spacing
 Padding(padding: EdgeInsets.all(16), child: ...)
+SizedBox(height: 16)
 
-// ✅ Named constant
-Padding(padding: EdgeInsets.all(AppSpacing.md), child: ...)
+// ✅ Named constant & responsive
+Padding(padding: EdgeInsets.all(AppSpacing.md.responsiveRadius), child: ...)
+AppSpacing.md.verticalSpace
 
 // ❌ Hardcoded typography
 Text('Hello', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
@@ -488,6 +478,7 @@ Text('Hello', style: Theme.of(context).textTheme.titleLarge)
 
 // ❌ Hardcoded color
 Container(color: Color(0xFF1A73E8))
+Container(color: Colors.blue)
 
 // ✅ ColorScheme
 Container(color: Theme.of(context).colorScheme.primary)
@@ -496,7 +487,7 @@ Container(color: Theme.of(context).colorScheme.primary)
 Text('Continue')
 
 // ✅ Localized
-Text(AppLocalizations.of(context)!.continueButton)
+Text(S.of(context).continueButton)
 ```
 
 ---
@@ -649,9 +640,10 @@ provider or constructor arguments).
 
 ---
 
-## Container vs SizedBox
+## Container vs SizedBox vs Responsive Spacing
 
-- `SizedBox` for fixed sizing and fixed-dimension spacing gaps.
+- NEVER use `SizedBox(height: ...)` or `SizedBox(width: ...)`. Use `16.verticalSpace` or `AppSpacing.md.horizontalSpace` from `AppResponsiveNumExtension`.
+- `SizedBox` is ONLY for constraints (`SizedBox.shrink()`, `SizedBox.expand()`).
 - `Container` only when decoration, clipping, or combined constraints are
   needed simultaneously. Never use `Container` as a plain sizing wrapper.
 

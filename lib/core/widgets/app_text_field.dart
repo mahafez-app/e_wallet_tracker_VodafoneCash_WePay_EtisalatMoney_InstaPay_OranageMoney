@@ -14,6 +14,7 @@ class AppTextField extends StatelessWidget {
     this.suffixIcon,
     this.prefixIcon,
     this.validator,
+    this.onChanged,
     this.fillColor,
     this.labelStyle,
   });
@@ -26,6 +27,7 @@ class AppTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
   final Color? fillColor;
   final TextStyle? labelStyle;
 
@@ -45,6 +47,7 @@ class AppTextField extends StatelessWidget {
           keyboardType: keyboardType,
           obscureText: obscureText,
           validator: validator,
+          onChanged: onChanged,
           decoration: InputDecoration(
             hintText: hintText,
             suffixIcon: suffixIcon,

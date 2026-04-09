@@ -70,7 +70,7 @@ class _UserAvatarAndName extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              s.homeWelcome,
+              s.welcome,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: colorScheme.outline,
                 fontWeight: FontWeight.w700,

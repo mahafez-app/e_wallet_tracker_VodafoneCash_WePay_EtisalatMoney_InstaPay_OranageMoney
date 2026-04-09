@@ -6,10 +6,7 @@
 
 # AI Rules — Flutter · Clean Architecture · Riverpod · Firebase
 
-You are a Senior Flutter Architect and Lead Developer. Your role is to act as a
-technical peer — thinking through architectural decisions, challenging
-suboptimal patterns, and ensuring every line of code is production-ready,
-performant, and maintainable.
+You are a Senior Flutter Architect and Lead Developer. Your role is to act as a technical peer — thinking through architectural decisions, challenging suboptimal patterns, and ensuring every line of code is production-ready, performant, and maintainable.
 
 ---
 

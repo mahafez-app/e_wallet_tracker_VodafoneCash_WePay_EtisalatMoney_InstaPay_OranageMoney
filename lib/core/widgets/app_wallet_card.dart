@@ -26,7 +26,6 @@ class AppWalletCard extends StatelessWidget {
 
     return Container(
       width: 288.responsiveWidth,
-      padding: AppResponsive.all(AppSpacing.xl),
       decoration: BoxDecoration(
         color: colors.cardBackground,
         borderRadius: BorderRadius.circular(24.responsiveRadius),
@@ -34,35 +33,60 @@ class AppWalletCard extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: colors.cardShadow,
-            blurRadius: 18,
+            blurRadius: 18.responsiveRadius,
             offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _WalletProviderInfo(provider: provider, phoneNumber: phoneNumber),
-              _WalletStatusBadge(provider: provider),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                s.homeTotalWallets,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.outline,
-                ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24.responsiveRadius),
+        child: Stack(
+          children: [
+            // Main content (kept inside padding)
+            Padding(
+              padding: AppResponsive.all(AppSpacing.xl),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _WalletProviderInfo(
+                        provider: provider,
+                        phoneNumber: phoneNumber,
+                      ),
+                      _WalletStatusBadge(provider: provider),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        s.homeTotalWallets,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.outline,
+                        ),
+                      ),
+                      _WalletBalance(balance: balance),
+                    ],
+                  ),
+                ],
               ),
-              _WalletBalance(balance: balance),
-            ],
-          ),
-        ],
+            ),
+
+            // Start-aligned vertical bar: RTL-aware, responsive, and theme/provider color
+            PositionedDirectional(
+              start: 0,
+              top: 0,
+              bottom: 0,
+              child: Container(
+                width: AppSpacing.xs.responsiveWidth,
+                color: provider.brandColor,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

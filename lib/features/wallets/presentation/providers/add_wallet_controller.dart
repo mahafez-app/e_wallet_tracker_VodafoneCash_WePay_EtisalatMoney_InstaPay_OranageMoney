@@ -84,7 +84,7 @@ final addWalletSubmitProvider =
 
 class AddWalletSubmitController extends AsyncNotifier<void> {
   @override
-  Future<void> build() => Future.value();
+  void build() {}
 
   Future<void> submit() async {
     state = const AsyncLoading();

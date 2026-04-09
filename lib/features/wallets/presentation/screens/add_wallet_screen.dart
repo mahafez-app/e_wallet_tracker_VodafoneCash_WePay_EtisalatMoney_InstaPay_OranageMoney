@@ -36,8 +36,11 @@ class _AddWalletBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<void>>(addWalletSubmitProvider, (_, next) async {
-      if (next is AsyncData) {
+    ref.listen<AsyncValue<void>>(addWalletSubmitProvider, (
+      previous,
+      next,
+    ) async {
+      if (next is AsyncData && previous?.isLoading == true) {
         final checkPerm = ref.read(checkSmsPermissionUseCaseProvider);
         final hasPerm = await checkPerm();
 

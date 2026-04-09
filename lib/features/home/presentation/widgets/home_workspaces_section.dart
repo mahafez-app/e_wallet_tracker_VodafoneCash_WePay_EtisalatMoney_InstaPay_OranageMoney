@@ -22,18 +22,12 @@ class HomeWorkspacesSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              s.workspaces,
-              style: theme.textTheme.titleLarge?.copyWith(
-                color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.tune)),
-          ],
+        Text(
+          s.workspaces,
+          style: theme.textTheme.titleLarge?.copyWith(
+            color: theme.colorScheme.onSurface,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         AppSpacing.md.verticalSpace,
         ListView.separated(
@@ -119,10 +113,7 @@ class _WorkspaceCard extends StatelessWidget {
 }
 
 class _WorkspaceHeader extends StatelessWidget {
-  const _WorkspaceHeader({
-    required this.name,
-    required this.walletsCount,
-  });
+  const _WorkspaceHeader({required this.name, required this.walletsCount});
 
   final String name;
   final int walletsCount;
@@ -142,10 +133,7 @@ class _WorkspaceHeader extends StatelessWidget {
             color: colors.workspaceIconBackground,
             borderRadius: BorderRadius.circular(12.responsiveRadius),
           ),
-          child: Icon(
-            Icons.storefront,
-            color: colors.workspaceIconForeground,
-          ),
+          child: Icon(Icons.storefront, color: colors.workspaceIconForeground),
         ),
         AppSpacing.md.horizontalSpace,
         Column(

@@ -4,12 +4,10 @@ import '../../domain/entities/wallet_details_entity.dart';
 import '../../domain/usecases/wallet_details_usecases.dart';
 import '../../providers/wallets_providers.dart';
 
-final walletDetailsControllerProvider =
-    AsyncNotifierProvider.family<
-      WalletDetailsController,
-      WalletDetailsEntity,
-      String
-    >(WalletDetailsController.new);
+final walletDetailsControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<WalletDetailsController, WalletDetailsEntity, String>(
+      WalletDetailsController.new,
+    );
 
 class WalletDetailsController extends AsyncNotifier<WalletDetailsEntity> {
   WalletDetailsController(this._walletId);

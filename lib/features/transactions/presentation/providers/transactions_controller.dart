@@ -4,13 +4,14 @@ import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../domain/usecases/get_transactions_usecase.dart';
 import '../../providers/transactions_providers.dart';
 
-final transactionsControllerProvider = AsyncNotifierProvider.family<
-    TransactionsController, List<TransactionEntity>, String?>(
-  (arg) => TransactionsController(arg),
-);
+final transactionsControllerProvider =
+    AsyncNotifierProvider.autoDispose.family<
+      TransactionsController,
+      List<TransactionEntity>,
+      String?
+    >(TransactionsController.new);
 
-class TransactionsController
-    extends AsyncNotifier<List<TransactionEntity>> {
+class TransactionsController extends AsyncNotifier<List<TransactionEntity>> {
   TransactionsController(this._walletId);
 
   final String? _walletId;

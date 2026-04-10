@@ -14,7 +14,12 @@ abstract final class AppRoutes {
   // Wallets
   static const String addWallet = '/add-wallet';
   static const String smsPermissions = '/sms-permissions';
+  static const String walletDetails = '/wallet/:walletId';
+  static const String transactions = '/transactions';
 
   // Path builders — always use these for navigation, never interpolate inline
   static String profilePath(String userId) => '/profile/$userId';
+  static String walletDetailsPath(String walletId) => '/wallet/$walletId';
+  static String transactionsPath({String? walletId}) =>
+      walletId == null ? '/transactions' : '/transactions?walletId=$walletId';
 }

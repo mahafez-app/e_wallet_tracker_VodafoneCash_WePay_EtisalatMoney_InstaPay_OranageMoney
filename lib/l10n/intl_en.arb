@@ -99,5 +99,36 @@
   "addWalletAction": "Add Wallet",
   "errorWalletPhoneNumberRequired": "Please enter a phone number",
   "errorWalletProviderRequired": "Please select at least one provider",
-  "errorWalletAllExists": "All selected wallets are already added for this phone number."
+  "errorWalletAllExists": "All selected wallets are already added for this phone number.",
+  "transactionTypeReceive": "Receive",
+  "transactionTypeSend": "Send",
+  "transactionStatusPaid": "Paid",
+  "transactionStatusUnpaid": "Unpaid",
+  "recentTransactions": "Recent Transactions",
+  "noTransactionsTitle": "No transactions yet, they will appear here when new messages arrive",
+  "deleteWallet": "Delete Wallet",
+  "deleteWalletConfirmTitle": "Delete Wallet",
+  "deleteWalletConfirmMessage": "Are you sure you want to delete this wallet? This action cannot be undone.",
+  "allTransactions": "All Transactions",
+  "walletTransactions": "Wallet Transactions",
+  "walletDetails": "Wallet Details",
+  "transactionsHistory": "Transactions History",
+  "transactionDetails": "Transaction Details",
+  "transactionMessageReceive": "Received {amount} EGP",
+  "transactionMessageSend": "Sent {amount} EGP",
+  "@transactionMessageReceive": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "@transactionMessageSend": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "walletLabel": "Your wallet",
+  "fromLabel": "From",
+  "toLabel": "To",
+  "viaLabel": "Via",
+  "paymentStatus": "Payment Status"
 }

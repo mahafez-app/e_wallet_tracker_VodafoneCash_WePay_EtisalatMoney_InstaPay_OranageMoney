@@ -147,6 +147,8 @@ wire implementations to interfaces.
 - Firebase types (`Timestamp`, `DocumentSnapshot`, `DocumentReference`,
   `GeoPoint`, `QuerySnapshot`) are confined to this layer exclusively.
 - DTOs handle serialization. Entities handle business logic. Never merge.
+- DTOs MUST extend their corresponding Domain Entity to avoid redundancy
+  and ensure type safety.
 - Every DTO implements `toEntity()` for simple mappings. Complex multi-model
   transforms use a dedicated `Mapper` class in `data/mappers/`.
 - All exceptions are caught here, mapped to `Failure` objects, returned as

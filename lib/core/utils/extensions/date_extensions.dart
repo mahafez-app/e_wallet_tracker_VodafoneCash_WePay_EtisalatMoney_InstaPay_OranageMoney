@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../generated/l10n.dart';
+import '../../../generated/l10n.dart';
 
 extension DateFormatting on DateTime {
   String toTimeAgo(BuildContext context) {
@@ -27,5 +27,12 @@ extension DateFormatting on DateTime {
         Localizations.localeOf(context).languageCode,
       ).format(this);
     }
+  }
+
+  String toFormattedDate(BuildContext context) {
+    return DateFormat(
+      'd MMMM yyyy · H:mm',
+      Localizations.localeOf(context).languageCode,
+    ).format(this);
   }
 }

@@ -30,6 +30,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m3(minutes) => "منذ ${minutes} دقيقة";
 
+  static String m4(amount) => "تم استلام ${amount} ج.م";
+
+  static String m5(amount) => "تم إرسال ${amount} ج.م";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "activeWalletsCount": m0,
@@ -40,6 +44,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "addWalletDescription": MessageLookupByLibrary.simpleMessage(
             "يجب أن تكون هذه المحفظة متاحة على هذا الجهاز. التطبيق يقرأ رسائل SMS الجديدة من هذا الهاتف فقط."),
         "addWalletTitle": MessageLookupByLibrary.simpleMessage("إضافة محفظة"),
+        "allTransactions":
+            MessageLookupByLibrary.simpleMessage("جميع المعاملات"),
         "allowAndContinue":
             MessageLookupByLibrary.simpleMessage("سماح ومتابعة"),
         "alreadyHaveAccount":
@@ -58,6 +64,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "createAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
         "currency": MessageLookupByLibrary.simpleMessage("ج.م"),
         "currentBalance": MessageLookupByLibrary.simpleMessage("الرصيد الحالي"),
+        "deleteWallet": MessageLookupByLibrary.simpleMessage("حذف المحفظة"),
+        "deleteWalletConfirmMessage": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد من رغبتك في حذف هذه المحفظة؟ لا يمكنك التراجع عن هذا الإجراء."),
+        "deleteWalletConfirmTitle":
+            MessageLookupByLibrary.simpleMessage("حذف المحفظة"),
         "displayName": MessageLookupByLibrary.simpleMessage("الاسم"),
         "displayNameHint": MessageLookupByLibrary.simpleMessage("أدخل اسمك"),
         "dontHaveAccount":
@@ -117,6 +128,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "يرجى اختيار مزود خدمة واحد على الأقل"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور؟"),
+        "fromLabel": MessageLookupByLibrary.simpleMessage("من"),
         "fullName": MessageLookupByLibrary.simpleMessage("الاسم الكامل"),
         "fullNamePlaceholder":
             MessageLookupByLibrary.simpleMessage("مثلاً: أحمد محمود"),
@@ -125,6 +137,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "minutesAgo": m3,
         "nameWillBeDisplayed": MessageLookupByLibrary.simpleMessage(
             "سيظهر اسمك عند تحديث حالة الدفع لتسهيل تتبع العمليات المالية"),
+        "noTransactionsTitle": MessageLookupByLibrary.simpleMessage(
+            "لا توجد معاملات حتى الآن، ستظهر هنا عند وصول رسائل جديدة"),
         "notFoundPageTitle":
             MessageLookupByLibrary.simpleMessage("الصفحة غير موجودة"),
         "notFoundStatusCode": MessageLookupByLibrary.simpleMessage("404"),
@@ -134,6 +148,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "passwordHint":
             MessageLookupByLibrary.simpleMessage("أدخل كلمة المرور"),
         "passwordPlaceholder": MessageLookupByLibrary.simpleMessage("••••••••"),
+        "paymentStatus": MessageLookupByLibrary.simpleMessage("حالة الدفع"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
         "providerEtisalat": MessageLookupByLibrary.simpleMessage("اتصالات كاش"),
         "providerInstapay": MessageLookupByLibrary.simpleMessage("إنستا باي"),
@@ -141,6 +156,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "providerUnknown": MessageLookupByLibrary.simpleMessage("محفظة"),
         "providerVodafone": MessageLookupByLibrary.simpleMessage("فودافون كاش"),
         "providerWePay": MessageLookupByLibrary.simpleMessage("وي باي"),
+        "recentTransactions":
+            MessageLookupByLibrary.simpleMessage("آخر المعاملات"),
         "signIn": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
         "signInWithEmail": MessageLookupByLibrary.simpleMessage(
             "تسجيل الدخول بالبريد الإلكتروني"),
@@ -162,11 +179,29 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("خصوصية تامة"),
         "smsPermissionTitle":
             MessageLookupByLibrary.simpleMessage("السماح بالوصول إلى الرسائل"),
+        "toLabel": MessageLookupByLibrary.simpleMessage("إلى"),
         "totalBalance": MessageLookupByLibrary.simpleMessage("إجمالي الرصيد"),
         "totalIn": MessageLookupByLibrary.simpleMessage("إجمالي الوارد"),
         "totalOut": MessageLookupByLibrary.simpleMessage("إجمالي الصادر"),
+        "transactionDetails":
+            MessageLookupByLibrary.simpleMessage("تفاصيل المعاملة"),
+        "transactionMessageReceive": m4,
+        "transactionMessageSend": m5,
+        "transactionStatusPaid": MessageLookupByLibrary.simpleMessage("مدفوع"),
+        "transactionStatusUnpaid":
+            MessageLookupByLibrary.simpleMessage("غير مدفوع"),
+        "transactionTypeReceive":
+            MessageLookupByLibrary.simpleMessage("استلام"),
+        "transactionTypeSend": MessageLookupByLibrary.simpleMessage("إرسال"),
+        "transactionsHistory":
+            MessageLookupByLibrary.simpleMessage("تاريخ المعاملات"),
+        "viaLabel": MessageLookupByLibrary.simpleMessage("عبر"),
         "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+        "walletDetails": MessageLookupByLibrary.simpleMessage("تفاصيل المحفظة"),
+        "walletLabel": MessageLookupByLibrary.simpleMessage("محفظتك"),
         "walletStatusActive": MessageLookupByLibrary.simpleMessage("نشط"),
+        "walletTransactions":
+            MessageLookupByLibrary.simpleMessage("معاملات المحفظة"),
         "welcome": MessageLookupByLibrary.simpleMessage("مرحباً بك"),
         "whatIsYourName": MessageLookupByLibrary.simpleMessage("ما اسمك؟"),
         "workspaces": MessageLookupByLibrary.simpleMessage("مساحات العمل"),

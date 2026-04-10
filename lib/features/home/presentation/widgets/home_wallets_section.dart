@@ -6,7 +6,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/widgets/app_wallet_card.dart';
+import '../../../../core/widgets/wallets/wallet_card.dart';
 import '../../../../generated/l10n.dart';
 
 class HomeWalletsSection extends StatelessWidget {
@@ -38,10 +38,16 @@ class HomeWalletsSection extends StatelessWidget {
             separatorBuilder: (_, _) => AppSpacing.md.horizontalSpace,
             itemBuilder: (context, index) {
               if (index == wallets.length) return const _AddWalletCard();
-              return AppWalletCard(
-                provider: wallets[index].provider,
-                phoneNumber: wallets[index].phoneNumber,
-                balance: wallets[index].currentBalance,
+              final wallet = wallets[index];
+              return GestureDetector(
+                onTap: () => context.push(
+                  AppRoutes.walletDetailsPath(wallet.id),
+                ),
+                child: WalletCard(
+                  provider: wallet.provider,
+                  phoneNumber: wallet.phoneNumber,
+                  balance: wallet.currentBalance,
+                ),
               );
             },
           ),
@@ -81,7 +87,7 @@ class _AddWalletCard extends StatelessWidget {
               width: 48.responsiveRadius,
               height: 48.responsiveRadius,
               decoration: BoxDecoration(
-                color: primary.withValues(alpha: 0.1),
+                color: primary.withAlpha(25), // 0.1
                 shape: BoxShape.circle,
               ),
               child: Icon(Icons.add, color: primary),

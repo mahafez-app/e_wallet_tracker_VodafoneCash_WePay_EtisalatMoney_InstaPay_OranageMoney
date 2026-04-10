@@ -99,5 +99,37 @@
   "addWalletAction": "إضافة المحفظة",
   "errorWalletPhoneNumberRequired": "يرجى إدخال رقم الهاتف",
   "errorWalletProviderRequired": "يرجى اختيار مزود خدمة واحد على الأقل",
-  "errorWalletAllExists": "جميع المحافظ المختارة مضافة بالفعل لهذا الرقم."
+  "errorWalletAllExists": "جميع المحافظ المختارة مضافة بالفعل لهذا الرقم.",
+  "transactionTypeReceive": "استلام",
+  "transactionTypeSend": "إرسال",
+  "transactionStatusPaid": "مدفوع",
+  "transactionStatusUnpaid": "غير مدفوع",
+  "recentTransactions": "آخر المعاملات",
+  "noTransactionsTitle": "لا توجد معاملات حتى الآن، ستظهر هنا عند وصول رسائل جديدة",
+  "deleteWallet": "حذف المحفظة",
+  "deleteWalletConfirmTitle": "حذف المحفظة",
+  "deleteWalletConfirmMessage": "هل أنت متأكد من رغبتك في حذف هذه المحفظة؟ لا يمكنك التراجع عن هذا الإجراء.",
+  "allTransactions": "جميع المعاملات",
+  "walletTransactions": "معاملات المحفظة",
+  "walletDetails": "تفاصيل المحفظة",
+  "transactionsHistory": "تاريخ المعاملات",
+  "transactionDetails": "تفاصيل المعاملة",
+  "transactionMessageReceive": "تم استلام {amount} ج.م",
+  "transactionMessageSend": "تم إرسال {amount} ج.م",
+  "@transactionMessageReceive": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "@transactionMessageSend": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "walletLabel": "محفظتك",
+  "fromLabel": "من",
+  "toLabel": "إلى",
+  "viaLabel": "عبر",
+  "paymentStatus": "حالة الدفع"
+
 }

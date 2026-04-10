@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/utils/failure_extension.dart';
+import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../../../../generated/l10n.dart';

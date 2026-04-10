@@ -13,5 +13,5 @@ abstract final class AppSpacing {
 
   // Common EdgeInsets
   static EdgeInsets get pagePadding =>
-      AppResponsive.symmetricPadding(horizontal: lg, vertical: xl);
+      AppResponsive.symmetricPadding(horizontal: lg, vertical: lg);
 }

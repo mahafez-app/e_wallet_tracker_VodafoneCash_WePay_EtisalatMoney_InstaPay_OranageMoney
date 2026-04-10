@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:wallet_tracker/generated/l10n.dart';
 
-import '../error/failures.dart';
+import '../../error/failures.dart';
 
 extension FailureMessaging on BuildContext {
   String failureMessage(Failure failure) {

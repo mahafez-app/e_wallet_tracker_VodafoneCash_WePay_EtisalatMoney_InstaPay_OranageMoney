@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wallet_tracker/core/utils/app_constants.dart';
+import 'package:wallet_tracker/core/widgets/info_card.dart';
 
 import '../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/utils/failure_extension.dart';
+import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../../../../core/widgets/app_text_field.dart';
@@ -36,34 +37,10 @@ class _AddWalletBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<void>>(addWalletSubmitProvider, (
-      previous,
-      next,
-    ) async {
-      if (next is AsyncData && previous?.isLoading == true) {
-        final checkPerm = ref.read(checkSmsPermissionUseCaseProvider);
-        final hasPerm = await checkPerm();
-
-        if (context.mounted) {
-          if (hasPerm.dataOrNull == true) {
-            context.go(AppRoutes.home);
-          } else {
-            context.push(AppRoutes.smsPermissions);
-          }
-        }
-      } else if (next is AsyncError) {
-        final error = next.error;
-        final message = error is Failure
-            ? error.toLocalizedString(context)
-            : error.toString();
-
-        AppSnackbar.show(
-          context,
-          message: message,
-          type: AppSnackbarType.error,
-        );
-      }
-    });
+    ref.listen<AsyncValue<void>>(
+      addWalletSubmitProvider,
+      (previous, next) => _onStateChange(previous, next, ref, context),
+    );
 
     final s = S.of(context);
     final theme = Theme.of(context);
@@ -77,7 +54,7 @@ class _AddWalletBody extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _InfoCard(text: s.addWalletDescription),
+                InfoCard(text: s.addWalletDescription),
                 AppSpacing.xxl.verticalSpace,
                 AppTextField(
                   label: s.phoneNumber,
@@ -92,12 +69,12 @@ class _AddWalletBody extends ConsumerWidget {
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
+                      spacing: AppSpacing.xs,
                       children: [
                         Text(
                           AppConstants.egyptCountryCode,
                           style: theme.textTheme.titleSmall,
                         ),
-                        AppSpacing.xs.horizontalSpace,
                         Text(
                           AppConstants.egyptFlag,
                           style: theme.textTheme.titleMedium,
@@ -128,35 +105,34 @@ class _AddWalletBody extends ConsumerWidget {
       ],
     );
   }
-}
 
-class _InfoCard extends StatelessWidget {
-  final String text;
+  Future<void> _onStateChange(
+    AsyncValue<void>? previous,
+    AsyncValue<void> next,
+    WidgetRef ref,
+    BuildContext context,
+  ) async {
+    if (next is AsyncData && previous?.isLoading == true) {
+      final hasPerm = await hasSmsPermission(ref);
+      if (context.mounted && hasPerm) {
+        context.go(AppRoutes.home);
+      } else if (context.mounted && !hasPerm) {
+        context.push(AppRoutes.smsPermissions);
+      }
+    } else if (next is AsyncError) {
+      final error = next.error;
+      final message = error is Failure
+          ? error.toLocalizedString(context)
+          : error.toString();
 
-  const _InfoCard({required this.text});
+      AppSnackbar.show(context, message: message, type: AppSnackbarType.error);
+    }
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: AppResponsive.allPadding(AppSpacing.md),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primaryContainer.withAlpha(50),
-        borderRadius: BorderRadius.circular(12.responsiveRadius),
-        border: Border(
-          left: BorderSide(
-            color: theme.colorScheme.primary,
-            width: 4.responsiveWidth,
-          ),
-        ),
-      ),
-      child: Text(
-        text,
-        style: theme.textTheme.bodyMedium?.copyWith(
-          color: theme.colorScheme.onSurfaceVariant,
-        ),
-      ),
-    );
+  Future<bool> hasSmsPermission(WidgetRef ref) async {
+    final checkPerm = ref.read(checkSmsPermissionUseCaseProvider);
+    final result = await checkPerm();
+    return result.dataOrNull == true;
   }
 }
 

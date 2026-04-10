@@ -30,6 +30,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m3(minutes) => "${minutes} mins ago";
 
+  static String m4(amount) => "Received ${amount} EGP";
+
+  static String m5(amount) => "Sent ${amount} EGP";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "activeWalletsCount": m0,
@@ -39,6 +43,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "addWalletDescription": MessageLookupByLibrary.simpleMessage(
             "This wallet must be available on this device. The app reads new SMS messages from this phone only."),
         "addWalletTitle": MessageLookupByLibrary.simpleMessage("Add Wallet"),
+        "allTransactions":
+            MessageLookupByLibrary.simpleMessage("All Transactions"),
         "allowAndContinue":
             MessageLookupByLibrary.simpleMessage("Allow and Continue"),
         "alreadyHaveAccount":
@@ -58,6 +64,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "currency": MessageLookupByLibrary.simpleMessage("EGP"),
         "currentBalance":
             MessageLookupByLibrary.simpleMessage("Current Balance"),
+        "deleteWallet": MessageLookupByLibrary.simpleMessage("Delete Wallet"),
+        "deleteWalletConfirmMessage": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete this wallet? This action cannot be undone."),
+        "deleteWalletConfirmTitle":
+            MessageLookupByLibrary.simpleMessage("Delete Wallet"),
         "displayName": MessageLookupByLibrary.simpleMessage("Name"),
         "displayNameHint":
             MessageLookupByLibrary.simpleMessage("Enter your name"),
@@ -119,6 +130,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please select at least one provider"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
+        "fromLabel": MessageLookupByLibrary.simpleMessage("From"),
         "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
         "fullNamePlaceholder":
             MessageLookupByLibrary.simpleMessage("e.g. John Doe"),
@@ -127,6 +139,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "minutesAgo": m3,
         "nameWillBeDisplayed": MessageLookupByLibrary.simpleMessage(
             "Your name will be displayed when updating payment status to facilitate tracking financial transactions"),
+        "noTransactionsTitle": MessageLookupByLibrary.simpleMessage(
+            "No transactions yet, they will appear here when new messages arrive"),
         "notFoundPageTitle":
             MessageLookupByLibrary.simpleMessage("Page Not Found"),
         "notFoundStatusCode": MessageLookupByLibrary.simpleMessage("404"),
@@ -136,6 +150,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "passwordHint":
             MessageLookupByLibrary.simpleMessage("Enter your password"),
         "passwordPlaceholder": MessageLookupByLibrary.simpleMessage("••••••••"),
+        "paymentStatus": MessageLookupByLibrary.simpleMessage("Payment Status"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone Number"),
         "providerEtisalat":
             MessageLookupByLibrary.simpleMessage("Etisalat Cash"),
@@ -145,6 +160,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "providerVodafone":
             MessageLookupByLibrary.simpleMessage("Vodafone Cash"),
         "providerWePay": MessageLookupByLibrary.simpleMessage("WE Pay"),
+        "recentTransactions":
+            MessageLookupByLibrary.simpleMessage("Recent Transactions"),
         "signIn": MessageLookupByLibrary.simpleMessage("Sign In"),
         "signInWithEmail":
             MessageLookupByLibrary.simpleMessage("Sign in with Email"),
@@ -166,11 +183,29 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Complete Privacy"),
         "smsPermissionTitle":
             MessageLookupByLibrary.simpleMessage("Allow Access to Messages"),
+        "toLabel": MessageLookupByLibrary.simpleMessage("To"),
         "totalBalance": MessageLookupByLibrary.simpleMessage("Total Balance"),
         "totalIn": MessageLookupByLibrary.simpleMessage("Total In"),
         "totalOut": MessageLookupByLibrary.simpleMessage("Total Out"),
+        "transactionDetails":
+            MessageLookupByLibrary.simpleMessage("Transaction Details"),
+        "transactionMessageReceive": m4,
+        "transactionMessageSend": m5,
+        "transactionStatusPaid": MessageLookupByLibrary.simpleMessage("Paid"),
+        "transactionStatusUnpaid":
+            MessageLookupByLibrary.simpleMessage("Unpaid"),
+        "transactionTypeReceive":
+            MessageLookupByLibrary.simpleMessage("Receive"),
+        "transactionTypeSend": MessageLookupByLibrary.simpleMessage("Send"),
+        "transactionsHistory":
+            MessageLookupByLibrary.simpleMessage("Transactions History"),
+        "viaLabel": MessageLookupByLibrary.simpleMessage("Via"),
         "viewAll": MessageLookupByLibrary.simpleMessage("View All"),
+        "walletDetails": MessageLookupByLibrary.simpleMessage("Wallet Details"),
+        "walletLabel": MessageLookupByLibrary.simpleMessage("Your wallet"),
         "walletStatusActive": MessageLookupByLibrary.simpleMessage("Active"),
+        "walletTransactions":
+            MessageLookupByLibrary.simpleMessage("Wallet Transactions"),
         "welcome": MessageLookupByLibrary.simpleMessage("Welcome"),
         "whatIsYourName":
             MessageLookupByLibrary.simpleMessage("What is your name?"),

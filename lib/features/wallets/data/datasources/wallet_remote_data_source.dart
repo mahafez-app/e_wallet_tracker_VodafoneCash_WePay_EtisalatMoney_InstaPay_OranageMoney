@@ -8,7 +8,7 @@ import '../../../../core/error/failures.dart';
 abstract interface class WalletRemoteDataSource {
   Future<List<WalletDto>> addWallets({
     required String phoneNumber,
-    required List<String> providerStrs,
+    required List<String> providers,
     required String deviceId,
   });
 }
@@ -26,7 +26,7 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   @override
   Future<List<WalletDto>> addWallets({
     required String phoneNumber,
-    required List<String> providerStrs,
+    required List<String> providers,
     required String deviceId,
   }) async {
     final currentUser = _auth.currentUser;
@@ -39,14 +39,14 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
         .collection('wallets')
         .where('ownerUid', isEqualTo: currentUser.uid)
         .where('phoneNumber', isEqualTo: phoneNumber)
-        .where('provider', whereIn: providerStrs)
+        .where('provider', whereIn: providers)
         .get();
 
     final existingProvidersSet = existingQuery.docs
         .map((doc) => doc.data()['provider'] as String)
         .toSet();
 
-    final providersToCreate = providerStrs
+    final providersToCreate = providers
         .where((p) => !existingProvidersSet.contains(p))
         .toList();
 

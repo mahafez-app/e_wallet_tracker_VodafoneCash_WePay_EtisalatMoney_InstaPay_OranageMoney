@@ -991,6 +991,216 @@ class S {
       args: [],
     );
   }
+
+  /// `استلام`
+  String get transactionTypeReceive {
+    return Intl.message(
+      'استلام',
+      name: 'transactionTypeReceive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إرسال`
+  String get transactionTypeSend {
+    return Intl.message(
+      'إرسال',
+      name: 'transactionTypeSend',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مدفوع`
+  String get transactionStatusPaid {
+    return Intl.message(
+      'مدفوع',
+      name: 'transactionStatusPaid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `غير مدفوع`
+  String get transactionStatusUnpaid {
+    return Intl.message(
+      'غير مدفوع',
+      name: 'transactionStatusUnpaid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `آخر المعاملات`
+  String get recentTransactions {
+    return Intl.message(
+      'آخر المعاملات',
+      name: 'recentTransactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد معاملات حتى الآن، ستظهر هنا عند وصول رسائل جديدة`
+  String get noTransactionsTitle {
+    return Intl.message(
+      'لا توجد معاملات حتى الآن، ستظهر هنا عند وصول رسائل جديدة',
+      name: 'noTransactionsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف المحفظة`
+  String get deleteWallet {
+    return Intl.message(
+      'حذف المحفظة',
+      name: 'deleteWallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف المحفظة`
+  String get deleteWalletConfirmTitle {
+    return Intl.message(
+      'حذف المحفظة',
+      name: 'deleteWalletConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هل أنت متأكد من رغبتك في حذف هذه المحفظة؟ لا يمكنك التراجع عن هذا الإجراء.`
+  String get deleteWalletConfirmMessage {
+    return Intl.message(
+      'هل أنت متأكد من رغبتك في حذف هذه المحفظة؟ لا يمكنك التراجع عن هذا الإجراء.',
+      name: 'deleteWalletConfirmMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `جميع المعاملات`
+  String get allTransactions {
+    return Intl.message(
+      'جميع المعاملات',
+      name: 'allTransactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `معاملات المحفظة`
+  String get walletTransactions {
+    return Intl.message(
+      'معاملات المحفظة',
+      name: 'walletTransactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تفاصيل المحفظة`
+  String get walletDetails {
+    return Intl.message(
+      'تفاصيل المحفظة',
+      name: 'walletDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تاريخ المعاملات`
+  String get transactionsHistory {
+    return Intl.message(
+      'تاريخ المعاملات',
+      name: 'transactionsHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تفاصيل المعاملة`
+  String get transactionDetails {
+    return Intl.message(
+      'تفاصيل المعاملة',
+      name: 'transactionDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم استلام {amount} ج.م`
+  String transactionMessageReceive(Object amount) {
+    return Intl.message(
+      'تم استلام $amount ج.م',
+      name: 'transactionMessageReceive',
+      desc: '',
+      args: [amount],
+    );
+  }
+
+  /// `تم إرسال {amount} ج.م`
+  String transactionMessageSend(Object amount) {
+    return Intl.message(
+      'تم إرسال $amount ج.م',
+      name: 'transactionMessageSend',
+      desc: '',
+      args: [amount],
+    );
+  }
+
+  /// `محفظتك`
+  String get walletLabel {
+    return Intl.message(
+      'محفظتك',
+      name: 'walletLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `من`
+  String get fromLabel {
+    return Intl.message(
+      'من',
+      name: 'fromLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إلى`
+  String get toLabel {
+    return Intl.message(
+      'إلى',
+      name: 'toLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عبر`
+  String get viaLabel {
+    return Intl.message(
+      'عبر',
+      name: 'viaLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حالة الدفع`
+  String get paymentStatus {
+    return Intl.message(
+      'حالة الدفع',
+      name: 'paymentStatus',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

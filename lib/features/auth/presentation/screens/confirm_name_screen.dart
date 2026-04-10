@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/utils/failure_extension.dart';
+import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../../../../generated/l10n.dart';
@@ -83,7 +83,7 @@ class _ConfirmNameBody extends ConsumerWidget {
               borderRadius: BorderRadius.circular(24.responsiveRadius),
               boxShadow: [
                 BoxShadow(
-                  color: colorScheme.shadow.withValues(alpha: 0.25),
+                  color: colorScheme.shadow.withAlpha(64),
                   blurRadius: 15.responsiveRadius,
                   offset: Offset(0, 10.responsiveHeight),
                   spreadRadius: (-3).responsiveRadius,

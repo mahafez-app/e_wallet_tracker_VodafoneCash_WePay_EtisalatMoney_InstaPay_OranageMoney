@@ -4,7 +4,7 @@ import '../../../../core/domain/entities/workspace_entity.dart';
 import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/utils/date_extensions.dart';
+import '../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../generated/l10n.dart';
 
 class HomeWorkspacesSection extends StatelessWidget {
@@ -209,7 +209,7 @@ class _WorkspaceStat extends StatelessWidget {
     return Container(
       padding: AppResponsive.allPadding(AppSpacing.md),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        color: theme.colorScheme.surfaceContainerHighest.withAlpha(127), // 0.5
         borderRadius: BorderRadius.circular(12.responsiveRadius),
       ),
       child: Column(

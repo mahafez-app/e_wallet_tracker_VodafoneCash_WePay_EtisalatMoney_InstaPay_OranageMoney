@@ -52,7 +52,9 @@ These apply without exception across all files and tasks.
 - **No Firebase types outside the data layer.** `Timestamp`, `DocumentSnapshot`,
   `DocumentReference`, `QuerySnapshot` belong only in DTOs and data sources.
 - **No `dynamic`.** Use generics, `Object?`, sealed types, or explicit casts.
-- **No hardcoded strings, colors (`Color(0xFF...)`), spacing, or font sizes (`TextStyle(...)`) in widget trees.** Period. All `TextStyle` instances MUST be extracted from `Theme.of(context).textTheme`. All hex colors MUST be in `AppColors`.
+- **No hardcoded strings, colors (`Color(0xFF...)`, `Colors.x`), spacing, sizes, or font sizes (`TextStyle(...)`) in widget trees.** Period. All `TextStyle` instances MUST be extracted from `Theme.of(context).textTheme`. All hex colors MUST be in `AppColors`. All material Colors MUST come from `Theme.of(context).colorScheme`.
+- **Never instantiate `TextStyle` or `Color` objects inside widgets.** This completely breaks theming and dark mode.
+- **No hardcoded `SizedBox(height: ...)` or `EdgeInsets.all(...)`.** You MUST use `AppResponsiveNumExtension` sizes: `.verticalSpace`, `.horizontalSpace`, `.responsiveWidth`, `.responsiveHeight`, `.responsiveRadius`, `.responsiveFont`.
 - **No `print`.** Use `dart:developer`'s `log()`.
 - **No empty `catch` blocks.** Every error is handled explicitly.
 - **No `!` operator** unless non-null is structurally guaranteed at that point.
@@ -76,7 +78,6 @@ lib/
 │   ├── providers/        # App-wide Riverpod provider declarations
 │   ├── error/            # Result<T>, Failure hierarchy, FailureMapper
 │   ├── usecase/          # Base UseCase interfaces
-│   ├── network/          # Firebase client, interceptors, base API config
 │   ├── router/           # GoRouter, route constants, refresh stream
 │   ├── theme/            # AppTheme, AppColors, AppSpacing, ThemeExtension
 │   ├── widgets/          # Shared UI components (AppButton, AppTextField…)
@@ -112,7 +113,7 @@ lib/
 ```
 Presentation  →  Domain  (use cases only — never repositories or data sources)
 Data          →  Domain  (implements repository interfaces)
-Data          →  Core    (Firebase, Firebase instances, storage)
+Data          →  Core    (Firebase instances, storage)
 Domain        →  nothing (pure Dart — zero Flutter or infrastructure imports)
 
 ❌  Presentation → Data
@@ -134,7 +135,7 @@ wire implementations to interfaces.
 ### Domain Layer (purest layer)
 
 - Contains only: entities, repository interfaces, use cases, value objects.
-- Zero imports from Flutter SDK, Firebase, Firebase, or any infrastructure package.
+- Zero imports from Flutter SDK, Firebase, or any infrastructure package.
 - The only permitted external package: `equatable` for value comparison.
 - Entities are immutable, extend `Equatable`, have no serialization logic.
 - Repository interfaces define the contract — no implementation detail leaks.
@@ -142,10 +143,12 @@ wire implementations to interfaces.
 ### Data Layer
 
 - Implements domain repository interfaces.
-- All Firebase SDK calls, Firebase calls, and third-party SDK calls live here.
+- All Firebase SDK calls and third-party SDK calls live here.
 - Firebase types (`Timestamp`, `DocumentSnapshot`, `DocumentReference`,
   `GeoPoint`, `QuerySnapshot`) are confined to this layer exclusively.
 - DTOs handle serialization. Entities handle business logic. Never merge.
+- DTOs MUST extend their corresponding Domain Entity to avoid redundancy
+  and ensure type safety.
 - Every DTO implements `toEntity()` for simple mappings. Complex multi-model
   transforms use a dedicated `Mapper` class in `data/mappers/`.
 - All exceptions are caught here, mapped to `Failure` objects, returned as
@@ -166,9 +169,6 @@ wire implementations to interfaces.
   No Riverpod providers here.
 - `core/providers/` — Riverpod provider declarations wrapping initialized
   instances. No business logic here.
-- `core/network/` — shared Firebase client, auth interceptor, token refresh,
-  logging interceptor, base URL config. Feature-specific API methods belong
-  in the feature's data layer.
 - `core/widgets/` — shared UI component library. Rules enforced in
   `code-quality.md`.
 
@@ -302,16 +302,6 @@ final firestoreProvider = Provider<FirebaseFirestore>(
 final firebaseStorageProvider = Provider<FirebaseStorage>(
   (ref) => FirebaseStorage.instance,
 );
-
-// core/providers/network_providers.dart
-final firebaseProvider = Provider<Firebase>((ref) {
-  final firebase = Firebase(BaseOptions(baseUrl: Env.apiBaseUrl));
-  firebase.interceptors.addAll([
-    AuthInterceptor(ref),
-    LogInterceptor(requestBody: true, responseBody: true),
-  ]);
-  return firebase;
-});
 ```
 
 These are the **only** providers features may import from outside their
@@ -476,9 +466,11 @@ presentation or data layers.
 ```dart
 // ❌ Hardcoded spacing
 Padding(padding: EdgeInsets.all(16), child: ...)
+SizedBox(height: 16)
 
-// ✅ Named constant
-Padding(padding: EdgeInsets.all(AppSpacing.md), child: ...)
+// ✅ Named constant & responsive
+Padding(padding: EdgeInsets.all(AppSpacing.md.responsiveRadius), child: ...)
+AppSpacing.md.verticalSpace
 
 // ❌ Hardcoded typography
 Text('Hello', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
@@ -488,6 +480,7 @@ Text('Hello', style: Theme.of(context).textTheme.titleLarge)
 
 // ❌ Hardcoded color
 Container(color: Color(0xFF1A73E8))
+Container(color: Colors.blue)
 
 // ✅ ColorScheme
 Container(color: Theme.of(context).colorScheme.primary)
@@ -496,7 +489,7 @@ Container(color: Theme.of(context).colorScheme.primary)
 Text('Continue')
 
 // ✅ Localized
-Text(AppLocalizations.of(context)!.continueButton)
+Text(S.of(context).continueButton)
 ```
 
 ---
@@ -649,9 +642,10 @@ provider or constructor arguments).
 
 ---
 
-## Container vs SizedBox
+## Container vs SizedBox vs Responsive Spacing
 
-- `SizedBox` for fixed sizing and fixed-dimension spacing gaps.
+- NEVER use `SizedBox(height: ...)` or `SizedBox(width: ...)`. Use `16.verticalSpace` or `AppSpacing.md.horizontalSpace` from `AppResponsiveNumExtension`.
+- `SizedBox` is ONLY for constraints (`SizedBox.shrink()`, `SizedBox.expand()`).
 - `Container` only when decoration, clipping, or combined constraints are
   needed simultaneously. Never use `Container` as a plain sizing wrapper.
 
@@ -1406,7 +1400,7 @@ entire Firebase suite by default.
 
 | Purpose                | Package              |
 | ---------------------- | -------------------- |
-| HTTP client            | `firebase`                |
+| HTTP client            | `dio`                |
 | WebSockets (if needed) | `web_socket_channel` |
 
 ### Serialization
@@ -1508,7 +1502,7 @@ dependencies:
 ## Complete Flow Summary
 
 ```
-DataSource      →  Executes Firebase / Firebase / SDK call.
+DataSource      →  Executes Firebase / Dio / SDK call.
                    Throws on error (never catches internally).
 
 RepositoryImpl  →  executeAndHandleErrors / executeStreamAndHandleErrors wraps:
@@ -1787,7 +1781,7 @@ try {
 # Error Handling — Core Types & Data Layer Policy
 
 The project follows a **Zero Leak** exception policy. Raw exceptions
-(`FirebaseException`, `FirebaseException`, `FirebaseAuthException`, `SocketException`,
+(`DioException`, `FirebaseException`, `FirebaseAuthException`, `SocketException`,
 etc.) must never reach the domain or presentation layers. All errors are caught
 in the data layer, mapped to typed `Failure` objects, and returned as
 `Result<T>`. User-facing error messages are always resolved in the presentation
@@ -1935,7 +1929,7 @@ precede their supertypes (`FirebaseException`).
 
 ```dart
 import 'dart:io';
-import 'package:firebase/firebase.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -1945,26 +1939,26 @@ class FailureMapper {
   const FailureMapper();
 
   Failure map(Object error) => switch (error) {
-    // — Firebase / REST ——————————————————————————————————————————
-    FirebaseException e when _isNetworkError(e) =>
+    // — Dio / REST ——————————————————————————————————————————
+    DioException e when _isNetworkError(e) =>
       NetworkFailure(technicalMessage: e.type.name),
 
-    FirebaseException e when e.response?.statusCode == 401 =>
+    DioException e when e.response?.statusCode == 401 =>
       AuthFailure(
         code: '401',
-        technicalMessage: _extractFirebaseMessage(e),
+        technicalMessage: _extractDioMessage(e),
       ),
 
-    FirebaseException e when e.response?.statusCode == 403 =>
+    DioException e when e.response?.statusCode == 403 =>
       PermissionFailure(
         code: '403',
-        technicalMessage: _extractFirebaseMessage(e),
+        technicalMessage: _extractDioMessage(e),
       ),
 
-    FirebaseException e =>
+    DioException e =>
       ServerFailure(
         code: e.response?.statusCode?.toString(),
-        technicalMessage: _extractFirebaseMessage(e),
+        technicalMessage: _extractDioMessage(e),
       ),
 
     // — Firebase Auth ———————————————————————————————————————
@@ -1996,13 +1990,13 @@ class FailureMapper {
     _ => UnknownFailure(technicalMessage: error.toString()),
   };
 
-  bool _isNetworkError(FirebaseException e) =>
-    e.type == FirebaseExceptionType.connectionError ||
-    e.type == FirebaseExceptionType.receiveTimeout ||
-    e.type == FirebaseExceptionType.sendTimeout ||
-    e.type == FirebaseExceptionType.connectionTimeout;
+  bool _isNetworkError(DioException e) =>
+    e.type == DioExceptionType.connectionError ||
+    e.type == DioExceptionType.receiveTimeout ||
+    e.type == DioExceptionType.sendTimeout ||
+    e.type == DioExceptionType.connectionTimeout;
 
-  String? _extractFirebaseMessage(FirebaseException e) =>
+  String? _extractDioMessage(DioException e) =>
     e.response?.data is Map<String, dynamic>
       ? e.response?.data['message'] as String?
       : e.message;
@@ -2036,7 +2030,7 @@ Result<T> executeAndHandleErrorsSync<T>(
   }
 }
 
-/// For asynchronous repository methods (Firebase, Firebase, etc.).
+/// For asynchronous repository methods (Dio, Firebase, etc.).
 Future<Result<T>> executeAndHandleErrors<T>(
   Future<T> Function() call, {
   required String tag,
@@ -2550,7 +2544,7 @@ are declared manually.
 
 | Provider                 | `autoDispose` | Notes                        |
 | ------------------------ | ------------- | ---------------------------- |
-| Firebase / HTTP client        | No            | App lifetime                 |
+| Dio / HTTP client        | No            | App lifetime                 |
 | Firebase instances       | No            | App lifetime                 |
 | Auth state stream        | No            | App lifetime                 |
 | Theme notifier           | No            | App lifetime                 |

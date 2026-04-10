@@ -13,6 +13,8 @@ final class TransactionDto extends TransactionEntity {
     required super.walletId,
     required super.provider,
     required super.phoneNumber,
+    super.counterpartyNumber,
+    super.referenceNumber,
     super.isPaid,
     super.message,
   });
@@ -33,10 +35,22 @@ final class TransactionDto extends TransactionEntity {
       walletId: walletId,
       provider: provider,
       phoneNumber: phoneNumber,
+      counterpartyNumber: data['counterpartyNumber'] as String?,
+      referenceNumber: data['referenceNumber'] as String?,
       isPaid: data['isPaid'] as bool?,
       message: data['message'] as String?,
     );
   }
+
+  Map<String, dynamic> toFirestore() => {
+    'type': type.name,
+    'amount': amount,
+    'createdAt': Timestamp.fromDate(createdAt),
+    'counterpartyNumber': counterpartyNumber,
+    'referenceNumber': referenceNumber,
+    'isPaid': isPaid,
+    'message': message,
+  };
 
   TransactionEntity toEntity() => TransactionEntity(
     id: id,
@@ -46,7 +60,23 @@ final class TransactionDto extends TransactionEntity {
     walletId: walletId,
     provider: provider,
     phoneNumber: phoneNumber,
+    counterpartyNumber: counterpartyNumber,
+    referenceNumber: referenceNumber,
     isPaid: isPaid,
     message: message,
+  );
+
+  factory TransactionDto.fromEntity(TransactionEntity entity) => TransactionDto(
+    id: entity.id,
+    type: entity.type,
+    amount: entity.amount,
+    createdAt: entity.createdAt,
+    walletId: entity.walletId,
+    provider: entity.provider,
+    phoneNumber: entity.phoneNumber,
+    counterpartyNumber: entity.counterpartyNumber,
+    referenceNumber: entity.referenceNumber,
+    isPaid: entity.isPaid,
+    message: entity.message,
   );
 }

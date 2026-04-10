@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wallet_tracker/core/domain/entities/transaction_entity.dart';
 import 'package:wallet_tracker/core/domain/enums/wallet_provider.dart';
-import 'package:wallet_tracker/core/utils/extensions/transaction_extensions.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../domain/enums/transaction_type.dart';

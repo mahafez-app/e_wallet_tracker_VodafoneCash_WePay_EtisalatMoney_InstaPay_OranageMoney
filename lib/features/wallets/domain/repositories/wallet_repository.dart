@@ -8,7 +8,7 @@ abstract interface class WalletRepository {
     required String deviceId,
   });
 
-  Future<Result<bool>> requestSmsPermission();
+  Future<Result<bool?>> requestSmsPermission();
 
   Future<Result<bool>> hasSmsPermission();
 

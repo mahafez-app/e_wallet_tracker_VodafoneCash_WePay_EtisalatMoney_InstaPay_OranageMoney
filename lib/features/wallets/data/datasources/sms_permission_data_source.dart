@@ -1,7 +1,8 @@
+import 'package:another_telephony/telephony.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 abstract interface class SmsPermissionDataSource {
-  Future<bool> requestSmsPermission();
+  Future<bool?> requestSmsPermission();
   Future<bool> hasSmsPermission();
 }
 
@@ -9,14 +10,15 @@ class SmsPermissionDataSourceImpl implements SmsPermissionDataSource {
   const SmsPermissionDataSourceImpl();
 
   @override
-  Future<bool> requestSmsPermission() async {
-    final status = await Permission.sms.request();
-    return status.isGranted;
+  Future<bool?> requestSmsPermission() {
+    return Telephony.instance.requestPhoneAndSmsPermissions;
   }
 
   @override
   Future<bool> hasSmsPermission() async {
-    final status = await Permission.sms.status;
-    return status.isGranted;
+    final smsPermissionsStatus = await Permission.sms.status;
+    final phonePermissionsStatus = await Permission.phone.status;
+
+    return smsPermissionsStatus.isGranted && phonePermissionsStatus.isGranted;
   }
 }

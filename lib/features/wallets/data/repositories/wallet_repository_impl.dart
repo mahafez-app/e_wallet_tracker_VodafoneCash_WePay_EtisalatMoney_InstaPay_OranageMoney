@@ -36,7 +36,7 @@ class WalletRepositoryImpl implements WalletRepository {
   }
 
   @override
-  Future<Result<bool>> requestSmsPermission() {
+  Future<Result<bool?>> requestSmsPermission() {
     return _executeAndHandleErrors(
       () => _permissionDataSource.requestSmsPermission(),
       tag: 'WalletRepositoryImpl.requestSmsPermission',

@@ -55,16 +55,3 @@ class SmsParsingService {
     );
   }
 }
-
-
-// final entity = SmsParsingService.parse(
-//   sender: sms.sender ?? '',
-//   message: sms.body ?? '',
-//   smsReceivedAt: DateTime.now(),
-//   walletId: currentWallet.id,
-//   walletPhoneNumber: currentWallet.phoneNumber,
-// );
-
-// if (entity != null) {
-//   await transactionRepository.save(entity);
-// }

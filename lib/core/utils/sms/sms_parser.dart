@@ -1,42 +1,54 @@
-// sms_parser.dart
+// lib/core/utils/sms/sms_parser.dart
 
 import '../../domain/enums/wallet_provider.dart';
 import 'sms_parse_result.dart';
+import 'sms_pattern_matcher.dart';
+import 'sms_patterns.dart';
 
 abstract class SmsParser {
-  /// The provider this parser handles.
   WalletProvider get provider;
-
-  /// SMS sender IDs / shortcodes that belong to this provider.
-  /// Case-insensitive matching is applied by the registry.
   List<String> get senderIds;
 
-  /// Returns null if the message is not a transaction SMS.
-  SmsParseResult? parse(String message, DateTime smsReceivedAt);
+  List<RegExp> get receivePatterns;
+  List<RegExp> get sendPatterns;
+  List<RegExp> get refPatterns;
 
-  // ─── Shared utilities available to all parsers ──────────────────────────
+  SmsParseResult? parse(String message, DateTime smsReceivedAt) {
+    final match = SmsPatternMatcher.match(
+      message,
+      receivePatterns: receivePatterns,
+      sendPatterns: sendPatterns,
+    );
+    if (match == null) return null;
 
-  /// Normalizes any Egyptian number format to 01XXXXXXXXX.
-  /// 00201XXXXXXXXX → 01XXXXXXXXX
-  /// +201XXXXXXXXX  → 01XXXXXXXXX
-  String? normalizeNumber(String? raw) {
-    if (raw == null) return null;
-    final digits = raw.replaceAll(RegExp(r'\s+'), '');
-    if (digits.startsWith('002')) return '0${digits.substring(3)}';
-    if (digits.startsWith('+2')) return '0${digits.substring(2)}';
-    if (digits.startsWith('01') && digits.length == 11) return digits;
-    return null; // unrecognizable format — don't store garbage
+    return SmsParseResult(
+      amount: match.amount,
+      type: match.type,
+      createdAt: extractDateTime(message) ?? smsReceivedAt,
+      provider: provider,
+      counterpartyNumber: match.counterpartyNumber,
+      referenceNumber: extractRef(message),
+    );
   }
 
-  /// Parses amounts like "1,500.00", "1500", "150.5"
-  double? parseAmount(String raw) {
-    return double.tryParse(raw.replaceAll(',', '').trim());
+  /// Override if a provider uses a non-standard date format.
+  DateTime? extractDateTime(String message) =>
+      parseDateShort(message) ??
+      parseDateLongEn(message) ??
+      parseDateArabicBank(message);
+
+  String? extractRef(String message) {
+    for (final pattern in refPatterns) {
+      final m = pattern.firstMatch(message);
+      if (m != null) return m.group(1);
+    }
+    return null;
   }
 
-  /// DD-MM-YY HH:mm  (e.g. "08-04-26 17:50")
-  DateTime? parseDdMmYyHhMm(String msg) {
-    final pattern = RegExp(r'(\d{2})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})');
-    final m = pattern.firstMatch(msg);
+  // ─── Shared date parsers ──────────────────────────────────────────────────
+
+  DateTime? parseDateShort(String msg) {
+    final m = SmsPatterns.dateShort.firstMatch(msg);
     if (m == null) return null;
     return DateTime(
       2000 + int.parse(m.group(3)!),
@@ -47,13 +59,8 @@ abstract class SmsParser {
     );
   }
 
-  /// "Mar 22, 2026 11:37:20 AM"
-  DateTime? parseEnglishLongDate(String msg) {
-    final pattern = RegExp(
-      r'(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s+(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})\s+(AM|PM)',
-      caseSensitive: false,
-    );
-    final m = pattern.firstMatch(msg);
+  DateTime? parseDateLongEn(String msg) {
+    final m = SmsPatterns.dateLongEn.firstMatch(msg);
     if (m == null) return null;
     var hour = int.parse(m.group(4)!);
     final isPm = m.group(7)!.toUpperCase() == 'PM';
@@ -69,12 +76,8 @@ abstract class SmsParser {
     );
   }
 
-  /// "يوم 08-04-26 الساعة 17:50"
-  DateTime? parseArabicBankDate(String msg) {
-    final pattern = RegExp(
-      r'يوم\s+(\d{2})-(\d{2})-(\d{2}).*?الساعة\s+(\d{2}):(\d{2})',
-    );
-    final m = pattern.firstMatch(msg);
+  DateTime? parseDateArabicBank(String msg) {
+    final m = SmsPatterns.dateArabicBank.firstMatch(msg);
     if (m == null) return null;
     return DateTime(
       2000 + int.parse(m.group(3)!),
@@ -87,9 +90,18 @@ abstract class SmsParser {
 
   int _monthFromAbbr(String abbr) {
     const map = {
-      'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4,
-      'may': 5, 'jun': 6, 'jul': 7, 'aug': 8,
-      'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12,
+      'jan': 1,
+      'feb': 2,
+      'mar': 3,
+      'apr': 4,
+      'may': 5,
+      'jun': 6,
+      'jul': 7,
+      'aug': 8,
+      'sep': 9,
+      'oct': 10,
+      'nov': 11,
+      'dec': 12,
     };
     return map[abbr.toLowerCase()] ?? 1;
   }

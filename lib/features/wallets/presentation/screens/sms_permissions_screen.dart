@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wallet_tracker/features/transactions/providers/transactions_providers.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_responsive.dart';
@@ -124,7 +125,11 @@ class _SmsPermissionsBody extends ConsumerWidget {
                         message: failure.toLocalizedString(context),
                         type: AppSnackbarType.error,
                       ),
-                      (_) => context.go(AppRoutes.home),
+                      (_) {
+                        // Refresh the readiness state to trigger the SMS listener
+                        ref.invalidate(smsReadinessProvider);
+                        context.go(AppRoutes.home);
+                      },
                     );
                   }
                 },

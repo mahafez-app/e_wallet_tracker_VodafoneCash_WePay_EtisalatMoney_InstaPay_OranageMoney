@@ -9,4 +9,6 @@ abstract interface class TransactionRepository {
   });
 
   Future<Result<void>> markAsPaid(String transactionId, String walletId);
+
+  Future<Result<void>> saveTransaction(TransactionEntity transaction);
 }

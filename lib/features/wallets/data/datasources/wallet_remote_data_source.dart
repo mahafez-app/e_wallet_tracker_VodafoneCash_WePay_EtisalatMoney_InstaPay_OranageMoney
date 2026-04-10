@@ -11,6 +11,8 @@ abstract interface class WalletRemoteDataSource {
     required List<String> providers,
     required String deviceId,
   });
+
+  Future<List<WalletDto>> getWallets();
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -22,6 +24,21 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
     required FirebaseAuth auth,
   }) : _firestore = firestore,
        _auth = auth;
+
+  @override
+  Future<List<WalletDto>> getWallets() async {
+    final currentUser = _auth.currentUser;
+    if (currentUser == null) {
+      throw const UnknownFailure(technicalMessage: 'User is not logged in');
+    }
+
+    final query = await _firestore
+        .collection('wallets')
+        .where('ownerUid', isEqualTo: currentUser.uid)
+        .get();
+
+    return query.docs.map((doc) => WalletDto.fromFirestore(doc)).toList();
+  }
 
   @override
   Future<List<WalletDto>> addWallets({

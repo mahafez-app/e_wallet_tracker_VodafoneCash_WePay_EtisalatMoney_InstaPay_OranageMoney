@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/data/models/transaction_dto.dart';
+import '../../../../core/domain/entities/transaction_entity.dart';
+import '../../../../core/domain/enums/transaction_type.dart';
 import '../../../../core/domain/enums/wallet_provider.dart';
 
 abstract interface class TransactionRemoteDataSource {
@@ -11,6 +13,8 @@ abstract interface class TransactionRemoteDataSource {
   });
 
   Future<void> markAsPaid(String transactionId, String walletId);
+
+  Future<void> saveTransaction(TransactionEntity transaction);
 }
 
 final class TransactionRemoteDataSourceImpl
@@ -27,30 +31,21 @@ final class TransactionRemoteDataSourceImpl
     int? limit,
     DateTime? before,
   }) async {
-    // If walletId is provided, we fetch from a specific subcollection.
-    // In a real app with global history, you might use a collection group query 
-    // or a flattened transactions collection. 
-    // For now, if walletId is null, we might need a different approach.
-    // Let's assume for MVP we always filter by wallet for the history screen.
-    
     if (walletId == null) {
-      // In this app, transactions are stored under wallets/{id}/transactions
-      // To get ALL transactions, we'd need a collection group query.
       final query = _firestore
           .collectionGroup('transactions')
           .orderBy('createdAt', descending: true);
-          
+
       var filteredQuery = query;
       if (limit != null) filteredQuery = filteredQuery.limit(limit);
-      if (before != null) filteredQuery = filteredQuery.startAfter([Timestamp.fromDate(before)]);
+      if (before != null) {
+        filteredQuery = filteredQuery
+            .startAfter([Timestamp.fromDate(before)]);
+      }
 
       final snapshot = await filteredQuery.get();
-      
-      // We need to fetch the parent wallet to get provider/phoneNumber for each transaction
-      // This is inefficient. Ideally, DTOs in Firestore should be self-contained.
-      // For now, let's fetch them and see.
-      
       final List<TransactionDto> results = [];
+
       for (final doc in snapshot.docs) {
         final walletDoc = await doc.reference.parent.parent!.get();
         final walletData = walletDoc.data() as Map<String, dynamic>;
@@ -58,7 +53,7 @@ final class TransactionRemoteDataSourceImpl
           walletData['provider'] as String? ?? '',
         );
         final phoneNumber = walletData['phoneNumber'] as String? ?? '';
-        
+
         results.add(TransactionDto.fromFirestore(
           doc,
           provider,
@@ -69,7 +64,8 @@ final class TransactionRemoteDataSourceImpl
       return results;
     }
 
-    final walletDoc = await _firestore.collection('wallets').doc(walletId).get();
+    final walletDoc =
+        await _firestore.collection('wallets').doc(walletId).get();
     final walletData = walletDoc.data() as Map<String, dynamic>;
     final provider = WalletProvider.fromString(
       walletData['provider'] as String? ?? '',
@@ -83,7 +79,9 @@ final class TransactionRemoteDataSourceImpl
         .orderBy('createdAt', descending: true);
 
     if (limit != null) query = query.limit(limit);
-    if (before != null) query = query.startAfter([Timestamp.fromDate(before)]);
+    if (before != null) {
+      query = query.startAfter([Timestamp.fromDate(before)]);
+    }
 
     final snapshot = await query.get();
     return snapshot.docs
@@ -104,5 +102,35 @@ final class TransactionRemoteDataSourceImpl
         .collection('transactions')
         .doc(transactionId)
         .update({'isPaid': true});
+  }
+
+  @override
+  Future<void> saveTransaction(TransactionEntity transaction) async {
+    final walletRef =
+        _firestore.collection('wallets').doc(transaction.walletId);
+    final txRef = walletRef
+        .collection('transactions')
+        .doc(transaction.id);
+
+    final dto = TransactionDto.fromEntity(transaction);
+    final isReceive = transaction.type == TransactionType.receive;
+    final amount = transaction.amount;
+
+    final batch = _firestore.batch();
+
+    batch.set(txRef, dto.toFirestore());
+
+    // Atomically update wallet aggregate stats.
+    // currentBalance increases on receive, decreases on send.
+    batch.update(walletRef, {
+      'currentBalance': FieldValue.increment(isReceive ? amount : -amount),
+      'totalReceived':
+          FieldValue.increment(isReceive ? amount : 0),
+      'totalSent':
+          FieldValue.increment(isReceive ? 0 : amount),
+      'lastBalanceAt': Timestamp.fromDate(transaction.createdAt),
+    });
+
+    await batch.commit();
   }
 }

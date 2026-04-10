@@ -37,4 +37,12 @@ final class TransactionRepositoryImpl implements TransactionRepository {
       tag: 'TransactionRepository.markAsPaid',
     );
   }
+
+  @override
+  Future<Result<void>> saveTransaction(TransactionEntity transaction) {
+    return executeAndHandleErrors(
+      () => _remoteDataSource.saveTransaction(transaction),
+      tag: 'TransactionRepository.saveTransaction',
+    );
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../../core/providers/firebase_providers.dart';
 import '../data/datasources/sms_permission_data_source.dart';
@@ -7,6 +8,7 @@ import '../data/datasources/wallet_remote_data_source.dart';
 import '../data/repositories/wallet_repository_impl.dart';
 import '../domain/repositories/wallet_repository.dart';
 import '../domain/usecases/add_wallets_usecase.dart';
+import '../domain/usecases/get_wallets_usecase.dart';
 import '../domain/usecases/sms_permission_usecases.dart';
 import '../domain/usecases/wallet_details_usecases.dart';
 
@@ -54,3 +56,10 @@ final getWalletDetailsUseCaseProvider =
     Provider<GetWalletDetailsUseCase>((ref) {
   return GetWalletDetailsUseCase(ref.watch(walletRepositoryProvider));
 });
+
+final getWalletsUseCaseProvider = Provider<GetWalletsUseCase>((ref) {
+  return GetWalletsUseCase(ref.watch(walletRepositoryProvider));
+});
+
+/// Tracks if the user has been prompted for SMS permission in the current app session.
+final hasPromptedSmsPermissionSessionProvider = StateProvider<bool>((ref) => false);

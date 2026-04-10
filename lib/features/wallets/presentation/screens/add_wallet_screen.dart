@@ -117,6 +117,7 @@ class _AddWalletBody extends ConsumerWidget {
       if (context.mounted && hasPerm) {
         context.go(AppRoutes.home);
       } else if (context.mounted && !hasPerm) {
+        ref.read(hasPromptedSmsPermissionSessionProvider.notifier).state = true;
         context.push(AppRoutes.smsPermissions);
       }
     } else if (next is AsyncError) {

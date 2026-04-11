@@ -23,7 +23,7 @@ class TransactionsController extends Notifier<TransactionsState> {
 
   final TransactionsRouteData arg;
 
-  static const int _pageSize = 20;
+  static const int _pageSize = 10;
   bool _didScheduleInitialLoad = false;
   int _activeRequestId = 0;
 
@@ -213,20 +213,35 @@ class TransactionsController extends Notifier<TransactionsState> {
     DateTime? start,
     DateTime? end,
   }) async {
-    if (preset == DatePreset.custom && start != null && end != null) {
-      final range = _DateRangeHelper.fromDates(start, end);
-      state = state.copyWith(
-        datePreset: DatePreset.custom,
-        customDateRange: range,
-      );
-    } else {
-      state = state.copyWith(datePreset: preset);
+    if (preset == DatePreset.custom) {
+      await _setCustomDatePreset(start: start, end: end);
+      return;
     }
+
+    if (state.datePreset == preset) {
+      await clearDatePreset();
+      return;
+    }
+
+    state = state.copyWith(datePreset: preset, customDateRange: null);
+    await _loadInitial(requestId: _startRequest());
+  }
+
+  Future<void> _setCustomDatePreset({DateTime? start, DateTime? end}) async {
+    if (start == null || end == null) return;
+    state = state.copyWith(
+      datePreset: DatePreset.custom,
+      customDateRange: _DateRangeHelper.fromDates(start, end),
+    );
     await _loadInitial(requestId: _startRequest());
   }
 
   Future<void> clearDatePreset() async {
-    state = state.copyWith(datePreset: DatePreset.none);
+    if (state.datePreset == DatePreset.none && state.customDateRange == null) {
+      return;
+    }
+
+    state = state.copyWith(datePreset: DatePreset.none, customDateRange: null);
     await _loadInitial(requestId: _startRequest());
   }
 

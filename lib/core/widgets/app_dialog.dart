@@ -147,13 +147,15 @@ class AppDialog extends StatelessWidget {
                       ),
                     ),
                   ),
-                if (confirmLabel != null)
+                if (confirmLabel != null) ...[
+                  AppSpacing.md.horizontalSpace,
                   Expanded(
                     child: AppButton(
                       label: confirmLabel!,
                       onPressed: onConfirm ?? () => Navigator.pop(context),
                     ),
                   ),
+                ],
               ],
             ),
           ],

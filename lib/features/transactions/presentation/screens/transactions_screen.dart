@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/app_snackbar.dart';
 import '../../../../core/widgets/app_error_view.dart';
 import '../../../../core/widgets/app_loader.dart';
+import '../../../../core/widgets/app_snackbar.dart';
 import '../navigation/transactions_route_data.dart';
 import '../providers/transactions_controller.dart';
 import '../widgets/details/transaction_details_bottom_sheet.dart';

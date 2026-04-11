@@ -106,9 +106,10 @@ class _DetailRow extends StatelessWidget {
         vertical: AppSpacing.md,
       ),
       child: Row(
+        spacing: AppSpacing.lg,
         children: [
           Expanded(
-            flex: 2,
+            flex: 1,
             child: Text(
               label,
               style: theme.textTheme.labelMedium?.copyWith(

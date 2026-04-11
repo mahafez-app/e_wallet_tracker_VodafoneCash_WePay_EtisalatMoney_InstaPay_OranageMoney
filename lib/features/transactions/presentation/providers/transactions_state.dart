@@ -115,7 +115,7 @@ final class TransactionsState extends Equatable {
     List<TransactionEntity>? transactions,
     TransactionTypeFilter? typeFilter,
     DatePreset? datePreset,
-    DateTimeRange? customDateRange,
+    Object? customDateRange = _sentinel,
     Object? selectedWalletId = _sentinel,
     int? totalCount,
     Object? nextCursor = _sentinel,
@@ -126,7 +126,9 @@ final class TransactionsState extends Equatable {
     transactions: transactions ?? this.transactions,
     typeFilter: typeFilter ?? this.typeFilter,
     datePreset: datePreset ?? this.datePreset,
-    customDateRange: customDateRange ?? this.customDateRange,
+    customDateRange: identical(customDateRange, _sentinel)
+        ? this.customDateRange
+        : customDateRange as DateTimeRange?,
     selectedWalletId: identical(selectedWalletId, _sentinel)
         ? this.selectedWalletId
         : selectedWalletId as String?,

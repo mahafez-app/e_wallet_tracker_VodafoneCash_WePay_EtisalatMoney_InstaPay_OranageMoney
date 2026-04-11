@@ -10,15 +10,14 @@ import 'package:screenshot/screenshot.dart';
 import '../../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../../core/error/failure_mapper.dart';
 import '../../../../../core/error/failures.dart';
-import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/utils/extensions/transaction_share_extension.dart';
 import '../../../../../core/widgets/app_snackbar.dart';
-import '../../providers/transaction_details_controller.dart';
 import '../../providers/share_receipt/share_receipt_controller.dart';
+import '../../providers/transaction_details_controller.dart';
 import 'transaction_receipt_image.dart';
 
 class ShareReceiptSection extends ConsumerWidget {
@@ -160,9 +159,10 @@ class _ReceiptCaptureRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final borderRadius = BorderRadius.circular(AppSpacing.xl.responsiveRadius);
 
     return ColoredBox(
-      color: AppColors.surface,
+      color: theme.colorScheme.surfaceContainerLow,
       child: SizedBox(
         width: width,
         child: Padding(
@@ -172,7 +172,12 @@ class _ReceiptCaptureRoot extends StatelessWidget {
             bottom: AppSpacing.xl,
             left: AppSpacing.md,
           ),
-          child: Material(color: theme.scaffoldBackgroundColor, child: child),
+          child: Material(
+            color: theme.scaffoldBackgroundColor,
+            borderRadius: borderRadius,
+            clipBehavior: Clip.antiAlias,
+            child: child,
+          ),
         ),
       ),
     );

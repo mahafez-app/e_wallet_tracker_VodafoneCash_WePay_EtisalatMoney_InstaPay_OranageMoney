@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
@@ -23,7 +25,7 @@ class SmsPermissionsScreen extends StatelessWidget {
 }
 
 class _SmsPermissionsBody extends ConsumerWidget {
-  const _SmsPermissionsBody();
+  const _SmsPermissionsBody({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,13 +33,11 @@ class _SmsPermissionsBody extends ConsumerWidget {
       previous,
       next,
     ) {
-      if (next is AsyncError) {
-        AppSnackbar.show(
-          context,
-          message: (next.error as Failure).toLocalizedString(context),
-          type: AppSnackbarType.error,
-        );
-      }
+      _handlePermissionRequestStateChange(
+        previous: previous,
+        next: next,
+        context: context,
+      );
     });
 
     final s = context.l10n;
@@ -130,13 +130,10 @@ class _SmsPermissionsBody extends ConsumerWidget {
               AppButton(
                 label: s.allowAndContinue,
                 isLoading: state.isLoading,
-                onPressed: () async {
-                  final result = await ref
+                onPressed: () {
+                  ref
                       .read(smsPermissionsControllerProvider.notifier)
                       .requestPermission();
-                  if (context.mounted && result) {
-                    context.go(AppRoutes.home);
-                  }
                 },
               ),
               AppSpacing.md.verticalSpace,
@@ -156,6 +153,27 @@ class _SmsPermissionsBody extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  void _handlePermissionRequestStateChange({
+    required AsyncValue<void>? previous,
+    required AsyncValue<void> next,
+    required BuildContext context,
+  }) {
+    if (next case AsyncError(:final error) when error is Failure) {
+      AppSnackbar.show(
+        context,
+        message: error.toLocalizedString(context),
+        type: AppSnackbarType.error,
+      );
+      return;
+    }
+
+    final hasCompletedRequest =
+        previous?.isLoading == true && next is AsyncData<void>;
+    if (!hasCompletedRequest || !context.mounted) return;
+
+    context.go(AppRoutes.home);
   }
 }
 

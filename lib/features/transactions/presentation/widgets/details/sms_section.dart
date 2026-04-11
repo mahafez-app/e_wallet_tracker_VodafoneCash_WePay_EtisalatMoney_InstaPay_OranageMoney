@@ -32,7 +32,7 @@ class SmsSection extends StatelessWidget {
           ),
           child: SelectableText(
             message,
-            style: theme.textTheme.bodySmall?.copyWith(
+            style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),

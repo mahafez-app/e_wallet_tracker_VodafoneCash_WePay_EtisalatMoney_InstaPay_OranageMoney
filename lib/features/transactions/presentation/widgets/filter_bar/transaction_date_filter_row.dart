@@ -129,7 +129,9 @@ class _CustomDateChip extends ConsumerWidget {
     final isSelected = state.datePreset == DatePreset.custom;
 
     return GestureDetector(
-      onTap: () => _pickRange(context, controller),
+      onTap: () => isSelected
+          ? controller.clearDatePreset()
+          : _pickRange(context, controller),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         alignment: Alignment.center,

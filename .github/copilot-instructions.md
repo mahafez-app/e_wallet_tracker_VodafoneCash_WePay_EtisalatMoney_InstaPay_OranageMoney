@@ -2179,9 +2179,6 @@ extension FailureMessaging on BuildContext {
   is never defined in `main.dart` or inside feature folders.
 - **Route Constants:** All route paths are constants in
   `core/router/app_routes.dart`. Never hardcode path strings inline.
-- **Auth Guard:** Use `go_router`'s `redirect` wired to a
-  `GoRouterRefreshStream` that listens to `authStateProvider`. Guards
-  re-evaluate on state changes, not only on navigation events.
 - **Shell Routes:** Use `ShellRoute` for persistent navigation UI (bottom nav,
   drawer). Never wrap each screen individually.
 - **Path Parameters:** Never use `!` on path parameters. Use a null-safe
@@ -2210,32 +2207,6 @@ abstract final class AppRoutes {
   // Path builders — always use these for navigation, never interpolate inline
   static String profilePath(String userId) => '/profile/$userId';
   static String postDetailPath(String postId) => '/posts/$postId';
-}
-```
-
----
-
-## GoRouter Refresh Stream (`core/router/go_router_refresh_stream.dart`)
-
-Bridges a Riverpod `StreamProvider` to `go_router`'s `refreshListenable`.
-
-```dart
-import 'dart:async';
-import 'package:flutter/foundation.dart';
-
-final class GoRouterRefreshStream extends ChangeNotifier {
-  GoRouterRefreshStream(Stream<dynamic> stream) {
-    notifyListeners();
-    _subscription = stream.listen((_) => notifyListeners());
-  }
-
-  late final StreamSubscription<dynamic> _subscription;
-
-  @override
-  void dispose() {
-    _subscription.cancel();
-    super.dispose();
-  }
 }
 ```
 
@@ -2288,7 +2259,6 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: AppRoutes.splash,
     debugLogDiagnostics: false,
-    refreshListenable: GoRouterRefreshStream(authStream),
     redirect: (context, state) {
       final authValue = ref.read(authStateProvider);
 

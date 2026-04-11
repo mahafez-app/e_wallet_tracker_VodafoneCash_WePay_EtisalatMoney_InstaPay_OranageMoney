@@ -74,17 +74,19 @@ class _NoteTextRow extends StatelessWidget {
             ),
           ),
         ),
-        AppSpacing.xs.horizontalSpace,
-        _ActionIconButton(
-          icon: Icons.edit_outlined,
-          onPressed: onEditTap,
-          color: colors.info,
-        ),
-        _ActionIconButton(
-          icon: Icons.delete_outline_rounded,
-          onPressed: onDeleteTap,
-          color: theme.colorScheme.error,
-        ),
+        if (isOwner) ...[
+          AppSpacing.xs.horizontalSpace,
+          _ActionIconButton(
+            icon: Icons.edit_outlined,
+            onPressed: onEditTap,
+            color: colors.info,
+          ),
+          _ActionIconButton(
+            icon: Icons.delete_outline_rounded,
+            onPressed: onDeleteTap,
+            color: theme.colorScheme.error,
+          ),
+        ],
       ],
     );
   }

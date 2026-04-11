@@ -15,24 +15,15 @@ class AppLogoName extends StatelessWidget {
           AppConstants.appNameArabic,
           style: Theme.of(context).textTheme.displayLarge?.copyWith(
             color: Theme.of(context).colorScheme.primary,
-            fontFamily: 'Cairo',
-            fontWeight: FontWeight.w800,
-            height: 1.0,
-            fontSize: 48.responsiveFont,
-            letterSpacing: -1.20.responsiveWidth,
           ),
         ),
         8.verticalSpace,
         Text(
           AppConstants.appNameEnglish,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontFamily: 'Cairo',
-            fontWeight: FontWeight.w400,
-            fontSize: 14.responsiveFont,
-            height: 1.43,
-            letterSpacing: 2.80.responsiveWidth,
+            letterSpacing: 3,
           ),
         ),
       ],

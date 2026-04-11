@@ -32,8 +32,6 @@ class SmsSection extends StatelessWidget {
             message,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
-              height: 1.6,
-              fontFamily: 'monospace',
             ),
           ),
         ),

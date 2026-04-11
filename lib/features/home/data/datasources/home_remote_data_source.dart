@@ -53,20 +53,10 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
           if (workspaceIds.isEmpty) return <WorkspaceDto>[];
 
-          final chunks = <List<String>>[];
-          for (var i = 0; i < workspaceIds.length; i += 30) {
-            chunks.add(
-              workspaceIds.sublist(
-                i,
-                i + 30 > workspaceIds.length ? workspaceIds.length : i + 30,
-              ),
-            );
-          }
-
-          final futures = chunks.map(
-            (chunk) => _firestore
+          final futures = workspaceIds.map(
+            (id) => _firestore
                 .collection('workspaces')
-                .where(FieldPath.documentId, whereIn: chunk)
+                .where(FieldPath.documentId, isEqualTo: id)
                 .get(),
           );
 

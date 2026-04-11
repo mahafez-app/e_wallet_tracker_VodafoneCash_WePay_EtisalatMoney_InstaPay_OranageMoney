@@ -99,10 +99,6 @@ class TransactionCard extends StatelessWidget {
                         letterSpacing: -0.5,
                       ),
                     ),
-                    // if (isReceive && transaction.isPaid != null) ...[
-                    //   AppSpacing.sm.horizontalSpace,
-                    //   _IsPaidBadge(isPaid: transaction.isPaid!),
-                    // ],
                   ],
                 ),
                 AppSpacing.xs.verticalSpace,

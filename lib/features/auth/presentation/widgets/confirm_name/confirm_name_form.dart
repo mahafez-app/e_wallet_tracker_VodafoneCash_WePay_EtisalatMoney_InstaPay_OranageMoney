@@ -71,7 +71,7 @@ class _ConfirmNameFormState extends ConsumerState<ConfirmNameForm> {
             keyboardType: TextInputType.name,
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return 'Please enter your name';
+                return l10n.fullNameValidationEmpty;
               }
               return null;
             },

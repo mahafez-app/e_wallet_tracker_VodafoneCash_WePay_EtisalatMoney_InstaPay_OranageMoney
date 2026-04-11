@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../domain/entities/transaction_date_range.dart';
 
 import '../../../../core/data/models/transaction_dto.dart';
+import '../../../../core/data/models/wallet_dto.dart';
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/domain/enums/transaction_type.dart';
 import '../../../../core/domain/enums/wallet_provider.dart';
+import '../../domain/entities/transaction_date_range.dart';
 import '../models/history_entry_dto.dart';
 import '../models/note_dto.dart';
 
@@ -91,11 +92,8 @@ final class TransactionRemoteDataSourceImpl
     String walletId,
   ) async {
     final doc = await _firestore.collection('wallets').doc(walletId).get();
-    final data = doc.data() ?? {};
-    return (
-      provider: WalletProvider.fromString(data['provider'] as String? ?? ''),
-      phoneNumber: data['phoneNumber'] as String? ?? '',
-    );
+    final wallet = WalletDto.fromFirestore(doc);
+    return (provider: wallet.provider, phoneNumber: wallet.phoneNumber);
   }
 
   Query<Map<String, dynamic>> _applyFilters(

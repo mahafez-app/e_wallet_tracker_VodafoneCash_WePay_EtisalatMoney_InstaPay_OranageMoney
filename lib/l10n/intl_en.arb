@@ -212,5 +212,6 @@
         "type": "String"
       }
     }
-  }
+  },
+  "fullNameValidationEmpty": "Please enter your name"
 }

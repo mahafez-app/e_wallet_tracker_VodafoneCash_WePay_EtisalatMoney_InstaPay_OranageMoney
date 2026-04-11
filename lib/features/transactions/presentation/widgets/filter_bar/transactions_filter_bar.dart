@@ -17,24 +17,21 @@ class TransactionsFilterBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _TypeFilterRow(context_: context_),
-          _DateFilterRow(context_: context_),
-          if (context_ is WorkspaceTransactionsContext)
-            _WalletFilterRow(
-              context_: context_ as WorkspaceTransactionsContext,
-            ),
-          Divider(
-            height: 1,
-            thickness: 0.5,
-            color: Theme.of(context).colorScheme.outlineVariant.withAlpha(80),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _TypeFilterRow(context_: context_),
+        _DateFilterRow(context_: context_),
+        if (context_ is WorkspaceTransactionsContext)
+          _WalletFilterRow(
+            context_: context_ as WorkspaceTransactionsContext,
           ),
-        ],
-      ),
+        Divider(
+          height: 1,
+          thickness: 0.5,
+          color: Theme.of(context).colorScheme.outlineVariant.withAlpha(80),
+        ),
+      ],
     );
   }
 }

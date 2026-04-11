@@ -7,8 +7,8 @@ import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/usecases/get_wallet_transactions_usecase.dart';
 import '../../domain/usecases/get_workspace_transactions_usecase.dart';
-import '../models/transactions_context.dart';
 import '../../providers/transactions_providers.dart';
+import '../models/transactions_context.dart';
 import 'transactions_state.dart';
 
 final transactionUpdatesProvider =

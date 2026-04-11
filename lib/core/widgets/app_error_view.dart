@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../generated/l10n.dart';
 import '../error/failures.dart';
@@ -7,7 +6,6 @@ import '../theme/app_responsive.dart';
 import '../theme/app_spacing.dart';
 import '../utils/extensions/failure_extension.dart';
 import 'app_button.dart';
-import 'app_loader.dart';
 
 /// Standard error view for all AsyncError states.
 /// Renders a localized message from [Failure] subtypes, falling back to
@@ -53,26 +51,4 @@ class AppErrorView extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Convenience widget for showing a full-screen async state.
-/// Wraps [AppLoader], [AppErrorView], and a content builder.
-class AsyncStateView<T> extends StatelessWidget {
-  const AsyncStateView({
-    super.key,
-    required this.state,
-    required this.dataBuilder,
-    this.onRetry,
-  });
-
-  final AsyncValue<T> state;
-  final Widget Function(T data) dataBuilder;
-  final VoidCallback? onRetry;
-
-  @override
-  Widget build(BuildContext context) => switch (state) {
-    AsyncLoading() => const AppLoader(),
-    AsyncData(:final value) => dataBuilder(value),
-    AsyncError(:final error) => AppErrorView(error: error, onRetry: onRetry),
-  };
 }

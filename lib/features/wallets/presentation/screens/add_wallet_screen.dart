@@ -11,6 +11,8 @@ import '../../../../core/utils/app_constants.dart';
 import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/utils/extensions/wallet_provider_ext.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_error_view.dart';
+import '../../../../core/widgets/app_loader.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/info_card.dart';
@@ -42,68 +44,13 @@ class _AddWalletBody extends ConsumerWidget {
       _handleStateChange(previous, next, ref, context);
     });
 
-    final s = S.of(context);
-    final theme = Theme.of(context);
-    final submitState = ref.watch(addWalletSubmitProvider);
+    final walletStateAsync = ref.watch(addWalletControllerProvider);
 
-    return Column(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            padding: AppResponsive.allPadding(AppSpacing.lg),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                InfoCard(text: s.addWalletDescription),
-                AppSpacing.xxl.verticalSpace,
-                AppTextField(
-                  label: s.phoneNumber,
-                  hintText: AppConstants.egyptPhoneHint,
-                  keyboardType: TextInputType.phone,
-                  onChanged: ref
-                      .read(addWalletControllerProvider.notifier)
-                      .updatePhoneNumber,
-                  prefixIcon: Padding(
-                    padding: AppResponsive.symmetricPadding(
-                      horizontal: AppSpacing.md,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: AppSpacing.xs,
-                      children: [
-                        Text(
-                          AppConstants.egyptCountryCode,
-                          style: theme.textTheme.titleSmall,
-                        ),
-                        Text(
-                          AppConstants.egyptFlag,
-                          style: theme.textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                AppSpacing.xl.verticalSpace,
-                Text(s.chooseProvider, style: theme.textTheme.titleMedium),
-                AppSpacing.md.verticalSpace,
-                const _ProvidersGrid(key: ValueKey('_ProvidersGrid')),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: AppResponsive.allPadding(AppSpacing.lg),
-          child: AppButton(
-            label: s.addWalletAction,
-            icon: const Icon(Icons.add_circle_outline),
-            isLoading: submitState.isLoading,
-            onPressed: () {
-              ref.read(addWalletSubmitProvider.notifier).submit();
-            },
-          ),
-        ),
-      ],
-    );
+    return switch (walletStateAsync) {
+      AsyncLoading() => const Center(child: AppLoader()),
+      AsyncError(:final error) => Center(child: AppErrorView(error: error)),
+      AsyncData(:final value) => _AddWalletContent(state: value),
+    };
   }
 
   Future<void> _handleStateChange(
@@ -145,12 +92,158 @@ class _AddWalletBody extends ConsumerWidget {
   }
 }
 
-class _ProvidersGrid extends ConsumerWidget {
-  const _ProvidersGrid({super.key});
+class _AddWalletContent extends ConsumerWidget {
+  const _AddWalletContent({required this.state});
+
+  final AddWalletState state;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(addWalletControllerProvider);
+    final s = S.of(context);
+    final theme = Theme.of(context);
+    final submitState = ref.watch(addWalletSubmitProvider);
+
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            padding: AppResponsive.allPadding(AppSpacing.lg),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                InfoCard(text: s.addWalletDescription),
+                AppSpacing.xxl.verticalSpace,
+                const _PhoneNumberSelector(),
+                AppSpacing.xl.verticalSpace,
+                Text(s.chooseProvider, style: theme.textTheme.titleMedium),
+                AppSpacing.md.verticalSpace,
+                const _ProvidersGrid(),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: AppResponsive.allPadding(AppSpacing.lg),
+          child: AppButton(
+            label: s.addWalletAction,
+            icon: const Icon(Icons.add_circle_outline),
+            isLoading: submitState.isLoading,
+            onPressed: () {
+              ref.read(addWalletSubmitProvider.notifier).submit();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PhoneNumberSelector extends ConsumerWidget {
+  const _PhoneNumberSelector();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final walletStateAsync = ref.watch(addWalletControllerProvider);
+    final state = walletStateAsync.asData?.value;
+    if (state == null) return const SizedBox.shrink();
+
+    final s = S.of(context);
+    final theme = Theme.of(context);
+
+    if (state.devicePhoneNumbers.isEmpty) {
+      return AppTextField(
+        label: s.phoneNumber,
+        initialValue: state.phoneNumber,
+        hintText: AppConstants.egyptPhoneHint,
+        keyboardType: TextInputType.phone,
+        onChanged: ref
+            .read(addWalletControllerProvider.notifier)
+            .updatePhoneNumber,
+        prefixIcon: Padding(
+          padding: AppResponsive.symmetricPadding(horizontal: AppSpacing.md),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: AppSpacing.xs,
+            children: [
+              Text(
+                AppConstants.egyptCountryCode,
+                style: theme.textTheme.titleSmall,
+              ),
+              Text(AppConstants.egyptFlag, style: theme.textTheme.titleMedium),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(s.phoneNumber, style: theme.textTheme.titleMedium),
+        AppSpacing.md.verticalSpace,
+        ...state.devicePhoneNumbers.map((number) {
+          final isSelected = state.phoneNumber == number;
+          return Padding(
+            padding: EdgeInsets.only(bottom: AppSpacing.sm.responsiveHeight),
+            child: InkWell(
+              onTap: () => ref
+                  .read(addWalletControllerProvider.notifier)
+                  .updatePhoneNumber(number),
+              borderRadius: BorderRadius.circular(12.responsiveRadius),
+              child: Container(
+                padding: AppResponsive.allPadding(AppSpacing.md),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? theme.colorScheme.primaryContainer.withAlpha(30)
+                      : theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(12.responsiveRadius),
+                  border: Border.all(
+                    color: isSelected
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.outlineVariant,
+                    width: isSelected ? 2.responsiveWidth : 1.responsiveWidth,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      isSelected
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_unchecked,
+                      color: isSelected
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.outline,
+                    ),
+                    AppSpacing.md.horizontalSpace,
+                    Text(
+                      number,
+                      style: isSelected
+                          ? theme.textTheme.titleMedium?.copyWith(
+                              color: theme.colorScheme.primary,
+                            )
+                          : theme.textTheme.titleMedium,
+                      textDirection: TextDirection.ltr,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }),
+      ],
+    );
+  }
+}
+
+class _ProvidersGrid extends ConsumerWidget {
+  const _ProvidersGrid();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final walletStateAsync = ref.watch(addWalletControllerProvider);
+    final state = walletStateAsync.asData?.value;
+    if (state == null) return const SizedBox.shrink();
+
     final providers = WalletProvider.values
         .where((p) => p != WalletProvider.unknown)
         .toList();

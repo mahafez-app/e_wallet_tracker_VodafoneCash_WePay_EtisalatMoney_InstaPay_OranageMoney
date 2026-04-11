@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/domain/enums/wallet_provider.dart';
@@ -10,18 +11,22 @@ import '../../providers/wallets_providers.dart';
 
 final class AddWalletState {
   const AddWalletState({
+    required this.devicePhoneNumbers,
     required this.phoneNumber,
     required this.selectedProviders,
   });
 
+  final List<String> devicePhoneNumbers;
   final String phoneNumber;
   final Set<WalletProvider> selectedProviders;
 
   AddWalletState copyWith({
+    List<String>? devicePhoneNumbers,
     String? phoneNumber,
     Set<WalletProvider>? selectedProviders,
   }) {
     return AddWalletState(
+      devicePhoneNumbers: devicePhoneNumbers ?? this.devicePhoneNumbers,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       selectedProviders: selectedProviders ?? this.selectedProviders,
     );
@@ -29,46 +34,96 @@ final class AddWalletState {
 }
 
 final addWalletControllerProvider =
-    NotifierProvider.autoDispose<AddWalletController, AddWalletState>(
-      AddWalletController.new,
-    );
+    AsyncNotifierProvider.autoDispose<AddWalletController, AddWalletState>(
+  AddWalletController.new,
+);
 
-class AddWalletController extends Notifier<AddWalletState> {
+class AddWalletController extends AsyncNotifier<AddWalletState> {
   @override
-  AddWalletState build() =>
-      const AddWalletState(phoneNumber: '', selectedProviders: {});
+  FutureOr<AddWalletState> build() async {
+    final phoneNumberService = ref.watch(phoneNumberServiceProvider);
+    final numbers = await phoneNumberService.getDevicePhoneNumbers();
+
+    var initialNumber = '';
+    var initialProviders = const <WalletProvider>{};
+
+    if (numbers.isNotEmpty) {
+      initialNumber = numbers.first;
+      initialProviders = _autoSelectProvider(initialNumber, {});
+    }
+
+    return AddWalletState(
+      devicePhoneNumbers: numbers,
+      phoneNumber: initialNumber,
+      selectedProviders: initialProviders,
+    );
+  }
 
   void updatePhoneNumber(String newNumber) {
-    final newProviders = _autoSelectProvider(newNumber);
-    state = state.copyWith(
-      phoneNumber: newNumber,
-      selectedProviders: newProviders,
+    if (!state.hasValue) return;
+
+    final currentState = state.value!;
+    final newProviders = _autoSelectProvider(
+      newNumber,
+      currentState.selectedProviders,
+    );
+    state = AsyncData(
+      currentState.copyWith(
+        phoneNumber: newNumber,
+        selectedProviders: newProviders,
+      ),
     );
   }
 
   void toggleProvider(WalletProvider provider) {
-    final current = Set<WalletProvider>.of(state.selectedProviders);
-    if (current.contains(provider)) {
-      current.remove(provider);
+    if (!state.hasValue) return;
+
+    final currentState = state.value!;
+    final currentProviders = Set<WalletProvider>.of(
+      currentState.selectedProviders,
+    );
+    if (currentProviders.contains(provider)) {
+      currentProviders.remove(provider);
     } else {
-      current.add(provider);
+      currentProviders.add(provider);
     }
-    state = state.copyWith(selectedProviders: current);
+    state = AsyncData(
+      currentState.copyWith(selectedProviders: currentProviders),
+    );
   }
 
   void reset() {
-    state = const AddWalletState(phoneNumber: '', selectedProviders: {});
+    if (!state.hasValue) return;
+
+    final currentState = state.value!;
+    var initialNumber = '';
+    var initialProviders = const <WalletProvider>{};
+
+    if (currentState.devicePhoneNumbers.isNotEmpty) {
+      initialNumber = currentState.devicePhoneNumbers.first;
+      initialProviders = _autoSelectProvider(initialNumber, {});
+    }
+
+    state = AsyncData(
+      currentState.copyWith(
+        phoneNumber: initialNumber,
+        selectedProviders: initialProviders,
+      ),
+    );
   }
 
-  Set<WalletProvider> _autoSelectProvider(String number) {
-    if (number.length < 3) return {};
+  Set<WalletProvider> _autoSelectProvider(
+    String number,
+    Set<WalletProvider> currentProviders,
+  ) {
+    if (number.length < 3) return currentProviders;
     final prefix = number.substring(0, 3);
     return switch (prefix) {
       '010' => {WalletProvider.vodafoneCash},
       '011' => {WalletProvider.etisalatCash},
       '012' => {WalletProvider.orangeMoney},
       '015' => {WalletProvider.wePay},
-      _ => Set.of(state.selectedProviders),
+      _ => Set.of(currentProviders),
     };
   }
 }
@@ -77,21 +132,26 @@ class AddWalletController extends Notifier<AddWalletState> {
 
 final addWalletSubmitProvider =
     AsyncNotifierProvider.autoDispose<AddWalletSubmitController, void>(
-      AddWalletSubmitController.new,
-    );
+  AddWalletSubmitController.new,
+);
 
-/// Handles the wallet creation flow.
-/// On success, transitions to [AsyncData]. Navigation is driven by the
-/// widget's [ref.listen] — specifically checking SMS permission and routing
-/// accordingly.
 class AddWalletSubmitController extends AsyncNotifier<void> {
   @override
-  void build() {}
+  FutureOr<void> build() {}
 
   Future<void> submit() async {
     state = const AsyncLoading();
 
-    final walletState = ref.read(addWalletControllerProvider);
+    final walletStateAsync = ref.read(addWalletControllerProvider);
+    if (!walletStateAsync.hasValue) {
+      state = AsyncError(
+        const ValidationFailure(code: 'wallet-state-unavailable'),
+        StackTrace.current,
+      );
+      return;
+    }
+
+    final walletState = walletStateAsync.value!;
 
     if (walletState.phoneNumber.isEmpty) {
       state = AsyncError(

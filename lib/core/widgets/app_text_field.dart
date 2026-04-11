@@ -15,6 +15,7 @@ class AppTextField extends StatelessWidget {
     this.prefixIcon,
     this.validator,
     this.onChanged,
+    this.initialValue,
     this.fillColor,
     this.labelStyle,
   });
@@ -28,6 +29,7 @@ class AppTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
+  final String? initialValue;
   final Color? fillColor;
   final TextStyle? labelStyle;
 
@@ -44,6 +46,7 @@ class AppTextField extends StatelessWidget {
         AppSpacing.sm.verticalSpace,
         TextFormField(
           controller: controller,
+          initialValue: initialValue,
           keyboardType: keyboardType,
           obscureText: obscureText,
           validator: validator,

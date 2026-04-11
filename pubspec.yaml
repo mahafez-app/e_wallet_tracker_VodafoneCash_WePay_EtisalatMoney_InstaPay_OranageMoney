@@ -57,6 +57,7 @@ dependencies:
   device_info_plus: ^12.4.0
   another_telephony: ^0.4.1
   uuid: ^4.5.3
+  mobile_number: ^3.0.0
 
 dev_dependencies:
   flutter_test:

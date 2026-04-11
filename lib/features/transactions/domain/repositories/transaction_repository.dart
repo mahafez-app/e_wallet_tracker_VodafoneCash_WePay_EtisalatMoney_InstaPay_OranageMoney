@@ -2,20 +2,21 @@ import '../entities/transaction_date_range.dart';
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/domain/enums/transaction_type.dart';
-import '../entities/history_entry_entity.dart';
+import '../entities/transaction_history_entry_entity.dart';
 import '../entities/note_entity.dart';
+import '../entities/transaction_page.dart';
 
 abstract interface class TransactionRepository {
   // ── Queries ─────────────────────────────────────────────────────────────
 
   /// Paginated list of transactions for a single wallet.
-  /// [lastDocument] is the Firestore cursor for the next page.
-  Future<Result<PaginatedTransactions>> getWalletTransactions({
+  /// [cursor] points to the next page when more data is available.
+  Future<Result<TransactionPage>> getWalletTransactions({
     required String walletId,
     TransactionType? type,
     TransactionDateRange? dateRange,
     int limit = 20,
-    Object? lastCursor,
+    TransactionPageCursor? cursor,
   });
 
   /// Merged + sorted list of transactions across multiple wallet IDs.
@@ -74,27 +75,8 @@ abstract interface class TransactionRepository {
 
   // ── History ──────────────────────────────────────────────────────────────
 
-  Stream<Result<List<HistoryEntryEntity>>> getHistory({
+  Stream<Result<List<TransactionHistoryEntryEntity>>> getTransactionHistory({
     required String walletId,
     required String transactionId,
   });
-}
-
-/// Wraps a page of transactions with its Firestore cursor.
-final class PaginatedTransactions {
-  const PaginatedTransactions({
-    required this.transactions,
-    required this.totalCount,
-    this.lastCursor,
-  });
-
-  final List<TransactionEntity> transactions;
-
-  /// Best-effort total from a count query; may be approximate.
-  final int totalCount;
-
-  /// Null when there are no more pages.
-  final Object? lastCursor;
-
-  bool get hasMore => lastCursor != null;
 }

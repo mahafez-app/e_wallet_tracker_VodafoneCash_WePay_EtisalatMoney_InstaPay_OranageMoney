@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:wallet_tracker/core/domain/entities/wallet_entity.dart';
 
@@ -7,7 +9,6 @@ import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/wallets/wallet_card.dart';
-import '../../../../generated/l10n.dart';
 
 class HomeWalletsSection extends StatelessWidget {
   const HomeWalletsSection({super.key, required this.wallets});
@@ -16,7 +17,7 @@ class HomeWalletsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final s = context.l10n;
     final theme = Theme.of(context);
 
     return Column(
@@ -61,7 +62,7 @@ class _AddWalletCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final s = context.l10n;
     final theme = Theme.of(context);
     final colors = context.appColors;
     final primary = theme.colorScheme.primary;

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/widgets/app_button.dart';
 import '../../../../../core/widgets/app_text_field.dart';
-import '../../../../../generated/l10n.dart';
 import '../../../providers/auth_providers.dart';
 import '../../providers/auth_controller.dart';
 
@@ -53,7 +54,7 @@ class _ConfirmNameFormState extends ConsumerState<ConfirmNameForm> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = S.of(context);
+    final l10n = context.l10n;
     final authState = ref.watch(authNotifierProvider);
     final isLoading = authState.loadingMethod == AuthLoadingMethod.confirmName;
 

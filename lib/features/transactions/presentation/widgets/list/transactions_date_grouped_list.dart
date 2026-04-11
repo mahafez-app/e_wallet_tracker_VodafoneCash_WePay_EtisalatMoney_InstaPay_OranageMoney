@@ -1,11 +1,11 @@
 // ignore_for_file: unused_element_parameter
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
+import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/widgets/transactions/transaction_card.dart';
 
 /// Groups transactions by calendar day and renders date headers.
@@ -91,8 +91,7 @@ class _DayHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).languageCode;
-    final label = DateFormat.yMMMMEEEEd(locale).format(day);
+    final label = day.toGroupedDateLabel(context);
 
     return Container(
       margin: AppResponsive.symmetricPadding(vertical: AppSpacing.xs),

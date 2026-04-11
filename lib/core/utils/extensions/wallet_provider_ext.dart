@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
-import '../../../generated/l10n.dart';
 import '../../domain/enums/wallet_provider.dart';
 import '../../theme/app_colors.dart';
 
 extension WalletProviderDisplay on WalletProvider {
   String displayName(BuildContext context) => switch (this) {
-    WalletProvider.vodafoneCash => S.of(context).providerVodafone,
-    WalletProvider.orangeMoney => S.of(context).providerOrange,
-    WalletProvider.etisalatCash => S.of(context).providerEtisalat,
-    WalletProvider.instaPay => S.of(context).providerInstapay,
-    WalletProvider.wePay => S.of(context).providerWePay,
-    WalletProvider.unknown => S.of(context).providerUnknown,
+    WalletProvider.vodafoneCash => context.l10n.providerVodafone,
+    WalletProvider.orangeMoney => context.l10n.providerOrange,
+    WalletProvider.etisalatCash => context.l10n.providerEtisalat,
+    WalletProvider.instaPay => context.l10n.providerInstapay,
+    WalletProvider.wePay => context.l10n.providerWePay,
+    WalletProvider.unknown => context.l10n.providerUnknown,
   };
 
   Color get brandColor => switch (this) {

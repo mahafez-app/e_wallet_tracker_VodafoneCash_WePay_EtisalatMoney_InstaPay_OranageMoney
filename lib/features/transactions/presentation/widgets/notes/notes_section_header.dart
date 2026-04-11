@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../core/theme/app_responsive.dart';
 import '../../../../../../core/theme/app_spacing.dart';
-import '../../../../../../generated/l10n.dart';
+import '../../../../../../core/utils/extensions/localization_extension.dart';
 
 /// Header row with a "Notes" title and an "Add" button.
 class NotesSectionHeader extends StatelessWidget {
@@ -12,12 +12,13 @@ class NotesSectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return Row(
       children: [
         Text(
-          S.of(context).transaction_notes,
+          l10n.transaction_notes,
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w700,
           ),
@@ -26,7 +27,7 @@ class NotesSectionHeader extends StatelessWidget {
         TextButton.icon(
           onPressed: onAddTap,
           icon: Icon(Icons.add_rounded, size: 16.responsiveRadius),
-          label: Text(S.of(context).transaction_addNote),
+          label: Text(l10n.transaction_addNote),
           style: TextButton.styleFrom(
             padding: AppResponsive.symmetricPadding(
               horizontal: AppSpacing.md,

@@ -1,10 +1,13 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 
-import '../../../generated/l10n.dart';
 import '../../domain/enums/wallet_provider.dart';
 import '../../theme/app_color_extension.dart';
 import '../../theme/app_responsive.dart';
 import '../../theme/app_spacing.dart';
+import '../../utils/extensions/amount_extension.dart';
+import '../../utils/extensions/localization_extension.dart';
 import '../../utils/extensions/wallet_provider_ext.dart';
 import 'wallet_provider_info.dart';
 
@@ -22,7 +25,7 @@ class WalletCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = context.appColors;
 
@@ -56,7 +59,7 @@ class WalletCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  s.currentBalance,
+                  l10n.currentBalance,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.outline,
                   ),
@@ -72,20 +75,20 @@ class WalletCard extends StatelessWidget {
 }
 
 class _WalletBalance extends StatelessWidget {
-  const _WalletBalance({required this.balance});
+  const _WalletBalance({super.key, required this.balance});
 
   final double balance;
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final primary = theme.colorScheme.primary;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          balance.toStringAsFixed(2),
+          balance.toLocalizedAmount(context),
           style: theme.textTheme.titleLarge?.copyWith(
             color: primary,
             fontSize: 24.responsiveFont,
@@ -96,7 +99,7 @@ class _WalletBalance extends StatelessWidget {
         Padding(
           padding: AppResponsive.onlyPadding(bottom: 4),
           child: Text(
-            s.currency,
+            l10n.currency,
             style: theme.textTheme.labelSmall?.copyWith(
               color: primary,
               fontSize: 12.responsiveFont,

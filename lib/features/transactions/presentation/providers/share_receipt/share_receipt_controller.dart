@@ -19,15 +19,21 @@ class ShareReceiptController extends AsyncNotifier<void> {
 
   void shareReceipt({
     required Uint8List receiptBytes,
+    required String fileName,
     required String shareMessage,
   }) {
     unawaited(
-      _shareReceipt(receiptBytes: receiptBytes, shareMessage: shareMessage),
+      _shareReceipt(
+        receiptBytes: receiptBytes,
+        fileName: fileName,
+        shareMessage: shareMessage,
+      ),
     );
   }
 
   Future<void> _shareReceipt({
     required Uint8List receiptBytes,
+    required String fileName,
     required String shareMessage,
   }) async {
     state = const AsyncLoading();
@@ -43,11 +49,7 @@ class ShareReceiptController extends AsyncNotifier<void> {
         ShareParams(
           text: shareMessage,
           files: [
-            XFile.fromData(
-              receiptBytes,
-              mimeType: 'image/png',
-              name: 'receipt.png',
-            ),
+            XFile.fromData(receiptBytes, mimeType: 'image/png', name: fileName),
           ],
         ),
       );

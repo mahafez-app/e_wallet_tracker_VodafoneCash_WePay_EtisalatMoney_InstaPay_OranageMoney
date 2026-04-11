@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 import '../../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/widgets/app_button.dart';
 import '../../../../../core/widgets/info_card.dart';
-import '../../../../../generated/l10n.dart';
 import '../../providers/add_wallet_controller.dart';
 import 'add_wallet_phone_number_section.dart';
 import 'add_wallet_provider_grid.dart';
@@ -26,7 +26,7 @@ class AddWalletContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final s = context.l10n;
     final theme = Theme.of(context);
 
     return Column(

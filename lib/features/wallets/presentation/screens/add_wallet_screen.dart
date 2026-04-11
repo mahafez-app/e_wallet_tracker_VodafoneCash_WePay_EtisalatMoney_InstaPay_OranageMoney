@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/providers/sms_providers.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions/failure_extension.dart';
+import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_snackbar.dart';
-import '../../../../generated/l10n.dart';
 import '../../providers/wallets_providers.dart';
 import '../providers/add_wallet_controller.dart';
 import '../widgets/add_wallet/add_wallet_content.dart';
@@ -18,11 +19,9 @@ class AddWalletScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).addWalletTitle),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text(l10n.addWalletTitle), centerTitle: true),
       body: const SafeArea(child: _AddWalletBody()),
     );
   }

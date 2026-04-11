@@ -1,10 +1,9 @@
 import 'package:flutter/widgets.dart';
-
-import '../../generated/l10n.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 abstract final class AppValidators {
   static String? email(BuildContext context, String? value) {
-    final l10n = S.of(context);
+    final l10n = context.l10n;
     final val = value?.trim();
     if (val == null || val.isEmpty) {
       return l10n.errorValidation;
@@ -20,7 +19,7 @@ abstract final class AppValidators {
   }
 
   static String? password(BuildContext context, String? value) {
-    final l10n = S.of(context);
+    final l10n = context.l10n;
     if (value == null || value.isEmpty) {
       return l10n.errorValidation;
     }
@@ -32,7 +31,7 @@ abstract final class AppValidators {
   }
 
   static String? required(BuildContext context, String? value) {
-    final l10n = S.of(context);
+    final l10n = context.l10n;
     if (value == null || value.trim().isEmpty) {
       return l10n.errorValidation;
     }

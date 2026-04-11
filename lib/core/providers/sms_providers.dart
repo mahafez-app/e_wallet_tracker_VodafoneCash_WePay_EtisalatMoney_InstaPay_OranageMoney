@@ -1,4 +1,6 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../features/transactions/providers/transactions_providers.dart';
 import '../../features/wallets/providers/wallets_providers.dart';
@@ -7,6 +9,12 @@ import '../services/sms_transaction_service.dart';
 
 /// Internal representation of SMS readiness state.
 typedef SmsReadiness = ({bool isPermitted, List<WalletEntity> wallets});
+
+/// Tracks whether the SMS permission prompt has already been shown in the
+/// current app session.
+final hasPromptedWalletPermissionsSessionProvider = StateProvider<bool>(
+  (ref) => false,
+);
 
 /// Evaluates wallet-sync permissions and fetches wallets once per session.
 /// Invalidate this provider after permission is granted to re-evaluate.
@@ -40,3 +48,32 @@ final smsTransactionListenerProvider =
       ref.onDispose(service.stopListening);
       return service;
     });
+
+final smsPermissionPromptControllerProvider =
+    AsyncNotifierProvider.autoDispose<SmsPermissionPromptController, void>(
+      SmsPermissionPromptController.new,
+    );
+
+class SmsPermissionPromptController extends AsyncNotifier<void> {
+  @override
+  void build() {}
+
+  Future<void> checkAndPromptIfNeeded({
+    required bool hasWallets,
+    required VoidCallback navigate,
+  }) async {
+    if (!hasWallets) return;
+
+    final hasPrompted = ref.read(hasPromptedWalletPermissionsSessionProvider);
+    if (hasPrompted) return;
+
+    ref.read(hasPromptedWalletPermissionsSessionProvider.notifier).state = true;
+
+    final result = await ref.read(checkSmsPermissionUseCaseProvider)();
+    result.fold((_) => null, (hasPermission) {
+      if (!hasPermission) {
+        navigate();
+      }
+    });
+  }
+}

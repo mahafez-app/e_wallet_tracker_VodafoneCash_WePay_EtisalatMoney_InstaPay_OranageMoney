@@ -2,20 +2,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
 import '../transaction_details_controller.dart';
-import 'notes_section_state.dart';
+import 'notes_state.dart';
 
-final notesSectionControllerProvider = NotifierProvider.autoDispose
-    .family<NotesSectionController, NotesSectionState, TransactionEntity>(
-      NotesSectionController.new,
+final notesControllerProvider = NotifierProvider.autoDispose
+    .family<NotesController, NotesState, TransactionEntity>(
+      NotesController.new,
     );
 
-class NotesSectionController extends Notifier<NotesSectionState> {
-  NotesSectionController(this.arg);
+class NotesController extends Notifier<NotesState> {
+  NotesController(this.arg);
 
   final TransactionEntity arg;
 
   @override
-  NotesSectionState build() => const NotesSectionState();
+  NotesState build() => const NotesState();
 
   // ── Add field visibility ──────────────────────────────────────────────────
 
@@ -51,12 +51,25 @@ class NotesSectionController extends Notifier<NotesSectionState> {
   void exitEditMode() => state = state.copyWith(editingNoteId: null);
 
   Future<void> editNote({required String noteId, required String text}) async {
-    if (text.trim().isEmpty) return;
+    final trimmedText = text.trim();
+    if (trimmedText.isEmpty) return;
+
+    final currentNote = ref
+        .read(transactionDetailsControllerProvider(arg))
+        .notes
+        .where((note) => note.id == noteId)
+        .firstOrNull;
+
+    if (currentNote != null && currentNote.text.trim() == trimmedText) {
+      state = state.copyWith(editingNoteId: null, savingNoteId: null);
+      return;
+    }
+
     state = state.copyWith(savingNoteId: noteId);
 
     await ref
         .read(transactionDetailsControllerProvider(arg).notifier)
-        .editNote(noteId: noteId, text: text);
+        .editNote(noteId: noteId, text: trimmedText);
 
     if (!ref.mounted) return;
     if (!_lastActionSucceeded) {
@@ -69,30 +82,15 @@ class NotesSectionController extends Notifier<NotesSectionState> {
 
   // ── Delete note ───────────────────────────────────────────────────────────
 
-  Future<void> deleteNote(String noteId, String noteText) async {
+  Future<void> deleteNote(String noteId) async {
     await ref
         .read(transactionDetailsControllerProvider(arg).notifier)
         .deleteNote(noteId);
 
     if (!ref.mounted) return;
-    if (!_lastActionSucceeded) return;
-
-    state = state.copyWith(deletedNoteText: noteText);
-  }
-
-  String? takeDeletedNoteText() {
-    final deletedNoteText = state.deletedNoteText;
-    if (deletedNoteText == null) return null;
-
-    state = state.copyWith(deletedNoteText: null);
-    return deletedNoteText;
-  }
-
-  /// Re-adds a previously deleted note (undo support).
-  Future<void> restoreNote(String text) async {
-    await ref
-        .read(transactionDetailsControllerProvider(arg).notifier)
-        .addNote(text);
+    if (_lastActionSucceeded) {
+      state = state.copyWith(editingNoteId: null, savingNoteId: null);
+    }
   }
 
   bool get _lastActionSucceeded =>

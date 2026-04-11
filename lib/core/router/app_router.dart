@@ -8,7 +8,7 @@ import '../../features/auth/presentation/screens/sign_up_screen.dart';
 import '../../features/auth/providers/auth_providers.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
-import '../../features/transactions/presentation/models/transactions_context.dart';
+import '../../features/transactions/presentation/navigation/transactions_route_data.dart';
 import '../../features/wallets/presentation/screens/add_wallet_screen.dart';
 import '../../features/wallets/presentation/screens/sms_permissions_screen.dart';
 import '../../features/transactions/presentation/screens/transactions_screen.dart';
@@ -146,7 +146,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.transactions,
         builder: (context, state) {
           final transactionsContext = state.extra;
-          if (transactionsContext is! TransactionsContext) {
+          if (transactionsContext is! TransactionsRouteData) {
             return const NotFoundScreen();
           }
           return TransactionsScreen(transactionsContext: transactionsContext);

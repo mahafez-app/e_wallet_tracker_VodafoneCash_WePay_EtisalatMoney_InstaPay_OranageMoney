@@ -1,8 +1,10 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../generated/l10n.dart';
+import '../../../../../core/utils/extensions/localization_extension.dart';
 
 /// Section 3: raw SMS text in a muted selectable container.
 class SmsSection extends StatelessWidget {
@@ -17,7 +19,7 @@ class SmsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _SectionTitle(title: S.of(context).transaction_smsText),
+        _SectionTitle(title: context.l10n.transaction_smsText),
         AppSpacing.sm.verticalSpace,
         Container(
           padding: AppResponsive.allPadding(AppSpacing.md),
@@ -41,7 +43,7 @@ class SmsSection extends StatelessWidget {
 }
 
 class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({required this.title});
+  const _SectionTitle({super.key, required this.title});
 
   final String title;
 

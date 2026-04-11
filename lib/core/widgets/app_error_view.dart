@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
-import '../../generated/l10n.dart';
 import '../error/failures.dart';
 import '../theme/app_responsive.dart';
 import '../theme/app_spacing.dart';
@@ -9,7 +9,7 @@ import 'app_button.dart';
 
 /// Standard error view for all AsyncError states.
 /// Renders a localized message from [Failure] subtypes, falling back to
-/// [S.of(context).errorUnknown] for untyped errors.
+/// [context.l10n.errorUnknown] for untyped errors.
 class AppErrorView extends StatelessWidget {
   const AppErrorView({super.key, required this.error, this.onRetry});
 
@@ -21,7 +21,7 @@ class AppErrorView extends StatelessWidget {
     final theme = Theme.of(context);
     final message = error is Failure
         ? (error as Failure).toLocalizedString(context)
-        : S.of(context).errorUnknown;
+        : context.l10n.errorUnknown;
 
     return Center(
       child: Padding(

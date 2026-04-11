@@ -1,12 +1,15 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:wallet_tracker/core/domain/entities/transaction_entity.dart';
 
-import '../../../../generated/l10n.dart';
 import '../../domain/enums/transaction_type.dart';
 import '../../theme/app_color_extension.dart';
 import '../../theme/app_responsive.dart';
 import '../../theme/app_spacing.dart';
+import '../../utils/extensions/amount_extension.dart';
+import '../../utils/extensions/date_extensions.dart';
+import '../../utils/extensions/localization_extension.dart';
 import '../../utils/extensions/wallet_provider_ext.dart';
 
 class TransactionCard extends StatelessWidget {
@@ -21,19 +24,16 @@ class TransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = context.appColors;
-    final locale = Localizations.localeOf(context).languageCode;
 
     final isReceive = transaction.type == TransactionType.receive;
     final typeColor = isReceive ? colors.success : colors.danger;
     final counterparty = transaction.counterpartyNumber;
-
-    final formattedDate = DateFormat.yMMMMd(
-      locale,
-    ).format(transaction.createdAt);
-    final formattedTime = DateFormat.jm(locale).format(transaction.createdAt);
+    final formattedDateTime = transaction.createdAt.toTransactionDateTimeLabel(
+      context,
+    );
 
     return Container(
       margin: AppResponsive.onlyPadding(bottom: AppSpacing.sm),
@@ -81,8 +81,8 @@ class TransactionCard extends StatelessWidget {
                   children: [
                     Text(
                       isReceive
-                          ? s.transactionTypeReceive
-                          : s.transactionTypeSend,
+                          ? l10n.transactionTypeReceive
+                          : l10n.transactionTypeSend,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         fontSize: 15.responsiveFont,
                         fontWeight: FontWeight.w500,
@@ -91,7 +91,10 @@ class TransactionCard extends StatelessWidget {
                     ),
                     Spacer(),
                     Text(
-                      '${isReceive ? '+' : '-'} ${transaction.amount.toStringAsFixed(2)} ${s.currency}',
+                      transaction.amount.toCurrencyText(
+                        context,
+                        sign: isReceive ? '+' : '-',
+                      ),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         fontSize: 17.responsiveFont,
                         fontWeight: FontWeight.w500,
@@ -111,7 +114,7 @@ class TransactionCard extends StatelessWidget {
                     ),
                     AppSpacing.sm.horizontalSpace,
                     Text(
-                      '$formattedDate · $formattedTime',
+                      formattedDateTime,
                       style: theme.textTheme.labelMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant.withAlpha(
                           200,
@@ -127,7 +130,7 @@ class TransactionCard extends StatelessWidget {
                     icon: Icons.account_balance_wallet,
                     iconColor: theme.colorScheme.onPrimaryContainer,
                     iconBg: theme.colorScheme.onSurface.withAlpha(18),
-                    label: s.walletLabel,
+                    label: l10n.walletLabel,
                     value:
                         '${transaction.provider.displayName(context)} · ${transaction.phoneNumber}',
                   ),
@@ -137,7 +140,7 @@ class TransactionCard extends StatelessWidget {
                       icon: Icons.person_outline_rounded,
                       iconColor: typeColor,
                       iconBg: typeColor.withAlpha(30),
-                      label: isReceive ? s.fromLabel : s.toLabel,
+                      label: isReceive ? l10n.fromLabel : l10n.toLabel,
                       value: counterparty,
                     ),
                   ],
@@ -154,10 +157,10 @@ class TransactionCard extends StatelessWidget {
                     iconBg: transaction.isPaid!
                         ? colors.success.withAlpha(30)
                         : theme.colorScheme.onSurface.withAlpha(18),
-                    label: s.paymentStatus,
+                    label: l10n.paymentStatus,
                     value: transaction.isPaid!
-                        ? s.transactionStatusPaid
-                        : s.transactionStatusUnpaid,
+                        ? l10n.transactionStatusPaid
+                        : l10n.transactionStatusUnpaid,
                   ),
                 ],
               ],
@@ -171,6 +174,7 @@ class TransactionCard extends StatelessWidget {
 
 class _InfoChip extends StatelessWidget {
   const _InfoChip({
+    super.key,
     required this.icon,
     required this.iconColor,
     required this.iconBg,

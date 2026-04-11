@@ -5,6 +5,7 @@ import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/domain/enums/transaction_type.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/transaction_date_range.dart';
+import '../../domain/entities/transaction_page.dart';
 
 /// Type-filter option in the segmented chip row.
 enum TransactionTypeFilter { all, receive, send }
@@ -21,7 +22,7 @@ final class TransactionsState extends Equatable {
     this.customDateRange,
     this.selectedWalletId,
     this.totalCount = 0,
-    this.lastCursor,
+    this.nextCursor,
     this.isLoadingInitial = true,
     this.isLoadingMore = false,
     this.error,
@@ -39,8 +40,8 @@ final class TransactionsState extends Equatable {
 
   final int totalCount;
 
-  /// Opaque cursor object for the next page; null when no more pages exist.
-  final Object? lastCursor;
+  /// Null when there are no more pages.
+  final TransactionPageCursor? nextCursor;
 
   final bool isLoadingInitial;
   final bool isLoadingMore;
@@ -48,7 +49,7 @@ final class TransactionsState extends Equatable {
   /// Non-null on error; cleared on next successful load.
   final Failure? error;
 
-  bool get hasMore => lastCursor != null;
+  bool get hasMore => nextCursor != null;
   bool get hasActiveFilter =>
       typeFilter != TransactionTypeFilter.all ||
       datePreset != DatePreset.none ||
@@ -117,7 +118,7 @@ final class TransactionsState extends Equatable {
     DateTimeRange? customDateRange,
     Object? selectedWalletId = _sentinel,
     int? totalCount,
-    Object? lastCursor = _sentinel,
+    Object? nextCursor = _sentinel,
     bool? isLoadingInitial,
     bool? isLoadingMore,
     Object? error = _sentinel,
@@ -130,7 +131,9 @@ final class TransactionsState extends Equatable {
         ? this.selectedWalletId
         : selectedWalletId as String?,
     totalCount: totalCount ?? this.totalCount,
-    lastCursor: identical(lastCursor, _sentinel) ? this.lastCursor : lastCursor,
+    nextCursor: identical(nextCursor, _sentinel)
+        ? this.nextCursor
+        : nextCursor as TransactionPageCursor?,
     isLoadingInitial: isLoadingInitial ?? this.isLoadingInitial,
     isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     error: identical(error, _sentinel) ? this.error : error as Failure?,
@@ -144,7 +147,7 @@ final class TransactionsState extends Equatable {
     customDateRange,
     selectedWalletId,
     totalCount,
-    lastCursor,
+    nextCursor,
     isLoadingInitial,
     isLoadingMore,
     error,

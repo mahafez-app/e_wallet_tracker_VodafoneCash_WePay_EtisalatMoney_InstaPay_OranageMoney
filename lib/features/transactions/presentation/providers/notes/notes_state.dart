@@ -1,16 +1,13 @@
 import 'package:equatable/equatable.dart';
 
-/// Tracks lightweight UI state local to the notes section:
-/// whether the add-field is visible and which note (by id) is currently
-/// being saved after an edit. All CRUD side-effects are delegated to
-/// [TransactionDetailsController].
-final class NotesSectionState extends Equatable {
-  const NotesSectionState({
+/// Tracks lightweight UI state local to the notes section while delegating
+/// persistence to [TransactionDetailsController].
+final class NotesState extends Equatable {
+  const NotesState({
     this.showAddField = false,
     this.savingNoteId,
     this.isAdding = false,
     this.editingNoteId,
-    this.deletedNoteText,
   });
 
   /// Whether the inline "add note" TextField is expanded.
@@ -26,16 +23,12 @@ final class NotesSectionState extends Equatable {
   /// The id of the note currently being edited.
   final String? editingNoteId;
 
-  /// Stores recently deleted note text to present an undo snackbar.
-  final String? deletedNoteText;
-
-  NotesSectionState copyWith({
+  NotesState copyWith({
     bool? showAddField,
     Object? savingNoteId = _sentinel,
     bool? isAdding,
     Object? editingNoteId = _sentinel,
-    Object? deletedNoteText = _sentinel,
-  }) => NotesSectionState(
+  }) => NotesState(
     showAddField: showAddField ?? this.showAddField,
     savingNoteId: identical(savingNoteId, _sentinel)
         ? this.savingNoteId
@@ -44,9 +37,6 @@ final class NotesSectionState extends Equatable {
     editingNoteId: identical(editingNoteId, _sentinel)
         ? this.editingNoteId
         : editingNoteId as String?,
-    deletedNoteText: identical(deletedNoteText, _sentinel)
-        ? this.deletedNoteText
-        : deletedNoteText as String?,
   );
 
   @override
@@ -55,7 +45,6 @@ final class NotesSectionState extends Equatable {
     savingNoteId,
     isAdding,
     editingNoteId,
-    deletedNoteText,
   ];
 }
 

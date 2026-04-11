@@ -1,16 +1,18 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../generated/l10n.dart';
-import '../../../domain/entities/history_entry_entity.dart';
+import '../../../../../core/utils/extensions/date_extensions.dart';
+import '../../../../../core/utils/extensions/localization_extension.dart';
+import '../../../domain/entities/transaction_history_entry_entity.dart';
 
 /// Section 5: Timeline of paid/unpaid status changes.
-class HistorySection extends StatelessWidget {
-  const HistorySection({super.key, required this.entries});
+class TransactionHistorySection extends StatelessWidget {
+  const TransactionHistorySection({super.key, required this.entries});
 
-  final List<HistoryEntryEntity> entries;
+  final List<TransactionHistoryEntryEntity> entries;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class HistorySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _SectionTitle(title: S.of(context).transaction_history),
+        _SectionTitle(title: context.l10n.transaction_history),
         AppSpacing.md.verticalSpace,
         ...entries.asMap().entries.map(
           (entry) => _HistoryEntryTile(
@@ -33,7 +35,7 @@ class HistorySection extends StatelessWidget {
 }
 
 class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({required this.title});
+  const _SectionTitle({super.key, required this.title});
 
   final String title;
 
@@ -48,21 +50,22 @@ class _SectionTitle extends StatelessWidget {
 
 class _HistoryEntryTile extends StatelessWidget {
   const _HistoryEntryTile({
+    super.key,
     required this.entry,
     required this.isFirst,
     required this.isLast,
   });
 
-  final HistoryEntryEntity entry;
+  final TransactionHistoryEntryEntity entry;
   final bool isFirst;
   final bool isLast;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).languageCode;
-    final dateStr = DateFormat.MMMd(locale).format(entry.occurredAt);
-    final timeStr = DateFormat.jm(locale).format(entry.occurredAt);
+    final l10n = context.l10n;
+    final dateText = entry.occurredAt.toMonthDayLabel(context);
+    final timeText = entry.occurredAt.toTimeLabel(context);
 
     // Active entry (most recent) has primary color, older ones are muted.
     final color = isFirst
@@ -81,13 +84,11 @@ class _HistoryEntryTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    S
-                        .of(context)
-                        .transaction_markedAs(
-                          entry.isPaid
-                              ? S.of(context).transactionStatusPaid
-                              : S.of(context).transactionStatusUnpaid,
-                        ),
+                    l10n.transaction_markedAs(
+                      entry.isPaid
+                          ? l10n.transactionStatusPaid
+                          : l10n.transactionStatusUnpaid,
+                    ),
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: theme.colorScheme.onSurface,
                       fontWeight: FontWeight.w600,
@@ -95,7 +96,7 @@ class _HistoryEntryTile extends StatelessWidget {
                   ),
                   AppSpacing.xs.verticalSpace,
                   Text(
-                    '${S.of(context).transaction_by(entry.actorName)} · $dateStr · $timeStr',
+                    '${l10n.transaction_by(entry.actorName)} · $dateText · $timeText',
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),

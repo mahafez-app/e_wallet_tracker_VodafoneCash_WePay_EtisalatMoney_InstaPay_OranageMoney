@@ -69,6 +69,9 @@ final getNotesUseCaseProvider = Provider<GetNotesUseCase>((ref) {
   return GetNotesUseCase(ref.watch(transactionRepositoryProvider));
 });
 
-final getHistoryUseCaseProvider = Provider<GetHistoryUseCase>((ref) {
-  return GetHistoryUseCase(ref.watch(transactionRepositoryProvider));
-});
+final getTransactionHistoryUseCaseProvider =
+    Provider<GetTransactionHistoryUseCase>((ref) {
+      return GetTransactionHistoryUseCase(
+        ref.watch(transactionRepositoryProvider),
+      );
+    });

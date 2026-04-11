@@ -10,8 +10,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/app_error_view.dart';
 import '../../../../core/widgets/app_loader.dart';
 import '../../domain/entities/home_dashboard_entity.dart';
-import '../providers/home_controller.dart';
-import '../providers/home_sms_prompt_controller.dart';
+import '../providers/home_dashboard_provider.dart';
 import '../widgets/home_global_stats_widget.dart';
 import '../widgets/home_header_widget.dart';
 import '../widgets/home_wallets_section.dart';
@@ -41,7 +40,7 @@ class _HomeBody extends ConsumerWidget {
     ref.listen(homeDashboardProvider, (_, next) {
       if (next case AsyncData(:final value)) {
         ref
-            .read(homeSmsControllerProvider.notifier)
+            .read(smsPermissionPromptControllerProvider.notifier)
             .checkAndPromptIfNeeded(
               hasWallets: value.wallets.isNotEmpty,
               navigate: () {

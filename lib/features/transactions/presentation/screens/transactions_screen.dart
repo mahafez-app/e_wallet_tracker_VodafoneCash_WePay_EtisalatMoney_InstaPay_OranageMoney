@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utils/extensions/failure_extension.dart';
+import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../../../../core/widgets/app_error_view.dart';
 import '../../../../core/widgets/app_loader.dart';
-import '../../../../generated/l10n.dart';
-import '../models/transactions_context.dart';
+import '../navigation/transactions_route_data.dart';
 import '../providers/transactions_controller.dart';
 import '../widgets/details/transaction_details_bottom_sheet.dart';
 import '../widgets/filter_bar/transactions_filter_bar.dart';
@@ -19,7 +19,7 @@ import '../widgets/list/transactions_load_more_footer.dart';
 class TransactionsScreen extends StatelessWidget {
   const TransactionsScreen({super.key, required this.transactionsContext});
 
-  final TransactionsContext transactionsContext;
+  final TransactionsRouteData transactionsContext;
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +38,16 @@ class TransactionsScreen extends StatelessWidget {
 class _TransactionsTitle extends StatelessWidget {
   const _TransactionsTitle({super.key, required this.context_});
 
-  final TransactionsContext context_;
+  final TransactionsRouteData context_;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final label = switch (context_) {
-      WalletTransactionsContext(:final walletLabel) =>
-        S.of(context).transactions_title_wallet(walletLabel),
-      WorkspaceTransactionsContext(:final workspaceName) =>
-        S.of(context).transactions_title_workspace(workspaceName),
+      WalletTransactionsRouteData(:final walletLabel) =>
+        l10n.transactions_title_wallet(walletLabel),
+      WorkspaceTransactionsRouteData(:final workspaceName) =>
+        l10n.transactions_title_workspace(workspaceName),
     };
 
     return Text(
@@ -63,7 +64,7 @@ class _TransactionsTitle extends StatelessWidget {
 class _TransactionsBody extends ConsumerWidget {
   const _TransactionsBody({super.key, required this.context_});
 
-  final TransactionsContext context_;
+  final TransactionsRouteData context_;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -79,7 +80,7 @@ class _TransactionsBody extends ConsumerWidget {
 
     return Column(
       children: [
-        TransactionsFilterBar(context_: context_),
+        TransactionsFilterBar(routeData: context_),
         Expanded(child: _TransactionsContent(context_: context_)),
       ],
     );
@@ -91,7 +92,7 @@ class _TransactionsBody extends ConsumerWidget {
 class _TransactionsContent extends ConsumerWidget {
   const _TransactionsContent({super.key, required this.context_});
 
-  final TransactionsContext context_;
+  final TransactionsRouteData context_;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -105,18 +106,18 @@ class _TransactionsContent extends ConsumerWidget {
 
     if (state.transactions.isEmpty) {
       return TransactionsEmptyView(
-        context_: context_,
+        routeData: context_,
         hasActiveFilter: state.hasActiveFilter,
       );
     }
 
-    final showProviderInfo = context_ is WorkspaceTransactionsContext;
+    final showProviderInfo = context_ is WorkspaceTransactionsRouteData;
 
     return TransactionsDateGroupedList(
       groupedTransactions: state.groupedTransactions,
       showProviderInfo: showProviderInfo,
       onTap: (tx) => TransactionDetailsBottomSheet.show(context, tx),
-      footer: TransactionsLoadMoreFooter(context_: context_),
+      footer: TransactionsLoadMoreFooter(routeData: context_),
     );
   }
 }

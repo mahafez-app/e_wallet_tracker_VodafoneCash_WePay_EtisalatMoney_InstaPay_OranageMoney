@@ -2,15 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../../core/domain/enums/transaction_type.dart';
 import '../../../../../core/theme/app_color_extension.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
+import '../../../../../core/utils/extensions/date_extensions.dart';
+import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../../../generated/l10n.dart';
 import '../../providers/transaction_details_controller.dart';
 
 /// Details card with wallet, date/time, and (for receive) paid status chips.
@@ -30,10 +30,10 @@ class DetailsCardSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colors = context.appColors;
-    final locale = Localizations.localeOf(context).languageCode;
-
-    final dateStr = DateFormat.yMMMMEEEEd(locale).format(transaction.createdAt);
-    final timeStr = DateFormat.jm(locale).format(transaction.createdAt);
+    final l10n = context.l10n;
+    final dateTimeText = transaction.createdAt.toTransactionDateTimeLabel(
+      context,
+    );
 
     return Container(
       decoration: BoxDecoration(
@@ -44,7 +44,7 @@ class DetailsCardSection extends ConsumerWidget {
       child: Column(
         children: [
           _DetailRow(
-            label: S.of(context).transaction_wallet,
+            label: l10n.transaction_wallet,
             child: _WalletChip(transaction: transaction),
           ),
           _Divider(),
@@ -52,8 +52,8 @@ class DetailsCardSection extends ConsumerWidget {
               transaction.counterpartyNumber!.trim().isNotEmpty) ...[
             _DetailRow(
               label: transaction.type == TransactionType.receive
-                  ? S.of(context).transaction_receivedFrom
-                  : S.of(context).transaction_sentTo,
+                  ? l10n.transaction_receivedFrom
+                  : l10n.transaction_sentTo,
               child: Text(
                 transaction.counterpartyNumber!,
                 style: theme.textTheme.bodySmall?.copyWith(
@@ -66,9 +66,9 @@ class DetailsCardSection extends ConsumerWidget {
             _Divider(),
           ],
           _DetailRow(
-            label: S.of(context).transaction_dateTime,
+            label: l10n.transaction_dateTime,
             child: Text(
-              '$dateStr · $timeStr',
+              dateTimeText,
               style: theme.textTheme.bodySmall?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: theme.colorScheme.onSurface,
@@ -206,19 +206,19 @@ class _PaidStatusRow extends ConsumerWidget {
           );
 
     return _DetailRow(
-      label: S.of(context).paymentStatus,
+      label: context.l10n.paymentStatus,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           _PaidChip(
-            label: S.of(context).transactionStatusPaid,
+            label: context.l10n.transactionStatusPaid,
             isActive: isPaid,
             activeColor: colors.success,
             onTap: isReadOnly || isPaid ? null : () => controller?.markAsPaid(),
           ),
           AppSpacing.sm.horizontalSpace,
           _PaidChip(
-            label: S.of(context).transactionStatusUnpaid,
+            label: context.l10n.transactionStatusUnpaid,
             isActive: !isPaid,
             activeColor: colors.danger,
             onTap: isReadOnly || !isPaid

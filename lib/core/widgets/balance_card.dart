@@ -1,9 +1,12 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 
-import '../../../generated/l10n.dart';
 import '../theme/app_color_extension.dart';
 import '../theme/app_responsive.dart';
 import '../theme/app_spacing.dart';
+import '../utils/extensions/amount_extension.dart';
+import '../utils/extensions/localization_extension.dart';
 
 class BalanceCard extends StatelessWidget {
   const BalanceCard({
@@ -25,7 +28,7 @@ class BalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final l10n = context.l10n;
     final colors = context.appColors;
     final theme = Theme.of(context);
 
@@ -64,16 +67,18 @@ class BalanceCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _StatBox(
-                  title: s.totalOut,
-                  amount: '- ${sentAmount.toStringAsFixed(0)}',
+                  title: l10n.totalOut,
+                  amount:
+                      '- ${sentAmount.toLocalizedAmount(context, decimalDigits: 0)}',
                   amountColor: colors.statsSentColor,
                 ),
               ),
               AppSpacing.lg.horizontalSpace,
               Expanded(
                 child: _StatBox(
-                  title: s.totalIn,
-                  amount: '+ ${receivedAmount.toStringAsFixed(0)}',
+                  title: l10n.totalIn,
+                  amount:
+                      '+ ${receivedAmount.toLocalizedAmount(context, decimalDigits: 0)}',
                   amountColor: colors.statsReceivedColor,
                 ),
               ),
@@ -86,13 +91,13 @@ class BalanceCard extends StatelessWidget {
 }
 
 class _BalanceDisplay extends StatelessWidget {
-  const _BalanceDisplay({required this.amount});
+  const _BalanceDisplay({super.key, required this.amount});
 
   final double amount;
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final l10n = context.l10n;
     final colors = context.appColors;
     final theme = Theme.of(context);
 
@@ -100,7 +105,7 @@ class _BalanceDisplay extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          amount.toStringAsFixed(2),
+          amount.toLocalizedAmount(context),
           style: theme.textTheme.displaySmall?.copyWith(
             color: colors.statsOnGradient,
             fontSize: 36.responsiveFont,
@@ -111,7 +116,7 @@ class _BalanceDisplay extends StatelessWidget {
         Padding(
           padding: AppResponsive.onlyPadding(bottom: 6),
           child: Text(
-            s.currency,
+            l10n.currency,
             style: theme.textTheme.titleMedium?.copyWith(
               color: colors.statsOnGradient,
               fontWeight: FontWeight.w700,
@@ -125,6 +130,7 @@ class _BalanceDisplay extends StatelessWidget {
 
 class _StatBox extends StatelessWidget {
   const _StatBox({
+    super.key,
     required this.title,
     required this.amount,
     required this.amountColor,

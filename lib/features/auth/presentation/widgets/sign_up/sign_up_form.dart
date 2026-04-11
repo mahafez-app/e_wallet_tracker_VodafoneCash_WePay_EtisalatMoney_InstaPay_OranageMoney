@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/theme/app_responsive.dart';
@@ -6,7 +8,6 @@ import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/app_validators.dart';
 import '../../../../../core/widgets/app_button.dart';
 import '../../../../../core/widgets/app_text_field.dart';
-import '../../../../../generated/l10n.dart';
 import '../../providers/auth_controller.dart';
 
 class SignUpForm extends ConsumerStatefulWidget {
@@ -51,7 +52,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = S.of(context);
+    final l10n = context.l10n;
     final authState = ref.watch(authNotifierProvider);
 
     return Form(

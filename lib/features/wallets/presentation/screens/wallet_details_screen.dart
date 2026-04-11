@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,14 +11,14 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../core/utils/extensions/wallet_provider_ext.dart';
 import '../../../../core/widgets/app_loader.dart';
 import '../../../../core/widgets/balance_card.dart';
 import '../../../../core/widgets/transactions/no_transactions_card.dart';
 import '../../../../core/widgets/transactions/transaction_card.dart';
-import '../../../../generated/l10n.dart';
-import '../../../transactions/presentation/models/transactions_context.dart';
+import '../../../transactions/presentation/navigation/transactions_route_data.dart';
 import '../../../transactions/presentation/widgets/details/transaction_details_bottom_sheet.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 import '../providers/wallet_details_controller.dart';
@@ -28,18 +30,16 @@ class WalletDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).walletDetails),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text(l10n.walletDetails), centerTitle: true),
       body: SafeArea(child: _WalletDetailsBody(walletId: walletId)),
     );
   }
 }
 
 class _WalletDetailsBody extends ConsumerWidget {
-  const _WalletDetailsBody({required this.walletId});
+  const _WalletDetailsBody({super.key, required this.walletId});
 
   final String walletId;
 
@@ -67,13 +67,13 @@ class _WalletDetailsBody extends ConsumerWidget {
 }
 
 class _BalanceSection extends StatelessWidget {
-  const _BalanceSection({required this.details});
+  const _BalanceSection({super.key, required this.details});
 
   final WalletDetailsEntity details;
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final wallet = details.wallet;
     final localizedLastUpdate = wallet.lastBalanceAt.toFormattedDate(context);
@@ -81,9 +81,9 @@ class _BalanceSection extends StatelessWidget {
       balance: wallet.currentBalance,
       sentAmount: wallet.totalSent,
       receivedAmount: wallet.totalReceived,
-      label: s.currentBalance,
+      label: l10n.currentBalance,
       subtitle: Text(
-        '${s.lastActivity}: $localizedLastUpdate',
+        '${l10n.lastActivity}: $localizedLastUpdate',
         style: theme.textTheme.labelMedium?.copyWith(
           color: context.appColors.statsOnGradient.withAlpha(204),
         ),
@@ -93,7 +93,7 @@ class _BalanceSection extends StatelessWidget {
 }
 
 class _WalletInfoSection extends StatelessWidget {
-  const _WalletInfoSection({required this.details});
+  const _WalletInfoSection({super.key, required this.details});
 
   final WalletDetailsEntity details;
 
@@ -119,14 +119,14 @@ class _WalletInfoSection extends StatelessWidget {
 }
 
 class _RecentTransactionsSection extends StatelessWidget {
-  const _RecentTransactionsSection({required this.details});
+  const _RecentTransactionsSection({super.key, required this.details});
 
   final WalletDetailsEntity details;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final s = S.of(context);
+    final l10n = context.l10n;
 
     return Column(
       children: [
@@ -134,14 +134,14 @@ class _RecentTransactionsSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              s.recentTransactions,
+              l10n.recentTransactions,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
             ),
             TextButton(
               onPressed: () {
-                final contextData = WalletTransactionsContext(
+                final contextData = WalletTransactionsRouteData(
                   walletId: details.wallet.id,
                   walletLabel:
                       '${details.wallet.provider.displayName(context)} · ${details.wallet.phoneNumber}',
@@ -149,7 +149,7 @@ class _RecentTransactionsSection extends StatelessWidget {
                 context.push(AppRoutes.transactionsPath(), extra: contextData);
               },
               child: Text(
-                s.viewAll,
+                l10n.viewAll,
                 style: theme.textTheme.titleSmall?.copyWith(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.w700,

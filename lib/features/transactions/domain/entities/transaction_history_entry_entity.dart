@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-class HistoryEntryEntity extends Equatable {
-  const HistoryEntryEntity({
+class TransactionHistoryEntryEntity extends Equatable {
+  const TransactionHistoryEntryEntity({
     required this.id,
     required this.isPaid,
     required this.actorName,

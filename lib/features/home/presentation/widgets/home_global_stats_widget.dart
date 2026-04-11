@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_color_extension.dart';
+import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/balance_card.dart';
-import '../../../../generated/l10n.dart';
 
 class HomeGlobalStatsWidget extends StatelessWidget {
   const HomeGlobalStatsWidget({
@@ -20,7 +20,7 @@ class HomeGlobalStatsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final l10n = context.l10n;
     final colors = context.appColors;
     final theme = Theme.of(context);
 
@@ -28,10 +28,10 @@ class HomeGlobalStatsWidget extends StatelessWidget {
       balance: totalBalance,
       sentAmount: totalSent,
       receivedAmount: totalReceived,
-      label: s.totalBalance,
+      label: l10n.totalBalance,
       icon: Icons.account_balance_wallet_outlined,
       subtitle: Text(
-        s.activeWalletsHint(walletCount),
+        l10n.activeWalletsHint(walletCount),
         style: theme.textTheme.labelMedium?.copyWith(
           color: colors.statsOnGradient.withAlpha(204), // 0.8
         ),

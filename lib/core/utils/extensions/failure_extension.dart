@@ -1,11 +1,11 @@
 import 'package:flutter/widgets.dart';
-import 'package:wallet_tracker/generated/l10n.dart';
 
 import '../../error/failures.dart';
+import 'localization_extension.dart';
 
 extension FailureMessaging on BuildContext {
   String failureMessage(Failure failure) {
-    final l10n = S.of(this);
+    final l10n = this.l10n;
     return switch (failure) {
       NetworkFailure() => l10n.errorNetwork,
       AuthFailure(:final code) => switch (code) {
@@ -45,7 +45,6 @@ extension FailureMessaging on BuildContext {
 }
 
 extension FailureToLocalizedString on Failure {
-  String toLocalizedString(BuildContext context) {
-    return context.failureMessage(this);
-  }
+  String toLocalizedString(BuildContext context) =>
+      context.failureMessage(this);
 }

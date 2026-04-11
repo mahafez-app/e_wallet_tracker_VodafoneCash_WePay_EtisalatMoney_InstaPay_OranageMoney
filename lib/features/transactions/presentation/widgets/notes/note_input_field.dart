@@ -1,8 +1,10 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 
 import '../../../../../../core/theme/app_responsive.dart';
 import '../../../../../../core/theme/app_spacing.dart';
-import '../../../../../../generated/l10n.dart';
+import '../../../../../../core/utils/extensions/localization_extension.dart';
 
 /// Reusable inline text-field used for both adding a new note and editing
 /// an existing one. Pass [isBusy] to show a loading indicator in place of
@@ -35,7 +37,11 @@ class NoteInputField extends StatelessWidget {
 }
 
 class _NoteTextField extends StatelessWidget {
-  const _NoteTextField({required this.controller, required this.onSubmit});
+  const _NoteTextField({
+    super.key,
+    required this.controller,
+    required this.onSubmit,
+  });
 
   final TextEditingController controller;
   final VoidCallback onSubmit;
@@ -48,7 +54,7 @@ class _NoteTextField extends StatelessWidget {
       minLines: 1,
       autofocus: true,
       decoration: InputDecoration(
-        hintText: S.of(context).transaction_noteHint,
+        hintText: context.l10n.transaction_noteHint,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.responsiveRadius),
         ),
@@ -63,7 +69,11 @@ class _NoteTextField extends StatelessWidget {
 }
 
 class _SubmitButton extends StatelessWidget {
-  const _SubmitButton({required this.isBusy, required this.onSubmit});
+  const _SubmitButton({
+    super.key,
+    required this.isBusy,
+    required this.onSubmit,
+  });
 
   final bool isBusy;
   final VoidCallback onSubmit;

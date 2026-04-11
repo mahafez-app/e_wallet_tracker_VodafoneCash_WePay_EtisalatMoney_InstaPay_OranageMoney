@@ -1,7 +1,7 @@
 import '../../../../core/error/result.dart';
 import '../../../../core/usecase/usecase.dart';
-import '../entities/history_entry_entity.dart';
 import '../entities/note_entity.dart';
+import '../entities/transaction_history_entry_entity.dart';
 import '../repositories/transaction_repository.dart';
 
 // ── Add note ─────────────────────────────────────────────────────────────────
@@ -97,34 +97,46 @@ final class DeleteNoteParams {
 // ── Stream notes ──────────────────────────────────────────────────────────────
 
 final class GetNotesUseCase
-    implements StreamUseCase<List<NoteEntity>, NoteStreamParams> {
+    implements StreamUseCase<List<NoteEntity>, TransactionDetailsStreamParams> {
   const GetNotesUseCase(this._repository);
 
   final TransactionRepository _repository;
 
   @override
-  Stream<Result<List<NoteEntity>>> call(NoteStreamParams params) => _repository
-      .getNotes(walletId: params.walletId, transactionId: params.transactionId);
+  Stream<Result<List<NoteEntity>>> call(
+    TransactionDetailsStreamParams params,
+  ) => _repository.getNotes(
+    walletId: params.walletId,
+    transactionId: params.transactionId,
+  );
 }
 
 // ── Stream history ────────────────────────────────────────────────────────────
 
-final class GetHistoryUseCase
-    implements StreamUseCase<List<HistoryEntryEntity>, NoteStreamParams> {
-  const GetHistoryUseCase(this._repository);
+final class GetTransactionHistoryUseCase
+    implements
+        StreamUseCase<
+          List<TransactionHistoryEntryEntity>,
+          TransactionDetailsStreamParams
+        > {
+  const GetTransactionHistoryUseCase(this._repository);
 
   final TransactionRepository _repository;
 
   @override
-  Stream<Result<List<HistoryEntryEntity>>> call(NoteStreamParams params) =>
-      _repository.getHistory(
-        walletId: params.walletId,
-        transactionId: params.transactionId,
-      );
+  Stream<Result<List<TransactionHistoryEntryEntity>>> call(
+    TransactionDetailsStreamParams params,
+  ) => _repository.getTransactionHistory(
+    walletId: params.walletId,
+    transactionId: params.transactionId,
+  );
 }
 
-final class NoteStreamParams {
-  const NoteStreamParams({required this.walletId, required this.transactionId});
+final class TransactionDetailsStreamParams {
+  const TransactionDetailsStreamParams({
+    required this.walletId,
+    required this.transactionId,
+  });
 
   final String walletId;
   final String transactionId;

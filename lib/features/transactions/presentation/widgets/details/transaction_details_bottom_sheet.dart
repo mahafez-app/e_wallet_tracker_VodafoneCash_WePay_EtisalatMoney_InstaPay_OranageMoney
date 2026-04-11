@@ -10,10 +10,10 @@ import '../../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../../core/widgets/app_snackbar.dart';
 import '../../providers/transaction_details_controller.dart';
 import 'details_card_section.dart';
-import 'history_section.dart';
 import 'notes_section.dart';
 import 'share_receipt_section.dart';
 import 'sms_section.dart';
+import 'transaction_history_section.dart';
 import 'transaction_header_section.dart';
 
 class TransactionDetailsBottomSheet extends ConsumerWidget {
@@ -140,7 +140,8 @@ class _DetailsScrollContent extends ConsumerWidget {
         ],
         NotesSection(transaction: state.transaction),
         AppSpacing.xl.verticalSpace,
-        if (state.history.isNotEmpty) HistorySection(entries: state.history),
+        if (state.history.isNotEmpty)
+          TransactionHistorySection(entries: state.history),
         AppSpacing.xl.verticalSpace,
       ],
     );

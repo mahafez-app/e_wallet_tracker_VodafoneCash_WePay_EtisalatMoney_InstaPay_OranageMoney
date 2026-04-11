@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,7 +10,6 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/app_snackbar.dart';
-import '../../../../generated/l10n.dart';
 import '../providers/auth_controller.dart';
 import '../widgets/sign_up/sign_up_form.dart';
 
@@ -17,7 +18,7 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = S.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -66,7 +67,7 @@ class _SignUpBody extends ConsumerWidget {
       }
     });
 
-    final l10n = S.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return Form(
@@ -117,7 +118,7 @@ class _SignInPrompt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = S.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return Row(

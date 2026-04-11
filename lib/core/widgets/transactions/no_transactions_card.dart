@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
+
 import 'package:wallet_tracker/core/theme/app_responsive.dart';
 import 'package:wallet_tracker/core/theme/app_spacing.dart';
-import 'package:wallet_tracker/generated/l10n.dart';
 
 class NoTransactionsCard extends StatelessWidget {
   const NoTransactionsCard({super.key});
@@ -21,7 +22,7 @@ class NoTransactionsCard extends StatelessWidget {
           ),
           AppSpacing.lg.verticalSpace,
           Text(
-            S.of(context).noTransactionsTitle,
+            context.l10n.noTransactionsTitle,
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.outline,

@@ -1,9 +1,11 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../generated/l10n.dart';
+import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../auth/providers/auth_providers.dart';
 
 class HomeHeaderWidget extends ConsumerWidget {
@@ -13,7 +15,6 @@ class HomeHeaderWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final s = S.of(context);
     final user = ref.watch(currentUserProvider);
 
     return Padding(
@@ -24,7 +25,7 @@ class HomeHeaderWidget extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _UserAvatarAndName(userName: user?.name, s: s),
+          _UserAvatarAndName(userName: user?.name),
           _InvitationsIconBadge(count: invitationsCount),
         ],
       ),
@@ -33,13 +34,13 @@ class HomeHeaderWidget extends ConsumerWidget {
 }
 
 class _UserAvatarAndName extends StatelessWidget {
-  const _UserAvatarAndName({required this.userName, required this.s});
+  const _UserAvatarAndName({super.key, required this.userName});
 
   final String? userName;
-  final S s;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -70,14 +71,14 @@ class _UserAvatarAndName extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              s.welcome,
+              l10n.welcome,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: colorScheme.outline,
                 fontWeight: FontWeight.w700,
               ),
             ),
             Text(
-              userName ?? s.yourName,
+              userName ?? l10n.yourName,
               style: theme.textTheme.titleLarge?.copyWith(
                 color: colorScheme.primary,
                 fontWeight: FontWeight.w800,
@@ -91,7 +92,7 @@ class _UserAvatarAndName extends StatelessWidget {
 }
 
 class _InvitationsIconBadge extends StatelessWidget {
-  const _InvitationsIconBadge({required this.count});
+  const _InvitationsIconBadge({super.key, required this.count});
 
   final int count;
 

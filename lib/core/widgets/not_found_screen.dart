@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_tracker/generated/l10n.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 import '../theme/app_responsive.dart';
 import '../theme/app_spacing.dart';
@@ -26,12 +26,12 @@ class NotFoundScreen extends StatelessWidget {
               ),
               AppSpacing.lg.verticalSpace,
               Text(
-                S.of(context).notFoundStatusCode,
+                context.l10n.notFoundStatusCode,
                 style: Theme.of(context).textTheme.displaySmall,
               ),
               AppSpacing.sm.verticalSpace,
               Text(
-                S.of(context).notFoundPageTitle,
+                context.l10n.notFoundPageTitle,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ],

@@ -3,25 +3,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../generated/l10n.dart';
-import '../../models/transactions_context.dart';
+import '../../../../../core/utils/extensions/localization_extension.dart';
+import '../../navigation/transactions_route_data.dart';
 import '../../providers/transactions_controller.dart';
 
 class TransactionsEmptyView extends ConsumerWidget {
   const TransactionsEmptyView({
     super.key,
-    required this.context_,
+    required this.routeData,
     required this.hasActiveFilter,
   });
 
-  final TransactionsContext context_;
+  final TransactionsRouteData routeData;
   final bool hasActiveFilter;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final controller = ref.read(
-      transactionsControllerProvider(context_).notifier,
+      transactionsControllerProvider(routeData).notifier,
     );
 
     return Center(
@@ -48,8 +48,8 @@ class TransactionsEmptyView extends ConsumerWidget {
             AppSpacing.lg.verticalSpace,
             Text(
               hasActiveFilter
-                  ? S.of(context).transactions_emptyWithFilter
-                  : S.of(context).noTransactionsTitle,
+                  ? context.l10n.transactions_emptyWithFilter
+                  : context.l10n.noTransactionsTitle,
               textAlign: TextAlign.center,
               style: theme.textTheme.titleSmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
@@ -61,7 +61,7 @@ class TransactionsEmptyView extends ConsumerWidget {
               OutlinedButton.icon(
                 onPressed: () => controller.clearAllFilters(),
                 icon: const Icon(Icons.filter_alt_off_rounded),
-                label: Text(S.of(context).transactions_clearFilters),
+                label: Text(context.l10n.transactions_clearFilters),
               ),
             },
           ],

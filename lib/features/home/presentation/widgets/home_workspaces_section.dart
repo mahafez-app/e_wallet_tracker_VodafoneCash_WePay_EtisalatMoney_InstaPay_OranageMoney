@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/domain/entities/workspace_entity.dart';
-import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/utils/extensions/date_extensions.dart';
-import '../../../../generated/l10n.dart';
+import '../../../../core/utils/extensions/localization_extension.dart';
+import 'workspaces/home_workspace_card.dart';
 
 class HomeWorkspacesSection extends StatelessWidget {
   const HomeWorkspacesSection({super.key, required this.workspaces});
@@ -16,14 +15,14 @@ class HomeWorkspacesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     if (workspaces.isEmpty) return const SizedBox.shrink();
 
-    final s = S.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          s.workspaces,
+          l10n.workspaces,
           style: theme.textTheme.titleLarge?.copyWith(
             color: theme.colorScheme.onSurface,
             fontWeight: FontWeight.w700,
@@ -36,202 +35,9 @@ class HomeWorkspacesSection extends StatelessWidget {
           itemCount: workspaces.length,
           separatorBuilder: (_, _) => AppSpacing.md.verticalSpace,
           itemBuilder: (context, index) =>
-              _WorkspaceCard(workspace: workspaces[index]),
+              HomeWorkspaceCard(workspace: workspaces[index]),
         ),
       ],
-    );
-  }
-}
-
-class _WorkspaceCard extends StatelessWidget {
-  const _WorkspaceCard({required this.workspace});
-
-  final WorkspaceEntity workspace;
-
-  @override
-  Widget build(BuildContext context) {
-    final s = S.of(context);
-    final theme = Theme.of(context);
-    final colors = context.appColors;
-    final colorScheme = theme.colorScheme;
-
-    return Container(
-      padding: AppResponsive.allPadding(AppSpacing.xl),
-      decoration: BoxDecoration(
-        color: colors.cardBackground,
-        border: Border.all(color: colors.cardBorder),
-        borderRadius: BorderRadius.circular(16.responsiveRadius),
-        boxShadow: [
-          BoxShadow(
-            color: colors.cardShadow,
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _WorkspaceHeader(
-                name: workspace.name,
-                walletsCount: workspace.walletsCount,
-              ),
-              _WorkspaceLastActivity(
-                latestActivityAt: workspace.latestActivityAt,
-              ),
-            ],
-          ),
-          AppSpacing.lg.verticalSpace,
-          Row(
-            children: [
-              Expanded(
-                child: _WorkspaceStat(
-                  title: s.totalIn,
-                  amount:
-                      '${workspace.totalReceived.toStringAsFixed(0)} ${s.currency}',
-                  amountColor: colorScheme.secondary,
-                ),
-              ),
-              AppSpacing.md.horizontalSpace,
-              Expanded(
-                child: _WorkspaceStat(
-                  title: s.totalOut,
-                  amount:
-                      '${workspace.totalSent.toStringAsFixed(0)} ${s.currency}',
-                  amountColor: colorScheme.error,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _WorkspaceHeader extends StatelessWidget {
-  const _WorkspaceHeader({required this.name, required this.walletsCount});
-
-  final String name;
-  final int walletsCount;
-
-  @override
-  Widget build(BuildContext context) {
-    final s = S.of(context);
-    final theme = Theme.of(context);
-    final colors = context.appColors;
-
-    return Row(
-      children: [
-        Container(
-          width: 40.responsiveRadius,
-          height: 40.responsiveRadius,
-          decoration: BoxDecoration(
-            color: colors.workspaceIconBackground,
-            borderRadius: BorderRadius.circular(12.responsiveRadius),
-          ),
-          child: Icon(Icons.storefront, color: colors.workspaceIconForeground),
-        ),
-        AppSpacing.md.horizontalSpace,
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              name,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Text(
-              s.activeWalletsCount(walletsCount),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.outline,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _WorkspaceLastActivity extends StatelessWidget {
-  const _WorkspaceLastActivity({required this.latestActivityAt});
-
-  final DateTime? latestActivityAt;
-
-  @override
-  Widget build(BuildContext context) {
-    final s = S.of(context);
-    final theme = Theme.of(context);
-    final timeStr = latestActivityAt?.toTimeAgo(context) ?? s.justNow;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          s.lastActivity,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.outline,
-          ),
-        ),
-        Text(
-          timeStr,
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: theme.colorScheme.onSurface,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _WorkspaceStat extends StatelessWidget {
-  const _WorkspaceStat({
-    required this.title,
-    required this.amount,
-    required this.amountColor,
-  });
-
-  final String title;
-  final String amount;
-  final Color amountColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
-      padding: AppResponsive.allPadding(AppSpacing.md),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withAlpha(127), // 0.5
-        borderRadius: BorderRadius.circular(12.responsiveRadius),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.outline,
-            ),
-          ),
-          AppSpacing.xs.verticalSpace,
-          Text(
-            amount,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: amountColor,
-              fontSize: 14.responsiveFont,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

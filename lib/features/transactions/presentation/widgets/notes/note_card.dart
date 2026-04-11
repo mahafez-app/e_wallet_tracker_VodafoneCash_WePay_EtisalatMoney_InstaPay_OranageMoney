@@ -7,8 +7,10 @@ import '../../../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../../../core/theme/app_color_extension.dart';
 import '../../../../../../core/theme/app_responsive.dart';
 import '../../../../../../core/theme/app_spacing.dart';
+import '../../../../../../core/utils/extensions/localization_extension.dart';
+import '../../../../../../core/widgets/app_dialog.dart';
 import '../../../domain/entities/note_entity.dart';
-import '../../providers/notes/notes_section_controller.dart';
+import '../../providers/notes/notes_controller.dart';
 import 'note_input_field.dart';
 import 'note_read_view.dart';
 
@@ -16,7 +18,7 @@ import 'note_read_view.dart';
 ///
 /// Local [StatefulWidget] owns only the [TextEditingController].
 /// The boolean edit-mode flag and all Firestore mutations are delegated to
-/// [NotesSectionController].
+/// [NotesController].
 class NoteCard extends ConsumerStatefulWidget {
   const NoteCard({
     super.key,
@@ -43,9 +45,7 @@ class _NoteCardState extends ConsumerState<NoteCard> {
   }
 
   bool get _isEditing =>
-      ref
-          .read(notesSectionControllerProvider(widget.transaction))
-          .editingNoteId ==
+      ref.read(notesControllerProvider(widget.transaction)).editingNoteId ==
       widget.note.id;
 
   @override
@@ -78,13 +78,28 @@ class _NoteCardState extends ConsumerState<NoteCard> {
     );
   }
 
-  NotesSectionController get _notifier =>
-      ref.read(notesSectionControllerProvider(widget.transaction).notifier);
+  Future<void> _confirmDelete() async {
+    final l10n = context.l10n;
+    final didConfirm = await AppDialog.show<bool>(
+      context,
+      title: l10n.transaction_deleteNoteTitle,
+      message: l10n.transaction_deleteNoteMessage,
+      confirmLabel: l10n.transaction_deleteAction,
+      cancelLabel: MaterialLocalizations.of(context).cancelButtonLabel,
+      type: AppDialogType.warning,
+      onConfirm: () => Navigator.of(context).pop(true),
+      onCancel: () => Navigator.of(context).pop(false),
+    );
+
+    if (didConfirm != true || !mounted) return;
+    await _notifier.deleteNote(widget.note.id);
+  }
+
+  NotesController get _notifier =>
+      ref.read(notesControllerProvider(widget.transaction).notifier);
 
   bool get _isSaving =>
-      ref
-          .watch(notesSectionControllerProvider(widget.transaction))
-          .savingNoteId ==
+      ref.watch(notesControllerProvider(widget.transaction)).savingNoteId ==
       widget.note.id;
 
   @override
@@ -101,7 +116,7 @@ class _NoteCardState extends ConsumerState<NoteCard> {
       ),
       child:
           ref
-                  .watch(notesSectionControllerProvider(widget.transaction))
+                  .watch(notesControllerProvider(widget.transaction))
                   .editingNoteId ==
               widget.note.id
           ? _EditingContent(
@@ -114,8 +129,7 @@ class _NoteCardState extends ConsumerState<NoteCard> {
               note: widget.note,
               isOwner: widget.isOwner,
               onEditTap: _enterEditMode,
-              onDeleteTap: () =>
-                  _notifier.deleteNote(widget.note.id, widget.note.text),
+              onDeleteTap: _confirmDelete,
             ),
     );
   }

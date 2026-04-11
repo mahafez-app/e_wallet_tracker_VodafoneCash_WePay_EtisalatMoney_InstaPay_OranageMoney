@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,7 +11,6 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_snackbar.dart';
-import '../../../../generated/l10n.dart';
 import '../providers/sms_permissions_controller.dart';
 
 class SmsPermissionsScreen extends StatelessWidget {
@@ -39,7 +40,7 @@ class _SmsPermissionsBody extends ConsumerWidget {
       }
     });
 
-    final s = S.of(context);
+    final s = context.l10n;
     final theme = Theme.of(context);
     final state = ref.watch(smsPermissionsControllerProvider);
 

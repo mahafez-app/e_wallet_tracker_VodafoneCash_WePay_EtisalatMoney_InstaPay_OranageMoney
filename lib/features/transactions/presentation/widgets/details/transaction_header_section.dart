@@ -5,7 +5,8 @@ import '../../../../../core/domain/enums/transaction_type.dart';
 import '../../../../../core/theme/app_color_extension.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../generated/l10n.dart';
+import '../../../../../core/utils/extensions/amount_extension.dart';
+import '../../../../../core/utils/extensions/localization_extension.dart';
 
 /// Centered header: large icon, amount, and transaction type label.
 class TransactionHeaderSection extends StatelessWidget {
@@ -17,12 +18,14 @@ class TransactionHeaderSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.appColors;
+    final l10n = context.l10n;
     final isReceive = transaction.type == TransactionType.receive;
     final typeColor = isReceive ? colors.success : colors.danger;
     final sign = isReceive ? '+' : '-';
     final label = isReceive
-        ? S.of(context).transaction_typeReceiveLabel
-        : S.of(context).transaction_typeSendLabel;
+        ? l10n.transaction_typeReceiveLabel
+        : l10n.transaction_typeSendLabel;
+    final amountText = '$sign${transaction.amount.toLocalizedAmount(context)}';
 
     return Column(
       children: [
@@ -46,7 +49,7 @@ class TransactionHeaderSection extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: '$sign${transaction.amount.toStringAsFixed(2)} ',
+                text: '$amountText ',
                 style: theme.textTheme.headlineLarge?.copyWith(
                   color: typeColor,
                   fontWeight: FontWeight.w800,
@@ -54,7 +57,7 @@ class TransactionHeaderSection extends StatelessWidget {
                 ),
               ),
               TextSpan(
-                text: S.of(context).currency,
+                text: l10n.currency,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: typeColor.withAlpha(200),
                   fontWeight: FontWeight.w600,

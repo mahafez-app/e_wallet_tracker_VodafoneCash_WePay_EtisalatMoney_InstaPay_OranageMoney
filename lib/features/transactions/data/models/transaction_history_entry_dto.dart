@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../domain/entities/history_entry_entity.dart';
+import '../../domain/entities/transaction_history_entry_entity.dart';
 
-final class HistoryEntryDto extends HistoryEntryEntity {
-  const HistoryEntryDto({
+final class TransactionHistoryEntryDto extends TransactionHistoryEntryEntity {
+  const TransactionHistoryEntryDto({
     required super.id,
     required super.isPaid,
     required super.actorName,
@@ -11,9 +11,9 @@ final class HistoryEntryDto extends HistoryEntryEntity {
     required super.occurredAt,
   });
 
-  factory HistoryEntryDto.fromFirestore(DocumentSnapshot doc) {
+  factory TransactionHistoryEntryDto.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    return HistoryEntryDto(
+    return TransactionHistoryEntryDto(
       id: doc.id,
       isPaid: data['isPaid'] as bool? ?? false,
       actorName: data['actorName'] as String? ?? '',
@@ -30,7 +30,7 @@ final class HistoryEntryDto extends HistoryEntryEntity {
     'occurredAt': Timestamp.fromDate(occurredAt),
   };
 
-  HistoryEntryEntity toEntity() => HistoryEntryEntity(
+  TransactionHistoryEntryEntity toEntity() => TransactionHistoryEntryEntity(
     id: id,
     isPaid: isPaid,
     actorName: actorName,

@@ -14,8 +14,9 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/failure_extension.dart';
+import '../../../../../core/utils/extensions/localization_extension.dart';
+import '../../../../../core/utils/extensions/transaction_share_extension.dart';
 import '../../../../../core/widgets/app_snackbar.dart';
-import '../../../../../generated/l10n.dart';
 import '../../providers/transaction_details_controller.dart';
 import '../../providers/share_receipt/share_receipt_controller.dart';
 import 'transaction_receipt_image.dart';
@@ -42,7 +43,7 @@ class ShareReceiptSection extends ConsumerWidget {
   }) async {
     try {
       final screenshotController = ScreenshotController();
-      final shareMessage = S.of(context).transaction_shareReceipt;
+      final shareMessage = context.l10n.transaction_shareReceipt;
       final mediaQueryData = MediaQuery.of(context);
       final receiptWidth = mediaQueryData.size.width;
       final receiptWidget = _ReceiptCaptureRoot(
@@ -76,7 +77,11 @@ class ShareReceiptSection extends ConsumerWidget {
 
       ref
           .read(shareReceiptControllerProvider.notifier)
-          .shareReceipt(receiptBytes: receiptBytes, shareMessage: shareMessage);
+          .shareReceipt(
+            receiptBytes: receiptBytes,
+            fileName: transaction.receiptFileName,
+            shareMessage: shareMessage,
+          );
     } catch (error, stackTrace) {
       final failure = const FailureMapper().map(error);
       log(
@@ -216,7 +221,7 @@ class _ShareButton extends StatelessWidget {
                   ),
                 )
               : const Icon(Icons.share_rounded),
-          label: Text(S.of(context).transaction_shareReceipt),
+          label: Text(context.l10n.transaction_shareReceipt),
           style: FilledButton.styleFrom(
             padding: AppResponsive.symmetricPadding(vertical: AppSpacing.md),
             shape: RoundedRectangleBorder(

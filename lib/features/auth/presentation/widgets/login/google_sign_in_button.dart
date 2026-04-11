@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../../core/utils/app_assets.dart';
 import '../../../../../core/widgets/app_button.dart';
-import '../../../../../generated/l10n.dart';
 import '../../providers/auth_controller.dart';
 
 class GoogleSignInButton extends ConsumerWidget {
@@ -12,7 +13,7 @@ class GoogleSignInButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = S.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final authState = ref.watch(authNotifierProvider);
 

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/domain/entities/transaction_entity.dart';
-import '../../../transactions/presentation/providers/transactions_controller.dart';
+import '../../../../core/providers/transaction_events_provider.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 import '../../domain/usecases/wallet_details_usecases.dart';
 import '../../providers/wallets_providers.dart';

@@ -6,19 +6,18 @@ import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/domain/enums/transaction_type.dart';
 import '../../../../core/domain/enums/wallet_provider.dart';
 import '../../domain/entities/transaction_date_range.dart';
-import '../models/history_entry_dto.dart';
+import '../../domain/entities/transaction_page.dart';
 import '../models/note_dto.dart';
+import '../models/transaction_history_entry_dto.dart';
+import '../models/transaction_page_dto.dart';
 
 abstract interface class TransactionRemoteDataSource {
-  Future<
-    ({List<TransactionDto> transactions, DocumentSnapshot? lastDoc, int total})
-  >
-  getWalletTransactions({
+  Future<TransactionPageDto> getWalletTransactions({
     required String walletId,
     TransactionType? type,
     TransactionDateRange? dateRange,
     int limit = 20,
-    DocumentSnapshot? lastDocument,
+    TransactionPageCursor? cursor,
   });
 
   Future<List<TransactionDto>> getWorkspaceTransactions({
@@ -70,7 +69,7 @@ abstract interface class TransactionRemoteDataSource {
     required String transactionId,
   });
 
-  Stream<List<HistoryEntryDto>> getHistory({
+  Stream<List<TransactionHistoryEntryDto>> getTransactionHistory({
     required String walletId,
     required String transactionId,
   });
@@ -120,15 +119,12 @@ final class TransactionRemoteDataSourceImpl
   // ── Queries ────────────────────────────────────────────────────────────────
 
   @override
-  Future<
-    ({List<TransactionDto> transactions, DocumentSnapshot? lastDoc, int total})
-  >
-  getWalletTransactions({
+  Future<TransactionPageDto> getWalletTransactions({
     required String walletId,
     TransactionType? type,
     TransactionDateRange? dateRange,
     int limit = 20,
-    DocumentSnapshot? lastDocument,
+    TransactionPageCursor? cursor,
   }) async {
     final meta = await _walletMeta(walletId);
 
@@ -143,13 +139,16 @@ final class TransactionRemoteDataSourceImpl
 
     // Data query with pagination cursor.
     var dataQuery = _applyFilters(
-      _txCollection(walletId).orderBy('createdAt', descending: true),
+      _walletTransactionsQuery(walletId),
       type: type,
       dateRange: dateRange,
     ).limit(limit);
 
-    if (lastDocument != null) {
-      dataQuery = dataQuery.startAfterDocument(lastDocument);
+    if (cursor != null) {
+      dataQuery = dataQuery.startAfter([
+        Timestamp.fromDate(cursor.createdAt),
+        cursor.transactionId,
+      ]);
     }
 
     final snapshot = await dataQuery.get();
@@ -166,10 +165,10 @@ final class TransactionRemoteDataSourceImpl
         )
         .toList();
 
-    return (
+    return TransactionPageDto(
       transactions: transactions,
-      lastDoc: docs.length == limit ? docs.last : null,
-      total: total,
+      totalCount: total,
+      nextCursor: docs.length == limit ? _toCursor(docs.last) : null,
     );
   }
 
@@ -203,7 +202,7 @@ final class TransactionRemoteDataSourceImpl
   }) async {
     final meta = await _walletMeta(walletId);
     final query = _applyFilters(
-      _txCollection(walletId).orderBy('createdAt', descending: true),
+      _walletTransactionsQuery(walletId),
       type: type,
       dateRange: dateRange,
     ).limit(limit);
@@ -356,7 +355,7 @@ final class TransactionRemoteDataSourceImpl
   // ── History ────────────────────────────────────────────────────────────────
 
   @override
-  Stream<List<HistoryEntryDto>> getHistory({
+  Stream<List<TransactionHistoryEntryDto>> getTransactionHistory({
     required String walletId,
     required String transactionId,
   }) {
@@ -366,8 +365,27 @@ final class TransactionRemoteDataSourceImpl
         .orderBy('occurredAt', descending: true)
         .snapshots()
         .map(
-          (snapshot) =>
-              snapshot.docs.map(HistoryEntryDto.fromFirestore).toList(),
+          (snapshot) => snapshot.docs
+              .map(TransactionHistoryEntryDto.fromFirestore)
+              .toList(),
         );
+  }
+
+  Query<Map<String, dynamic>> _walletTransactionsQuery(String walletId) =>
+      _txCollection(walletId)
+          .orderBy('createdAt', descending: true)
+          .orderBy(FieldPath.documentId, descending: true);
+
+  TransactionPageCursor _toCursor(
+    QueryDocumentSnapshot<Map<String, dynamic>> document,
+  ) {
+    final createdAt =
+        (document.data()['createdAt'] as Timestamp? ?? Timestamp.now())
+            .toDate();
+
+    return TransactionPageCursor(
+      createdAt: createdAt,
+      transactionId: document.id,
+    );
   }
 }

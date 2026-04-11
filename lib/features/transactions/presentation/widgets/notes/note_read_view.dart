@@ -1,11 +1,13 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:wallet_tracker/features/transactions/domain/entities/note_entity.dart';
 
 import '../../../../../../core/theme/app_color_extension.dart';
 import '../../../../../../core/theme/app_responsive.dart';
 import '../../../../../../core/theme/app_spacing.dart';
-import '../../../../../../generated/l10n.dart';
+import '../../../../../../core/utils/extensions/date_extensions.dart';
+import '../../../../../../core/utils/extensions/localization_extension.dart';
 
 /// Renders a single note in read mode: text, author line, edit/delete actions.
 class NoteReadView extends StatelessWidget {
@@ -25,8 +27,7 @@ class NoteReadView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).languageCode;
-    final dateStr = DateFormat.MMMd(locale).format(note.createdAt);
+    final dateText = note.createdAt.toMonthDayLabel(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -38,7 +39,7 @@ class NoteReadView extends StatelessWidget {
           onDeleteTap: onDeleteTap,
         ),
         AppSpacing.xs.verticalSpace,
-        _NoteMetaRow(note: note, dateStr: dateStr, theme: theme),
+        _NoteMetaRow(note: note, dateText: dateText, theme: theme),
       ],
     );
   }
@@ -46,6 +47,7 @@ class NoteReadView extends StatelessWidget {
 
 class _NoteTextRow extends StatelessWidget {
   const _NoteTextRow({
+    super.key,
     required this.note,
     required this.isOwner,
     required this.onEditTap,
@@ -94,6 +96,7 @@ class _NoteTextRow extends StatelessWidget {
 
 class _ActionIconButton extends StatelessWidget {
   const _ActionIconButton({
+    super.key,
     required this.icon,
     required this.onPressed,
     required this.color,
@@ -117,13 +120,14 @@ class _ActionIconButton extends StatelessWidget {
 
 class _NoteMetaRow extends StatelessWidget {
   const _NoteMetaRow({
+    super.key,
     required this.note,
-    required this.dateStr,
+    required this.dateText,
     required this.theme,
   });
 
   final NoteEntity note;
-  final String dateStr;
+  final String dateText;
   final ThemeData theme;
 
   @override
@@ -131,7 +135,7 @@ class _NoteMetaRow extends StatelessWidget {
     return Row(
       children: [
         Text(
-          '${S.of(context).transaction_by(note.authorName)} · $dateStr',
+          '${context.l10n.transaction_by(note.authorName)} · $dateText',
           style: theme.textTheme.labelSmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant.withAlpha(160),
           ),
@@ -139,7 +143,7 @@ class _NoteMetaRow extends StatelessWidget {
         if (note.wasEdited) ...[
           AppSpacing.xs.horizontalSpace,
           Text(
-            S.of(context).transaction_edited,
+            context.l10n.transaction_edited,
             style: theme.textTheme.labelSmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant.withAlpha(120),
               fontStyle: FontStyle.italic,

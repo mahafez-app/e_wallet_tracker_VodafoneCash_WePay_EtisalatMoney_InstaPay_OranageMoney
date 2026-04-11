@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
+
 import 'package:wallet_tracker/core/domain/enums/wallet_provider.dart';
 import 'package:wallet_tracker/core/theme/app_responsive.dart';
 import 'package:wallet_tracker/core/theme/app_spacing.dart';
 import 'package:wallet_tracker/core/utils/extensions/wallet_provider_ext.dart';
-import 'package:wallet_tracker/generated/l10n.dart';
 
 class WalletProviderInfo extends StatelessWidget {
   const WalletProviderInfo({
@@ -86,7 +87,7 @@ class _WalletStatusBadge extends StatelessWidget {
           ),
           AppSpacing.xs.horizontalSpace,
           Text(
-            S.of(context).walletStatusActive,
+            context.l10n.walletStatusActive,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
               color: provider.brandColor,
               fontWeight: FontWeight.w700,

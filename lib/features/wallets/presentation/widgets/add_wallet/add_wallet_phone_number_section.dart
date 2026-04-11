@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/app_constants.dart';
 import '../../../../../core/widgets/app_text_field.dart';
-import '../../../../../generated/l10n.dart';
 import '../../providers/add_wallet_controller.dart';
 
 class AddWalletPhoneNumberSection extends StatelessWidget {
@@ -83,7 +83,7 @@ class _ManualPhoneNumberFieldState extends State<_ManualPhoneNumberField> {
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final s = context.l10n;
     final theme = Theme.of(context);
 
     return AppTextField(
@@ -121,7 +121,7 @@ class _DetectedPhoneNumbersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
+    final s = context.l10n;
     final theme = Theme.of(context);
 
     return Column(

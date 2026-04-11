@@ -2,21 +2,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wallet_tracker/features/transactions/presentation/providers/notes/notes_section_state.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../features/auth/providers/auth_providers.dart';
-import '../../../../../generated/l10n.dart';
-import '../../providers/notes/notes_section_controller.dart';
+import '../../providers/notes/notes_controller.dart';
 import '../../providers/transaction_details_controller.dart';
 import '../notes/note_card.dart';
 import '../notes/note_input_field.dart';
 import '../notes/notes_section_header.dart';
 
 /// Top-level entry point consumed by [TransactionDetailsBottomSheet].
-/// Thin assembler — all state is owned by [NotesSectionController].
+/// Thin assembler — all state is owned by [NotesController].
 class NotesSection extends StatelessWidget {
   const NotesSection({super.key, required this.transaction});
 
@@ -36,22 +34,20 @@ class _NotesSectionBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sectionState = ref.watch(notesSectionControllerProvider(transaction));
+    final notesState = ref.watch(notesControllerProvider(transaction));
     final currentUser = ref.watch(authStateChangesProvider).value;
-    final notifier = ref.read(
-      notesSectionControllerProvider(transaction).notifier,
-    );
+    final notifier = ref.read(notesControllerProvider(transaction).notifier);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         NotesSectionHeader(onAddTap: notifier.toggleAddField),
-        if (sectionState.showAddField) ...[
+        if (notesState.showAddField) ...[
           AppSpacing.sm.verticalSpace,
           _AddNoteRow(
             transaction: transaction,
             notifier: notifier,
-            isAdding: sectionState.isAdding,
+            isAdding: notesState.isAdding,
           ),
           AppSpacing.sm.verticalSpace,
         ],
@@ -61,7 +57,7 @@ class _NotesSectionBody extends ConsumerWidget {
   }
 }
 
-// ── Notes list with undo snackbar ─────────────────────────────────────────────
+// ── Notes list ────────────────────────────────────────────────────────────────
 
 class _NotesList extends ConsumerWidget {
   const _NotesList({
@@ -78,33 +74,6 @@ class _NotesList extends ConsumerWidget {
     final notes = ref.watch(
       transactionDetailsControllerProvider(transaction).select((s) => s.notes),
     );
-
-    final notifier = ref.read(
-      notesSectionControllerProvider(transaction).notifier,
-    );
-
-    ref.listen<NotesSectionState>(notesSectionControllerProvider(transaction), (
-      previous,
-      next,
-    ) {
-      if (next.deletedNoteText != null) {
-        final deletedText = notifier.takeDeletedNoteText();
-        if (deletedText == null) return;
-
-        if (!context.mounted) return;
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(
-              content: Text(S.of(context).transaction_noteDeleted),
-              action: SnackBarAction(
-                label: S.of(context).transaction_undo,
-                onPressed: () => notifier.restoreNote(deletedText),
-              ),
-            ),
-          );
-      }
-    });
 
     return Column(
       children: notes
@@ -132,7 +101,7 @@ class _AddNoteRow extends ConsumerStatefulWidget {
   });
 
   final TransactionEntity transaction;
-  final NotesSectionController notifier;
+  final NotesController notifier;
   final bool isAdding;
 
   @override
@@ -162,7 +131,7 @@ class _AddNoteRowState extends ConsumerState<_AddNoteRow> {
     if (!mounted) return;
 
     final addFieldClosed = !ref
-        .read(notesSectionControllerProvider(widget.transaction))
+        .read(notesControllerProvider(widget.transaction))
         .showAddField;
     if (addFieldClosed) {
       _controller.clear();

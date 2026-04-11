@@ -5,34 +5,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/error/failures.dart';
+import '../../../../core/providers/transaction_events_provider.dart';
+import '../../domain/entities/transaction_page.dart';
 import '../../domain/usecases/get_wallet_transactions_usecase.dart';
 import '../../domain/usecases/get_workspace_transactions_usecase.dart';
 import '../../providers/transactions_providers.dart';
-import '../models/transactions_context.dart';
+import '../navigation/transactions_route_data.dart';
 import 'transactions_state.dart';
 
-final transactionUpdatesProvider =
-    NotifierProvider.autoDispose<
-      TransactionUpdatesNotifier,
-      TransactionEntity?
-    >(TransactionUpdatesNotifier.new);
-
-class TransactionUpdatesNotifier extends Notifier<TransactionEntity?> {
-  @override
-  TransactionEntity? build() => null;
-
-  void notifyUpdated(TransactionEntity tx) => state = tx;
-}
-
 final transactionsControllerProvider = NotifierProvider.autoDispose
-    .family<TransactionsController, TransactionsState, TransactionsContext>(
+    .family<TransactionsController, TransactionsState, TransactionsRouteData>(
       TransactionsController.new,
     );
 
 class TransactionsController extends Notifier<TransactionsState> {
   TransactionsController(this.arg);
 
-  final TransactionsContext arg;
+  final TransactionsRouteData arg;
 
   static const int _pageSize = 20;
   bool _didScheduleInitialLoad = false;
@@ -78,19 +67,19 @@ class TransactionsController extends Notifier<TransactionsState> {
       error: null,
       transactions: [],
       totalCount: 0,
-      lastCursor: null,
+      nextCursor: null,
     );
 
     switch (arg) {
-      case WalletTransactionsContext():
+      case WalletTransactionsRouteData():
         await _loadWalletPage(
-          arg as WalletTransactionsContext,
+          arg as WalletTransactionsRouteData,
           isFirstPage: true,
           requestId: requestId,
         );
-      case WorkspaceTransactionsContext():
+      case WorkspaceTransactionsRouteData():
         await _loadWorkspacePage(
-          arg as WorkspaceTransactionsContext,
+          arg as WorkspaceTransactionsRouteData,
           requestId: requestId,
         );
     }
@@ -98,18 +87,18 @@ class TransactionsController extends Notifier<TransactionsState> {
 
   Future<void> loadMore() async {
     if (state.isLoadingMore || !state.hasMore) return;
-    if (arg is! WalletTransactionsContext) return;
+    if (arg is! WalletTransactionsRouteData) return;
 
     state = state.copyWith(isLoadingMore: true);
     await _loadWalletPage(
-      arg as WalletTransactionsContext,
+      arg as WalletTransactionsRouteData,
       isFirstPage: false,
       requestId: _activeRequestId,
     );
   }
 
   Future<void> _loadWalletPage(
-    WalletTransactionsContext context, {
+    WalletTransactionsRouteData context, {
     required bool isFirstPage,
     required int requestId,
   }) async {
@@ -121,7 +110,7 @@ class TransactionsController extends Notifier<TransactionsState> {
         type: state.resolvedType,
         dateRange: state.resolvedDateRange,
         limit: _pageSize,
-        lastCursor: isFirstPage ? null : state.lastCursor,
+        cursor: isFirstPage ? null : state.nextCursor,
       ),
     );
 
@@ -136,7 +125,7 @@ class TransactionsController extends Notifier<TransactionsState> {
         _setWalletPageSuccess(
           transactions: page.transactions,
           totalCount: page.totalCount,
-          lastCursor: page.lastCursor,
+          nextCursor: page.nextCursor,
           isFirstPage: isFirstPage,
         );
       },
@@ -154,7 +143,7 @@ class TransactionsController extends Notifier<TransactionsState> {
   void _setWalletPageSuccess({
     required List<TransactionEntity> transactions,
     required int totalCount,
-    required Object? lastCursor,
+    required TransactionPageCursor? nextCursor,
     required bool isFirstPage,
   }) {
     final mergedTransactions = isFirstPage
@@ -163,7 +152,7 @@ class TransactionsController extends Notifier<TransactionsState> {
     state = state.copyWith(
       transactions: mergedTransactions,
       totalCount: totalCount,
-      lastCursor: lastCursor,
+      nextCursor: nextCursor,
       isLoadingInitial: false,
       isLoadingMore: false,
       error: null,
@@ -171,7 +160,7 @@ class TransactionsController extends Notifier<TransactionsState> {
   }
 
   Future<void> _loadWorkspacePage(
-    WorkspaceTransactionsContext context, {
+    WorkspaceTransactionsRouteData context, {
     required int requestId,
   }) async {
     final walletIds = _resolveWorkspaceWalletIds(context);
@@ -203,7 +192,7 @@ class TransactionsController extends Notifier<TransactionsState> {
   }
 
   List<String> _resolveWorkspaceWalletIds(
-    WorkspaceTransactionsContext context,
+    WorkspaceTransactionsRouteData context,
   ) {
     final selectedWalletId = state.selectedWalletId;
     if (selectedWalletId != null) {

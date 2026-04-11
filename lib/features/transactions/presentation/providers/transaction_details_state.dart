@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/error/failures.dart';
-import '../../domain/entities/history_entry_entity.dart';
 import '../../domain/entities/note_entity.dart';
+import '../../domain/entities/transaction_history_entry_entity.dart';
 
 enum TransactionDetailsAction {
   none,
@@ -24,7 +24,7 @@ final class TransactionDetailsState extends Equatable {
 
   final TransactionEntity transaction;
   final List<NoteEntity> notes;
-  final List<HistoryEntryEntity> history;
+  final List<TransactionHistoryEntryEntity> history;
   final TransactionDetailsAction currentAction;
 
   /// Non-null on action failure; cleared on next action start.
@@ -35,7 +35,7 @@ final class TransactionDetailsState extends Equatable {
   TransactionDetailsState copyWith({
     TransactionEntity? transaction,
     List<NoteEntity>? notes,
-    List<HistoryEntryEntity>? history,
+    List<TransactionHistoryEntryEntity>? history,
     TransactionDetailsAction? currentAction,
     Object? actionError = _sentinel,
   }) => TransactionDetailsState(

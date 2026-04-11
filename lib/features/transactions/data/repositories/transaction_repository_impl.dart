@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../domain/entities/transaction_date_range.dart';
 import '../../../../core/domain/enums/transaction_type.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
-import '../../domain/entities/history_entry_entity.dart';
 import '../../domain/entities/note_entity.dart';
+import '../../domain/entities/transaction_history_entry_entity.dart';
+import '../../domain/entities/transaction_page.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../datasources/transaction_remote_data_source.dart';
 
@@ -19,24 +19,24 @@ final class TransactionRepositoryImpl implements TransactionRepository {
   // ── Queries ──────────────────────────────────────────────────────────────
 
   @override
-  Future<Result<PaginatedTransactions>> getWalletTransactions({
+  Future<Result<TransactionPage>> getWalletTransactions({
     required String walletId,
     TransactionType? type,
     TransactionDateRange? dateRange,
     int limit = 20,
-    Object? lastCursor,
+    TransactionPageCursor? cursor,
   }) => executeAndHandleErrors(() async {
     final result = await _remoteDataSource.getWalletTransactions(
       walletId: walletId,
       type: type,
       dateRange: dateRange,
       limit: limit,
-      lastDocument: lastCursor as DocumentSnapshot?,
+      cursor: cursor,
     );
-    return PaginatedTransactions(
+    return TransactionPage(
       transactions: result.transactions.map((e) => e.toEntity()).toList(),
-      totalCount: result.total,
-      lastCursor: result.lastDoc,
+      totalCount: result.totalCount,
+      nextCursor: result.nextCursor,
     );
   }, tag: 'TransactionRepository.getWalletTransactions');
 
@@ -159,13 +159,13 @@ final class TransactionRepositoryImpl implements TransactionRepository {
   );
 
   @override
-  Stream<Result<List<HistoryEntryEntity>>> getHistory({
+  Stream<Result<List<TransactionHistoryEntryEntity>>> getTransactionHistory({
     required String walletId,
     required String transactionId,
   }) => executeStreamAndHandleErrors(
     () => _remoteDataSource
-        .getHistory(walletId: walletId, transactionId: transactionId)
+        .getTransactionHistory(walletId: walletId, transactionId: transactionId)
         .map((dtos) => dtos.map((d) => d.toEntity()).toList()),
-    tag: 'TransactionRepository.getHistory',
+    tag: 'TransactionRepository.getTransactionHistory',
   );
 }

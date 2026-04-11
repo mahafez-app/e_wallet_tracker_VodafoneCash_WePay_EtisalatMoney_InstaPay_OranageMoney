@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wallet_tracker/features/transactions/presentation/providers/transactions_controller.dart';
 
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/error/failures.dart';
+import '../../../../core/providers/transaction_events_provider.dart';
 import '../../../../features/auth/domain/entities/user_entity.dart';
 import '../../../../features/auth/providers/auth_providers.dart';
 import '../../domain/usecases/mark_paid_usecases.dart';
@@ -39,7 +39,7 @@ class TransactionDetailsController extends Notifier<TransactionDetailsState> {
   // ── Streams ───────────────────────────────────────────────────────────────
 
   void _listenNotes() {
-    final params = NoteStreamParams(
+    final params = TransactionDetailsStreamParams(
       walletId: _walletId,
       transactionId: _transactionId,
     );
@@ -56,12 +56,12 @@ class TransactionDetailsController extends Notifier<TransactionDetailsState> {
   }
 
   void _listenHistory() {
-    final params = NoteStreamParams(
+    final params = TransactionDetailsStreamParams(
       walletId: _walletId,
       transactionId: _transactionId,
     );
     final subscription = ref
-        .read(getHistoryUseCaseProvider)
+        .read(getTransactionHistoryUseCaseProvider)
         .call(params)
         .listen((result) {
           if (!ref.mounted) return;

@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
 import '../../../core/providers/firebase_providers.dart';
 import '../../../core/providers/service_providers.dart';
@@ -71,8 +70,3 @@ final getWalletDetailsUseCaseProvider = Provider<GetWalletDetailsUseCase>((
 final getWalletsUseCaseProvider = Provider<GetWalletsUseCase>((ref) {
   return GetWalletsUseCase(ref.watch(walletRepositoryProvider));
 });
-
-/// Tracks if the user has been prompted for wallet permissions in the current app session.
-final hasPromptedWalletPermissionsSessionProvider = StateProvider<bool>(
-  (ref) => false,
-);

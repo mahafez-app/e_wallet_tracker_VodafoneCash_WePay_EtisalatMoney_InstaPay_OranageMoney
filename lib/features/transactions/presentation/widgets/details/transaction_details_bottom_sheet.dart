@@ -13,8 +13,8 @@ import 'details_card_section.dart';
 import 'notes_section.dart';
 import 'share_receipt_section.dart';
 import 'sms_section.dart';
-import 'transaction_history_section.dart';
 import 'transaction_header_section.dart';
+import 'transaction_history_section.dart';
 
 class TransactionDetailsBottomSheet extends ConsumerWidget {
   const TransactionDetailsBottomSheet({super.key, required this.transaction});
@@ -61,6 +61,7 @@ class TransactionDetailsBottomSheet extends ConsumerWidget {
                 ),
               ),
               ShareReceiptSection(transaction: transaction),
+              AppSpacing.lg.verticalSpace,
             ],
           ),
         ),

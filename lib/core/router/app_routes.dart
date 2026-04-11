@@ -20,6 +20,5 @@ abstract final class AppRoutes {
   // Path builders — always use these for navigation, never interpolate inline
   static String profilePath(String userId) => '/profile/$userId';
   static String walletDetailsPath(String walletId) => '/wallet/$walletId';
-  static String transactionsPath({String? walletId}) =>
-      walletId == null ? '/transactions' : '/transactions?walletId=$walletId';
+  static String transactionsPath() => '/transactions';
 }

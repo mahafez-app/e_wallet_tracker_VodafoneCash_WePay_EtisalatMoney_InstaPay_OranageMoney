@@ -14,27 +14,24 @@ class HomeSmsController extends AsyncNotifier<void> {
   @override
   void build() {}
 
-  /// Checks SMS permission and calls [navigate] if the prompt is needed.
+  /// Checks wallet permissions and calls [navigate] if the prompt is needed.
   /// Guards against duplicate prompts within the same session using
-  /// [hasPromptedSmsPermissionSessionProvider].
+  /// [hasPromptedWalletPermissionsSessionProvider].
   Future<void> checkAndPromptIfNeeded({
     required bool hasWallets,
     required VoidCallback navigate,
   }) async {
     if (!hasWallets) return;
 
-    final hasPrompted = ref.read(hasPromptedSmsPermissionSessionProvider);
+    final hasPrompted = ref.read(hasPromptedWalletPermissionsSessionProvider);
     if (hasPrompted) return;
 
     // Mark immediately to prevent double-triggers from stream re-emissions.
-    ref.read(hasPromptedSmsPermissionSessionProvider.notifier).state = true;
+    ref.read(hasPromptedWalletPermissionsSessionProvider.notifier).state = true;
 
     final result = await ref.read(checkSmsPermissionUseCaseProvider)();
-    result.fold(
-      (_) => null,
-      (hasPermission) {
-        if (!hasPermission) navigate();
-      },
-    );
+    result.fold((_) => null, (hasPermission) {
+      if (!hasPermission) navigate();
+    });
   }
 }

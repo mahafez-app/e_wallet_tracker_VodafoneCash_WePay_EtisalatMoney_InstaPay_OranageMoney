@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/domain/entities/transaction_entity.dart';
+import '../../domain/entities/transaction_date_range.dart';
+import '../../../../core/domain/enums/transaction_type.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
+import '../../domain/entities/history_entry_entity.dart';
+import '../../domain/entities/note_entity.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../datasources/transaction_remote_data_source.dart';
 
@@ -11,38 +16,156 @@ final class TransactionRepositoryImpl implements TransactionRepository {
 
   final TransactionRemoteDataSource _remoteDataSource;
 
-  @override
-  Future<Result<List<TransactionEntity>>> getTransactions({
-    String? walletId,
-    int? limit,
-    DateTime? before,
-  }) {
-    return executeAndHandleErrors(
-      () async {
-        final transactions = await _remoteDataSource.getTransactions(
-          walletId: walletId,
-          limit: limit,
-          before: before,
-        );
-        return transactions.map((e) => e.toEntity()).toList();
-      },
-      tag: 'TransactionRepository.getTransactions',
-    );
-  }
+  // ── Queries ──────────────────────────────────────────────────────────────
 
   @override
-  Future<Result<void>> markAsPaid(String transactionId, String walletId) {
-    return executeAndHandleErrors(
-      () => _remoteDataSource.markAsPaid(transactionId, walletId),
-      tag: 'TransactionRepository.markAsPaid',
+  Future<Result<PaginatedTransactions>> getWalletTransactions({
+    required String walletId,
+    TransactionType? type,
+    TransactionDateRange? dateRange,
+    int limit = 20,
+    Object? lastCursor,
+  }) => executeAndHandleErrors(() async {
+    final result = await _remoteDataSource.getWalletTransactions(
+      walletId: walletId,
+      type: type,
+      dateRange: dateRange,
+      limit: limit,
+      lastDocument: lastCursor as DocumentSnapshot?,
     );
-  }
+    return PaginatedTransactions(
+      transactions: result.transactions.map((e) => e.toEntity()).toList(),
+      totalCount: result.total,
+      lastCursor: result.lastDoc,
+    );
+  }, tag: 'TransactionRepository.getWalletTransactions');
 
   @override
-  Future<Result<void>> saveTransaction(TransactionEntity transaction) {
-    return executeAndHandleErrors(
-      () => _remoteDataSource.saveTransaction(transaction),
-      tag: 'TransactionRepository.saveTransaction',
+  Future<Result<List<TransactionEntity>>> getWorkspaceTransactions({
+    required List<String> walletIds,
+    TransactionType? type,
+    TransactionDateRange? dateRange,
+    int limit = 20,
+  }) => executeAndHandleErrors(() async {
+    final dtos = await _remoteDataSource.getWorkspaceTransactions(
+      walletIds: walletIds,
+      type: type,
+      dateRange: dateRange,
+      limit: limit,
     );
-  }
+    return dtos.map((e) => e.toEntity()).toList();
+  }, tag: 'TransactionRepository.getWorkspaceTransactions');
+
+  // ── Mutations ────────────────────────────────────────────────────────────
+
+  @override
+  Future<Result<void>> markAsPaid({
+    required String walletId,
+    required String transactionId,
+    required String userId,
+    required String userName,
+  }) => executeAndHandleErrors(
+    () => _remoteDataSource.markAsPaid(
+      walletId: walletId,
+      transactionId: transactionId,
+      userId: userId,
+      userName: userName,
+    ),
+    tag: 'TransactionRepository.markAsPaid',
+  );
+
+  @override
+  Future<Result<void>> markAsUnpaid({
+    required String walletId,
+    required String transactionId,
+    required String userId,
+    required String userName,
+  }) => executeAndHandleErrors(
+    () => _remoteDataSource.markAsUnpaid(
+      walletId: walletId,
+      transactionId: transactionId,
+      userId: userId,
+      userName: userName,
+    ),
+    tag: 'TransactionRepository.markAsUnpaid',
+  );
+
+  @override
+  Future<Result<void>> saveTransaction(TransactionEntity transaction) =>
+      executeAndHandleErrors(
+        () => _remoteDataSource.saveTransaction(transaction),
+        tag: 'TransactionRepository.saveTransaction',
+      );
+
+  // ── Notes ────────────────────────────────────────────────────────────────
+
+  @override
+  Future<Result<void>> addNote({
+    required String walletId,
+    required String transactionId,
+    required String text,
+    required String userId,
+    required String userName,
+  }) => executeAndHandleErrors(
+    () => _remoteDataSource.addNote(
+      walletId: walletId,
+      transactionId: transactionId,
+      text: text,
+      userId: userId,
+      userName: userName,
+    ),
+    tag: 'TransactionRepository.addNote',
+  );
+
+  @override
+  Future<Result<void>> editNote({
+    required String walletId,
+    required String transactionId,
+    required String noteId,
+    required String text,
+  }) => executeAndHandleErrors(
+    () => _remoteDataSource.editNote(
+      walletId: walletId,
+      transactionId: transactionId,
+      noteId: noteId,
+      text: text,
+    ),
+    tag: 'TransactionRepository.editNote',
+  );
+
+  @override
+  Future<Result<void>> deleteNote({
+    required String walletId,
+    required String transactionId,
+    required String noteId,
+  }) => executeAndHandleErrors(
+    () => _remoteDataSource.deleteNote(
+      walletId: walletId,
+      transactionId: transactionId,
+      noteId: noteId,
+    ),
+    tag: 'TransactionRepository.deleteNote',
+  );
+
+  @override
+  Stream<Result<List<NoteEntity>>> getNotes({
+    required String walletId,
+    required String transactionId,
+  }) => executeStreamAndHandleErrors(
+    () => _remoteDataSource
+        .getNotes(walletId: walletId, transactionId: transactionId)
+        .map((dtos) => dtos.map((d) => d.toEntity()).toList()),
+    tag: 'TransactionRepository.getNotes',
+  );
+
+  @override
+  Stream<Result<List<HistoryEntryEntity>>> getHistory({
+    required String walletId,
+    required String transactionId,
+  }) => executeStreamAndHandleErrors(
+    () => _remoteDataSource
+        .getHistory(walletId: walletId, transactionId: transactionId)
+        .map((dtos) => dtos.map((d) => d.toEntity()).toList()),
+    tag: 'TransactionRepository.getHistory',
+  );
 }

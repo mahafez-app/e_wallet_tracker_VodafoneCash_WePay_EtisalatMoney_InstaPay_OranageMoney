@@ -249,20 +249,89 @@ final class AppTheme {
 
   // Cairo font — same scale, color resolved by brightness automatically
   static const TextTheme _textTheme = TextTheme(
-    displayLarge: TextStyle(fontSize: 57, fontWeight: FontWeight.w800, letterSpacing: -0.25, fontFamily: 'Cairo'),
-    displayMedium: TextStyle(fontSize: 45, fontWeight: FontWeight.w800, fontFamily: 'Cairo'),
-    displaySmall: TextStyle(fontSize: 36, fontWeight: FontWeight.w800, fontFamily: 'Cairo'),
-    headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w700, fontFamily: 'Cairo'),
-    headlineMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, fontFamily: 'Cairo'),
-    headlineSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, fontFamily: 'Cairo'),
-    titleLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, fontFamily: 'Cairo'),
-    titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.15, fontFamily: 'Cairo'),
-    titleSmall: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1, fontFamily: 'Cairo'),
-    bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5, fontFamily: 'Cairo'),
-    bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25, fontFamily: 'Cairo'),
-    bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4, fontFamily: 'Cairo'),
-    labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 0.1, fontFamily: 'Cairo'),
-    labelMedium: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.5, fontFamily: 'Cairo'),
-    labelSmall: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.5, fontFamily: 'Cairo'),
+    displayLarge: TextStyle(
+      fontSize: 57,
+      fontWeight: FontWeight.w800,
+      letterSpacing: -0.25,
+      fontFamily: 'Cairo',
+    ),
+    displayMedium: TextStyle(
+      fontSize: 45,
+      fontWeight: FontWeight.w800,
+      fontFamily: 'Cairo',
+    ),
+    displaySmall: TextStyle(
+      fontSize: 36,
+      fontWeight: FontWeight.w800,
+      fontFamily: 'Cairo',
+    ),
+    headlineLarge: TextStyle(
+      fontSize: 32,
+      fontWeight: FontWeight.w700,
+      fontFamily: 'Cairo',
+    ),
+    headlineMedium: TextStyle(
+      fontSize: 28,
+      fontWeight: FontWeight.w700,
+      fontFamily: 'Cairo',
+    ),
+    headlineSmall: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Cairo',
+    ),
+    titleLarge: TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Cairo',
+    ),
+    titleMedium: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.15,
+      fontFamily: 'Cairo',
+    ),
+    titleSmall: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.1,
+      fontFamily: 'Cairo',
+    ),
+    bodyLarge: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.5,
+      fontFamily: 'Cairo',
+    ),
+    bodyMedium: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.25,
+      fontFamily: 'Cairo',
+    ),
+    bodySmall: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.4,
+      fontFamily: 'Cairo',
+    ),
+    labelLarge: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w700,
+      letterSpacing: 0.1,
+      fontFamily: 'Cairo',
+    ),
+    labelMedium: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w700,
+      letterSpacing: 0.5,
+      fontFamily: 'Cairo',
+    ),
+    labelSmall: TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w700,
+      letterSpacing: 0.5,
+      fontFamily: 'Cairo',
+    ),
   );
 }

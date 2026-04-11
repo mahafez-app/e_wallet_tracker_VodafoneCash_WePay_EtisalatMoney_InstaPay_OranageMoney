@@ -23,8 +23,8 @@ class SmsTransactionService {
   SmsTransactionService({
     required List<WalletEntity> wallets,
     required SaveTransactionUseCase saveTransactionUseCase,
-  })  : _wallets = wallets,
-        _saveTransactionUseCase = saveTransactionUseCase;
+  }) : _wallets = wallets,
+       _saveTransactionUseCase = saveTransactionUseCase;
 
   final List<WalletEntity> _wallets;
   final SaveTransactionUseCase _saveTransactionUseCase;
@@ -79,7 +79,10 @@ class SmsTransactionService {
     if (transaction != null) {
       _saveTransaction(transaction);
     } else {
-      log('SMS from $sender did not match any transaction pattern.', name: _tag);
+      log(
+        'SMS from $sender did not match any transaction pattern.',
+        name: _tag,
+      );
     }
   }
 
@@ -87,7 +90,9 @@ class SmsTransactionService {
     final parser = SmsParserRegistry.resolve(sender);
     if (parser == null) return null;
 
-    final matchingWallets = _wallets.where((w) => w.provider == parser.provider).toList();
+    final matchingWallets = _wallets
+        .where((w) => w.provider == parser.provider)
+        .toList();
     if (matchingWallets.isEmpty) {
       log('No wallet registered for provider ${parser.provider}.', name: _tag);
       return null;
@@ -109,11 +114,16 @@ class SmsTransactionService {
     FirebaseFirestore.instance
         .collection('wallets')
         .doc(walletId)
-        .update({'subscriptionId': subscriptionId}).then((_) {
-      log('Learned subscriptionId $subscriptionId for wallet $walletId', name: _tag);
-    }).catchError((e) {
-      log('Failed to learn subscriptionId: $e', name: _tag);
-    });
+        .update({'subscriptionId': subscriptionId})
+        .then((_) {
+          log(
+            'Learned subscriptionId $subscriptionId for wallet $walletId',
+            name: _tag,
+          );
+        })
+        .catchError((e) {
+          log('Failed to learn subscriptionId: $e', name: _tag);
+        });
   }
 
   void _saveTransaction(TransactionEntity transaction) {

@@ -5,13 +5,8 @@ import '../repositories/wallet_repository.dart';
 class AddWalletsParams {
   final String phoneNumber;
   final List<String> providers;
-  final String deviceId;
 
-  const AddWalletsParams({
-    required this.phoneNumber,
-    required this.providers,
-    required this.deviceId,
-  });
+  const AddWalletsParams({required this.phoneNumber, required this.providers});
 }
 
 class AddWalletsUseCase implements UseCase<void, AddWalletsParams> {
@@ -24,7 +19,6 @@ class AddWalletsUseCase implements UseCase<void, AddWalletsParams> {
     return _repository.addWallets(
       phoneNumber: params.phoneNumber,
       providers: params.providers,
-      deviceId: params.deviceId,
     );
   }
 }

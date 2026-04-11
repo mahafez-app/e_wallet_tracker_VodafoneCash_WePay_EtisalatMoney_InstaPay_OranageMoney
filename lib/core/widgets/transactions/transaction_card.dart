@@ -36,7 +36,7 @@ class TransactionCard extends StatelessWidget {
     final formattedTime = DateFormat.jm(locale).format(transaction.createdAt);
 
     return Container(
-      margin: AppResponsive.onlyPadding(bottom: 8),
+      margin: AppResponsive.onlyPadding(bottom: AppSpacing.sm),
       decoration: BoxDecoration(
         color: colors.cardBackground,
         borderRadius: BorderRadius.circular(20.responsiveRadius),
@@ -52,7 +52,7 @@ class TransactionCard extends StatelessWidget {
           ),
         ],
       ),
-      padding: AppResponsive.allPadding(16),
+      padding: AppResponsive.allPadding(AppSpacing.lg),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -84,7 +84,7 @@ class TransactionCard extends StatelessWidget {
                           ? s.transactionTypeReceive
                           : s.transactionTypeSend,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        fontSize: 15,
+                        fontSize: 15.responsiveFont,
                         fontWeight: FontWeight.w500,
                         letterSpacing: -0.2,
                       ),
@@ -93,7 +93,7 @@ class TransactionCard extends StatelessWidget {
                     Text(
                       '${isReceive ? '+' : '-'} ${transaction.amount.toStringAsFixed(2)} ${s.currency}',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        fontSize: 17,
+                        fontSize: 17.responsiveFont,
                         fontWeight: FontWeight.w500,
                         color: typeColor,
                         letterSpacing: -0.5,
@@ -146,7 +146,7 @@ class TransactionCard extends StatelessWidget {
                     ),
                   ],
                 ],
-                if (isReceive && transaction.isPaid != null) ...[
+                if (isReceive) ...[
                   AppSpacing.xs.verticalSpace,
                   _InfoChip(
                     icon: transaction.isPaid!

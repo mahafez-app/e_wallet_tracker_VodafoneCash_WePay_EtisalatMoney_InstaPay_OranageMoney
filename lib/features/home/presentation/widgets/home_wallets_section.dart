@@ -40,9 +40,8 @@ class HomeWalletsSection extends StatelessWidget {
               if (index == wallets.length) return const _AddWalletCard();
               final wallet = wallets[index];
               return GestureDetector(
-                onTap: () => context.push(
-                  AppRoutes.walletDetailsPath(wallet.id),
-                ),
+                onTap: () =>
+                    context.push(AppRoutes.walletDetailsPath(wallet.id)),
                 child: WalletCard(
                   provider: wallet.provider,
                   phoneNumber: wallet.phoneNumber,

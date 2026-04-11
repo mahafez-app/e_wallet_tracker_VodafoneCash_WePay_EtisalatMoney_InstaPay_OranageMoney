@@ -90,12 +90,12 @@
   "providerEtisalat": "اتصالات كاش",
   "providerWePay": "وي باي",
   "providerUnknown": "محفظة",
-  "smsPermissionTitle": "السماح بالوصول إلى الرسائل",
-  "smsPermissionDescription": "يحتاج التطبيق إلى الوصول للرسائل لمزامنة المعاملات تلقائياً من محفظتك.",
+  "smsPermissionTitle": "السماح بالوصول إلى الرسائل والهاتف",
+  "smsPermissionDescription": "يحتاج التطبيق إلى صلاحية الرسائل والهاتف لاكتشاف أرقام المحافظ على هذا الجهاز ومزامنة المعاملات تلقائياً.",
   "smsPermissionAutoUpdateTitle": "تحديث تلقائي",
   "smsPermissionAutoUpdateDesc": "رصد فوري للمصروفات والمدفوعات فور وصول رسالة البنك.",
   "smsPermissionPrivacyTitle": "خصوصية تامة",
-  "smsPermissionPrivacyDesc": "نقرأ فقط الرسائل المالية؛ بياناتك مشفرة ولا يتم مشاركتها أبدا.",
+  "smsPermissionPrivacyDesc": "نقرأ فقط الرسائل المالية وأرقام الهاتف اللازمة لإعداد المحافظ؛ بياناتك مشفرة ولا يتم مشاركتها أبدا.",
   "addWalletAction": "إضافة المحفظة",
   "errorWalletPhoneNumberRequired": "يرجى إدخال رقم الهاتف",
   "errorWalletProviderRequired": "يرجى اختيار مزود خدمة واحد على الأقل",
@@ -130,6 +130,87 @@
   "fromLabel": "من",
   "toLabel": "إلى",
   "viaLabel": "عبر",
-  "paymentStatus": "حالة الدفع"
-
+  "paymentStatus": "حالة الدفع",
+  "transactions_filter_all": "الكل",
+  "transactions_filter_allWallets": "كل المحافظ",
+  "transactions_date_today": "اليوم",
+  "transactions_date_yesterday": "أمس",
+  "transactions_date_week": "الأسبوع",
+  "transactions_date_month": "الشهر",
+  "transactions_date_customRange": "نطاق مخصص",
+  "transactions_loadMore": "تحميل المزيد",
+  "transactions_viewingCountOfTotal": "عرض {count} من أصل {total} معاملة",
+  "@transactions_viewingCountOfTotal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "transaction_shareReceipt": "مشاركة إيصال العملية",
+  "transaction_receiptHeader": "إيصال معاملة — {type}",
+  "@transaction_receiptHeader": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "transaction_amount": "المبلغ",
+  "transaction_wallet": "المحفظة",
+  "transaction_receivedFrom": "مُستلَم من",
+  "transaction_sentTo": "مُرسَل إلى",
+  "transaction_date": "التاريخ",
+  "transaction_dateTime": "التاريخ والوقت",
+  "transaction_referenceNumber": "رقم العملية",
+  "transaction_history": "سجل التغييرات",
+  "transaction_markedAs": "تم التحديد كـ {status}",
+  "@transaction_markedAs": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "transaction_by": "بواسطة {name}",
+  "@transaction_by": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transaction_notes": "ملاحظات",
+  "transaction_addNote": "إضافة ملاحظة",
+  "transaction_noteHint": "اكتب ملاحظتك هنا…",
+  "transaction_noteDeleted": "تم حذف الملاحظة",
+  "transaction_undo": "تراجع",
+  "transaction_edited": "تم التعديل",
+  "transaction_cancel": "إلغاء",
+  "transaction_save": "حفظ",
+  "transaction_smsText": "نص الرسالة",
+  "transaction_typeReceiveLabel": "معاملة استلام",
+  "transaction_typeSendLabel": "معاملة إرسال",
+  "transaction_errorGeneric": "حدث خطأ",
+  "transactions_emptyWithFilter": "لا توجد معاملات تطابق الفلتر المحدد",
+  "transactions_clearFilters": "مسح الفلاتر",
+  "transactions_title_wallet": "معاملات {name}",
+  "transactions_title_workspace": "معاملات {name}",
+  "@transactions_title_wallet": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@transactions_title_workspace": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -1,120 +1,122 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/extensions/failure_extension.dart';
+import '../../../../core/widgets/app_snackbar.dart';
 import '../../../../core/widgets/app_error_view.dart';
 import '../../../../core/widgets/app_loader.dart';
-import '../../../../core/widgets/transactions/transaction_card.dart';
 import '../../../../generated/l10n.dart';
-import '../../../wallets/presentation/providers/wallet_details_controller.dart';
+import '../models/transactions_context.dart';
 import '../providers/transactions_controller.dart';
+import '../widgets/details/transaction_details_bottom_sheet.dart';
+import '../widgets/filter_bar/transactions_filter_bar.dart';
+import '../widgets/list/transactions_date_grouped_list.dart';
+import '../widgets/list/transactions_empty_view.dart';
+import '../widgets/list/transactions_load_more_footer.dart';
 
 class TransactionsScreen extends StatelessWidget {
-  const TransactionsScreen({super.key, this.walletId});
+  const TransactionsScreen({super.key, required this.transactionsContext});
 
-  final String? walletId;
+  final TransactionsContext transactionsContext;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: _TransactionsTitle(walletId: walletId),
+        title: _TransactionsTitle(context_: transactionsContext),
+        centerTitle: true,
       ),
-      body: SafeArea(child: _TransactionsBody(walletId: walletId)),
+      body: SafeArea(child: _TransactionsBody(context_: transactionsContext)),
     );
   }
 }
 
-class _TransactionsTitle extends ConsumerWidget {
-  const _TransactionsTitle({required this.walletId});
+// ── App bar title ─────────────────────────────────────────────────────────────
 
-  final String? walletId;
+class _TransactionsTitle extends StatelessWidget {
+  const _TransactionsTitle({super.key, required this.context_});
+
+  final TransactionsContext context_;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final s = S.of(context);
-    if (walletId == null) return Text(s.allTransactions);
-
-    final title = ref
-        .watch(walletDetailsControllerProvider(walletId!))
-        .maybeWhen(
-          data: (_) => s.walletTransactions,
-          orElse: () => s.transactionsHistory,
-        );
+  Widget build(BuildContext context) {
+    final label = switch (context_) {
+      WalletTransactionsContext(:final walletLabel) =>
+        S.of(context).transactions_title_wallet(walletLabel),
+      WorkspaceTransactionsContext(:final workspaceName) =>
+        S.of(context).transactions_title_workspace(workspaceName),
+    };
 
     return Text(
-      title,
-      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-        fontWeight: FontWeight.w700,
-      ),
+      label,
+      style: Theme.of(
+        context,
+      ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
     );
   }
 }
 
-class _TransactionsBody extends ConsumerWidget {
-  const _TransactionsBody({required this.walletId});
+// ── Body ──────────────────────────────────────────────────────────────────────
 
-  final String? walletId;
+class _TransactionsBody extends ConsumerWidget {
+  const _TransactionsBody({super.key, required this.context_});
+
+  final TransactionsContext context_;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(transactionsControllerProvider(walletId));
+    ref.listen(transactionsControllerProvider(context_), (previous, next) {
+      final nextError = next.error;
+      if (nextError == null || previous?.error == nextError) return;
+      AppSnackbar.show(
+        context,
+        message: nextError.toLocalizedString(context),
+        type: AppSnackbarType.error,
+      );
+    });
 
-    return switch (state) {
-      AsyncLoading() => const AppLoader(),
-      AsyncError(:final error) => AppErrorView(error: error),
-      AsyncData(:final value) => value.isEmpty
-          ? const _EmptyTransactionsView()
-          : _TransactionsList(transactions: value),
-    };
-  }
-}
-
-class _TransactionsList extends StatelessWidget {
-  const _TransactionsList({required this.transactions});
-
-  final List transactions;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: AppSpacing.pagePadding,
-      itemCount: transactions.length,
-      itemBuilder: (context, index) {
-        return TransactionCard(transaction: transactions[index]);
-      },
+    return Column(
+      children: [
+        TransactionsFilterBar(context_: context_),
+        Expanded(child: _TransactionsContent(context_: context_)),
+      ],
     );
   }
 }
 
-class _EmptyTransactionsView extends StatelessWidget {
-  const _EmptyTransactionsView();
+// ── Content area ──────────────────────────────────────────────────────────────
+
+class _TransactionsContent extends ConsumerWidget {
+  const _TransactionsContent({super.key, required this.context_});
+
+  final TransactionsContext context_;
 
   @override
-  Widget build(BuildContext context) {
-    final s = S.of(context);
-    final theme = Theme.of(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(transactionsControllerProvider(context_));
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.receipt_long_outlined,
-            size: 64.responsiveRadius,
-            color: theme.colorScheme.outline.withAlpha(76),
-          ),
-          AppSpacing.lg.verticalSpace,
-          Text(
-            s.noTransactionsTitle,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.outline,
-            ),
-          ),
-        ],
-      ),
+    if (state.isLoadingInitial) return const AppLoader();
+
+    if (state.error != null && state.transactions.isEmpty) {
+      return AppErrorView(error: state.error!);
+    }
+
+    if (state.transactions.isEmpty) {
+      return TransactionsEmptyView(
+        context_: context_,
+        hasActiveFilter: state.hasActiveFilter,
+      );
+    }
+
+    final showProviderInfo = context_ is WorkspaceTransactionsContext;
+
+    return TransactionsDateGroupedList(
+      groupedTransactions: state.groupedTransactions,
+      showProviderInfo: showProviderInfo,
+      onTap: (tx) => TransactionDetailsBottomSheet.show(context, tx),
+      footer: TransactionsLoadMoreFooter(context_: context_),
     );
   }
 }

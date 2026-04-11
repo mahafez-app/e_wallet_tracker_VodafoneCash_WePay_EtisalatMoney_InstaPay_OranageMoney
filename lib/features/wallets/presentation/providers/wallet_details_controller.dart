@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/domain/entities/transaction_entity.dart';
+import '../../../transactions/presentation/providers/transactions_controller.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 import '../../domain/usecases/wallet_details_usecases.dart';
 import '../../providers/wallets_providers.dart';
@@ -16,6 +18,8 @@ class WalletDetailsController extends AsyncNotifier<WalletDetailsEntity> {
 
   @override
   Future<WalletDetailsEntity> build() async {
+    _listenTransactionUpdates();
+
     final result = await ref.read(getWalletDetailsUseCaseProvider)(
       GetWalletDetailsParams(walletId: _walletId),
     );
@@ -23,6 +27,38 @@ class WalletDetailsController extends AsyncNotifier<WalletDetailsEntity> {
     return result.fold(
       (failure) => throw failure,
       (walletDetails) => walletDetails,
+    );
+  }
+
+  void _listenTransactionUpdates() {
+    ref.listen<TransactionEntity?>(transactionUpdatesProvider, (
+      _,
+      updatedTransaction,
+    ) {
+      if (updatedTransaction == null) return;
+      _applyUpdatedTransaction(updatedTransaction);
+    });
+  }
+
+  void _applyUpdatedTransaction(TransactionEntity updatedTransaction) {
+    final currentDetails = state.asData?.value;
+    if (currentDetails == null) return;
+
+    final transactionIndex = currentDetails.recentTransactions.indexWhere(
+      (transaction) => transaction.id == updatedTransaction.id,
+    );
+    if (transactionIndex == -1) return;
+
+    final updatedTransactions = List<TransactionEntity>.of(
+      currentDetails.recentTransactions,
+    );
+    updatedTransactions[transactionIndex] = updatedTransaction;
+
+    state = AsyncValue.data(
+      WalletDetailsEntity(
+        wallet: currentDetails.wallet,
+        recentTransactions: updatedTransactions,
+      ),
     );
   }
 }

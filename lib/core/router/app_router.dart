@@ -8,10 +8,11 @@ import '../../features/auth/presentation/screens/sign_up_screen.dart';
 import '../../features/auth/providers/auth_providers.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
+import '../../features/transactions/presentation/models/transactions_context.dart';
 import '../../features/wallets/presentation/screens/add_wallet_screen.dart';
 import '../../features/wallets/presentation/screens/sms_permissions_screen.dart';
-import '../../features/wallets/presentation/screens/wallet_details_screen.dart';
 import '../../features/transactions/presentation/screens/transactions_screen.dart';
+import '../../features/wallets/presentation/screens/wallet_details_screen.dart';
 import '../widgets/not_found_screen.dart';
 import 'app_routes.dart';
 
@@ -144,8 +145,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.transactions,
         builder: (context, state) {
-          final walletId = state.uri.queryParameters['walletId'];
-          return TransactionsScreen(walletId: walletId);
+          final transactionsContext = state.extra;
+          if (transactionsContext is! TransactionsContext) {
+            return const NotFoundScreen();
+          }
+          return TransactionsScreen(transactionsContext: transactionsContext);
         },
       ),
     ],

@@ -37,7 +37,7 @@ final class TransactionDto extends TransactionEntity {
       phoneNumber: phoneNumber,
       counterpartyNumber: data['counterpartyNumber'] as String?,
       referenceNumber: data['referenceNumber'] as String?,
-      isPaid: data['isPaid'] as bool?,
+      isPaid: data['isPaid'] as bool? ?? false,
       message: data['message'] as String?,
     );
   }

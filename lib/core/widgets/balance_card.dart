@@ -53,19 +53,12 @@ class BalanceCard extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              if (icon != null)
-                Icon(
-                  icon,
-                  color: colors.statsOnGradient,
-                ),
+              if (icon != null) Icon(icon, color: colors.statsOnGradient),
             ],
           ),
           AppSpacing.sm.verticalSpace,
           _BalanceDisplay(amount: balance),
-          if (subtitle != null) ...[
-            AppSpacing.xs.verticalSpace,
-            subtitle!,
-          ],
+          if (subtitle != null) ...[AppSpacing.xs.verticalSpace, subtitle!],
           AppSpacing.lg.verticalSpace,
           Row(
             children: [

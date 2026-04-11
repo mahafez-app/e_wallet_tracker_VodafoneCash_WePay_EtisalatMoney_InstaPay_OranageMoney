@@ -126,10 +126,9 @@ Future<WalletEntity?> _fetchWalletForProvider({
   );
 
   if (matchResult.needsSubscriptionMapping && subscriptionId != null) {
-    await firestore
-        .collection('wallets')
-        .doc(matchResult.wallet.id)
-        .update({'subscriptionId': subscriptionId});
+    await firestore.collection('wallets').doc(matchResult.wallet.id).update({
+      'subscriptionId': subscriptionId,
+    });
   }
 
   return matchResult.wallet;

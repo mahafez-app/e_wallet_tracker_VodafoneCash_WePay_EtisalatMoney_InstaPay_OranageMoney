@@ -1,24 +1,17 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/utils/app_constants.dart';
 import '../../../../core/utils/extensions/failure_extension.dart';
-import '../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/app_error_view.dart';
-import '../../../../core/widgets/app_loader.dart';
 import '../../../../core/widgets/app_snackbar.dart';
-import '../../../../core/widgets/app_text_field.dart';
-import '../../../../core/widgets/info_card.dart';
 import '../../../../generated/l10n.dart';
 import '../../providers/wallets_providers.dart';
 import '../providers/add_wallet_controller.dart';
+import '../widgets/add_wallet/add_wallet_content.dart';
 
 class AddWalletScreen extends StatelessWidget {
   const AddWalletScreen({super.key});
@@ -36,303 +29,81 @@ class AddWalletScreen extends StatelessWidget {
 }
 
 class _AddWalletBody extends ConsumerWidget {
-  const _AddWalletBody();
+  const _AddWalletBody({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<void>>(addWalletSubmitProvider, (previous, next) {
+    ref.listen<AddWalletState>(addWalletControllerProvider, (previous, next) {
       _handleStateChange(previous, next, ref, context);
     });
 
-    final walletStateAsync = ref.watch(addWalletControllerProvider);
+    final state = ref.watch(addWalletControllerProvider);
+    final controller = ref.read(addWalletControllerProvider.notifier);
 
-    return switch (walletStateAsync) {
-      AsyncLoading() => const Center(child: AppLoader()),
-      AsyncError(:final error) => Center(child: AppErrorView(error: error)),
-      AsyncData(:final value) => _AddWalletContent(state: value),
-    };
+    return AddWalletContent(
+      state: state,
+      onPhoneNumberChanged: controller.updatePhoneNumber,
+      onProviderToggled: controller.toggleProvider,
+      onSubmit: controller.submit,
+    );
   }
 
   Future<void> _handleStateChange(
-    AsyncValue<void>? previous,
-    AsyncValue<void> next,
+    AddWalletState? previous,
+    AddWalletState next,
     WidgetRef ref,
     BuildContext context,
   ) async {
-    if (next is AsyncError) {
-      if (!context.mounted) return;
-      final error = next.error;
-      AppSnackbar.show(
-        context,
-        message: error is Failure
-            ? error.toLocalizedString(context)
-            : error.toString(),
-        type: AppSnackbarType.error,
-      );
+    if (_hasNewLoadFailure(previous, next)) {
+      _showFailureSnackbar(context, next.loadFailure!);
       return;
     }
 
-    if (next is AsyncData && previous?.isLoading == true) {
-      if (!context.mounted) return;
-      final hasPerm = await _checkSmsPermission(ref);
-      if (!context.mounted) return;
-
-      if (hasPerm) {
-        context.go(AppRoutes.home);
-      } else {
-        ref.read(hasPromptedSmsPermissionSessionProvider.notifier).state = true;
-        context.push(AppRoutes.smsPermissions);
-      }
+    if (_hasNewSubmissionFailure(previous, next)) {
+      _showFailureSnackbar(context, next.submissionFailure!);
+      return;
     }
+
+    if (!_hasSuccessfulSubmission(previous, next)) return;
+
+    final hasPermission = await _checkSmsPermission(ref);
+    if (!context.mounted) return;
+
+    if (hasPermission) {
+      context.go(AppRoutes.home);
+      return;
+    }
+
+    ref.read(hasPromptedWalletPermissionsSessionProvider.notifier).state = true;
+    context.push(AppRoutes.smsPermissions);
+  }
+
+  bool _hasNewLoadFailure(AddWalletState? previous, AddWalletState next) {
+    return next.loadFailure != null &&
+        previous?.loadFailure != next.loadFailure;
+  }
+
+  bool _hasNewSubmissionFailure(AddWalletState? previous, AddWalletState next) {
+    return next.submissionStatus == AddWalletSubmissionStatus.failure &&
+        previous?.submissionFailure != next.submissionFailure &&
+        next.submissionFailure != null;
+  }
+
+  bool _hasSuccessfulSubmission(AddWalletState? previous, AddWalletState next) {
+    return previous?.submissionStatus != AddWalletSubmissionStatus.success &&
+        next.submissionStatus == AddWalletSubmissionStatus.success;
   }
 
   Future<bool> _checkSmsPermission(WidgetRef ref) async {
     final result = await ref.read(checkSmsPermissionUseCaseProvider)();
     return result.dataOrNull == true;
   }
-}
 
-class _AddWalletContent extends ConsumerWidget {
-  const _AddWalletContent({required this.state});
-
-  final AddWalletState state;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final s = S.of(context);
-    final theme = Theme.of(context);
-    final submitState = ref.watch(addWalletSubmitProvider);
-
-    return Column(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            padding: AppResponsive.allPadding(AppSpacing.lg),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                InfoCard(text: s.addWalletDescription),
-                AppSpacing.xxl.verticalSpace,
-                const _PhoneNumberSelector(),
-                AppSpacing.xl.verticalSpace,
-                Text(s.chooseProvider, style: theme.textTheme.titleMedium),
-                AppSpacing.md.verticalSpace,
-                const _ProvidersGrid(),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: AppResponsive.allPadding(AppSpacing.lg),
-          child: AppButton(
-            label: s.addWalletAction,
-            icon: const Icon(Icons.add_circle_outline),
-            isLoading: submitState.isLoading,
-            onPressed: () {
-              ref.read(addWalletSubmitProvider.notifier).submit();
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _PhoneNumberSelector extends ConsumerWidget {
-  const _PhoneNumberSelector();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final walletStateAsync = ref.watch(addWalletControllerProvider);
-    final state = walletStateAsync.asData?.value;
-    if (state == null) return const SizedBox.shrink();
-
-    final s = S.of(context);
-    final theme = Theme.of(context);
-
-    if (state.devicePhoneNumbers.isEmpty) {
-      return AppTextField(
-        label: s.phoneNumber,
-        initialValue: state.phoneNumber,
-        hintText: AppConstants.egyptPhoneHint,
-        keyboardType: TextInputType.phone,
-        onChanged: ref
-            .read(addWalletControllerProvider.notifier)
-            .updatePhoneNumber,
-        prefixIcon: Padding(
-          padding: AppResponsive.symmetricPadding(horizontal: AppSpacing.md),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            spacing: AppSpacing.xs,
-            children: [
-              Text(
-                AppConstants.egyptCountryCode,
-                style: theme.textTheme.titleSmall,
-              ),
-              Text(AppConstants.egyptFlag, style: theme.textTheme.titleMedium),
-            ],
-          ),
-        ),
-      );
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(s.phoneNumber, style: theme.textTheme.titleMedium),
-        AppSpacing.md.verticalSpace,
-        ...state.devicePhoneNumbers.map((number) {
-          final isSelected = state.phoneNumber == number;
-          return Padding(
-            padding: EdgeInsets.only(bottom: AppSpacing.sm.responsiveHeight),
-            child: InkWell(
-              onTap: () => ref
-                  .read(addWalletControllerProvider.notifier)
-                  .updatePhoneNumber(number),
-              borderRadius: BorderRadius.circular(12.responsiveRadius),
-              child: Container(
-                padding: AppResponsive.allPadding(AppSpacing.md),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? theme.colorScheme.primaryContainer.withAlpha(30)
-                      : theme.colorScheme.surface,
-                  borderRadius: BorderRadius.circular(12.responsiveRadius),
-                  border: Border.all(
-                    color: isSelected
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.outlineVariant,
-                    width: isSelected ? 2.responsiveWidth : 1.responsiveWidth,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      isSelected
-                          ? Icons.radio_button_checked
-                          : Icons.radio_button_unchecked,
-                      color: isSelected
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.outline,
-                    ),
-                    AppSpacing.md.horizontalSpace,
-                    Text(
-                      number,
-                      style: isSelected
-                          ? theme.textTheme.titleMedium?.copyWith(
-                              color: theme.colorScheme.primary,
-                            )
-                          : theme.textTheme.titleMedium,
-                      textDirection: TextDirection.ltr,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }),
-      ],
-    );
-  }
-}
-
-class _ProvidersGrid extends ConsumerWidget {
-  const _ProvidersGrid();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final walletStateAsync = ref.watch(addWalletControllerProvider);
-    final state = walletStateAsync.asData?.value;
-    if (state == null) return const SizedBox.shrink();
-
-    final providers = WalletProvider.values
-        .where((p) => p != WalletProvider.unknown)
-        .toList();
-
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: AppSpacing.md.responsiveWidth,
-        mainAxisSpacing: AppSpacing.md.responsiveHeight,
-        childAspectRatio: 1.5,
-      ),
-      itemCount: providers.length,
-      itemBuilder: (context, index) {
-        final provider = providers[index];
-        final isSelected = state.selectedProviders.contains(provider);
-        return GestureDetector(
-          onTap: () => ref
-              .read(addWalletControllerProvider.notifier)
-              .toggleProvider(provider),
-          child: _ProviderCard(
-            key: ValueKey('_ProviderCard_${provider.name}'),
-            name: provider.displayName(context),
-            iconData: provider.icon,
-            color: provider.brandColor,
-            isSelected: isSelected,
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _ProviderCard extends StatelessWidget {
-  const _ProviderCard({
-    super.key,
-    required this.name,
-    required this.iconData,
-    required this.color,
-    this.isSelected = false,
-  });
-
-  final String name;
-  final IconData iconData;
-  final Color color;
-  final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        color: isSelected
-            ? theme.colorScheme.primaryContainer.withAlpha(30)
-            : theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(12.responsiveRadius),
-        border: Border.all(
-          color: isSelected
-              ? theme.colorScheme.primary
-              : theme.colorScheme.outlineVariant,
-          width: isSelected ? 2.responsiveWidth : 1.responsiveWidth,
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: AppResponsive.allPadding(AppSpacing.sm),
-            decoration: BoxDecoration(
-              color: color.withAlpha(30),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(iconData, color: color),
-          ),
-          AppSpacing.sm.verticalSpace,
-          Text(
-            name,
-            style: isSelected
-                ? theme.textTheme.titleSmall?.copyWith(
-                    color: theme.colorScheme.primary,
-                  )
-                : theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface,
-                  ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+  void _showFailureSnackbar(BuildContext context, Failure failure) {
+    AppSnackbar.show(
+      context,
+      message: failure.toLocalizedString(context),
+      type: AppSnackbarType.error,
     );
   }
 }

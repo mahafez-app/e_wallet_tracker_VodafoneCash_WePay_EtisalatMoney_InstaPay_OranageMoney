@@ -1,0 +1,61 @@
+import 'package:equatable/equatable.dart';
+
+import '../../../../core/domain/entities/transaction_entity.dart';
+import '../../../../core/error/failures.dart';
+import '../../domain/entities/history_entry_entity.dart';
+import '../../domain/entities/note_entity.dart';
+
+enum TransactionDetailsAction {
+  none,
+  markingPaid,
+  addingNote,
+  editingNote,
+  deletingNote,
+}
+
+final class TransactionDetailsState extends Equatable {
+  const TransactionDetailsState({
+    required this.transaction,
+    this.notes = const [],
+    this.history = const [],
+    this.currentAction = TransactionDetailsAction.none,
+    this.actionError,
+  });
+
+  final TransactionEntity transaction;
+  final List<NoteEntity> notes;
+  final List<HistoryEntryEntity> history;
+  final TransactionDetailsAction currentAction;
+
+  /// Non-null on action failure; cleared on next action start.
+  final Failure? actionError;
+
+  bool get isActing => currentAction != TransactionDetailsAction.none;
+
+  TransactionDetailsState copyWith({
+    TransactionEntity? transaction,
+    List<NoteEntity>? notes,
+    List<HistoryEntryEntity>? history,
+    TransactionDetailsAction? currentAction,
+    Object? actionError = _sentinel,
+  }) => TransactionDetailsState(
+    transaction: transaction ?? this.transaction,
+    notes: notes ?? this.notes,
+    history: history ?? this.history,
+    currentAction: currentAction ?? this.currentAction,
+    actionError: identical(actionError, _sentinel)
+        ? this.actionError
+        : actionError as Failure?,
+  );
+
+  @override
+  List<Object?> get props => [
+    transaction,
+    notes,
+    history,
+    currentAction,
+    actionError,
+  ];
+}
+
+const Object _sentinel = Object();

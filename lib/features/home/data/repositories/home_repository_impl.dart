@@ -25,9 +25,7 @@ class HomeRepositoryImpl implements HomeRepository {
         _remote.watchUserWorkspaces(),
         _remote.watchPendingInvitationsCount(),
         (wallets, workspaces, invitesCount) {
-          final walletEntities = wallets
-              .map((w) => w.toEntity())
-              .toList();
+          final walletEntities = wallets.map((w) => w.toEntity()).toList();
           final workspaceEntities = workspaces
               .map((w) => w.toEntity())
               .toList();

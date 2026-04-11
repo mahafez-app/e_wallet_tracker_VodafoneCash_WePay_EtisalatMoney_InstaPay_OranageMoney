@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -28,7 +30,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HomeBody extends ConsumerWidget {
-  const _HomeBody();
+  const _HomeBody({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,37 +40,45 @@ class _HomeBody extends ConsumerWidget {
     // Side-effect: prompt for SMS permission the first time data arrives.
     ref.listen(homeDashboardProvider, (_, next) {
       if (next case AsyncData(:final value)) {
-        ref.read(homeSmsControllerProvider.notifier).checkAndPromptIfNeeded(
-          hasWallets: value.wallets.isNotEmpty,
-          navigate: () {
-            if (context.mounted) context.push(AppRoutes.smsPermissions);
-          },
-        );
+        ref
+            .read(homeSmsControllerProvider.notifier)
+            .checkAndPromptIfNeeded(
+              hasWallets: value.wallets.isNotEmpty,
+              navigate: () {
+                if (context.mounted) context.push(AppRoutes.smsPermissions);
+              },
+            );
       }
     });
 
     return switch (ref.watch(homeDashboardProvider)) {
       AsyncLoading() => const AppLoader(),
       AsyncData(:final value) => _HomeDataView(
-          key: const ValueKey('_HomeDataView'),
-          dashboard: value,
-          ref: ref,
-        ),
+        dashboard: value,
+        onRefresh: () async {
+          ref.invalidate(homeDashboardProvider);
+          await ref.read(homeDashboardProvider.future);
+        },
+      ),
       AsyncError(:final error) => AppErrorView(error: error),
     };
   }
 }
 
 class _HomeDataView extends StatelessWidget {
-  const _HomeDataView({super.key, required this.dashboard, required this.ref});
+  const _HomeDataView({
+    super.key,
+    required this.dashboard,
+    required this.onRefresh,
+  });
 
   final HomeDashboardEntity dashboard;
-  final WidgetRef ref;
+  final RefreshCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async => ref.refresh(homeDashboardProvider),
+      onRefresh: onRefresh,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Column(

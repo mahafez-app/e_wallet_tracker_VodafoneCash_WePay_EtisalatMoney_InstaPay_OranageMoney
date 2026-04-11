@@ -90,12 +90,12 @@
   "providerEtisalat": "Etisalat Cash",
   "providerWePay": "WE Pay",
   "providerUnknown": "Wallet",
-  "smsPermissionTitle": "Allow Access to Messages",
-  "smsPermissionDescription": "The app needs access to messages to automatically sync transactions from your wallet.",
+  "smsPermissionTitle": "Allow Message and Phone Access",
+  "smsPermissionDescription": "The app needs message and phone access to detect this device's wallet numbers and automatically sync wallet transactions.",
   "smsPermissionAutoUpdateTitle": "Automatic Update",
   "smsPermissionAutoUpdateDesc": "Instant tracking of expenses and payments upon arrival of bank message.",
   "smsPermissionPrivacyTitle": "Complete Privacy",
-  "smsPermissionPrivacyDesc": "We only read financial messages; your data is encrypted and never shared.",
+  "smsPermissionPrivacyDesc": "We only read financial messages and device phone numbers required for wallet setup; your data is encrypted and never shared.",
   "addWalletAction": "Add Wallet",
   "errorWalletPhoneNumberRequired": "Please enter a phone number",
   "errorWalletProviderRequired": "Please select at least one provider",
@@ -130,5 +130,87 @@
   "fromLabel": "From",
   "toLabel": "To",
   "viaLabel": "Via",
-  "paymentStatus": "Payment Status"
+  "paymentStatus": "Payment Status",
+  "transactions_filter_all": "All",
+  "transactions_filter_allWallets": "All Wallets",
+  "transactions_date_today": "Today",
+  "transactions_date_yesterday": "Yesterday",
+  "transactions_date_week": "This Week",
+  "transactions_date_month": "This Month",
+  "transactions_date_customRange": "Custom Range",
+  "transactions_loadMore": "Load More",
+  "transactions_viewingCountOfTotal": "Viewing {count} of {total} transactions",
+  "@transactions_viewingCountOfTotal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "transaction_shareReceipt": "Share Receipt",
+  "transaction_receiptHeader": "Transaction Receipt — {type}",
+  "@transaction_receiptHeader": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "transaction_amount": "Amount",
+  "transaction_wallet": "Wallet",
+  "transaction_receivedFrom": "Received From",
+  "transaction_sentTo": "Sent To",
+  "transaction_date": "Date",
+  "transaction_dateTime": "Date & Time",
+  "transaction_referenceNumber": "Reference Number",
+  "transaction_history": "Change History",
+  "transaction_markedAs": "Marked as {status}",
+  "@transaction_markedAs": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "transaction_by": "By {name}",
+  "@transaction_by": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "transaction_notes": "Notes",
+  "transaction_addNote": "Add Note",
+  "transaction_noteHint": "Write your note here…",
+  "transaction_noteDeleted": "Note deleted",
+  "transaction_undo": "Undo",
+  "transaction_edited": "Edited",
+  "transaction_cancel": "Cancel",
+  "transaction_save": "Save",
+  "transaction_smsText": "SMS Text",
+  "transaction_typeReceiveLabel": "Receive Transaction",
+  "transaction_typeSendLabel": "Send Transaction",
+  "transaction_errorGeneric": "An error occurred",
+  "transactions_emptyWithFilter": "No transactions match the selected filter",
+  "transactions_clearFilters": "Clear Filters",
+  "transactions_title_wallet": "Transactions: {name}",
+  "transactions_title_workspace": "Workspace: {name}",
+  "@transactions_title_wallet": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@transactions_title_workspace": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

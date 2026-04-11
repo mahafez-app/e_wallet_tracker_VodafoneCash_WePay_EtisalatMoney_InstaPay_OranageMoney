@@ -10,11 +10,14 @@ import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/date_extensions.dart';
+import '../../../../core/utils/extensions/wallet_provider_ext.dart';
 import '../../../../core/widgets/app_loader.dart';
 import '../../../../core/widgets/balance_card.dart';
 import '../../../../core/widgets/transactions/no_transactions_card.dart';
 import '../../../../core/widgets/transactions/transaction_card.dart';
 import '../../../../generated/l10n.dart';
+import '../../../transactions/presentation/models/transactions_context.dart';
+import '../../../transactions/presentation/widgets/details/transaction_details_bottom_sheet.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 import '../providers/wallet_details_controller.dart';
 
@@ -137,9 +140,14 @@ class _RecentTransactionsSection extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () => context.push(
-                AppRoutes.transactionsPath(walletId: details.wallet.id),
-              ),
+              onPressed: () {
+                final contextData = WalletTransactionsContext(
+                  walletId: details.wallet.id,
+                  walletLabel:
+                      '${details.wallet.provider.displayName(context)} · ${details.wallet.phoneNumber}',
+                );
+                context.push(AppRoutes.transactionsPath(), extra: contextData);
+              },
               child: Text(
                 s.viewAll,
                 style: theme.textTheme.titleSmall?.copyWith(
@@ -155,7 +163,10 @@ class _RecentTransactionsSection extends StatelessWidget {
           const NoTransactionsCard()
         else
           ...details.recentTransactions.map(
-            (tx) => TransactionCard(transaction: tx, showProviderInfo: false),
+            (tx) => GestureDetector(
+              onTap: () => TransactionDetailsBottomSheet.show(context, tx),
+              child: TransactionCard(transaction: tx, showProviderInfo: false),
+            ),
           ),
       ],
     );

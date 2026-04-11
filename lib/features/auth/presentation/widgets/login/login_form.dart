@@ -33,10 +33,12 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     if (_formKey.currentState!.validate()) {
       FocusScope.of(context).unfocus();
       // Navigation is handled via GoRouter redirect listening to authStateChangesProvider.
-      ref.read(authNotifierProvider.notifier).signInWithEmailPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-      );
+      ref
+          .read(authNotifierProvider.notifier)
+          .signInWithEmailPassword(
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          );
     }
   }
 

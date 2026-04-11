@@ -57,6 +57,32 @@ base class TransactionEntity extends Equatable {
   /// The raw SMS body. Stored for debugging and re-parsing if formats change.
   final String? message;
 
+  TransactionEntity copyWith({
+    String? id,
+    TransactionType? type,
+    double? amount,
+    DateTime? createdAt,
+    String? walletId,
+    WalletProvider? provider,
+    String? phoneNumber,
+    String? counterpartyNumber,
+    String? referenceNumber,
+    bool? isPaid,
+    String? message,
+  }) => TransactionEntity(
+    id: id ?? this.id,
+    type: type ?? this.type,
+    amount: amount ?? this.amount,
+    createdAt: createdAt ?? this.createdAt,
+    walletId: walletId ?? this.walletId,
+    provider: provider ?? this.provider,
+    phoneNumber: phoneNumber ?? this.phoneNumber,
+    counterpartyNumber: counterpartyNumber ?? this.counterpartyNumber,
+    referenceNumber: referenceNumber ?? this.referenceNumber,
+    isPaid: isPaid ?? this.isPaid,
+    message: message ?? this.message,
+  );
+
   @override
   List<Object?> get props => [
     id,

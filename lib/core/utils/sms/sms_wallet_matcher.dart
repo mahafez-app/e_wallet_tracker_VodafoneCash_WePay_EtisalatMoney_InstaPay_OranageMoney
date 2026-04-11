@@ -41,14 +41,14 @@ class SmsWalletMatcher {
       return SmsWalletMatchResult(wallet: wallets.first);
     }
 
-    final exactMatch =
-        wallets.where((w) => w.subscriptionId == subscriptionId).toList();
+    final exactMatch = wallets
+        .where((w) => w.subscriptionId == subscriptionId)
+        .toList();
     if (exactMatch.isNotEmpty) {
       return SmsWalletMatchResult(wallet: exactMatch.first);
     }
 
-    final unassigned =
-        wallets.where((w) => w.subscriptionId == null).toList();
+    final unassigned = wallets.where((w) => w.subscriptionId == null).toList();
     if (unassigned.isNotEmpty) {
       return SmsWalletMatchResult(
         wallet: unassigned.first,

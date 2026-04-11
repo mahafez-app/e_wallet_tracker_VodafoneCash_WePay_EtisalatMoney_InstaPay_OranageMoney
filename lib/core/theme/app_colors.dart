@@ -55,10 +55,12 @@ abstract final class AppColors {
   static const Color surfaceContainerHighest = Color(0xFFBFCBDC);
 
   // ── Dark surface system (Slate scale) ────────────────────────────────────
-  static const Color darkSurface = Color(0xFF0F172A);             // Slate-900
-  static const Color darkSurfaceContainer = Color(0xFF1E293B);    // Slate-800
+  static const Color darkSurface = Color(0xFF0F172A); // Slate-900
+  static const Color darkSurfaceContainer = Color(0xFF1E293B); // Slate-800
   static const Color darkSurfaceContainerHigh = Color(0xFF334155); // Slate-700
-  static const Color darkSurfaceContainerHighest = Color(0xFF475569); // Slate-600
+  static const Color darkSurfaceContainerHighest = Color(
+    0xFF475569,
+  ); // Slate-600
   static const Color darkOnSurface = Color(0xFFE2E8F0);
   static const Color darkOnSurfaceVariant = Color(0xFF94A3B8);
   static const Color darkOutline = Color(0xFF64748B);

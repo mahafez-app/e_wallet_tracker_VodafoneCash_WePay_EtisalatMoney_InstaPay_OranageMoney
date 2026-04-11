@@ -14,6 +14,7 @@ class WalletEntity extends Equatable {
     required this.totalSent,
     required this.lastBalanceAt,
     required this.createdAt,
+    this.subscriptionId,
   });
 
   final String id;
@@ -26,6 +27,7 @@ class WalletEntity extends Equatable {
   final double totalSent;
   final DateTime lastBalanceAt;
   final DateTime createdAt;
+  final int? subscriptionId;
 
   @override
   List<Object?> get props => [
@@ -39,5 +41,6 @@ class WalletEntity extends Equatable {
     totalSent,
     lastBalanceAt,
     createdAt,
+    subscriptionId,
   ];
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wallet_tracker/features/transactions/providers/transactions_providers.dart';
 
+import '../../../../core/error/failures.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -10,7 +10,7 @@ import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../../../../generated/l10n.dart';
-import '../../providers/wallets_providers.dart';
+import '../providers/sms_permissions_controller.dart';
 
 class SmsPermissionsScreen extends StatelessWidget {
   const SmsPermissionsScreen({super.key});
@@ -26,8 +26,22 @@ class _SmsPermissionsBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue<void>>(smsPermissionsControllerProvider, (
+      previous,
+      next,
+    ) {
+      if (next is AsyncError) {
+        AppSnackbar.show(
+          context,
+          message: (next.error as Failure).toLocalizedString(context),
+          type: AppSnackbarType.error,
+        );
+      }
+    });
+
     final s = S.of(context);
     final theme = Theme.of(context);
+    final state = ref.watch(smsPermissionsControllerProvider);
 
     return Column(
       children: [
@@ -91,12 +105,14 @@ class _SmsPermissionsBody extends ConsumerWidget {
                 AppSpacing.xxxl.verticalSpace,
                 // Feature items
                 _FeatureItem(
+                  key: const ValueKey('_FeatureItem_update'),
                   icon: Icons.update,
                   title: s.smsPermissionAutoUpdateTitle,
                   description: s.smsPermissionAutoUpdateDesc,
                 ),
                 AppSpacing.lg.verticalSpace,
                 _FeatureItem(
+                  key: const ValueKey('_FeatureItem_shield'),
                   icon: Icons.shield_outlined,
                   title: s.smsPermissionPrivacyTitle,
                   description: s.smsPermissionPrivacyDesc,
@@ -112,25 +128,13 @@ class _SmsPermissionsBody extends ConsumerWidget {
             children: [
               AppButton(
                 label: s.allowAndContinue,
+                isLoading: state.isLoading,
                 onPressed: () async {
-                  final requestPerm = ref.read(
-                    requestSmsPermissionUseCaseProvider,
-                  );
-                  final result = await requestPerm();
-
-                  if (context.mounted) {
-                    result.fold(
-                      (failure) => AppSnackbar.show(
-                        context,
-                        message: failure.toLocalizedString(context),
-                        type: AppSnackbarType.error,
-                      ),
-                      (_) {
-                        // Refresh the readiness state to trigger the SMS listener
-                        ref.invalidate(smsReadinessProvider);
-                        context.go(AppRoutes.home);
-                      },
-                    );
+                  final result = await ref
+                      .read(smsPermissionsControllerProvider.notifier)
+                      .requestPermission();
+                  if (context.mounted && result) {
+                    context.go(AppRoutes.home);
                   }
                 },
               ),
@@ -160,6 +164,7 @@ class _FeatureItem extends StatelessWidget {
   final String description;
 
   const _FeatureItem({
+    super.key,
     required this.icon,
     required this.title,
     required this.description,

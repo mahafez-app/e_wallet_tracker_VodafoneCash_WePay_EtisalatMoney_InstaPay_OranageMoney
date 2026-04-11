@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
+import 'package:wallet_tracker/core/domain/entities/transaction_entity.dart';
 import 'package:wallet_tracker/firebase_options.dart';
 
 import '../../features/transactions/data/datasources/transaction_remote_data_source.dart';
@@ -73,20 +74,8 @@ class SmsTransactionService {
     required String body,
     required DateTime smsReceivedAt,
   }) {
-    // Resolve which provider (if any) handles this sender.
-    final parser = SmsParserRegistry.resolve(sender);
-    if (parser == null) return;
-
-    // Find the first wallet matching this provider. A user may have zero or
-    // multiple wallets for one provider; we match the first registered one.
-    final matchingWallets = _wallets.where(
-      (w) => w.provider == parser.provider,
-    );
-    if (matchingWallets.isEmpty) {
-      log('No wallet registered for provider ${parser.provider}.', name: _tag);
-      return;
-    }
-    final wallet = matchingWallets.first;
+    final wallet = _getWalletForSender(sender);
+    if (wallet == null) return;
 
     final transaction = SmsParsingService.parse(
       sender: sender,
@@ -104,6 +93,24 @@ class SmsTransactionService {
       return;
     }
 
+    _saveTransaction(transaction);
+  }
+
+  WalletEntity? _getWalletForSender(String sender) {
+    final parser = SmsParserRegistry.resolve(sender);
+    if (parser == null) return null;
+
+    final matchingWallets = _wallets.where(
+      (w) => w.provider == parser.provider,
+    );
+    if (matchingWallets.isEmpty) {
+      log('No wallet registered for provider ${parser.provider}.', name: _tag);
+      return null;
+    }
+    return matchingWallets.first;
+  }
+
+  void _saveTransaction(TransactionEntity transaction) {
     _saveTransactionUseCase(transaction).then((result) {
       result.fold(
         (failure) => log(
@@ -142,6 +149,20 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
 
   await _initializeFirebaseIfNeeded();
 
+  await _handleBackgroundSmsForUser(
+    sender: sender,
+    body: body,
+    dateValue: message.date,
+    providerName: parser.provider.toValue,
+  );
+}
+
+Future<void> _handleBackgroundSmsForUser({
+  required String sender,
+  required String body,
+  required int? dateValue,
+  required String providerName,
+}) async {
   final currentUser = FirebaseAuth.instance.currentUser;
   if (currentUser == null) {
     log('Ignoring: User not logged in.', name: 'BackgroundSms');
@@ -150,11 +171,8 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
 
   final wallet = await _fetchWalletForProvider(
     uid: currentUser.uid,
-    providerName: parser.provider.toValue,
+    providerName: providerName,
   );
-
-  log('Background SMS from $sender matched provider ${parser.provider.name}. Current user: ${currentUser.uid}.'
-      'Wallet found: ${wallet != null}', name: 'BackgroundSms');
 
   if (wallet == null) {
     log('Ignoring: No matching wallet for provider.', name: 'BackgroundSms');
@@ -164,7 +182,7 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
   await _processAndSaveBackgroundTransaction(
     sender: sender,
     body: body,
-    dateValue: message.date,
+    dateValue: dateValue,
     wallet: wallet,
   );
 }
@@ -206,14 +224,10 @@ Future<void> _processAndSaveBackgroundTransaction({
   required int? dateValue,
   required WalletEntity wallet,
 }) async {
-  final smsReceivedAt = dateValue != null
-      ? DateTime.fromMillisecondsSinceEpoch(dateValue)
-      : DateTime.now();
-
   final transaction = SmsParsingService.parse(
     sender: sender,
     message: body,
-    smsReceivedAt: smsReceivedAt,
+    smsReceivedAt: _parseDate(dateValue),
     walletId: wallet.id,
     walletPhoneNumber: wallet.phoneNumber,
   );
@@ -223,10 +237,19 @@ Future<void> _processAndSaveBackgroundTransaction({
     return;
   }
 
+  await _saveBackgroundTransaction(transaction);
+}
+
+DateTime _parseDate(int? dateValue) {
+  return dateValue != null
+      ? DateTime.fromMillisecondsSinceEpoch(dateValue)
+      : DateTime.now();
+}
+
+Future<void> _saveBackgroundTransaction(TransactionEntity transaction) async {
   final remoteDataSource = TransactionRemoteDataSourceImpl(
     firestore: FirebaseFirestore.instance,
   );
-
   try {
     await remoteDataSource.saveTransaction(transaction);
     log('Background successful: ${transaction.id}', name: 'BackgroundSms');

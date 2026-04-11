@@ -29,16 +29,14 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     super.dispose();
   }
 
-  Future<void> _submit() async {
+  void _submit() {
     if (_formKey.currentState!.validate()) {
       FocusScope.of(context).unfocus();
-      await ref
-          .read(authNotifierProvider.notifier)
-          .signInWithEmailPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-          );
-      // Navigation is handled via GoRouterRefreshStream listening to authStateProvider
+      // Navigation is handled via GoRouter redirect listening to authStateChangesProvider.
+      ref.read(authNotifierProvider.notifier).signInWithEmailPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
     }
   }
 
@@ -79,22 +77,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             ),
             validator: (value) => AppValidators.required(context, value),
           ),
-          AppSpacing.sm.verticalSpace,
-          // Align(
-          //   alignment: AlignmentDirectional.centerEnd,
-          //   child: TextButton(
-          //     onPressed: () {
-          //       // Implement forgot password functionality
-          //     },
-          //     child: Text(
-          //       l10n.forgotPassword,
-          //       style: theme.textTheme.labelLarge?.copyWith(
-          //         color: theme.colorScheme.primary,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //   ),
-          // ),
           AppSpacing.xl.verticalSpace,
           AppButton(
             label: l10n.signIn,

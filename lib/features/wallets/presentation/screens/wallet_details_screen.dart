@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wallet_tracker/core/widgets/wallets/wallet_provider_info.dart';
 
+import '../../../../core/widgets/app_error_view.dart';
+
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
@@ -44,7 +46,7 @@ class _WalletDetailsBody extends ConsumerWidget {
 
     return state.when(
       loading: () => const AppLoader(),
-      error: (error, _) => Center(child: Text(error.toString())),
+      error: (error, _) => AppErrorView(error: error),
       data: (details) => SingleChildScrollView(
         padding: AppSpacing.pagePadding,
         child: Column(

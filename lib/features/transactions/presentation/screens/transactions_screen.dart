@@ -3,48 +3,57 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/widgets/app_error_view.dart';
 import '../../../../core/widgets/app_loader.dart';
 import '../../../../core/widgets/transactions/transaction_card.dart';
 import '../../../../generated/l10n.dart';
 import '../../../wallets/presentation/providers/wallet_details_controller.dart';
 import '../providers/transactions_controller.dart';
 
-class TransactionsScreen extends ConsumerWidget {
+class TransactionsScreen extends StatelessWidget {
   const TransactionsScreen({super.key, this.walletId});
 
   final String? walletId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final s = S.of(context);
-    final theme = Theme.of(context);
-
-    String title = s.allTransactions;
-    if (walletId != null) {
-      final walletState = ref.watch(walletDetailsControllerProvider(walletId!));
-      title = walletState.when(
-        data: (details) => s.walletTransactions,
-        loading: () => s.transactionsHistory,
-        error: (_, _) => s.transactionsHistory,
-      );
-    }
-
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          title,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        title: _TransactionsTitle(walletId: walletId),
       ),
       body: SafeArea(child: _TransactionsBody(walletId: walletId)),
     );
   }
 }
 
+class _TransactionsTitle extends ConsumerWidget {
+  const _TransactionsTitle({required this.walletId});
+
+  final String? walletId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = S.of(context);
+    if (walletId == null) return Text(s.allTransactions);
+
+    final title = ref
+        .watch(walletDetailsControllerProvider(walletId!))
+        .maybeWhen(
+          data: (_) => s.walletTransactions,
+          orElse: () => s.transactionsHistory,
+        );
+
+    return Text(
+      title,
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+        fontWeight: FontWeight.w700,
+      ),
+    );
+  }
+}
+
 class _TransactionsBody extends ConsumerWidget {
-  const _TransactionsBody({this.walletId});
+  const _TransactionsBody({required this.walletId});
 
   final String? walletId;
 
@@ -52,24 +61,28 @@ class _TransactionsBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(transactionsControllerProvider(walletId));
 
-    return state.when(
-      loading: () => const AppLoader(),
-      error: (error, _) => Center(child: Text(error.toString())),
-      data: (transactions) {
-        if (transactions.isEmpty) {
-          return const _EmptyTransactionsView();
-        }
+    return switch (state) {
+      AsyncLoading() => const AppLoader(),
+      AsyncError(:final error) => AppErrorView(error: error),
+      AsyncData(:final value) => value.isEmpty
+          ? const _EmptyTransactionsView()
+          : _TransactionsList(transactions: value),
+    };
+  }
+}
 
-        return ListView.builder(
-          padding: AppSpacing.pagePadding,
-          itemCount: transactions.length,
-          itemBuilder: (context, index) {
-            final tx = transactions[index];
-            return TransactionCard(
-              transaction: tx,
-            );
-          },
-        );
+class _TransactionsList extends StatelessWidget {
+  const _TransactionsList({required this.transactions});
+
+  final List transactions;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: AppSpacing.pagePadding,
+      itemCount: transactions.length,
+      itemBuilder: (context, index) {
+        return TransactionCard(transaction: transactions[index]);
       },
     );
   }
@@ -89,8 +102,8 @@ class _EmptyTransactionsView extends StatelessWidget {
         children: [
           Icon(
             Icons.receipt_long_outlined,
-            size: 64,
-            color: theme.colorScheme.outline.withAlpha(76), // 0.3
+            size: 64.responsiveRadius,
+            color: theme.colorScheme.outline.withAlpha(76),
           ),
           AppSpacing.lg.verticalSpace,
           Text(

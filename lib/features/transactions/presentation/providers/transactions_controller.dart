@@ -18,7 +18,7 @@ class TransactionsController extends AsyncNotifier<List<TransactionEntity>> {
 
   @override
   Future<List<TransactionEntity>> build() async {
-    final result = await ref.watch(getTransactionsUseCaseProvider)(
+    final result = await ref.read(getTransactionsUseCaseProvider)(
       GetTransactionsParams(walletId: _walletId),
     );
 
@@ -26,9 +26,5 @@ class TransactionsController extends AsyncNotifier<List<TransactionEntity>> {
       (failure) => throw failure,
       (transactions) => transactions,
     );
-  }
-
-  Future<void> loadMore() async {
-    // Implement pagination if needed
   }
 }

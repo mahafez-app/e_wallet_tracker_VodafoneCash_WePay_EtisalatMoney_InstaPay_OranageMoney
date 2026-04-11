@@ -6,14 +6,16 @@ import '../../../../core/providers/service_providers.dart';
 import '../../domain/usecases/add_wallets_usecase.dart';
 import '../../providers/wallets_providers.dart';
 
-final class AddWalletState {
-  final String phoneNumber;
-  final Set<WalletProvider> selectedProviders;
+// ── Form state ──────────────────────────────────────────────────────────────
 
+final class AddWalletState {
   const AddWalletState({
     required this.phoneNumber,
     required this.selectedProviders,
   });
+
+  final String phoneNumber;
+  final Set<WalletProvider> selectedProviders;
 
   AddWalletState copyWith({
     String? phoneNumber,
@@ -33,29 +35,11 @@ final addWalletControllerProvider =
 
 class AddWalletController extends Notifier<AddWalletState> {
   @override
-  AddWalletState build() {
-    return const AddWalletState(phoneNumber: '', selectedProviders: {});
-  }
+  AddWalletState build() =>
+      const AddWalletState(phoneNumber: '', selectedProviders: {});
 
   void updatePhoneNumber(String newNumber) {
-    Set<WalletProvider> newProviders = Set.of(state.selectedProviders);
-
-    // Auto-select provider based on prefix if starting fresh or if it's a new clear prefix typing
-    if (newNumber.length >= 3) {
-      final prefix = newNumber.substring(0, 3);
-      if (prefix == '010') {
-        newProviders.add(WalletProvider.vodafoneCash);
-      } else if (prefix == '011') {
-        newProviders.add(WalletProvider.etisalatCash);
-      } else if (prefix == '012') {
-        newProviders.add(WalletProvider.orangeMoney);
-      } else if (prefix == '015') {
-        newProviders.add(WalletProvider.wePay);
-      }
-    } else {
-      newProviders.clear();
-    }
-
+    final newProviders = _autoSelectProvider(newNumber);
     state = state.copyWith(
       phoneNumber: newNumber,
       selectedProviders: newProviders,
@@ -75,13 +59,31 @@ class AddWalletController extends Notifier<AddWalletState> {
   void reset() {
     state = const AddWalletState(phoneNumber: '', selectedProviders: {});
   }
+
+  Set<WalletProvider> _autoSelectProvider(String number) {
+    if (number.length < 3) return {};
+    final prefix = number.substring(0, 3);
+    return switch (prefix) {
+      '010' => {WalletProvider.vodafoneCash},
+      '011' => {WalletProvider.etisalatCash},
+      '012' => {WalletProvider.orangeMoney},
+      '015' => {WalletProvider.wePay},
+      _ => Set.of(state.selectedProviders),
+    };
+  }
 }
+
+// ── Submit controller ───────────────────────────────────────────────────────
 
 final addWalletSubmitProvider =
     AsyncNotifierProvider.autoDispose<AddWalletSubmitController, void>(
       AddWalletSubmitController.new,
     );
 
+/// Handles the wallet creation flow.
+/// On success, transitions to [AsyncData]. Navigation is driven by the
+/// widget's [ref.listen] — specifically checking SMS permission and routing
+/// accordingly.
 class AddWalletSubmitController extends AsyncNotifier<void> {
   @override
   void build() {}
@@ -90,6 +92,7 @@ class AddWalletSubmitController extends AsyncNotifier<void> {
     state = const AsyncLoading();
 
     final walletState = ref.read(addWalletControllerProvider);
+
     if (walletState.phoneNumber.isEmpty) {
       state = AsyncError(
         const ValidationFailure(code: 'wallet-phone-required'),
@@ -97,6 +100,7 @@ class AddWalletSubmitController extends AsyncNotifier<void> {
       );
       return;
     }
+
     if (walletState.selectedProviders.isEmpty) {
       state = AsyncError(
         const ValidationFailure(code: 'wallet-provider-required'),
@@ -109,19 +113,20 @@ class AddWalletSubmitController extends AsyncNotifier<void> {
     final deviceId = await deviceInfoService.getDeviceId();
     final deviceName = await deviceInfoService.getDeviceName();
 
-    final addUseCase = ref.read(addWalletsUseCaseProvider);
-    final params = AddWalletsParams(
-      phoneNumber: walletState.phoneNumber,
-      providers: walletState.selectedProviders.map((e) => e.toValue).toList(),
-      deviceId: '$deviceName ($deviceId)',
+    final result = await ref.read(addWalletsUseCaseProvider)(
+      AddWalletsParams(
+        phoneNumber: walletState.phoneNumber,
+        providers: walletState.selectedProviders.map((e) => e.toValue).toList(),
+        deviceId: '$deviceName ($deviceId)',
+      ),
     );
 
-    final result = await addUseCase(params);
-    result.fold((failure) => state = AsyncError(failure, StackTrace.current), (
-      _,
-    ) {
-      state = const AsyncData(null);
-      ref.read(addWalletControllerProvider.notifier).reset();
-    });
+    result.fold(
+      (failure) => state = AsyncError(failure, StackTrace.current),
+      (_) {
+        ref.read(addWalletControllerProvider.notifier).reset();
+        state = const AsyncData(null);
+      },
+    );
   }
 }

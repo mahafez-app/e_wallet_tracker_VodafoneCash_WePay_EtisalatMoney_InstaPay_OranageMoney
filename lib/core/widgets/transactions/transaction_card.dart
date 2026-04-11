@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wallet_tracker/core/domain/entities/transaction_entity.dart';
-import 'package:wallet_tracker/core/domain/enums/wallet_provider.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../domain/enums/transaction_type.dart';
 import '../../theme/app_color_extension.dart';
 import '../../theme/app_responsive.dart';
 import '../../theme/app_spacing.dart';
+import '../../utils/extensions/wallet_provider_ext.dart';
 
 class TransactionCard extends StatelessWidget {
   const TransactionCard({

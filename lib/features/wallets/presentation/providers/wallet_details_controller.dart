@@ -16,7 +16,7 @@ class WalletDetailsController extends AsyncNotifier<WalletDetailsEntity> {
 
   @override
   Future<WalletDetailsEntity> build() async {
-    final result = await ref.watch(getWalletDetailsUseCaseProvider)(
+    final result = await ref.read(getWalletDetailsUseCaseProvider)(
       GetWalletDetailsParams(walletId: _walletId),
     );
 

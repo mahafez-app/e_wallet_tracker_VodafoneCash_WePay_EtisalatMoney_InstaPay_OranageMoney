@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/providers/sms_providers.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../transactions/providers/transactions_providers.dart';
+import '../../../../core/widgets/app_error_view.dart';
+import '../../../../core/widgets/app_loader.dart';
+import '../../domain/entities/home_dashboard_entity.dart';
 import '../providers/home_controller.dart';
 import '../providers/home_sms_prompt_controller.dart';
 import '../widgets/home_global_stats_widget.dart';
@@ -33,54 +35,66 @@ class _HomeBody extends ConsumerWidget {
     // Keep the SMS listener alive while this widget is mounted.
     ref.watch(smsTransactionListenerProvider);
 
-    final dashboardState = ref.watch(homeDashboardProvider);
-
-    ref.listen(homeDashboardProvider, (previous, next) {
+    // Side-effect: prompt for SMS permission the first time data arrives.
+    ref.listen(homeDashboardProvider, (_, next) {
       if (next case AsyncData(:final value)) {
-        ref.read(checkAndPromptSmsPermissionProvider)(
-          value.wallets.isNotEmpty,
-          () {
-            if (context.mounted) {
-              context.push(AppRoutes.smsPermissions);
-            }
+        ref.read(homeSmsControllerProvider.notifier).checkAndPromptIfNeeded(
+          hasWallets: value.wallets.isNotEmpty,
+          navigate: () {
+            if (context.mounted) context.push(AppRoutes.smsPermissions);
           },
         );
       }
     });
 
-    return switch (dashboardState) {
-      AsyncLoading() => const Center(child: CircularProgressIndicator()),
-      AsyncData(:final value) => RefreshIndicator(
-        onRefresh: () async => ref.refresh(homeDashboardProvider),
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              HomeHeaderWidget(invitationsCount: value.invitationsCount),
-              Padding(
-                padding: AppSpacing.pagePadding,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: AppSpacing.xxl,
-                  children: [
-                    HomeGlobalStatsWidget(
-                      totalBalance: value.totalBalance,
-                      totalSent: value.totalSent,
-                      totalReceived: value.totalReceived,
-                      walletCount: value.wallets.length,
-                    ),
-                    HomeWalletsSection(wallets: value.wallets),
-                    HomeWorkspacesSection(workspaces: value.workspaces),
-                  ],
-                ),
-              ),
-            ],
-          ),
+    return switch (ref.watch(homeDashboardProvider)) {
+      AsyncLoading() => const AppLoader(),
+      AsyncData(:final value) => _HomeDataView(
+          key: const ValueKey('_HomeDataView'),
+          dashboard: value,
+          ref: ref,
         ),
-      ),
-      AsyncError(:final error) => Center(child: Text(error.toString())),
+      AsyncError(:final error) => AppErrorView(error: error),
     };
   }
 }
 
+class _HomeDataView extends StatelessWidget {
+  const _HomeDataView({super.key, required this.dashboard, required this.ref});
+
+  final HomeDashboardEntity dashboard;
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async => ref.refresh(homeDashboardProvider),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            HomeHeaderWidget(invitationsCount: dashboard.invitationsCount),
+            Padding(
+              padding: AppSpacing.pagePadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: AppSpacing.xxl,
+                children: [
+                  HomeGlobalStatsWidget(
+                    totalBalance: dashboard.totalBalance,
+                    totalSent: dashboard.totalSent,
+                    totalReceived: dashboard.totalReceived,
+                    walletCount: dashboard.wallets.length,
+                  ),
+                  HomeWalletsSection(wallets: dashboard.wallets),
+                  HomeWorkspacesSection(workspaces: dashboard.workspaces),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

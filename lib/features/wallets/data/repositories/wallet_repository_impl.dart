@@ -8,10 +8,6 @@ import '../datasources/wallet_details_remote_data_source.dart';
 import '../datasources/wallet_remote_data_source.dart';
 
 class WalletRepositoryImpl implements WalletRepository {
-  final WalletRemoteDataSource _remoteDataSource;
-  final WalletDetailsRemoteDataSource _detailsDataSource;
-  final SmsPermissionDataSource _permissionDataSource;
-
   const WalletRepositoryImpl({
     required WalletRemoteDataSource remoteDataSource,
     required WalletDetailsRemoteDataSource detailsDataSource,
@@ -20,12 +16,19 @@ class WalletRepositoryImpl implements WalletRepository {
        _detailsDataSource = detailsDataSource,
        _permissionDataSource = permissionDataSource;
 
+  final WalletRemoteDataSource _remoteDataSource;
+  final WalletDetailsRemoteDataSource _detailsDataSource;
+  final SmsPermissionDataSource _permissionDataSource;
+
   @override
   Future<Result<List<WalletEntity>>> getWallets() {
-    return _executeAndHandleErrors(() async {
-      final wallets = await _remoteDataSource.getWallets();
-      return wallets.map((dto) => dto.toEntity()).toList();
-    }, tag: 'WalletRepositoryImpl.getWallets');
+    return executeAndHandleErrors(
+      () async {
+        final wallets = await _remoteDataSource.getWallets();
+        return wallets.map((dto) => dto.toEntity()).toList();
+      },
+      tag: 'WalletRepositoryImpl.getWallets',
+    );
   }
 
   @override
@@ -34,7 +37,7 @@ class WalletRepositoryImpl implements WalletRepository {
     required List<String> providers,
     required String deviceId,
   }) {
-    return _executeAndHandleErrors(
+    return executeAndHandleErrors(
       () => _remoteDataSource.addWallets(
         phoneNumber: phoneNumber,
         providers: providers,
@@ -46,7 +49,7 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<Result<bool?>> requestSmsPermission() {
-    return _executeAndHandleErrors(
+    return executeAndHandleErrors(
       () => _permissionDataSource.requestSmsPermission(),
       tag: 'WalletRepositoryImpl.requestSmsPermission',
     );
@@ -54,7 +57,7 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<Result<bool>> hasSmsPermission() {
-    return _executeAndHandleErrors(
+    return executeAndHandleErrors(
       () => _permissionDataSource.hasSmsPermission(),
       tag: 'WalletRepositoryImpl.hasSmsPermission',
     );
@@ -62,26 +65,21 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<Result<WalletDetailsEntity>> getWalletDetails(String walletId) {
-    return _executeAndHandleErrors(() async {
-      final walletDto = await _detailsDataSource.getWallet(walletId);
-      final wallet = walletDto.toEntity();
-      final transactionsDto = await _detailsDataSource.getRecentTransactions(
-        wallet,
-      );
-
-      return WalletDetailsEntity(
-        wallet: wallet,
-        recentTransactions: transactionsDto
-            .map((dto) => dto.toEntity())
-            .toList(),
-      );
-    }, tag: 'WalletRepositoryImpl.getWalletDetails');
-  }
-
-  Future<Result<T>> _executeAndHandleErrors<T>(
-    Future<T> Function() action, {
-    required String tag,
-  }) {
-    return executeAndHandleErrors(action, tag: tag);
+    return executeAndHandleErrors(
+      () async {
+        final walletDto = await _detailsDataSource.getWallet(walletId);
+        final wallet = walletDto.toEntity();
+        final transactionsDto = await _detailsDataSource.getRecentTransactions(
+          wallet,
+        );
+        return WalletDetailsEntity(
+          wallet: wallet,
+          recentTransactions: transactionsDto
+              .map((dto) => dto.toEntity())
+              .toList(),
+        );
+      },
+      tag: 'WalletRepositoryImpl.getWalletDetails',
+    );
   }
 }

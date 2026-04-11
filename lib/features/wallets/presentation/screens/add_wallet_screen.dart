@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wallet_tracker/core/utils/app_constants.dart';
-import 'package:wallet_tracker/core/widgets/info_card.dart';
 
 import '../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/app_constants.dart';
 import '../../../../core/utils/extensions/failure_extension.dart';
+import '../../../../core/utils/extensions/wallet_provider_ext.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../../../../core/widgets/app_text_field.dart';
+import '../../../../core/widgets/info_card.dart';
 import '../../../../generated/l10n.dart';
 import '../../providers/wallets_providers.dart';
 import '../providers/add_wallet_controller.dart';
@@ -37,10 +38,9 @@ class _AddWalletBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<void>>(
-      addWalletSubmitProvider,
-      (previous, next) => _onStateChange(previous, next, ref, context),
-    );
+    ref.listen<AsyncValue<void>>(addWalletSubmitProvider, (previous, next) {
+      _handleStateChange(previous, next, ref, context);
+    });
 
     final s = S.of(context);
     final theme = Theme.of(context);
@@ -86,7 +86,7 @@ class _AddWalletBody extends ConsumerWidget {
                 AppSpacing.xl.verticalSpace,
                 Text(s.chooseProvider, style: theme.textTheme.titleMedium),
                 AppSpacing.md.verticalSpace,
-                const _ProvidersGrid(),
+                const _ProvidersGrid(key: ValueKey('_ProvidersGrid')),
               ],
             ),
           ),
@@ -106,44 +106,51 @@ class _AddWalletBody extends ConsumerWidget {
     );
   }
 
-  Future<void> _onStateChange(
+  Future<void> _handleStateChange(
     AsyncValue<void>? previous,
     AsyncValue<void> next,
     WidgetRef ref,
     BuildContext context,
   ) async {
+    if (next is AsyncError) {
+      if (!context.mounted) return;
+      final error = next.error;
+      AppSnackbar.show(
+        context,
+        message: error is Failure
+            ? error.toLocalizedString(context)
+            : error.toString(),
+        type: AppSnackbarType.error,
+      );
+      return;
+    }
+
     if (next is AsyncData && previous?.isLoading == true) {
-      final hasPerm = await hasSmsPermission(ref);
-      if (context.mounted && hasPerm) {
+      if (!context.mounted) return;
+      final hasPerm = await _checkSmsPermission(ref);
+      if (!context.mounted) return;
+
+      if (hasPerm) {
         context.go(AppRoutes.home);
-      } else if (context.mounted && !hasPerm) {
+      } else {
         ref.read(hasPromptedSmsPermissionSessionProvider.notifier).state = true;
         context.push(AppRoutes.smsPermissions);
       }
-    } else if (next is AsyncError) {
-      final error = next.error;
-      final message = error is Failure
-          ? error.toLocalizedString(context)
-          : error.toString();
-
-      AppSnackbar.show(context, message: message, type: AppSnackbarType.error);
     }
   }
 
-  Future<bool> hasSmsPermission(WidgetRef ref) async {
-    final checkPerm = ref.read(checkSmsPermissionUseCaseProvider);
-    final result = await checkPerm();
+  Future<bool> _checkSmsPermission(WidgetRef ref) async {
+    final result = await ref.read(checkSmsPermissionUseCaseProvider)();
     return result.dataOrNull == true;
   }
 }
 
 class _ProvidersGrid extends ConsumerWidget {
-  const _ProvidersGrid();
+  const _ProvidersGrid({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(addWalletControllerProvider);
-
     final providers = WalletProvider.values
         .where((p) => p != WalletProvider.unknown)
         .toList();
@@ -166,6 +173,7 @@ class _ProvidersGrid extends ConsumerWidget {
               .read(addWalletControllerProvider.notifier)
               .toggleProvider(provider),
           child: _ProviderCard(
+            key: ValueKey('_ProviderCard_${provider.name}'),
             name: provider.displayName(context),
             iconData: provider.icon,
             color: provider.brandColor,
@@ -178,17 +186,18 @@ class _ProvidersGrid extends ConsumerWidget {
 }
 
 class _ProviderCard extends StatelessWidget {
-  final String name;
-  final IconData iconData;
-  final Color color;
-  final bool isSelected;
-
   const _ProviderCard({
+    super.key,
     required this.name,
     required this.iconData,
     required this.color,
     this.isSelected = false,
   });
+
+  final String name;
+  final IconData iconData;
+  final Color color;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {

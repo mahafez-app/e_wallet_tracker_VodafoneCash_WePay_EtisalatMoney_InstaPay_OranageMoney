@@ -5,6 +5,7 @@ import '../../domain/enums/wallet_provider.dart';
 import '../../theme/app_color_extension.dart';
 import '../../theme/app_responsive.dart';
 import '../../theme/app_spacing.dart';
+import '../../utils/extensions/wallet_provider_ext.dart';
 import 'wallet_provider_info.dart';
 
 class WalletCard extends StatelessWidget {

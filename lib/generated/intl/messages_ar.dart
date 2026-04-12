@@ -26,13 +26,13 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m1(count) =>
       "${Intl.plural(count, zero: 'لم تقم بإضافة أي محافظ بعد', one: 'إجمالي الرصيد لمحفظتك', two: 'إجمالي الرصيد لمحفظتيك', few: 'إجمالي الرصيد لـ ${count} من محافظك', many: 'إجمالي الرصيد لـ ${count} من محافظك', other: 'إجمالي الرصيد لـ ${count} من محافظك')}";
 
-  static String m2(code) => "فشل التحقق: ${code}";
+  static String m2(code) => "راجع البيانات المدخلة: ${code}";
 
   static String m3(workspaceName) =>
       "تم انضمامك إلى مساحة العمل ${workspaceName} بنجاح.";
 
   static String m4(workspaceName) =>
-      "سيتم حذف دعوتك للانضمام إلى مساحة العمل ${workspaceName}. يمكنك طلب إعادة إرسال الدعوة لاحقًا.";
+      "سيتم حذف الدعوة للانضمام إلى مساحة العمل ${workspaceName}. تقدر تطلب من مالك المساحة يبعتها لك مرة تانية لاحقاً.";
 
   static String m5(workspaceName) =>
       "تم رفض دعوتك إلى مساحة العمل ${workspaceName}.";
@@ -63,13 +63,13 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m17(count) =>
       "${Intl.plural(count, zero: 'لا يوجد أعضاء', one: 'عضو واحد', two: 'عضوان', few: '${count} أعضاء', many: '${count} عضوًا', other: '${count} عضو')}";
 
-  static String m18(email) => "سيتم حذف الدعوة المرسلة إلى ${email} فورًا.";
+  static String m18(email) => "سيتم إلغاء الدعوة المرسلة إلى ${email} فوراً.";
 
   static String m19(memberName) =>
-      "سيتم حذف ${memberName} من مساحة العمل. يمكنك دعوته مرة أخرى لاحقًا.";
+      "سيتم حذف ${memberName} من مساحة العمل. تقدر تبعت له دعوة مرة تانية لاحقاً.";
 
   static String m20(ownedCount, linkedCount) =>
-      "أنت تملك ${ownedCount} محافظ، و${linkedCount} منها مرتبطة بالفعل بهذه المساحة.";
+      "عندك ${ownedCount} محافظ، و${linkedCount} منها مضافين بالفعل في مساحة العمل.";
 
   static String m21(count) =>
       "${Intl.plural(count, zero: 'لا توجد محافظ', one: 'محفظة واحدة', two: 'محفظتان', few: '${count} محافظ', many: '${count} محفظة', other: '${count} محفظة')}";
@@ -79,47 +79,47 @@ class MessageLookup extends MessageLookupByLibrary {
     "activeWalletsCount": m0,
     "activeWalletsHint": m1,
     "addWallet": MessageLookupByLibrary.simpleMessage("إضافة محفظة"),
-    "addWalletAction": MessageLookupByLibrary.simpleMessage("إضافة المحفظة"),
+    "addWalletAction": MessageLookupByLibrary.simpleMessage("أضف المحفظة"),
     "addWalletDescription": MessageLookupByLibrary.simpleMessage(
-      "يجب أن تكون هذه المحفظة متاحة على هذا الجهاز. التطبيق يقرأ رسائل SMS الجديدة من هذا الهاتف فقط.",
+      "لازم تكون المحفظة دي موجودة على الموبايل ده، لأن التطبيق بيقرأ رسائل الـSMS الجديدة من هنا فقط.",
     ),
     "addWalletTitle": MessageLookupByLibrary.simpleMessage("إضافة محفظة"),
     "addWorkspace": MessageLookupByLibrary.simpleMessage("إضافة مساحة عمل"),
     "allTransactions": MessageLookupByLibrary.simpleMessage("جميع المعاملات"),
-    "allowAndContinue": MessageLookupByLibrary.simpleMessage("سماح ومتابعة"),
+    "allowAndContinue": MessageLookupByLibrary.simpleMessage("اسمح وكمل"),
     "alreadyHaveAccount": MessageLookupByLibrary.simpleMessage(
       "لديك حساب بالفعل؟",
     ),
     "appName": MessageLookupByLibrary.simpleMessage("محافظ"),
     "appTagline": MessageLookupByLibrary.simpleMessage(
-      "إدارة محافظك الخاصة بالأعمال بسهولة",
+      "تابع محافظ شغلك بسهولة ومن مكان واحد",
     ),
-    "chooseProvider": MessageLookupByLibrary.simpleMessage("اختر مزود الخدمة"),
+    "chooseProvider": MessageLookupByLibrary.simpleMessage("اختر الشركة"),
     "commonCancelAction": MessageLookupByLibrary.simpleMessage("إلغاء"),
     "commonDeleteAction": MessageLookupByLibrary.simpleMessage("حذف"),
     "confirm": MessageLookupByLibrary.simpleMessage("تأكيد"),
     "confirmName": MessageLookupByLibrary.simpleMessage("تأكيد الاسم"),
     "confirmNameMessage": MessageLookupByLibrary.simpleMessage(
-      "يرجى تأكيد اسمك للمتابعة",
+      "أكد اسمك عشان نكمل",
     ),
     "continueWithGoogle": MessageLookupByLibrary.simpleMessage(
-      "المتابعة باستخدام جوجل",
+      "كمل باستخدام جوجل",
     ),
     "createAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
     "createWorkspaceAction": MessageLookupByLibrary.simpleMessage(
       "إنشاء مساحة العمل",
     ),
     "createWorkspaceDescription": MessageLookupByLibrary.simpleMessage(
-      "مساحات العمل تساعدك على تنظيم محافظ النشاط التجاري والتعاون مع الأعضاء الموثوقين من مكان واحد.",
+      "مساحة العمل بتساعدك تجمع محافظ شغلك وتشاركها مع الناس الموثوق فيهم من مكان واحد.",
     ),
     "createWorkspaceEmptyDescription": MessageLookupByLibrary.simpleMessage(
-      "اجمع محافظ النشاط، وتابع الحركة، وأضف فريقك داخل مساحة مشتركة واحدة.",
+      "اجمع محافظ شغلك، تابع الحركة، وخلي فريقك يشتغل معاك من مكان واحد.",
     ),
     "createWorkspaceEmptyTitle": MessageLookupByLibrary.simpleMessage(
-      "أنشئ أول مساحة عمل",
+      "ابدأ بأول مساحة عمل",
     ),
     "createWorkspacePreviewDescription": MessageLookupByLibrary.simpleMessage(
-      "يمكنك إضافة المحافظ ودعوة الأعضاء بعد إنشاء مساحة العمل.",
+      "بعد إنشاء مساحة العمل، تقدر تضيف محافظ وتبعت دعوات للأعضاء.",
     ),
     "createWorkspacePreviewFallback": MessageLookupByLibrary.simpleMessage(
       "مساحة عمل جديدة",
@@ -134,7 +134,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "currentBalance": MessageLookupByLibrary.simpleMessage("الرصيد الحالي"),
     "deleteWallet": MessageLookupByLibrary.simpleMessage("حذف المحفظة"),
     "deleteWalletConfirmMessage": MessageLookupByLibrary.simpleMessage(
-      "هل أنت متأكد من رغبتك في حذف هذه المحفظة؟ لا يمكنك التراجع عن هذا الإجراء.",
+      "هل تريد حذف هذه المحفظة؟ لا يمكن التراجع بعد الحذف.",
     ),
     "deleteWalletConfirmTitle": MessageLookupByLibrary.simpleMessage(
       "حذف المحفظة",
@@ -142,7 +142,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "displayName": MessageLookupByLibrary.simpleMessage("الاسم"),
     "displayNameHint": MessageLookupByLibrary.simpleMessage("أدخل اسمك"),
     "dontHaveAccount": MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟"),
-    "egp": MessageLookupByLibrary.simpleMessage("EGP"),
+    "egp": MessageLookupByLibrary.simpleMessage("ج.م"),
     "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
     "emailHint": MessageLookupByLibrary.simpleMessage("أدخل بريدك الإلكتروني"),
     "emailPlaceholder": MessageLookupByLibrary.simpleMessage(
@@ -152,38 +152,40 @@ class MessageLookup extends MessageLookupByLibrary {
       "هذا البريد الإلكتروني مسجل بالفعل.",
     ),
     "errorAuthGeneric": MessageLookupByLibrary.simpleMessage(
-      "فشل المصادقة. يرجى المحاولة مرة أخرى.",
+      "تعذر تسجيل الدخول الآن. حاول مرة تانية.",
     ),
     "errorAuthInvalidEmail": MessageLookupByLibrary.simpleMessage(
-      "عنوان البريد الإلكتروني غير صحيح.",
+      "البريد الإلكتروني غير صحيح.",
     ),
     "errorAuthTooManyRequests": MessageLookupByLibrary.simpleMessage(
-      "عدد محاولات كبير جداً. يرجى المحاولة لاحقاً.",
+      "عدد المحاولات كبير جداً. حاول مرة تانية بعد شوية.",
     ),
     "errorAuthUserDisabled": MessageLookupByLibrary.simpleMessage(
       "تم تعطيل هذا الحساب.",
     ),
     "errorAuthUserNotFound": MessageLookupByLibrary.simpleMessage(
-      "المستخدم غير موجود. يرجى التحقق من بيانات الاعتماد الخاصة بك.",
+      "الحساب غير موجود. اتأكد من بيانات الدخول.",
     ),
     "errorAuthWeakPassword": MessageLookupByLibrary.simpleMessage(
-      "كلمة المرور ضعيفة جداً. يرجى اختيار كلمة مرور أقوى.",
+      "كلمة المرور ضعيفة. اختر كلمة مرور أقوى.",
     ),
     "errorAuthWrongPassword": MessageLookupByLibrary.simpleMessage(
-      "كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.",
+      "كلمة المرور غير صحيحة. حاول مرة تانية.",
     ),
     "errorCache": MessageLookupByLibrary.simpleMessage(
-      "خطأ في التخزين المحلي. يرجى المحاولة مرة أخرى.",
+      "حصلت مشكلة في حفظ البيانات على الجهاز. حاول مرة تانية.",
     ),
     "errorConflict": MessageLookupByLibrary.simpleMessage(
-      "تضارب المورد. يرجى المحاولة مرة أخرى.",
+      "في تعارض في البيانات. حاول مرة تانية.",
     ),
-    "errorForbidden": MessageLookupByLibrary.simpleMessage("الوصول ممنوع."),
+    "errorForbidden": MessageLookupByLibrary.simpleMessage(
+      "لا يمكنك تنفيذ هذا الإجراء.",
+    ),
     "errorInvitationAlreadyPending": MessageLookupByLibrary.simpleMessage(
-      "توجد دعوة معلقة بالفعل لهذا البريد الإلكتروني.",
+      "في دعوة معلقة بالفعل لهذا البريد الإلكتروني.",
     ),
     "errorInvitationNotPending": MessageLookupByLibrary.simpleMessage(
-      "هذه الدعوة لم تعد معلقة.",
+      "الدعوة دي لم تعد معلقة.",
     ),
     "errorInvitationSelfNotAllowed": MessageLookupByLibrary.simpleMessage(
       "لا يمكنك دعوة نفسك إلى مساحة العمل.",
@@ -192,54 +194,56 @@ class MessageLookup extends MessageLookupByLibrary {
       "هذا المستخدم عضو بالفعل في مساحة العمل.",
     ),
     "errorInvitationUserNotFound": MessageLookupByLibrary.simpleMessage(
-      "هذا البريد الإلكتروني غير مرتبط بأي حساب محافظ.",
+      "البريد الإلكتروني ده غير مرتبط بحساب محافظ.",
     ),
     "errorNetwork": MessageLookupByLibrary.simpleMessage(
-      "لا توجد اتصالات إنترنت. يرجى التحقق من شبكتك.",
+      "لا يوجد اتصال بالإنترنت. اتأكد من الشبكة وحاول مرة تانية.",
     ),
-    "errorNotFound": MessageLookupByLibrary.simpleMessage("المورد غير موجود."),
+    "errorNotFound": MessageLookupByLibrary.simpleMessage("المطلوب غير موجود."),
     "errorPermissionDenied": MessageLookupByLibrary.simpleMessage(
-      "تم رفض الإذن.",
+      "الصلاحية غير متاحة.",
     ),
     "errorServer": MessageLookupByLibrary.simpleMessage(
-      "خطأ في الخادم. يرجى المحاولة لاحقاً.",
+      "في مشكلة في الخدمة حالياً. حاول بعد شوية.",
     ),
     "errorServerGeneric": MessageLookupByLibrary.simpleMessage(
-      "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+      "حصلت مشكلة. حاول مرة تانية.",
     ),
     "errorStorage": MessageLookupByLibrary.simpleMessage(
-      "خطأ في تخزين الملفات.",
+      "حصلت مشكلة في حفظ الملف.",
     ),
     "errorUnauthorized": MessageLookupByLibrary.simpleMessage(
-      "وصول غير مصرح. يرجى تسجيل الدخول مرة أخرى.",
+      "انتهت الجلسة. سجل دخولك مرة تانية.",
     ),
-    "errorUnknown": MessageLookupByLibrary.simpleMessage("حدث خطأ غير متوقع."),
+    "errorUnknown": MessageLookupByLibrary.simpleMessage(
+      "حصلت مشكلة غير متوقعة.",
+    ),
     "errorUnprocessable": MessageLookupByLibrary.simpleMessage(
-      "تعذر معالجة طلبك.",
+      "تعذر تنفيذ طلبك. راجع البيانات وحاول تاني.",
     ),
-    "errorValidation": MessageLookupByLibrary.simpleMessage("فشل التحقق."),
+    "errorValidation": MessageLookupByLibrary.simpleMessage(
+      "راجع البيانات المدخلة.",
+    ),
     "errorValidationWithCode": m2,
     "errorWalletAllExists": MessageLookupByLibrary.simpleMessage(
-      "جميع المحافظ المختارة مضافة بالفعل لهذا الرقم.",
+      "كل المحافظ المختارة مضافة بالفعل لهذا الرقم.",
     ),
     "errorWalletPhoneNumberRequired": MessageLookupByLibrary.simpleMessage(
-      "يرجى إدخال رقم الهاتف",
+      "أدخل رقم الموبايل",
     ),
     "errorWalletProviderRequired": MessageLookupByLibrary.simpleMessage(
-      "يرجى اختيار مزود خدمة واحد على الأقل",
+      "اختر شركة واحدة على الأقل",
     ),
     "errorWorkspaceMemberNotFound": MessageLookupByLibrary.simpleMessage(
-      "هذا العضو غير موجود داخل مساحة العمل الآن.",
+      "العضو ده مش موجود في مساحة العمل حالياً.",
     ),
     "errorWorkspaceNameRequired": MessageLookupByLibrary.simpleMessage(
-      "يرجى إدخال اسم مساحة العمل",
+      "أدخل اسم مساحة العمل",
     ),
     "errorWorkspaceOwnerRemovalNotAllowed":
         MessageLookupByLibrary.simpleMessage("لا يمكن حذف مالك مساحة العمل."),
     "errorWorkspaceWalletSelectionRequired":
-        MessageLookupByLibrary.simpleMessage(
-          "يرجى اختيار محفظة واحدة على الأقل",
-        ),
+        MessageLookupByLibrary.simpleMessage("اختر محفظة واحدة على الأقل"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور؟"),
     "fromLabel": MessageLookupByLibrary.simpleMessage("من"),
     "fullName": MessageLookupByLibrary.simpleMessage("الاسم الكامل"),
@@ -250,7 +254,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "يرجى إدخال اسمك",
     ),
     "invitationAcceptDetails": MessageLookupByLibrary.simpleMessage(
-      "أصبح بإمكانك العمل داخل مساحة العمل الآن.",
+      "تقدر تبدأ الشغل داخل مساحة العمل الآن.",
     ),
     "invitationAcceptSuccess": m3,
     "invitationDeclineConfirmMessage": m4,
@@ -265,23 +269,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "invitationsAcceptAction": MessageLookupByLibrary.simpleMessage("قبول"),
     "invitationsDeclineAction": MessageLookupByLibrary.simpleMessage("رفض"),
     "invitationsEmptyDescription": MessageLookupByLibrary.simpleMessage(
-      "لا توجد لديك دعوات معلقة لمساحات العمل الآن.",
+      "لا توجد عندك دعوات معلقة حالياً.",
     ),
     "invitationsEmptyTitle": MessageLookupByLibrary.simpleMessage(
       "لا توجد دعوات معلقة",
     ),
     "invitationsHowItWorksDescription": MessageLookupByLibrary.simpleMessage(
-      "لا يمكن إرسال دعوة مساحة العمل إلا إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المرتبط بالحساب.",
+      "يمكن إرسال الدعوة فقط إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المسجل به.",
     ),
     "invitationsHowItWorksTitle": MessageLookupByLibrary.simpleMessage(
       "كيف تعمل الدعوات",
     ),
     "invitationsListDescription": MessageLookupByLibrary.simpleMessage(
-      "راجع دعوات مساحات العمل الواردة وحدد قرارك في الوقت المناسب.",
+      "راجع الدعوات اللي وصلتك واختر إذا كنت هتقبل أو ترفض.",
     ),
     "invitationsPendingCount": m7,
     "invitationsPendingStatus": MessageLookupByLibrary.simpleMessage(
-      "بانتظار الرد",
+      "بانتظارك",
     ),
     "invitationsRecentResponsesTitle": MessageLookupByLibrary.simpleMessage(
       "أحدث الردود",
@@ -291,13 +295,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "invitationsTitle": MessageLookupByLibrary.simpleMessage("الدعوات"),
     "inviteMemberDescription": MessageLookupByLibrary.simpleMessage(
-      "أرسل دعوة إلى مساحة العمل عبر البريد الإلكتروني لحساب محافظ موجود بالفعل. سيجدها المستخدم المدعو في شاشة الدعوات.",
+      "ابعت دعوة لمساحة العمل على البريد الإلكتروني لحساب محافظ موجود بالفعل. الشخص المدعو هيلاقيها في شاشة الدعوات.",
     ),
     "inviteMemberEmailHint": MessageLookupByLibrary.simpleMessage(
       "name@example.com",
     ),
     "inviteMemberEmailLabel": MessageLookupByLibrary.simpleMessage(
-      "بريد العضو الإلكتروني",
+      "بريد العضو",
     ),
     "inviteMemberSendAction": MessageLookupByLibrary.simpleMessage(
       "إرسال الدعوة",
@@ -307,26 +311,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "lastActivity": MessageLookupByLibrary.simpleMessage("آخر نشاط"),
     "minutesAgo": m8,
     "nameWillBeDisplayed": MessageLookupByLibrary.simpleMessage(
-      "سيظهر اسمك عند تحديث حالة الدفع لتسهيل تتبع العمليات المالية",
+      "الاسم ده هيظهر وقت تحديث حالة الدفع عشان متابعة العمليات تبقى أسهل.",
     ),
     "noTransactionsTitle": MessageLookupByLibrary.simpleMessage(
-      "لا توجد معاملات حتى الآن، ستظهر هنا عند وصول رسائل جديدة",
+      "لا توجد معاملات حتى الآن. أول ما توصلك رسائل جديدة هتظهر هنا.",
     ),
     "notFoundPageTitle": MessageLookupByLibrary.simpleMessage(
       "الصفحة غير موجودة",
     ),
     "notFoundStatusCode": MessageLookupByLibrary.simpleMessage("404"),
-    "notNow": MessageLookupByLibrary.simpleMessage("ليس الآن"),
+    "notNow": MessageLookupByLibrary.simpleMessage("لاحقاً"),
     "or": MessageLookupByLibrary.simpleMessage("أو"),
     "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
     "passwordHint": MessageLookupByLibrary.simpleMessage("أدخل كلمة المرور"),
     "passwordPlaceholder": MessageLookupByLibrary.simpleMessage("••••••••"),
-    "paymentStatus": MessageLookupByLibrary.simpleMessage("حالة الدفع"),
-    "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
+    "paymentStatus": MessageLookupByLibrary.simpleMessage("حالة السداد"),
+    "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الموبايل"),
     "providerEtisalat": MessageLookupByLibrary.simpleMessage("اتصالات كاش"),
     "providerInstapay": MessageLookupByLibrary.simpleMessage("إنستا باي"),
     "providerOrange": MessageLookupByLibrary.simpleMessage("أورانج كاش"),
-    "providerUnknown": MessageLookupByLibrary.simpleMessage("محفظة"),
+    "providerUnknown": MessageLookupByLibrary.simpleMessage("محفظة أخرى"),
     "providerVodafone": MessageLookupByLibrary.simpleMessage("فودافون كاش"),
     "providerWePay": MessageLookupByLibrary.simpleMessage("وي باي"),
     "recentTransactions": MessageLookupByLibrary.simpleMessage("آخر المعاملات"),
@@ -335,30 +339,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "تسجيل الدخول بالبريد الإلكتروني",
     ),
     "signInWithGoogle": MessageLookupByLibrary.simpleMessage(
-      "تسجيل الدخول بواسطة جوجل",
+      "تسجيل الدخول بجوجل",
     ),
     "signUp": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
-    "signUpNow": MessageLookupByLibrary.simpleMessage("اشترك الآن"),
+    "signUpNow": MessageLookupByLibrary.simpleMessage("أنشئ حسابك"),
     "signUpSubtitle": MessageLookupByLibrary.simpleMessage(
-      "إنشاء حساب جديد للبدء في إدارة أعمالك",
+      "أنشئ حساب جديد وابدأ تتابع شغلك بسهولة",
     ),
     "smsPermissionAutoUpdateDesc": MessageLookupByLibrary.simpleMessage(
-      "رصد فوري للمصروفات والمدفوعات فور وصول رسالة البنك.",
+      "أي حركة جديدة بتتسجل أول ما رسالة العملية توصل.",
     ),
     "smsPermissionAutoUpdateTitle": MessageLookupByLibrary.simpleMessage(
       "تحديث تلقائي",
     ),
     "smsPermissionDescription": MessageLookupByLibrary.simpleMessage(
-      "يحتاج التطبيق إلى صلاحية الرسائل والهاتف لاكتشاف أرقام المحافظ على هذا الجهاز ومزامنة المعاملات تلقائياً.",
+      "التطبيق محتاج صلاحية الرسائل والموبايل عشان يتعرف على أرقام المحافظ الموجودة على الجهاز ويضيف الحركات الجديدة تلقائياً.",
     ),
     "smsPermissionPrivacyDesc": MessageLookupByLibrary.simpleMessage(
-      "نقرأ فقط الرسائل المالية وأرقام الهاتف اللازمة لإعداد المحافظ؛ بياناتك مشفرة ولا يتم مشاركتها أبدا.",
+      "بنقرأ فقط الرسائل الخاصة بالمعاملات وأرقام الموبايل اللازمة لإعداد المحافظ. بياناتك مشفرة ومش بنشاركها مع أي حد.",
     ),
     "smsPermissionPrivacyTitle": MessageLookupByLibrary.simpleMessage(
-      "خصوصية تامة",
+      "خصوصيتك محفوظة",
     ),
     "smsPermissionTitle": MessageLookupByLibrary.simpleMessage(
-      "السماح بالوصول إلى الرسائل والهاتف",
+      "اسمح بالوصول للرسائل والموبايل",
     ),
     "toLabel": MessageLookupByLibrary.simpleMessage("إلى"),
     "totalBalance": MessageLookupByLibrary.simpleMessage("إجمالي الرصيد"),
@@ -393,34 +397,36 @@ class MessageLookup extends MessageLookupByLibrary {
     "transaction_edited": MessageLookupByLibrary.simpleMessage("تم التعديل"),
     "transaction_errorGeneric": MessageLookupByLibrary.simpleMessage("حدث خطأ"),
     "transaction_history": MessageLookupByLibrary.simpleMessage(
-      "سجل التغييرات",
+      "سجل التعديلات",
     ),
     "transaction_markedAs": m12,
     "transaction_noteDeleted": MessageLookupByLibrary.simpleMessage(
       "تم حذف الملاحظة",
     ),
     "transaction_noteHint": MessageLookupByLibrary.simpleMessage(
-      "اكتب ملاحظتك هنا…",
+      "اكتب ملاحظتك هنا",
     ),
     "transaction_notes": MessageLookupByLibrary.simpleMessage("ملاحظات"),
     "transaction_receiptHeader": m13,
     "transaction_receivedFrom": MessageLookupByLibrary.simpleMessage(
-      "مُستلَم من",
+      "تم الاستلام من",
     ),
     "transaction_referenceNumber": MessageLookupByLibrary.simpleMessage(
       "رقم العملية",
     ),
     "transaction_save": MessageLookupByLibrary.simpleMessage("حفظ"),
-    "transaction_sentTo": MessageLookupByLibrary.simpleMessage("مُرسَل إلى"),
+    "transaction_sentTo": MessageLookupByLibrary.simpleMessage(
+      "تم الإرسال إلى",
+    ),
     "transaction_shareReceipt": MessageLookupByLibrary.simpleMessage(
       "مشاركة إيصال العملية",
     ),
     "transaction_smsText": MessageLookupByLibrary.simpleMessage("نص الرسالة"),
     "transaction_typeReceiveLabel": MessageLookupByLibrary.simpleMessage(
-      "معاملة استلام",
+      "عملية استلام",
     ),
     "transaction_typeSendLabel": MessageLookupByLibrary.simpleMessage(
-      "معاملة إرسال",
+      "عملية إرسال",
     ),
     "transaction_undo": MessageLookupByLibrary.simpleMessage("تراجع"),
     "transaction_wallet": MessageLookupByLibrary.simpleMessage("المحفظة"),
@@ -438,15 +444,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "transactions_date_week": MessageLookupByLibrary.simpleMessage("الأسبوع"),
     "transactions_date_yesterday": MessageLookupByLibrary.simpleMessage("أمس"),
     "transactions_emptyWithFilter": MessageLookupByLibrary.simpleMessage(
-      "لا توجد معاملات تطابق الفلتر المحدد",
+      "لا توجد معاملات مطابقة للفلاتر المحددة",
     ),
     "transactions_filter_all": MessageLookupByLibrary.simpleMessage("الكل"),
     "transactions_filter_allWallets": MessageLookupByLibrary.simpleMessage(
       "كل المحافظ",
     ),
-    "transactions_loadMore": MessageLookupByLibrary.simpleMessage(
-      "تحميل المزيد",
-    ),
+    "transactions_loadMore": MessageLookupByLibrary.simpleMessage("عرض المزيد"),
     "transactions_title_wallet": m14,
     "transactions_title_workspace": m15,
     "transactions_viewingCountOfTotal": m16,
@@ -458,8 +462,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "walletTransactions": MessageLookupByLibrary.simpleMessage(
       "معاملات المحفظة",
     ),
-    "welcome": MessageLookupByLibrary.simpleMessage("مرحباً بك"),
-    "whatIsYourName": MessageLookupByLibrary.simpleMessage("ما اسمك؟"),
+    "welcome": MessageLookupByLibrary.simpleMessage("أهلاً بيك"),
+    "whatIsYourName": MessageLookupByLibrary.simpleMessage("اسمك إيه؟"),
     "workspaceAddSelectedWalletsAction": MessageLookupByLibrary.simpleMessage(
       "إضافة المحافظ المحددة",
     ),
@@ -467,23 +471,23 @@ class MessageLookup extends MessageLookupByLibrary {
       "إضافة محافظ",
     ),
     "workspaceAddWalletsCreateDescription": MessageLookupByLibrary.simpleMessage(
-      "اختر المحافظ التي تريد إظهارها في مساحة العمل الآن. يمكنك إضافة المزيد لاحقًا.",
+      "اختر المحافظ التي تريد تظهر في مساحة العمل الآن. وتقدر تضيف المزيد لاحقاً.",
     ),
     "workspaceAddWalletsManageDescription": MessageLookupByLibrary.simpleMessage(
-      "شارك محافظك الخاصة مع مساحة العمل. المحافظ المرتبطة تصبح مرئية لكل أعضاء مساحة العمل.",
+      "شارك محافظك مع مساحة العمل. أي محفظة تضيفها هنا هتظهر لكل أعضاء المساحة.",
     ),
     "workspaceAddWalletsTitle": MessageLookupByLibrary.simpleMessage(
       "إضافة محافظ",
     ),
     "workspaceAllOwnedWalletsLinkedDescription":
         MessageLookupByLibrary.simpleMessage(
-          "يمكنك المتابعة إلى مساحة العمل أو إضافة محفظة جديدة لاحقًا.",
+          "تقدر تدخل على مساحة العمل أو تضيف محفظة جديدة لاحقاً.",
         ),
     "workspaceAllOwnedWalletsLinkedTitle": MessageLookupByLibrary.simpleMessage(
       "كل محافظك مرتبطة بالفعل",
     ),
     "workspaceContinueToDetailsAction": MessageLookupByLibrary.simpleMessage(
-      "المتابعة إلى مساحة العمل",
+      "ادخل على مساحة العمل",
     ),
     "workspaceInviteMemberAction": MessageLookupByLibrary.simpleMessage(
       "دعوة عضو",
@@ -491,7 +495,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "workspaceMembers": MessageLookupByLibrary.simpleMessage("الأعضاء"),
     "workspaceMembersCount": m17,
     "workspaceMembersEmpty": MessageLookupByLibrary.simpleMessage(
-      "لم ينضم أي أعضاء إلى مساحة العمل بعد.",
+      "لا يوجد أعضاء في مساحة العمل حتى الآن.",
     ),
     "workspaceNameHint": MessageLookupByLibrary.simpleMessage(
       "مثلاً: محل موبايلات",
@@ -500,7 +504,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "اسم مساحة العمل",
     ),
     "workspaceNoOwnedWalletsDescription": MessageLookupByLibrary.simpleMessage(
-      "أضف محفظة أولاً ثم يمكنك مشاركتها مع مساحة العمل.",
+      "أضف محفظة أولاً، وبعدها تقدر تشاركها مع مساحة العمل.",
     ),
     "workspaceNoOwnedWalletsTitle": MessageLookupByLibrary.simpleMessage(
       "لا تملك أي محافظ بعد",
@@ -513,45 +517,45 @@ class MessageLookup extends MessageLookupByLibrary {
     "workspaceSettingsCancelInvitationConfirmTitle":
         MessageLookupByLibrary.simpleMessage("إلغاء الدعوة؟"),
     "workspaceSettingsDangerZone": MessageLookupByLibrary.simpleMessage(
-      "منطقة الخطر",
+      "إجراءات حساسة",
     ),
     "workspaceSettingsDeleteWorkspaceAction":
         MessageLookupByLibrary.simpleMessage("حذف مساحة العمل"),
     "workspaceSettingsDeleteWorkspaceConfirmMessage":
         MessageLookupByLibrary.simpleMessage(
-          "سيؤدي هذا إلى حذف مساحة العمل وأذونات الأعضاء وروابط المحافظ والدعوات المعلقة نهائيًا.",
+          "سيتم حذف مساحة العمل وأذونات الأعضاء وربط المحافظ والدعوات المعلقة نهائياً.",
         ),
     "workspaceSettingsDeleteWorkspaceConfirmTitle":
         MessageLookupByLibrary.simpleMessage("حذف مساحة العمل؟"),
     "workspaceSettingsDeleteWorkspaceDescription":
         MessageLookupByLibrary.simpleMessage(
-          "سيتم حذف جميع البيانات المرتبطة وسجلات الوصول نهائيًا.",
+          "سيتم حذف كل البيانات المرتبطة بالمساحة نهائياً.",
         ),
     "workspaceSettingsEditNameAction": MessageLookupByLibrary.simpleMessage(
       "حفظ التعديلات",
     ),
     "workspaceSettingsEditNameDescription":
         MessageLookupByLibrary.simpleMessage(
-          "حدّث الاسم الظاهر للمساحة في كل الشاشات المشتركة.",
+          "غيّر الاسم الظاهر للمساحة في كل الشاشات المشتركة.",
         ),
     "workspaceSettingsEditNameTitle": MessageLookupByLibrary.simpleMessage(
       "تعديل اسم المساحة",
     ),
     "workspaceSettingsInfoSection": MessageLookupByLibrary.simpleMessage(
-      "معلومات المساحة",
+      "بيانات المساحة",
     ),
     "workspaceSettingsInvitationCancelledSuccess":
-        MessageLookupByLibrary.simpleMessage("تم إلغاء الدعوة بنجاح."),
+        MessageLookupByLibrary.simpleMessage("تم إلغاء الدعوة."),
     "workspaceSettingsInviteByEmailAction":
         MessageLookupByLibrary.simpleMessage("دعوة عضو"),
     "workspaceSettingsMemberRemovedSuccess":
-        MessageLookupByLibrary.simpleMessage("تم حذف العضو بنجاح."),
+        MessageLookupByLibrary.simpleMessage("تم حذف العضو."),
     "workspaceSettingsNameUpdatedSuccess": MessageLookupByLibrary.simpleMessage(
-      "تم تحديث اسم مساحة العمل بنجاح.",
+      "تم تغيير اسم مساحة العمل.",
     ),
     "workspaceSettingsPendingInvitationsEmpty":
         MessageLookupByLibrary.simpleMessage(
-          "لا توجد دعوات معلقة لهذه المساحة الآن.",
+          "لا توجد دعوات معلقة لهذه المساحة حالياً.",
         ),
     "workspaceSettingsPendingInvitationsSection":
         MessageLookupByLibrary.simpleMessage("الدعوات المعلقة"),
@@ -565,10 +569,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "إعدادات المساحة",
     ),
     "workspaceSkipWalletsAction": MessageLookupByLibrary.simpleMessage(
-      "تخطي الآن",
+      "تخطي حالياً",
     ),
     "workspaceWalletAlreadyAdded": MessageLookupByLibrary.simpleMessage(
-      "مضافة بالفعل",
+      "مضافة",
     ),
     "workspaceWalletAvailable": MessageLookupByLibrary.simpleMessage("متاحة"),
     "workspaceWalletSelected": MessageLookupByLibrary.simpleMessage("محددة"),
@@ -576,7 +580,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "workspaceWallets": MessageLookupByLibrary.simpleMessage("المحافظ"),
     "workspaceWalletsCount": m21,
     "workspaceWalletsEmptyDescription": MessageLookupByLibrary.simpleMessage(
-      "ستظهر المحافظ المشتركة هنا بعد ربطها بمساحة العمل.",
+      "المحافظ المشتركة هتظهر هنا بعد ربطها بمساحة العمل.",
     ),
     "workspaceWalletsEmptyTitle": MessageLookupByLibrary.simpleMessage(
       "لا توجد محافظ مرتبطة بعد",

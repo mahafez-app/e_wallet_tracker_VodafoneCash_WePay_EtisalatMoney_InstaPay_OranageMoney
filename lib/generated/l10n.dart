@@ -54,30 +54,30 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `لا توجد اتصالات إنترنت. يرجى التحقق من شبكتك.`
+  /// `لا يوجد اتصال بالإنترنت. اتأكد من الشبكة وحاول مرة تانية.`
   String get errorNetwork {
     return Intl.message(
-      'لا توجد اتصالات إنترنت. يرجى التحقق من شبكتك.',
+      'لا يوجد اتصال بالإنترنت. اتأكد من الشبكة وحاول مرة تانية.',
       name: 'errorNetwork',
       desc: '',
       args: [],
     );
   }
 
-  /// `المستخدم غير موجود. يرجى التحقق من بيانات الاعتماد الخاصة بك.`
+  /// `الحساب غير موجود. اتأكد من بيانات الدخول.`
   String get errorAuthUserNotFound {
     return Intl.message(
-      'المستخدم غير موجود. يرجى التحقق من بيانات الاعتماد الخاصة بك.',
+      'الحساب غير موجود. اتأكد من بيانات الدخول.',
       name: 'errorAuthUserNotFound',
       desc: '',
       args: [],
     );
   }
 
-  /// `كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.`
+  /// `كلمة المرور غير صحيحة. حاول مرة تانية.`
   String get errorAuthWrongPassword {
     return Intl.message(
-      'كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.',
+      'كلمة المرور غير صحيحة. حاول مرة تانية.',
       name: 'errorAuthWrongPassword',
       desc: '',
       args: [],
@@ -94,10 +94,10 @@ class S {
     );
   }
 
-  /// `عدد محاولات كبير جداً. يرجى المحاولة لاحقاً.`
+  /// `عدد المحاولات كبير جداً. حاول مرة تانية بعد شوية.`
   String get errorAuthTooManyRequests {
     return Intl.message(
-      'عدد محاولات كبير جداً. يرجى المحاولة لاحقاً.',
+      'عدد المحاولات كبير جداً. حاول مرة تانية بعد شوية.',
       name: 'errorAuthTooManyRequests',
       desc: '',
       args: [],
@@ -114,160 +114,160 @@ class S {
     );
   }
 
-  /// `كلمة المرور ضعيفة جداً. يرجى اختيار كلمة مرور أقوى.`
+  /// `كلمة المرور ضعيفة. اختر كلمة مرور أقوى.`
   String get errorAuthWeakPassword {
     return Intl.message(
-      'كلمة المرور ضعيفة جداً. يرجى اختيار كلمة مرور أقوى.',
+      'كلمة المرور ضعيفة. اختر كلمة مرور أقوى.',
       name: 'errorAuthWeakPassword',
       desc: '',
       args: [],
     );
   }
 
-  /// `عنوان البريد الإلكتروني غير صحيح.`
+  /// `البريد الإلكتروني غير صحيح.`
   String get errorAuthInvalidEmail {
     return Intl.message(
-      'عنوان البريد الإلكتروني غير صحيح.',
+      'البريد الإلكتروني غير صحيح.',
       name: 'errorAuthInvalidEmail',
       desc: '',
       args: [],
     );
   }
 
-  /// `وصول غير مصرح. يرجى تسجيل الدخول مرة أخرى.`
+  /// `انتهت الجلسة. سجل دخولك مرة تانية.`
   String get errorUnauthorized {
     return Intl.message(
-      'وصول غير مصرح. يرجى تسجيل الدخول مرة أخرى.',
+      'انتهت الجلسة. سجل دخولك مرة تانية.',
       name: 'errorUnauthorized',
       desc: '',
       args: [],
     );
   }
 
-  /// `فشل المصادقة. يرجى المحاولة مرة أخرى.`
+  /// `تعذر تسجيل الدخول الآن. حاول مرة تانية.`
   String get errorAuthGeneric {
     return Intl.message(
-      'فشل المصادقة. يرجى المحاولة مرة أخرى.',
+      'تعذر تسجيل الدخول الآن. حاول مرة تانية.',
       name: 'errorAuthGeneric',
       desc: '',
       args: [],
     );
   }
 
-  /// `الوصول ممنوع.`
+  /// `لا يمكنك تنفيذ هذا الإجراء.`
   String get errorForbidden {
     return Intl.message(
-      'الوصول ممنوع.',
+      'لا يمكنك تنفيذ هذا الإجراء.',
       name: 'errorForbidden',
       desc: '',
       args: [],
     );
   }
 
-  /// `المورد غير موجود.`
+  /// `المطلوب غير موجود.`
   String get errorNotFound {
     return Intl.message(
-      'المورد غير موجود.',
+      'المطلوب غير موجود.',
       name: 'errorNotFound',
       desc: '',
       args: [],
     );
   }
 
-  /// `تضارب المورد. يرجى المحاولة مرة أخرى.`
+  /// `في تعارض في البيانات. حاول مرة تانية.`
   String get errorConflict {
     return Intl.message(
-      'تضارب المورد. يرجى المحاولة مرة أخرى.',
+      'في تعارض في البيانات. حاول مرة تانية.',
       name: 'errorConflict',
       desc: '',
       args: [],
     );
   }
 
-  /// `تعذر معالجة طلبك.`
+  /// `تعذر تنفيذ طلبك. راجع البيانات وحاول تاني.`
   String get errorUnprocessable {
     return Intl.message(
-      'تعذر معالجة طلبك.',
+      'تعذر تنفيذ طلبك. راجع البيانات وحاول تاني.',
       name: 'errorUnprocessable',
       desc: '',
       args: [],
     );
   }
 
-  /// `خطأ في الخادم. يرجى المحاولة لاحقاً.`
+  /// `في مشكلة في الخدمة حالياً. حاول بعد شوية.`
   String get errorServer {
     return Intl.message(
-      'خطأ في الخادم. يرجى المحاولة لاحقاً.',
+      'في مشكلة في الخدمة حالياً. حاول بعد شوية.',
       name: 'errorServer',
       desc: '',
       args: [],
     );
   }
 
-  /// `حدث خطأ ما. يرجى المحاولة مرة أخرى.`
+  /// `حصلت مشكلة. حاول مرة تانية.`
   String get errorServerGeneric {
     return Intl.message(
-      'حدث خطأ ما. يرجى المحاولة مرة أخرى.',
+      'حصلت مشكلة. حاول مرة تانية.',
       name: 'errorServerGeneric',
       desc: '',
       args: [],
     );
   }
 
-  /// `تم رفض الإذن.`
+  /// `الصلاحية غير متاحة.`
   String get errorPermissionDenied {
     return Intl.message(
-      'تم رفض الإذن.',
+      'الصلاحية غير متاحة.',
       name: 'errorPermissionDenied',
       desc: '',
       args: [],
     );
   }
 
-  /// `خطأ في التخزين المحلي. يرجى المحاولة مرة أخرى.`
+  /// `حصلت مشكلة في حفظ البيانات على الجهاز. حاول مرة تانية.`
   String get errorCache {
     return Intl.message(
-      'خطأ في التخزين المحلي. يرجى المحاولة مرة أخرى.',
+      'حصلت مشكلة في حفظ البيانات على الجهاز. حاول مرة تانية.',
       name: 'errorCache',
       desc: '',
       args: [],
     );
   }
 
-  /// `خطأ في تخزين الملفات.`
+  /// `حصلت مشكلة في حفظ الملف.`
   String get errorStorage {
     return Intl.message(
-      'خطأ في تخزين الملفات.',
+      'حصلت مشكلة في حفظ الملف.',
       name: 'errorStorage',
       desc: '',
       args: [],
     );
   }
 
-  /// `فشل التحقق.`
+  /// `راجع البيانات المدخلة.`
   String get errorValidation {
     return Intl.message(
-      'فشل التحقق.',
+      'راجع البيانات المدخلة.',
       name: 'errorValidation',
       desc: '',
       args: [],
     );
   }
 
-  /// `فشل التحقق: {code}`
+  /// `راجع البيانات المدخلة: {code}`
   String errorValidationWithCode(String code) {
     return Intl.message(
-      'فشل التحقق: $code',
+      'راجع البيانات المدخلة: $code',
       name: 'errorValidationWithCode',
       desc: '',
       args: [code],
     );
   }
 
-  /// `حدث خطأ غير متوقع.`
+  /// `حصلت مشكلة غير متوقعة.`
   String get errorUnknown {
     return Intl.message(
-      'حدث خطأ غير متوقع.',
+      'حصلت مشكلة غير متوقعة.',
       name: 'errorUnknown',
       desc: '',
       args: [],
@@ -329,10 +329,10 @@ class S {
     return Intl.message('تأكيد', name: 'confirm', desc: '', args: []);
   }
 
-  /// `تسجيل الدخول بواسطة جوجل`
+  /// `تسجيل الدخول بجوجل`
   String get signInWithGoogle {
     return Intl.message(
-      'تسجيل الدخول بواسطة جوجل',
+      'تسجيل الدخول بجوجل',
       name: 'signInWithGoogle',
       desc: '',
       args: [],
@@ -414,10 +414,10 @@ class S {
     return Intl.message('تأكيد الاسم', name: 'confirmName', desc: '', args: []);
   }
 
-  /// `يرجى تأكيد اسمك للمتابعة`
+  /// `أكد اسمك عشان نكمل`
   String get confirmNameMessage {
     return Intl.message(
-      'يرجى تأكيد اسمك للمتابعة',
+      'أكد اسمك عشان نكمل',
       name: 'confirmNameMessage',
       desc: '',
       args: [],
@@ -429,20 +429,20 @@ class S {
     return Intl.message('أو', name: 'or', desc: '', args: []);
   }
 
-  /// `إدارة محافظك الخاصة بالأعمال بسهولة`
+  /// `تابع محافظ شغلك بسهولة ومن مكان واحد`
   String get appTagline {
     return Intl.message(
-      'إدارة محافظك الخاصة بالأعمال بسهولة',
+      'تابع محافظ شغلك بسهولة ومن مكان واحد',
       name: 'appTagline',
       desc: '',
       args: [],
     );
   }
 
-  /// `المتابعة باستخدام جوجل`
+  /// `كمل باستخدام جوجل`
   String get continueWithGoogle {
     return Intl.message(
-      'المتابعة باستخدام جوجل',
+      'كمل باستخدام جوجل',
       name: 'continueWithGoogle',
       desc: '',
       args: [],
@@ -459,9 +459,9 @@ class S {
     );
   }
 
-  /// `اشترك الآن`
+  /// `أنشئ حسابك`
   String get signUpNow {
-    return Intl.message('اشترك الآن', name: 'signUpNow', desc: '', args: []);
+    return Intl.message('أنشئ حسابك', name: 'signUpNow', desc: '', args: []);
   }
 
   /// `example@email.com`
@@ -499,34 +499,39 @@ class S {
     );
   }
 
-  /// `إنشاء حساب جديد للبدء في إدارة أعمالك`
+  /// `أنشئ حساب جديد وابدأ تتابع شغلك بسهولة`
   String get signUpSubtitle {
     return Intl.message(
-      'إنشاء حساب جديد للبدء في إدارة أعمالك',
+      'أنشئ حساب جديد وابدأ تتابع شغلك بسهولة',
       name: 'signUpSubtitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `ما اسمك؟`
+  /// `اسمك إيه؟`
   String get whatIsYourName {
-    return Intl.message('ما اسمك؟', name: 'whatIsYourName', desc: '', args: []);
+    return Intl.message(
+      'اسمك إيه؟',
+      name: 'whatIsYourName',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `سيظهر اسمك عند تحديث حالة الدفع لتسهيل تتبع العمليات المالية`
+  /// `الاسم ده هيظهر وقت تحديث حالة الدفع عشان متابعة العمليات تبقى أسهل.`
   String get nameWillBeDisplayed {
     return Intl.message(
-      'سيظهر اسمك عند تحديث حالة الدفع لتسهيل تتبع العمليات المالية',
+      'الاسم ده هيظهر وقت تحديث حالة الدفع عشان متابعة العمليات تبقى أسهل.',
       name: 'nameWillBeDisplayed',
       desc: '',
       args: [],
     );
   }
 
-  /// `مرحباً بك`
+  /// `أهلاً بيك`
   String get welcome {
-    return Intl.message('مرحباً بك', name: 'welcome', desc: '', args: []);
+    return Intl.message('أهلاً بيك', name: 'welcome', desc: '', args: []);
   }
 
   /// `إجمالي الرصيد`
@@ -651,9 +656,9 @@ class S {
     );
   }
 
-  /// `EGP`
+  /// `ج.م`
   String get egp {
-    return Intl.message('EGP', name: 'egp', desc: '', args: []);
+    return Intl.message('ج.م', name: 'egp', desc: '', args: []);
   }
 
   /// `إضافة محفظة`
@@ -666,44 +671,49 @@ class S {
     );
   }
 
-  /// `يجب أن تكون هذه المحفظة متاحة على هذا الجهاز. التطبيق يقرأ رسائل SMS الجديدة من هذا الهاتف فقط.`
+  /// `لازم تكون المحفظة دي موجودة على الموبايل ده، لأن التطبيق بيقرأ رسائل الـSMS الجديدة من هنا فقط.`
   String get addWalletDescription {
     return Intl.message(
-      'يجب أن تكون هذه المحفظة متاحة على هذا الجهاز. التطبيق يقرأ رسائل SMS الجديدة من هذا الهاتف فقط.',
+      'لازم تكون المحفظة دي موجودة على الموبايل ده، لأن التطبيق بيقرأ رسائل الـSMS الجديدة من هنا فقط.',
       name: 'addWalletDescription',
       desc: '',
       args: [],
     );
   }
 
-  /// `رقم الهاتف`
+  /// `رقم الموبايل`
   String get phoneNumber {
-    return Intl.message('رقم الهاتف', name: 'phoneNumber', desc: '', args: []);
+    return Intl.message(
+      'رقم الموبايل',
+      name: 'phoneNumber',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `اختر مزود الخدمة`
+  /// `اختر الشركة`
   String get chooseProvider {
     return Intl.message(
-      'اختر مزود الخدمة',
+      'اختر الشركة',
       name: 'chooseProvider',
       desc: '',
       args: [],
     );
   }
 
-  /// `سماح ومتابعة`
+  /// `اسمح وكمل`
   String get allowAndContinue {
     return Intl.message(
-      'سماح ومتابعة',
+      'اسمح وكمل',
       name: 'allowAndContinue',
       desc: '',
       args: [],
     );
   }
 
-  /// `ليس الآن`
+  /// `لاحقاً`
   String get notNow {
-    return Intl.message('ليس الآن', name: 'notNow', desc: '', args: []);
+    return Intl.message('لاحقاً', name: 'notNow', desc: '', args: []);
   }
 
   /// `أورانج كاش`
@@ -751,25 +761,30 @@ class S {
     return Intl.message('وي باي', name: 'providerWePay', desc: '', args: []);
   }
 
-  /// `محفظة`
+  /// `محفظة أخرى`
   String get providerUnknown {
-    return Intl.message('محفظة', name: 'providerUnknown', desc: '', args: []);
+    return Intl.message(
+      'محفظة أخرى',
+      name: 'providerUnknown',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `السماح بالوصول إلى الرسائل والهاتف`
+  /// `اسمح بالوصول للرسائل والموبايل`
   String get smsPermissionTitle {
     return Intl.message(
-      'السماح بالوصول إلى الرسائل والهاتف',
+      'اسمح بالوصول للرسائل والموبايل',
       name: 'smsPermissionTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `يحتاج التطبيق إلى صلاحية الرسائل والهاتف لاكتشاف أرقام المحافظ على هذا الجهاز ومزامنة المعاملات تلقائياً.`
+  /// `التطبيق محتاج صلاحية الرسائل والموبايل عشان يتعرف على أرقام المحافظ الموجودة على الجهاز ويضيف الحركات الجديدة تلقائياً.`
   String get smsPermissionDescription {
     return Intl.message(
-      'يحتاج التطبيق إلى صلاحية الرسائل والهاتف لاكتشاف أرقام المحافظ على هذا الجهاز ومزامنة المعاملات تلقائياً.',
+      'التطبيق محتاج صلاحية الرسائل والموبايل عشان يتعرف على أرقام المحافظ الموجودة على الجهاز ويضيف الحركات الجديدة تلقائياً.',
       name: 'smsPermissionDescription',
       desc: '',
       args: [],
@@ -786,40 +801,40 @@ class S {
     );
   }
 
-  /// `رصد فوري للمصروفات والمدفوعات فور وصول رسالة البنك.`
+  /// `أي حركة جديدة بتتسجل أول ما رسالة العملية توصل.`
   String get smsPermissionAutoUpdateDesc {
     return Intl.message(
-      'رصد فوري للمصروفات والمدفوعات فور وصول رسالة البنك.',
+      'أي حركة جديدة بتتسجل أول ما رسالة العملية توصل.',
       name: 'smsPermissionAutoUpdateDesc',
       desc: '',
       args: [],
     );
   }
 
-  /// `خصوصية تامة`
+  /// `خصوصيتك محفوظة`
   String get smsPermissionPrivacyTitle {
     return Intl.message(
-      'خصوصية تامة',
+      'خصوصيتك محفوظة',
       name: 'smsPermissionPrivacyTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `نقرأ فقط الرسائل المالية وأرقام الهاتف اللازمة لإعداد المحافظ؛ بياناتك مشفرة ولا يتم مشاركتها أبدا.`
+  /// `بنقرأ فقط الرسائل الخاصة بالمعاملات وأرقام الموبايل اللازمة لإعداد المحافظ. بياناتك مشفرة ومش بنشاركها مع أي حد.`
   String get smsPermissionPrivacyDesc {
     return Intl.message(
-      'نقرأ فقط الرسائل المالية وأرقام الهاتف اللازمة لإعداد المحافظ؛ بياناتك مشفرة ولا يتم مشاركتها أبدا.',
+      'بنقرأ فقط الرسائل الخاصة بالمعاملات وأرقام الموبايل اللازمة لإعداد المحافظ. بياناتك مشفرة ومش بنشاركها مع أي حد.',
       name: 'smsPermissionPrivacyDesc',
       desc: '',
       args: [],
     );
   }
 
-  /// `إضافة المحفظة`
+  /// `أضف المحفظة`
   String get addWalletAction {
     return Intl.message(
-      'إضافة المحفظة',
+      'أضف المحفظة',
       name: 'addWalletAction',
       desc: '',
       args: [],
@@ -836,10 +851,10 @@ class S {
     );
   }
 
-  /// `مساحات العمل تساعدك على تنظيم محافظ النشاط التجاري والتعاون مع الأعضاء الموثوقين من مكان واحد.`
+  /// `مساحة العمل بتساعدك تجمع محافظ شغلك وتشاركها مع الناس الموثوق فيهم من مكان واحد.`
   String get createWorkspaceDescription {
     return Intl.message(
-      'مساحات العمل تساعدك على تنظيم محافظ النشاط التجاري والتعاون مع الأعضاء الموثوقين من مكان واحد.',
+      'مساحة العمل بتساعدك تجمع محافظ شغلك وتشاركها مع الناس الموثوق فيهم من مكان واحد.',
       name: 'createWorkspaceDescription',
       desc: '',
       args: [],
@@ -886,10 +901,10 @@ class S {
     );
   }
 
-  /// `يمكنك إضافة المحافظ ودعوة الأعضاء بعد إنشاء مساحة العمل.`
+  /// `بعد إنشاء مساحة العمل، تقدر تضيف محافظ وتبعت دعوات للأعضاء.`
   String get createWorkspacePreviewDescription {
     return Intl.message(
-      'يمكنك إضافة المحافظ ودعوة الأعضاء بعد إنشاء مساحة العمل.',
+      'بعد إنشاء مساحة العمل، تقدر تضيف محافظ وتبعت دعوات للأعضاء.',
       name: 'createWorkspacePreviewDescription',
       desc: '',
       args: [],
@@ -953,20 +968,20 @@ class S {
     );
   }
 
-  /// `أنشئ أول مساحة عمل`
+  /// `ابدأ بأول مساحة عمل`
   String get createWorkspaceEmptyTitle {
     return Intl.message(
-      'أنشئ أول مساحة عمل',
+      'ابدأ بأول مساحة عمل',
       name: 'createWorkspaceEmptyTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `اجمع محافظ النشاط، وتابع الحركة، وأضف فريقك داخل مساحة مشتركة واحدة.`
+  /// `اجمع محافظ شغلك، تابع الحركة، وخلي فريقك يشتغل معاك من مكان واحد.`
   String get createWorkspaceEmptyDescription {
     return Intl.message(
-      'اجمع محافظ النشاط، وتابع الحركة، وأضف فريقك داخل مساحة مشتركة واحدة.',
+      'اجمع محافظ شغلك، تابع الحركة، وخلي فريقك يشتغل معاك من مكان واحد.',
       name: 'createWorkspaceEmptyDescription',
       desc: '',
       args: [],
@@ -1013,10 +1028,10 @@ class S {
     );
   }
 
-  /// `معلومات المساحة`
+  /// `بيانات المساحة`
   String get workspaceSettingsInfoSection {
     return Intl.message(
-      'معلومات المساحة',
+      'بيانات المساحة',
       name: 'workspaceSettingsInfoSection',
       desc: '',
       args: [],
@@ -1043,20 +1058,20 @@ class S {
     );
   }
 
-  /// `لا توجد دعوات معلقة لهذه المساحة الآن.`
+  /// `لا توجد دعوات معلقة لهذه المساحة حالياً.`
   String get workspaceSettingsPendingInvitationsEmpty {
     return Intl.message(
-      'لا توجد دعوات معلقة لهذه المساحة الآن.',
+      'لا توجد دعوات معلقة لهذه المساحة حالياً.',
       name: 'workspaceSettingsPendingInvitationsEmpty',
       desc: '',
       args: [],
     );
   }
 
-  /// `منطقة الخطر`
+  /// `إجراءات حساسة`
   String get workspaceSettingsDangerZone {
     return Intl.message(
-      'منطقة الخطر',
+      'إجراءات حساسة',
       name: 'workspaceSettingsDangerZone',
       desc: '',
       args: [],
@@ -1073,10 +1088,10 @@ class S {
     );
   }
 
-  /// `حدّث الاسم الظاهر للمساحة في كل الشاشات المشتركة.`
+  /// `غيّر الاسم الظاهر للمساحة في كل الشاشات المشتركة.`
   String get workspaceSettingsEditNameDescription {
     return Intl.message(
-      'حدّث الاسم الظاهر للمساحة في كل الشاشات المشتركة.',
+      'غيّر الاسم الظاهر للمساحة في كل الشاشات المشتركة.',
       name: 'workspaceSettingsEditNameDescription',
       desc: '',
       args: [],
@@ -1123,40 +1138,40 @@ class S {
     );
   }
 
-  /// `سيتم حذف جميع البيانات المرتبطة وسجلات الوصول نهائيًا.`
+  /// `سيتم حذف كل البيانات المرتبطة بالمساحة نهائياً.`
   String get workspaceSettingsDeleteWorkspaceDescription {
     return Intl.message(
-      'سيتم حذف جميع البيانات المرتبطة وسجلات الوصول نهائيًا.',
+      'سيتم حذف كل البيانات المرتبطة بالمساحة نهائياً.',
       name: 'workspaceSettingsDeleteWorkspaceDescription',
       desc: '',
       args: [],
     );
   }
 
-  /// `تم تحديث اسم مساحة العمل بنجاح.`
+  /// `تم تغيير اسم مساحة العمل.`
   String get workspaceSettingsNameUpdatedSuccess {
     return Intl.message(
-      'تم تحديث اسم مساحة العمل بنجاح.',
+      'تم تغيير اسم مساحة العمل.',
       name: 'workspaceSettingsNameUpdatedSuccess',
       desc: '',
       args: [],
     );
   }
 
-  /// `تم حذف العضو بنجاح.`
+  /// `تم حذف العضو.`
   String get workspaceSettingsMemberRemovedSuccess {
     return Intl.message(
-      'تم حذف العضو بنجاح.',
+      'تم حذف العضو.',
       name: 'workspaceSettingsMemberRemovedSuccess',
       desc: '',
       args: [],
     );
   }
 
-  /// `تم إلغاء الدعوة بنجاح.`
+  /// `تم إلغاء الدعوة.`
   String get workspaceSettingsInvitationCancelledSuccess {
     return Intl.message(
-      'تم إلغاء الدعوة بنجاح.',
+      'تم إلغاء الدعوة.',
       name: 'workspaceSettingsInvitationCancelledSuccess',
       desc: '',
       args: [],
@@ -1173,10 +1188,10 @@ class S {
     );
   }
 
-  /// `سيتم حذف {memberName} من مساحة العمل. يمكنك دعوته مرة أخرى لاحقًا.`
+  /// `سيتم حذف {memberName} من مساحة العمل. تقدر تبعت له دعوة مرة تانية لاحقاً.`
   String workspaceSettingsRemoveMemberConfirmMessage(Object memberName) {
     return Intl.message(
-      'سيتم حذف $memberName من مساحة العمل. يمكنك دعوته مرة أخرى لاحقًا.',
+      'سيتم حذف $memberName من مساحة العمل. تقدر تبعت له دعوة مرة تانية لاحقاً.',
       name: 'workspaceSettingsRemoveMemberConfirmMessage',
       desc: '',
       args: [memberName],
@@ -1193,10 +1208,10 @@ class S {
     );
   }
 
-  /// `سيتم حذف الدعوة المرسلة إلى {email} فورًا.`
+  /// `سيتم إلغاء الدعوة المرسلة إلى {email} فوراً.`
   String workspaceSettingsCancelInvitationConfirmMessage(Object email) {
     return Intl.message(
-      'سيتم حذف الدعوة المرسلة إلى $email فورًا.',
+      'سيتم إلغاء الدعوة المرسلة إلى $email فوراً.',
       name: 'workspaceSettingsCancelInvitationConfirmMessage',
       desc: '',
       args: [email],
@@ -1213,10 +1228,10 @@ class S {
     );
   }
 
-  /// `سيؤدي هذا إلى حذف مساحة العمل وأذونات الأعضاء وروابط المحافظ والدعوات المعلقة نهائيًا.`
+  /// `سيتم حذف مساحة العمل وأذونات الأعضاء وربط المحافظ والدعوات المعلقة نهائياً.`
   String get workspaceSettingsDeleteWorkspaceConfirmMessage {
     return Intl.message(
-      'سيؤدي هذا إلى حذف مساحة العمل وأذونات الأعضاء وروابط المحافظ والدعوات المعلقة نهائيًا.',
+      'سيتم حذف مساحة العمل وأذونات الأعضاء وربط المحافظ والدعوات المعلقة نهائياً.',
       name: 'workspaceSettingsDeleteWorkspaceConfirmMessage',
       desc: '',
       args: [],
@@ -1258,20 +1273,20 @@ class S {
     );
   }
 
-  /// `اختر المحافظ التي تريد إظهارها في مساحة العمل الآن. يمكنك إضافة المزيد لاحقًا.`
+  /// `اختر المحافظ التي تريد تظهر في مساحة العمل الآن. وتقدر تضيف المزيد لاحقاً.`
   String get workspaceAddWalletsCreateDescription {
     return Intl.message(
-      'اختر المحافظ التي تريد إظهارها في مساحة العمل الآن. يمكنك إضافة المزيد لاحقًا.',
+      'اختر المحافظ التي تريد تظهر في مساحة العمل الآن. وتقدر تضيف المزيد لاحقاً.',
       name: 'workspaceAddWalletsCreateDescription',
       desc: '',
       args: [],
     );
   }
 
-  /// `شارك محافظك الخاصة مع مساحة العمل. المحافظ المرتبطة تصبح مرئية لكل أعضاء مساحة العمل.`
+  /// `شارك محافظك مع مساحة العمل. أي محفظة تضيفها هنا هتظهر لكل أعضاء المساحة.`
   String get workspaceAddWalletsManageDescription {
     return Intl.message(
-      'شارك محافظك الخاصة مع مساحة العمل. المحافظ المرتبطة تصبح مرئية لكل أعضاء مساحة العمل.',
+      'شارك محافظك مع مساحة العمل. أي محفظة تضيفها هنا هتظهر لكل أعضاء المساحة.',
       name: 'workspaceAddWalletsManageDescription',
       desc: '',
       args: [],
@@ -1288,20 +1303,20 @@ class S {
     );
   }
 
-  /// `المتابعة إلى مساحة العمل`
+  /// `ادخل على مساحة العمل`
   String get workspaceContinueToDetailsAction {
     return Intl.message(
-      'المتابعة إلى مساحة العمل',
+      'ادخل على مساحة العمل',
       name: 'workspaceContinueToDetailsAction',
       desc: '',
       args: [],
     );
   }
 
-  /// `تخطي الآن`
+  /// `تخطي حالياً`
   String get workspaceSkipWalletsAction {
     return Intl.message(
-      'تخطي الآن',
+      'تخطي حالياً',
       name: 'workspaceSkipWalletsAction',
       desc: '',
       args: [],
@@ -1328,10 +1343,10 @@ class S {
     );
   }
 
-  /// `مضافة بالفعل`
+  /// `مضافة`
   String get workspaceWalletAlreadyAdded {
     return Intl.message(
-      'مضافة بالفعل',
+      'مضافة',
       name: 'workspaceWalletAlreadyAdded',
       desc: '',
       args: [],
@@ -1348,10 +1363,10 @@ class S {
     );
   }
 
-  /// `أضف محفظة أولاً ثم يمكنك مشاركتها مع مساحة العمل.`
+  /// `أضف محفظة أولاً، وبعدها تقدر تشاركها مع مساحة العمل.`
   String get workspaceNoOwnedWalletsDescription {
     return Intl.message(
-      'أضف محفظة أولاً ثم يمكنك مشاركتها مع مساحة العمل.',
+      'أضف محفظة أولاً، وبعدها تقدر تشاركها مع مساحة العمل.',
       name: 'workspaceNoOwnedWalletsDescription',
       desc: '',
       args: [],
@@ -1368,20 +1383,20 @@ class S {
     );
   }
 
-  /// `يمكنك المتابعة إلى مساحة العمل أو إضافة محفظة جديدة لاحقًا.`
+  /// `تقدر تدخل على مساحة العمل أو تضيف محفظة جديدة لاحقاً.`
   String get workspaceAllOwnedWalletsLinkedDescription {
     return Intl.message(
-      'يمكنك المتابعة إلى مساحة العمل أو إضافة محفظة جديدة لاحقًا.',
+      'تقدر تدخل على مساحة العمل أو تضيف محفظة جديدة لاحقاً.',
       name: 'workspaceAllOwnedWalletsLinkedDescription',
       desc: '',
       args: [],
     );
   }
 
-  /// `أنت تملك {ownedCount} محافظ، و{linkedCount} منها مرتبطة بالفعل بهذه المساحة.`
+  /// `عندك {ownedCount} محافظ، و{linkedCount} منها مضافين بالفعل في مساحة العمل.`
   String workspaceWalletSelectionSummary(int ownedCount, int linkedCount) {
     return Intl.message(
-      'أنت تملك $ownedCount محافظ، و$linkedCount منها مرتبطة بالفعل بهذه المساحة.',
+      'عندك $ownedCount محافظ، و$linkedCount منها مضافين بالفعل في مساحة العمل.',
       name: 'workspaceWalletSelectionSummary',
       desc: '',
       args: [ownedCount, linkedCount],
@@ -1398,20 +1413,20 @@ class S {
     );
   }
 
-  /// `ستظهر المحافظ المشتركة هنا بعد ربطها بمساحة العمل.`
+  /// `المحافظ المشتركة هتظهر هنا بعد ربطها بمساحة العمل.`
   String get workspaceWalletsEmptyDescription {
     return Intl.message(
-      'ستظهر المحافظ المشتركة هنا بعد ربطها بمساحة العمل.',
+      'المحافظ المشتركة هتظهر هنا بعد ربطها بمساحة العمل.',
       name: 'workspaceWalletsEmptyDescription',
       desc: '',
       args: [],
     );
   }
 
-  /// `لم ينضم أي أعضاء إلى مساحة العمل بعد.`
+  /// `لا يوجد أعضاء في مساحة العمل حتى الآن.`
   String get workspaceMembersEmpty {
     return Intl.message(
-      'لم ينضم أي أعضاء إلى مساحة العمل بعد.',
+      'لا يوجد أعضاء في مساحة العمل حتى الآن.',
       name: 'workspaceMembersEmpty',
       desc: '',
       args: [],
@@ -1438,20 +1453,20 @@ class S {
     );
   }
 
-  /// `لا توجد لديك دعوات معلقة لمساحات العمل الآن.`
+  /// `لا توجد عندك دعوات معلقة حالياً.`
   String get invitationsEmptyDescription {
     return Intl.message(
-      'لا توجد لديك دعوات معلقة لمساحات العمل الآن.',
+      'لا توجد عندك دعوات معلقة حالياً.',
       name: 'invitationsEmptyDescription',
       desc: '',
       args: [],
     );
   }
 
-  /// `راجع دعوات مساحات العمل الواردة وحدد قرارك في الوقت المناسب.`
+  /// `راجع الدعوات اللي وصلتك واختر إذا كنت هتقبل أو ترفض.`
   String get invitationsListDescription {
     return Intl.message(
-      'راجع دعوات مساحات العمل الواردة وحدد قرارك في الوقت المناسب.',
+      'راجع الدعوات اللي وصلتك واختر إذا كنت هتقبل أو ترفض.',
       name: 'invitationsListDescription',
       desc: '',
       args: [],
@@ -1474,10 +1489,10 @@ class S {
     );
   }
 
-  /// `بانتظار الرد`
+  /// `بانتظارك`
   String get invitationsPendingStatus {
     return Intl.message(
-      'بانتظار الرد',
+      'بانتظارك',
       name: 'invitationsPendingStatus',
       desc: '',
       args: [],
@@ -1524,10 +1539,10 @@ class S {
     );
   }
 
-  /// `لا يمكن إرسال دعوة مساحة العمل إلا إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المرتبط بالحساب.`
+  /// `يمكن إرسال الدعوة فقط إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المسجل به.`
   String get invitationsHowItWorksDescription {
     return Intl.message(
-      'لا يمكن إرسال دعوة مساحة العمل إلا إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المرتبط بالحساب.',
+      'يمكن إرسال الدعوة فقط إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المسجل به.',
       name: 'invitationsHowItWorksDescription',
       desc: '',
       args: [],
@@ -1564,10 +1579,10 @@ class S {
     );
   }
 
-  /// `أصبح بإمكانك العمل داخل مساحة العمل الآن.`
+  /// `تقدر تبدأ الشغل داخل مساحة العمل الآن.`
   String get invitationAcceptDetails {
     return Intl.message(
-      'أصبح بإمكانك العمل داخل مساحة العمل الآن.',
+      'تقدر تبدأ الشغل داخل مساحة العمل الآن.',
       name: 'invitationAcceptDetails',
       desc: '',
       args: [],
@@ -1594,10 +1609,10 @@ class S {
     );
   }
 
-  /// `سيتم حذف دعوتك للانضمام إلى مساحة العمل {workspaceName}. يمكنك طلب إعادة إرسال الدعوة لاحقًا.`
+  /// `سيتم حذف الدعوة للانضمام إلى مساحة العمل {workspaceName}. تقدر تطلب من مالك المساحة يبعتها لك مرة تانية لاحقاً.`
   String invitationDeclineConfirmMessage(Object workspaceName) {
     return Intl.message(
-      'سيتم حذف دعوتك للانضمام إلى مساحة العمل $workspaceName. يمكنك طلب إعادة إرسال الدعوة لاحقًا.',
+      'سيتم حذف الدعوة للانضمام إلى مساحة العمل $workspaceName. تقدر تطلب من مالك المساحة يبعتها لك مرة تانية لاحقاً.',
       name: 'invitationDeclineConfirmMessage',
       desc: '',
       args: [workspaceName],
@@ -1624,20 +1639,20 @@ class S {
     );
   }
 
-  /// `أرسل دعوة إلى مساحة العمل عبر البريد الإلكتروني لحساب محافظ موجود بالفعل. سيجدها المستخدم المدعو في شاشة الدعوات.`
+  /// `ابعت دعوة لمساحة العمل على البريد الإلكتروني لحساب محافظ موجود بالفعل. الشخص المدعو هيلاقيها في شاشة الدعوات.`
   String get inviteMemberDescription {
     return Intl.message(
-      'أرسل دعوة إلى مساحة العمل عبر البريد الإلكتروني لحساب محافظ موجود بالفعل. سيجدها المستخدم المدعو في شاشة الدعوات.',
+      'ابعت دعوة لمساحة العمل على البريد الإلكتروني لحساب محافظ موجود بالفعل. الشخص المدعو هيلاقيها في شاشة الدعوات.',
       name: 'inviteMemberDescription',
       desc: '',
       args: [],
     );
   }
 
-  /// `بريد العضو الإلكتروني`
+  /// `بريد العضو`
   String get inviteMemberEmailLabel {
     return Intl.message(
-      'بريد العضو الإلكتروني',
+      'بريد العضو',
       name: 'inviteMemberEmailLabel',
       desc: '',
       args: [],
@@ -1664,50 +1679,50 @@ class S {
     );
   }
 
-  /// `يرجى إدخال رقم الهاتف`
+  /// `أدخل رقم الموبايل`
   String get errorWalletPhoneNumberRequired {
     return Intl.message(
-      'يرجى إدخال رقم الهاتف',
+      'أدخل رقم الموبايل',
       name: 'errorWalletPhoneNumberRequired',
       desc: '',
       args: [],
     );
   }
 
-  /// `يرجى اختيار مزود خدمة واحد على الأقل`
+  /// `اختر شركة واحدة على الأقل`
   String get errorWalletProviderRequired {
     return Intl.message(
-      'يرجى اختيار مزود خدمة واحد على الأقل',
+      'اختر شركة واحدة على الأقل',
       name: 'errorWalletProviderRequired',
       desc: '',
       args: [],
     );
   }
 
-  /// `جميع المحافظ المختارة مضافة بالفعل لهذا الرقم.`
+  /// `كل المحافظ المختارة مضافة بالفعل لهذا الرقم.`
   String get errorWalletAllExists {
     return Intl.message(
-      'جميع المحافظ المختارة مضافة بالفعل لهذا الرقم.',
+      'كل المحافظ المختارة مضافة بالفعل لهذا الرقم.',
       name: 'errorWalletAllExists',
       desc: '',
       args: [],
     );
   }
 
-  /// `يرجى إدخال اسم مساحة العمل`
+  /// `أدخل اسم مساحة العمل`
   String get errorWorkspaceNameRequired {
     return Intl.message(
-      'يرجى إدخال اسم مساحة العمل',
+      'أدخل اسم مساحة العمل',
       name: 'errorWorkspaceNameRequired',
       desc: '',
       args: [],
     );
   }
 
-  /// `يرجى اختيار محفظة واحدة على الأقل`
+  /// `اختر محفظة واحدة على الأقل`
   String get errorWorkspaceWalletSelectionRequired {
     return Intl.message(
-      'يرجى اختيار محفظة واحدة على الأقل',
+      'اختر محفظة واحدة على الأقل',
       name: 'errorWorkspaceWalletSelectionRequired',
       desc: '',
       args: [],
@@ -1724,10 +1739,10 @@ class S {
     );
   }
 
-  /// `هذا العضو غير موجود داخل مساحة العمل الآن.`
+  /// `العضو ده مش موجود في مساحة العمل حالياً.`
   String get errorWorkspaceMemberNotFound {
     return Intl.message(
-      'هذا العضو غير موجود داخل مساحة العمل الآن.',
+      'العضو ده مش موجود في مساحة العمل حالياً.',
       name: 'errorWorkspaceMemberNotFound',
       desc: '',
       args: [],
@@ -1744,20 +1759,20 @@ class S {
     );
   }
 
-  /// `توجد دعوة معلقة بالفعل لهذا البريد الإلكتروني.`
+  /// `في دعوة معلقة بالفعل لهذا البريد الإلكتروني.`
   String get errorInvitationAlreadyPending {
     return Intl.message(
-      'توجد دعوة معلقة بالفعل لهذا البريد الإلكتروني.',
+      'في دعوة معلقة بالفعل لهذا البريد الإلكتروني.',
       name: 'errorInvitationAlreadyPending',
       desc: '',
       args: [],
     );
   }
 
-  /// `هذا البريد الإلكتروني غير مرتبط بأي حساب محافظ.`
+  /// `البريد الإلكتروني ده غير مرتبط بحساب محافظ.`
   String get errorInvitationUserNotFound {
     return Intl.message(
-      'هذا البريد الإلكتروني غير مرتبط بأي حساب محافظ.',
+      'البريد الإلكتروني ده غير مرتبط بحساب محافظ.',
       name: 'errorInvitationUserNotFound',
       desc: '',
       args: [],
@@ -1774,10 +1789,10 @@ class S {
     );
   }
 
-  /// `هذه الدعوة لم تعد معلقة.`
+  /// `الدعوة دي لم تعد معلقة.`
   String get errorInvitationNotPending {
     return Intl.message(
-      'هذه الدعوة لم تعد معلقة.',
+      'الدعوة دي لم تعد معلقة.',
       name: 'errorInvitationNotPending',
       desc: '',
       args: [],
@@ -1834,10 +1849,10 @@ class S {
     );
   }
 
-  /// `لا توجد معاملات حتى الآن، ستظهر هنا عند وصول رسائل جديدة`
+  /// `لا توجد معاملات حتى الآن. أول ما توصلك رسائل جديدة هتظهر هنا.`
   String get noTransactionsTitle {
     return Intl.message(
-      'لا توجد معاملات حتى الآن، ستظهر هنا عند وصول رسائل جديدة',
+      'لا توجد معاملات حتى الآن. أول ما توصلك رسائل جديدة هتظهر هنا.',
       name: 'noTransactionsTitle',
       desc: '',
       args: [],
@@ -1864,10 +1879,10 @@ class S {
     );
   }
 
-  /// `هل أنت متأكد من رغبتك في حذف هذه المحفظة؟ لا يمكنك التراجع عن هذا الإجراء.`
+  /// `هل تريد حذف هذه المحفظة؟ لا يمكن التراجع بعد الحذف.`
   String get deleteWalletConfirmMessage {
     return Intl.message(
-      'هل أنت متأكد من رغبتك في حذف هذه المحفظة؟ لا يمكنك التراجع عن هذا الإجراء.',
+      'هل تريد حذف هذه المحفظة؟ لا يمكن التراجع بعد الحذف.',
       name: 'deleteWalletConfirmMessage',
       desc: '',
       args: [],
@@ -1964,10 +1979,10 @@ class S {
     return Intl.message('عبر', name: 'viaLabel', desc: '', args: []);
   }
 
-  /// `حالة الدفع`
+  /// `حالة السداد`
   String get paymentStatus {
     return Intl.message(
-      'حالة الدفع',
+      'حالة السداد',
       name: 'paymentStatus',
       desc: '',
       args: [],
@@ -2044,10 +2059,10 @@ class S {
     );
   }
 
-  /// `تحميل المزيد`
+  /// `عرض المزيد`
   String get transactions_loadMore {
     return Intl.message(
-      'تحميل المزيد',
+      'عرض المزيد',
       name: 'transactions_loadMore',
       desc: '',
       args: [],
@@ -2104,20 +2119,20 @@ class S {
     );
   }
 
-  /// `مُستلَم من`
+  /// `تم الاستلام من`
   String get transaction_receivedFrom {
     return Intl.message(
-      'مُستلَم من',
+      'تم الاستلام من',
       name: 'transaction_receivedFrom',
       desc: '',
       args: [],
     );
   }
 
-  /// `مُرسَل إلى`
+  /// `تم الإرسال إلى`
   String get transaction_sentTo {
     return Intl.message(
-      'مُرسَل إلى',
+      'تم الإرسال إلى',
       name: 'transaction_sentTo',
       desc: '',
       args: [],
@@ -2154,10 +2169,10 @@ class S {
     );
   }
 
-  /// `سجل التغييرات`
+  /// `سجل التعديلات`
   String get transaction_history {
     return Intl.message(
-      'سجل التغييرات',
+      'سجل التعديلات',
       name: 'transaction_history',
       desc: '',
       args: [],
@@ -2204,10 +2219,10 @@ class S {
     );
   }
 
-  /// `اكتب ملاحظتك هنا…`
+  /// `اكتب ملاحظتك هنا`
   String get transaction_noteHint {
     return Intl.message(
-      'اكتب ملاحظتك هنا…',
+      'اكتب ملاحظتك هنا',
       name: 'transaction_noteHint',
       desc: '',
       args: [],
@@ -2294,20 +2309,20 @@ class S {
     );
   }
 
-  /// `معاملة استلام`
+  /// `عملية استلام`
   String get transaction_typeReceiveLabel {
     return Intl.message(
-      'معاملة استلام',
+      'عملية استلام',
       name: 'transaction_typeReceiveLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `معاملة إرسال`
+  /// `عملية إرسال`
   String get transaction_typeSendLabel {
     return Intl.message(
-      'معاملة إرسال',
+      'عملية إرسال',
       name: 'transaction_typeSendLabel',
       desc: '',
       args: [],
@@ -2324,10 +2339,10 @@ class S {
     );
   }
 
-  /// `لا توجد معاملات تطابق الفلتر المحدد`
+  /// `لا توجد معاملات مطابقة للفلاتر المحددة`
   String get transactions_emptyWithFilter {
     return Intl.message(
-      'لا توجد معاملات تطابق الفلتر المحدد',
+      'لا توجد معاملات مطابقة للفلاتر المحددة',
       name: 'transactions_emptyWithFilter',
       desc: '',
       args: [],

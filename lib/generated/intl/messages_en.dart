@@ -83,7 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "addWallet": MessageLookupByLibrary.simpleMessage("Add Wallet"),
     "addWalletAction": MessageLookupByLibrary.simpleMessage("Add Wallet"),
     "addWalletDescription": MessageLookupByLibrary.simpleMessage(
-      "This wallet must be available on this device. The app reads new SMS messages from this phone only.",
+      "This wallet must be on this device. The app reads new SMS messages from this phone only.",
     ),
     "addWalletTitle": MessageLookupByLibrary.simpleMessage("Add Wallet"),
     "addWorkspace": MessageLookupByLibrary.simpleMessage("Add Workspace"),
@@ -96,11 +96,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "appName": MessageLookupByLibrary.simpleMessage("Mahafez"),
     "appTagline": MessageLookupByLibrary.simpleMessage(
-      "Manage your business wallets easily",
+      "Manage your business wallets with ease",
     ),
-    "chooseProvider": MessageLookupByLibrary.simpleMessage(
-      "Choose Service Provider",
-    ),
+    "chooseProvider": MessageLookupByLibrary.simpleMessage("Choose a provider"),
     "commonCancelAction": MessageLookupByLibrary.simpleMessage("Cancel"),
     "commonDeleteAction": MessageLookupByLibrary.simpleMessage("Delete"),
     "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
@@ -116,16 +114,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "Create Workspace",
     ),
     "createWorkspaceDescription": MessageLookupByLibrary.simpleMessage(
-      "Workspaces help you organize business wallets and collaborate with trusted members in one place.",
+      "Workspaces help you organize your business wallets and share access with trusted members in one place.",
     ),
     "createWorkspaceEmptyDescription": MessageLookupByLibrary.simpleMessage(
-      "Group business wallets, track activity, and bring your team into one shared space.",
+      "Bring your wallets together, track activity, and work with your team from one place.",
     ),
     "createWorkspaceEmptyTitle": MessageLookupByLibrary.simpleMessage(
       "Create your first workspace",
     ),
     "createWorkspacePreviewDescription": MessageLookupByLibrary.simpleMessage(
-      "You can add wallets and invite members after creating this workspace.",
+      "After you create the workspace, you can add wallets and invite members.",
     ),
     "createWorkspacePreviewFallback": MessageLookupByLibrary.simpleMessage(
       "New Workspace",
@@ -264,7 +262,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Please enter your name",
     ),
     "invitationAcceptDetails": MessageLookupByLibrary.simpleMessage(
-      "Your access to this workspace is ready.",
+      "You can start working in this workspace now.",
     ),
     "invitationAcceptSuccess": m3,
     "invitationDeclineConfirmMessage": m4,
@@ -291,7 +289,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "How invitations work",
     ),
     "invitationsListDescription": MessageLookupByLibrary.simpleMessage(
-      "Review incoming workspace invitations and respond when you are ready.",
+      "Review your workspace invitations and choose what to do.",
     ),
     "invitationsPendingCount": m7,
     "invitationsPendingStatus": MessageLookupByLibrary.simpleMessage(
@@ -323,10 +321,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "lastActivity": MessageLookupByLibrary.simpleMessage("Last Activity"),
     "minutesAgo": m8,
     "nameWillBeDisplayed": MessageLookupByLibrary.simpleMessage(
-      "Your name will be displayed when updating payment status to facilitate tracking financial transactions",
+      "This name appears when payment status is updated, making transactions easier to track.",
     ),
     "noTransactionsTitle": MessageLookupByLibrary.simpleMessage(
-      "No transactions yet, they will appear here when new messages arrive",
+      "No transactions yet. New messages will appear here automatically.",
     ),
     "notFoundPageTitle": MessageLookupByLibrary.simpleMessage("Page Not Found"),
     "notFoundStatusCode": MessageLookupByLibrary.simpleMessage("404"),
@@ -356,22 +354,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
     "signUpNow": MessageLookupByLibrary.simpleMessage("Sign Up Now"),
     "signUpSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Create a new account to start managing your business",
+      "Create an account and start tracking your business",
     ),
     "smsPermissionAutoUpdateDesc": MessageLookupByLibrary.simpleMessage(
-      "Instant tracking of expenses and payments upon arrival of bank message.",
+      "Track payments and expenses as soon as the SMS arrives.",
     ),
     "smsPermissionAutoUpdateTitle": MessageLookupByLibrary.simpleMessage(
       "Automatic Update",
     ),
     "smsPermissionDescription": MessageLookupByLibrary.simpleMessage(
-      "The app needs message and phone access to detect this device\'s wallet numbers and automatically sync wallet transactions.",
+      "The app needs access to messages and phone information to find wallet numbers on this device and sync transactions automatically.",
     ),
     "smsPermissionPrivacyDesc": MessageLookupByLibrary.simpleMessage(
       "We only read financial messages and device phone numbers required for wallet setup; your data is encrypted and never shared.",
     ),
     "smsPermissionPrivacyTitle": MessageLookupByLibrary.simpleMessage(
-      "Complete Privacy",
+      "Your privacy matters",
     ),
     "smsPermissionTitle": MessageLookupByLibrary.simpleMessage(
       "Allow Message and Phone Access",
@@ -439,7 +437,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "transaction_undo": MessageLookupByLibrary.simpleMessage("Undo"),
     "transaction_wallet": MessageLookupByLibrary.simpleMessage("Wallet"),
     "transactionsHistory": MessageLookupByLibrary.simpleMessage(
-      "Transactions History",
+      "Transaction History",
     ),
     "transactions_clearFilters": MessageLookupByLibrary.simpleMessage(
       "Clear Filters",
@@ -531,7 +529,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "workspaceSettingsCancelInvitationConfirmTitle":
         MessageLookupByLibrary.simpleMessage("Cancel invitation?"),
     "workspaceSettingsDangerZone": MessageLookupByLibrary.simpleMessage(
-      "Danger Zone",
+      "Sensitive actions",
     ),
     "workspaceSettingsDeleteWorkspaceAction":
         MessageLookupByLibrary.simpleMessage("Delete workspace"),

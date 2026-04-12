@@ -16,15 +16,15 @@ abstract final class AppResponsive {
         vertical: height(vertical),
       );
 
-  static EdgeInsets onlyPadding({
-    num left = 0,
+  static EdgeInsetsDirectional onlyPadding({
+    num start = 0,
     num top = 0,
-    num right = 0,
+    num end = 0,
     num bottom = 0,
-  }) => EdgeInsets.only(
-    left: width(left),
+  }) => EdgeInsetsDirectional.only(
+    start: width(start),
     top: height(top),
-    right: width(right),
+    end: width(end),
     bottom: height(bottom),
   );
 

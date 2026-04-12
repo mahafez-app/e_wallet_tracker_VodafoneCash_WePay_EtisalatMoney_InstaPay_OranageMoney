@@ -14,12 +14,23 @@ abstract final class AppRoutes {
   // Wallets
   static const String addWallet = '/add-wallet';
   static const String addWorkspace = '/add-workspace';
+  static const String workspaceDetails = '/workspace/:workspaceId';
+  static const String workspaceWalletSelection =
+      '/workspace/:workspaceId/wallets';
   static const String smsPermissions = '/sms-permissions';
   static const String walletDetails = '/wallet/:walletId';
   static const String transactions = '/transactions';
 
   // Path builders — always use these for navigation, never interpolate inline
   static String profilePath(String userId) => '/profile/$userId';
+  static String workspaceDetailsPath(String workspaceId) =>
+      '/workspace/$workspaceId';
+  static String workspaceWalletSelectionPath(
+    String workspaceId, {
+    bool fromCreation = false,
+  }) => fromCreation
+      ? '/workspace/$workspaceId/wallets?flow=create'
+      : '/workspace/$workspaceId/wallets';
   static String walletDetailsPath(String walletId) => '/wallet/$walletId';
   static String transactionsPath() => '/transactions';
 }

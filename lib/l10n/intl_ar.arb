@@ -106,8 +106,17 @@
   "createWorkspacePreviewFallback": "مساحة عمل جديدة",
   "createWorkspacePreviewDescription": "يمكنك إضافة المحافظ ودعوة الأعضاء بعد إنشاء مساحة العمل.",
   "workspaceOwner": "المالك",
+  "workspaceOwnerBadge": "مالك",
   "workspaceMembersCount": "{count, plural, =0{لا يوجد أعضاء} =1{عضو واحد} =2{عضوان} few{{count} أعضاء} many{{count} عضوًا} other{{count} عضو}}",
   "@workspaceMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workspaceWalletsCount": "{count, plural, =0{لا توجد محافظ} =1{محفظة واحدة} =2{محفظتان} few{{count} محافظ} many{{count} محفظة} other{{count} محفظة}}",
+  "@workspaceWalletsCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -117,10 +126,41 @@
   "createWorkspaceAction": "إنشاء مساحة العمل",
   "createWorkspaceEmptyTitle": "أنشئ أول مساحة عمل",
   "createWorkspaceEmptyDescription": "اجمع محافظ النشاط، وتابع الحركة، وأضف فريقك داخل مساحة مشتركة واحدة.",
+  "workspaceWallets": "المحافظ",
+  "workspaceMembers": "الأعضاء",
+  "workspaceAddWalletsTitle": "إضافة محافظ",
+  "workspaceAddWalletsAction": "إضافة محافظ",
+  "workspaceAddWalletsCreateDescription": "اختر المحافظ التي تريد إظهارها في مساحة العمل الآن. يمكنك إضافة المزيد لاحقًا.",
+  "workspaceAddWalletsManageDescription": "شارك محافظك الخاصة مع مساحة العمل. المحافظ المرتبطة تصبح مرئية لكل أعضاء مساحة العمل.",
+  "workspaceAddSelectedWalletsAction": "إضافة المحافظ المحددة",
+  "workspaceContinueToDetailsAction": "المتابعة إلى مساحة العمل",
+  "workspaceSkipWalletsAction": "تخطي الآن",
+  "workspaceWalletAvailable": "متاحة",
+  "workspaceWalletSelected": "محددة",
+  "workspaceWalletAlreadyAdded": "مضافة بالفعل",
+  "workspaceNoOwnedWalletsTitle": "لا تملك أي محافظ بعد",
+  "workspaceNoOwnedWalletsDescription": "أضف محفظة أولاً ثم يمكنك مشاركتها مع مساحة العمل.",
+  "workspaceAllOwnedWalletsLinkedTitle": "كل محافظك مرتبطة بالفعل",
+  "workspaceAllOwnedWalletsLinkedDescription": "يمكنك المتابعة إلى مساحة العمل أو إضافة محفظة جديدة لاحقًا.",
+  "workspaceWalletSelectionSummary": "أنت تملك {ownedCount} محافظ، و{linkedCount} منها مرتبطة بالفعل بهذه المساحة.",
+  "@workspaceWalletSelectionSummary": {
+    "placeholders": {
+      "ownedCount": {
+        "type": "int"
+      },
+      "linkedCount": {
+        "type": "int"
+      }
+    }
+  },
+  "workspaceWalletsEmptyTitle": "لا توجد محافظ مرتبطة بعد",
+  "workspaceWalletsEmptyDescription": "ستظهر المحافظ المشتركة هنا بعد ربطها بمساحة العمل.",
+  "workspaceMembersEmpty": "لم ينضم أي أعضاء إلى مساحة العمل بعد.",
   "errorWalletPhoneNumberRequired": "يرجى إدخال رقم الهاتف",
   "errorWalletProviderRequired": "يرجى اختيار مزود خدمة واحد على الأقل",
   "errorWalletAllExists": "جميع المحافظ المختارة مضافة بالفعل لهذا الرقم.",
   "errorWorkspaceNameRequired": "يرجى إدخال اسم مساحة العمل",
+  "errorWorkspaceWalletSelectionRequired": "يرجى اختيار محفظة واحدة على الأقل",
   "transactionTypeReceive": "استلام",
   "transactionTypeSend": "إرسال",
   "transactionStatusPaid": "مدفوع",

@@ -179,44 +179,22 @@ final class TransactionRemoteDataSourceImpl
     TransactionDateRange? dateRange,
     int limit = 20,
   }) async {
-    // Fetch each wallet's slice in parallel then merge-sort.
-    final futures = walletIds.map(
-      (id) => _fetchWalletSlice(
-        walletId: id,
-        type: type,
-        dateRange: dateRange,
-        limit: limit,
+    if (walletIds.isEmpty || limit <= 0) {
+      return const <TransactionDto>[];
+    }
+
+    final states = await Future.wait(
+      walletIds.map(
+        (walletId) => _createWorkspaceTransactionState(walletId: walletId),
       ),
     );
-    final slices = await Future.wait(futures);
-    final merged = slices.expand((s) => s).toList()
-      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    return merged.take(limit).toList();
-  }
 
-  Future<List<TransactionDto>> _fetchWalletSlice({
-    required String walletId,
-    TransactionType? type,
-    TransactionDateRange? dateRange,
-    int limit = 20,
-  }) async {
-    final meta = await _walletMeta(walletId);
-    final query = _applyFilters(
-      _walletTransactionsQuery(walletId),
+    return _collectLatestWorkspaceTransactions(
+      states: states,
       type: type,
       dateRange: dateRange,
-    ).limit(limit);
-    final snapshot = await query.get();
-    return snapshot.docs
-        .map(
-          (doc) => TransactionDto.fromFirestore(
-            doc,
-            meta.provider,
-            meta.phoneNumber,
-            walletId,
-          ),
-        )
-        .toList();
+      limit: limit,
+    );
   }
 
   // ── Mutations ──────────────────────────────────────────────────────────────
@@ -376,6 +354,159 @@ final class TransactionRemoteDataSourceImpl
           .orderBy('createdAt', descending: true)
           .orderBy(FieldPath.documentId, descending: true);
 
+  Future<_WorkspaceWalletTransactionState> _createWorkspaceTransactionState({
+    required String walletId,
+  }) async {
+    final meta = await _walletMeta(walletId);
+    return _WorkspaceWalletTransactionState(
+      walletId: walletId,
+      provider: meta.provider,
+      phoneNumber: meta.phoneNumber,
+    );
+  }
+
+  Future<List<TransactionDto>> _collectLatestWorkspaceTransactions({
+    required List<_WorkspaceWalletTransactionState> states,
+    required int limit,
+    required TransactionType? type,
+    required TransactionDateRange? dateRange,
+  }) async {
+    final results = <TransactionDto>[];
+    final batchSize = _resolveWorkspaceBatchSize(limit);
+
+    while (results.length < limit) {
+      final candidate = await _selectLatestWorkspaceTransaction(
+        states: states,
+        batchSize: batchSize,
+        type: type,
+        dateRange: dateRange,
+      );
+      if (candidate == null) {
+        break;
+      }
+
+      results.add(candidate.transaction);
+      candidate.state.pendingTransactions.removeAt(0);
+    }
+
+    return results;
+  }
+
+  Future<_WorkspaceWalletTransactionCandidate?>
+  _selectLatestWorkspaceTransaction({
+    required List<_WorkspaceWalletTransactionState> states,
+    required int batchSize,
+    required TransactionType? type,
+    required TransactionDateRange? dateRange,
+  }) async {
+    _WorkspaceWalletTransactionCandidate? selectedCandidate;
+
+    for (final state in states) {
+      final transaction = await _peekWorkspaceTransaction(
+        state: state,
+        batchSize: batchSize,
+        type: type,
+        dateRange: dateRange,
+      );
+      if (transaction == null) {
+        continue;
+      }
+
+      if (selectedCandidate == null ||
+          _isTransactionAfter(transaction, selectedCandidate.transaction)) {
+        selectedCandidate = _WorkspaceWalletTransactionCandidate(
+          state: state,
+          transaction: transaction,
+        );
+      }
+    }
+
+    return selectedCandidate;
+  }
+
+  Future<TransactionDto?> _peekWorkspaceTransaction({
+    required _WorkspaceWalletTransactionState state,
+    required int batchSize,
+    required TransactionType? type,
+    required TransactionDateRange? dateRange,
+  }) async {
+    if (state.pendingTransactions.isNotEmpty) {
+      return state.pendingTransactions.first;
+    }
+    if (state.exhausted) {
+      return null;
+    }
+
+    final batch = await _fetchWorkspaceTransactionBatch(
+      state: state,
+      batchSize: batchSize,
+      type: type,
+      dateRange: dateRange,
+    );
+
+    state.pendingTransactions.addAll(batch.transactions);
+    state.lastFetchedDocument = batch.lastFetchedDocument;
+    state.exhausted = batch.transactions.length < batchSize;
+
+    if (state.pendingTransactions.isEmpty) {
+      return null;
+    }
+
+    return state.pendingTransactions.first;
+  }
+
+  Future<_WorkspaceTransactionBatch> _fetchWorkspaceTransactionBatch({
+    required _WorkspaceWalletTransactionState state,
+    required int batchSize,
+    required TransactionType? type,
+    required TransactionDateRange? dateRange,
+  }) async {
+    var query = _applyFilters(
+      _walletTransactionsQuery(state.walletId),
+      type: type,
+      dateRange: dateRange,
+    );
+    if (state.lastFetchedDocument != null) {
+      query = query.startAfterDocument(state.lastFetchedDocument!);
+    }
+
+    final snapshot = await query.limit(batchSize).get();
+    final transactions = snapshot.docs
+        .map(
+          (doc) => TransactionDto.fromFirestore(
+            doc,
+            state.provider,
+            state.phoneNumber,
+            state.walletId,
+          ),
+        )
+        .toList();
+
+    return _WorkspaceTransactionBatch(
+      transactions: transactions,
+      lastFetchedDocument: snapshot.docs.isEmpty ? null : snapshot.docs.last,
+    );
+  }
+
+  int _resolveWorkspaceBatchSize(int limit) {
+    if (limit <= 0) {
+      return 1;
+    }
+    if (limit < 5) {
+      return limit;
+    }
+    return 5;
+  }
+
+  bool _isTransactionAfter(TransactionDto left, TransactionDto right) {
+    final dateComparison = left.createdAt.compareTo(right.createdAt);
+    if (dateComparison != 0) {
+      return dateComparison > 0;
+    }
+
+    return left.id.compareTo(right.id) > 0;
+  }
+
   TransactionPageCursor _toCursor(
     QueryDocumentSnapshot<Map<String, dynamic>> document,
   ) {
@@ -388,4 +519,39 @@ final class TransactionRemoteDataSourceImpl
       transactionId: document.id,
     );
   }
+}
+
+final class _WorkspaceWalletTransactionState {
+  _WorkspaceWalletTransactionState({
+    required this.walletId,
+    required this.provider,
+    required this.phoneNumber,
+  });
+
+  final String walletId;
+  final WalletProvider provider;
+  final String phoneNumber;
+  final List<TransactionDto> pendingTransactions = <TransactionDto>[];
+  QueryDocumentSnapshot<Map<String, dynamic>>? lastFetchedDocument;
+  bool exhausted = false;
+}
+
+final class _WorkspaceTransactionBatch {
+  const _WorkspaceTransactionBatch({
+    required this.transactions,
+    required this.lastFetchedDocument,
+  });
+
+  final List<TransactionDto> transactions;
+  final QueryDocumentSnapshot<Map<String, dynamic>>? lastFetchedDocument;
+}
+
+final class _WorkspaceWalletTransactionCandidate {
+  const _WorkspaceWalletTransactionCandidate({
+    required this.state,
+    required this.transaction,
+  });
+
+  final _WorkspaceWalletTransactionState state;
+  final TransactionDto transaction;
 }

@@ -168,9 +168,9 @@ class _ReceiptCaptureRoot extends StatelessWidget {
         child: Padding(
           padding: AppResponsive.onlyPadding(
             top: AppSpacing.xl,
-            right: AppSpacing.md,
+            end: AppSpacing.md,
             bottom: AppSpacing.xl,
-            left: AppSpacing.md,
+            start: AppSpacing.md,
           ),
           child: Material(
             color: theme.scaffoldBackgroundColor,

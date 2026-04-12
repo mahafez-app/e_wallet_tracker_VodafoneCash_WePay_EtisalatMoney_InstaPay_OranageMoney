@@ -901,6 +901,16 @@ class S {
     return Intl.message('المالك', name: 'workspaceOwner', desc: '', args: []);
   }
 
+  /// `مالك`
+  String get workspaceOwnerBadge {
+    return Intl.message(
+      'مالك',
+      name: 'workspaceOwnerBadge',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{count, plural, =0{لا يوجد أعضاء} =1{عضو واحد} =2{عضوان} few{{count} أعضاء} many{{count} عضوًا} other{{count} عضو}}`
   String workspaceMembersCount(int count) {
     return Intl.plural(
@@ -912,6 +922,22 @@ class S {
       many: '$count عضوًا',
       other: '$count عضو',
       name: 'workspaceMembersCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count, plural, =0{لا توجد محافظ} =1{محفظة واحدة} =2{محفظتان} few{{count} محافظ} many{{count} محفظة} other{{count} محفظة}}`
+  String workspaceWalletsCount(int count) {
+    return Intl.plural(
+      count,
+      zero: 'لا توجد محافظ',
+      one: 'محفظة واحدة',
+      two: 'محفظتان',
+      few: '$count محافظ',
+      many: '$count محفظة',
+      other: '$count محفظة',
+      name: 'workspaceWalletsCount',
       desc: '',
       args: [count],
     );
@@ -942,6 +968,206 @@ class S {
     return Intl.message(
       'اجمع محافظ النشاط، وتابع الحركة، وأضف فريقك داخل مساحة مشتركة واحدة.',
       name: 'createWorkspaceEmptyDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المحافظ`
+  String get workspaceWallets {
+    return Intl.message(
+      'المحافظ',
+      name: 'workspaceWallets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الأعضاء`
+  String get workspaceMembers {
+    return Intl.message(
+      'الأعضاء',
+      name: 'workspaceMembers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة محافظ`
+  String get workspaceAddWalletsTitle {
+    return Intl.message(
+      'إضافة محافظ',
+      name: 'workspaceAddWalletsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة محافظ`
+  String get workspaceAddWalletsAction {
+    return Intl.message(
+      'إضافة محافظ',
+      name: 'workspaceAddWalletsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اختر المحافظ التي تريد إظهارها في مساحة العمل الآن. يمكنك إضافة المزيد لاحقًا.`
+  String get workspaceAddWalletsCreateDescription {
+    return Intl.message(
+      'اختر المحافظ التي تريد إظهارها في مساحة العمل الآن. يمكنك إضافة المزيد لاحقًا.',
+      name: 'workspaceAddWalletsCreateDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `شارك محافظك الخاصة مع مساحة العمل. المحافظ المرتبطة تصبح مرئية لكل أعضاء مساحة العمل.`
+  String get workspaceAddWalletsManageDescription {
+    return Intl.message(
+      'شارك محافظك الخاصة مع مساحة العمل. المحافظ المرتبطة تصبح مرئية لكل أعضاء مساحة العمل.',
+      name: 'workspaceAddWalletsManageDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة المحافظ المحددة`
+  String get workspaceAddSelectedWalletsAction {
+    return Intl.message(
+      'إضافة المحافظ المحددة',
+      name: 'workspaceAddSelectedWalletsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المتابعة إلى مساحة العمل`
+  String get workspaceContinueToDetailsAction {
+    return Intl.message(
+      'المتابعة إلى مساحة العمل',
+      name: 'workspaceContinueToDetailsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تخطي الآن`
+  String get workspaceSkipWalletsAction {
+    return Intl.message(
+      'تخطي الآن',
+      name: 'workspaceSkipWalletsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `متاحة`
+  String get workspaceWalletAvailable {
+    return Intl.message(
+      'متاحة',
+      name: 'workspaceWalletAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `محددة`
+  String get workspaceWalletSelected {
+    return Intl.message(
+      'محددة',
+      name: 'workspaceWalletSelected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مضافة بالفعل`
+  String get workspaceWalletAlreadyAdded {
+    return Intl.message(
+      'مضافة بالفعل',
+      name: 'workspaceWalletAlreadyAdded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا تملك أي محافظ بعد`
+  String get workspaceNoOwnedWalletsTitle {
+    return Intl.message(
+      'لا تملك أي محافظ بعد',
+      name: 'workspaceNoOwnedWalletsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أضف محفظة أولاً ثم يمكنك مشاركتها مع مساحة العمل.`
+  String get workspaceNoOwnedWalletsDescription {
+    return Intl.message(
+      'أضف محفظة أولاً ثم يمكنك مشاركتها مع مساحة العمل.',
+      name: 'workspaceNoOwnedWalletsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كل محافظك مرتبطة بالفعل`
+  String get workspaceAllOwnedWalletsLinkedTitle {
+    return Intl.message(
+      'كل محافظك مرتبطة بالفعل',
+      name: 'workspaceAllOwnedWalletsLinkedTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `يمكنك المتابعة إلى مساحة العمل أو إضافة محفظة جديدة لاحقًا.`
+  String get workspaceAllOwnedWalletsLinkedDescription {
+    return Intl.message(
+      'يمكنك المتابعة إلى مساحة العمل أو إضافة محفظة جديدة لاحقًا.',
+      name: 'workspaceAllOwnedWalletsLinkedDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أنت تملك {ownedCount} محافظ، و{linkedCount} منها مرتبطة بالفعل بهذه المساحة.`
+  String workspaceWalletSelectionSummary(int ownedCount, int linkedCount) {
+    return Intl.message(
+      'أنت تملك $ownedCount محافظ، و$linkedCount منها مرتبطة بالفعل بهذه المساحة.',
+      name: 'workspaceWalletSelectionSummary',
+      desc: '',
+      args: [ownedCount, linkedCount],
+    );
+  }
+
+  /// `لا توجد محافظ مرتبطة بعد`
+  String get workspaceWalletsEmptyTitle {
+    return Intl.message(
+      'لا توجد محافظ مرتبطة بعد',
+      name: 'workspaceWalletsEmptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ستظهر المحافظ المشتركة هنا بعد ربطها بمساحة العمل.`
+  String get workspaceWalletsEmptyDescription {
+    return Intl.message(
+      'ستظهر المحافظ المشتركة هنا بعد ربطها بمساحة العمل.',
+      name: 'workspaceWalletsEmptyDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لم ينضم أي أعضاء إلى مساحة العمل بعد.`
+  String get workspaceMembersEmpty {
+    return Intl.message(
+      'لم ينضم أي أعضاء إلى مساحة العمل بعد.',
+      name: 'workspaceMembersEmpty',
       desc: '',
       args: [],
     );
@@ -982,6 +1208,16 @@ class S {
     return Intl.message(
       'يرجى إدخال اسم مساحة العمل',
       name: 'errorWorkspaceNameRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `يرجى اختيار محفظة واحدة على الأقل`
+  String get errorWorkspaceWalletSelectionRequired {
+    return Intl.message(
+      'يرجى اختيار محفظة واحدة على الأقل',
+      name: 'errorWorkspaceWalletSelectionRequired',
       desc: '',
       args: [],
     );

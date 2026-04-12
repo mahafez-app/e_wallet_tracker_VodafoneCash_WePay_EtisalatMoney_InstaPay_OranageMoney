@@ -49,6 +49,12 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m12(count) =>
       "${Intl.plural(count, zero: 'لا يوجد أعضاء', one: 'عضو واحد', two: 'عضوان', few: '${count} أعضاء', many: '${count} عضوًا', other: '${count} عضو')}";
 
+  static String m13(ownedCount, linkedCount) =>
+      "أنت تملك ${ownedCount} محافظ، و${linkedCount} منها مرتبطة بالفعل بهذه المساحة.";
+
+  static String m14(count) =>
+      "${Intl.plural(count, zero: 'لا توجد محافظ', one: 'محفظة واحدة', two: 'محفظتان', few: '${count} محافظ', many: '${count} محفظة', other: '${count} محفظة')}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "activeWalletsCount": m0,
@@ -189,6 +195,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorWorkspaceNameRequired": MessageLookupByLibrary.simpleMessage(
       "يرجى إدخال اسم مساحة العمل",
     ),
+    "errorWorkspaceWalletSelectionRequired":
+        MessageLookupByLibrary.simpleMessage(
+          "يرجى اختيار محفظة واحدة على الأقل",
+        ),
     "forgotPassword": MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور؟"),
     "fromLabel": MessageLookupByLibrary.simpleMessage("من"),
     "fullName": MessageLookupByLibrary.simpleMessage("الاسم الكامل"),
@@ -355,14 +365,67 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "welcome": MessageLookupByLibrary.simpleMessage("مرحباً بك"),
     "whatIsYourName": MessageLookupByLibrary.simpleMessage("ما اسمك؟"),
+    "workspaceAddSelectedWalletsAction": MessageLookupByLibrary.simpleMessage(
+      "إضافة المحافظ المحددة",
+    ),
+    "workspaceAddWalletsAction": MessageLookupByLibrary.simpleMessage(
+      "إضافة محافظ",
+    ),
+    "workspaceAddWalletsCreateDescription": MessageLookupByLibrary.simpleMessage(
+      "اختر المحافظ التي تريد إظهارها في مساحة العمل الآن. يمكنك إضافة المزيد لاحقًا.",
+    ),
+    "workspaceAddWalletsManageDescription": MessageLookupByLibrary.simpleMessage(
+      "شارك محافظك الخاصة مع مساحة العمل. المحافظ المرتبطة تصبح مرئية لكل أعضاء مساحة العمل.",
+    ),
+    "workspaceAddWalletsTitle": MessageLookupByLibrary.simpleMessage(
+      "إضافة محافظ",
+    ),
+    "workspaceAllOwnedWalletsLinkedDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "يمكنك المتابعة إلى مساحة العمل أو إضافة محفظة جديدة لاحقًا.",
+        ),
+    "workspaceAllOwnedWalletsLinkedTitle": MessageLookupByLibrary.simpleMessage(
+      "كل محافظك مرتبطة بالفعل",
+    ),
+    "workspaceContinueToDetailsAction": MessageLookupByLibrary.simpleMessage(
+      "المتابعة إلى مساحة العمل",
+    ),
+    "workspaceMembers": MessageLookupByLibrary.simpleMessage("الأعضاء"),
     "workspaceMembersCount": m12,
+    "workspaceMembersEmpty": MessageLookupByLibrary.simpleMessage(
+      "لم ينضم أي أعضاء إلى مساحة العمل بعد.",
+    ),
     "workspaceNameHint": MessageLookupByLibrary.simpleMessage(
       "مثلاً: محل موبايلات",
     ),
     "workspaceNameLabel": MessageLookupByLibrary.simpleMessage(
       "اسم مساحة العمل",
     ),
+    "workspaceNoOwnedWalletsDescription": MessageLookupByLibrary.simpleMessage(
+      "أضف محفظة أولاً ثم يمكنك مشاركتها مع مساحة العمل.",
+    ),
+    "workspaceNoOwnedWalletsTitle": MessageLookupByLibrary.simpleMessage(
+      "لا تملك أي محافظ بعد",
+    ),
     "workspaceOwner": MessageLookupByLibrary.simpleMessage("المالك"),
+    "workspaceOwnerBadge": MessageLookupByLibrary.simpleMessage("مالك"),
+    "workspaceSkipWalletsAction": MessageLookupByLibrary.simpleMessage(
+      "تخطي الآن",
+    ),
+    "workspaceWalletAlreadyAdded": MessageLookupByLibrary.simpleMessage(
+      "مضافة بالفعل",
+    ),
+    "workspaceWalletAvailable": MessageLookupByLibrary.simpleMessage("متاحة"),
+    "workspaceWalletSelected": MessageLookupByLibrary.simpleMessage("محددة"),
+    "workspaceWalletSelectionSummary": m13,
+    "workspaceWallets": MessageLookupByLibrary.simpleMessage("المحافظ"),
+    "workspaceWalletsCount": m14,
+    "workspaceWalletsEmptyDescription": MessageLookupByLibrary.simpleMessage(
+      "ستظهر المحافظ المشتركة هنا بعد ربطها بمساحة العمل.",
+    ),
+    "workspaceWalletsEmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "لا توجد محافظ مرتبطة بعد",
+    ),
     "workspaces": MessageLookupByLibrary.simpleMessage("مساحات العمل"),
     "yourName": MessageLookupByLibrary.simpleMessage("اسمك"),
     "yourWallets": MessageLookupByLibrary.simpleMessage("محافظك"),

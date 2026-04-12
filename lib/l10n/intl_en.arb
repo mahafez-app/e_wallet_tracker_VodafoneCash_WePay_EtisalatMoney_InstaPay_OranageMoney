@@ -106,8 +106,17 @@
   "createWorkspacePreviewFallback": "New Workspace",
   "createWorkspacePreviewDescription": "You can add wallets and invite members after creating this workspace.",
   "workspaceOwner": "Owner",
+  "workspaceOwnerBadge": "Owner",
   "workspaceMembersCount": "{count, plural, =0{No members} =1{1 member} other{{count} members}}",
   "@workspaceMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workspaceWalletsCount": "{count, plural, =0{No wallets} =1{1 wallet} other{{count} wallets}}",
+  "@workspaceWalletsCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -117,10 +126,41 @@
   "createWorkspaceAction": "Create Workspace",
   "createWorkspaceEmptyTitle": "Create your first workspace",
   "createWorkspaceEmptyDescription": "Group business wallets, track activity, and bring your team into one shared space.",
+  "workspaceWallets": "Wallets",
+  "workspaceMembers": "Members",
+  "workspaceAddWalletsTitle": "Add Wallets",
+  "workspaceAddWalletsAction": "Add Wallets",
+  "workspaceAddWalletsCreateDescription": "Choose which of your wallets should appear in this workspace now. You can add more later.",
+  "workspaceAddWalletsManageDescription": "Share your own wallets with this workspace. Linked wallets become visible to all workspace members.",
+  "workspaceAddSelectedWalletsAction": "Add Selected Wallets",
+  "workspaceContinueToDetailsAction": "Continue to Workspace",
+  "workspaceSkipWalletsAction": "Skip for now",
+  "workspaceWalletAvailable": "Available",
+  "workspaceWalletSelected": "Selected",
+  "workspaceWalletAlreadyAdded": "Already Added",
+  "workspaceNoOwnedWalletsTitle": "You do not have any wallets yet",
+  "workspaceNoOwnedWalletsDescription": "Add a wallet first, then you can share it with this workspace.",
+  "workspaceAllOwnedWalletsLinkedTitle": "All of your wallets are already linked",
+  "workspaceAllOwnedWalletsLinkedDescription": "You can continue to the workspace or add a new wallet later.",
+  "workspaceWalletSelectionSummary": "You own {ownedCount} wallets, and {linkedCount} are already linked to this workspace.",
+  "@workspaceWalletSelectionSummary": {
+    "placeholders": {
+      "ownedCount": {
+        "type": "int"
+      },
+      "linkedCount": {
+        "type": "int"
+      }
+    }
+  },
+  "workspaceWalletsEmptyTitle": "No wallets linked yet",
+  "workspaceWalletsEmptyDescription": "This workspace will show shared wallets here once they are linked.",
+  "workspaceMembersEmpty": "No members have joined this workspace yet.",
   "errorWalletPhoneNumberRequired": "Please enter a phone number",
   "errorWalletProviderRequired": "Please select at least one provider",
   "errorWalletAllExists": "All selected wallets are already added for this phone number.",
   "errorWorkspaceNameRequired": "Please enter a workspace name",
+  "errorWorkspaceWalletSelectionRequired": "Please select at least one wallet",
   "transactionTypeReceive": "Receive",
   "transactionTypeSend": "Send",
   "transactionStatusPaid": "Paid",

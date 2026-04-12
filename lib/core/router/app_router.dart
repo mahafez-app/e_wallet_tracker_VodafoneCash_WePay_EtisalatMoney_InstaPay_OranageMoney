@@ -11,9 +11,11 @@ import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/transactions/presentation/navigation/transactions_route_data.dart';
 import '../../features/wallets/presentation/screens/add_wallet_screen.dart';
 import '../../features/wallets/presentation/screens/sms_permissions_screen.dart';
-import '../../features/workspaces/presentation/screens/create_workspace_screen.dart';
 import '../../features/transactions/presentation/screens/transactions_screen.dart';
 import '../../features/wallets/presentation/screens/wallet_details_screen.dart';
+import '../../features/workspaces/presentation/screens/create_workspace_screen.dart';
+import '../../features/workspaces/presentation/screens/select_workspace_wallets_screen.dart';
+import '../../features/workspaces/presentation/screens/workspace_details_screen.dart';
 import '../widgets/not_found_screen.dart';
 import 'app_routes.dart';
 
@@ -135,6 +137,26 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.addWorkspace,
         builder: (context, state) => const CreateWorkspaceScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.workspaceDetails,
+        builder: (context, state) {
+          final workspaceId = state.pathParameters['workspaceId']!;
+          return WorkspaceDetailsScreen(workspaceId: workspaceId);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.workspaceWalletSelection,
+        builder: (context, state) {
+          final workspaceId = state.pathParameters['workspaceId']!;
+          final flow = state.uri.queryParameters['flow'] == 'create'
+              ? WorkspaceWalletSelectionFlow.create
+              : WorkspaceWalletSelectionFlow.manage;
+          return SelectWorkspaceWalletsScreen(
+            workspaceId: workspaceId,
+            flow: flow,
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.smsPermissions,

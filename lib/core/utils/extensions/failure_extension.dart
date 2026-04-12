@@ -35,6 +35,8 @@ extension FailureMessaging on BuildContext {
         'wallet-provider-required' => l10n.errorWalletProviderRequired,
         'wallet-all-exists' => l10n.errorWalletAllExists,
         'workspace-name-required' => l10n.errorWorkspaceNameRequired,
+        'workspace-wallet-selection-required' =>
+          l10n.errorWorkspaceWalletSelectionRequired,
         _ =>
           code != null
               ? l10n.errorValidationWithCode(code)

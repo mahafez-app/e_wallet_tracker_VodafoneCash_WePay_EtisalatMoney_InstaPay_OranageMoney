@@ -50,6 +50,12 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m12(count) =>
       "${Intl.plural(count, zero: 'No members', one: '1 member', other: '${count} members')}";
 
+  static String m13(ownedCount, linkedCount) =>
+      "You own ${ownedCount} wallets, and ${linkedCount} are already linked to this workspace.";
+
+  static String m14(count) =>
+      "${Intl.plural(count, zero: 'No wallets', one: '1 wallet', other: '${count} wallets')}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "activeWalletsCount": m0,
@@ -200,6 +206,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorWorkspaceNameRequired": MessageLookupByLibrary.simpleMessage(
       "Please enter a workspace name",
     ),
+    "errorWorkspaceWalletSelectionRequired":
+        MessageLookupByLibrary.simpleMessage(
+          "Please select at least one wallet",
+        ),
     "forgotPassword": MessageLookupByLibrary.simpleMessage("Forgot password?"),
     "fromLabel": MessageLookupByLibrary.simpleMessage("From"),
     "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
@@ -368,14 +378,69 @@ class MessageLookup extends MessageLookupByLibrary {
     "whatIsYourName": MessageLookupByLibrary.simpleMessage(
       "What is your name?",
     ),
+    "workspaceAddSelectedWalletsAction": MessageLookupByLibrary.simpleMessage(
+      "Add Selected Wallets",
+    ),
+    "workspaceAddWalletsAction": MessageLookupByLibrary.simpleMessage(
+      "Add Wallets",
+    ),
+    "workspaceAddWalletsCreateDescription": MessageLookupByLibrary.simpleMessage(
+      "Choose which of your wallets should appear in this workspace now. You can add more later.",
+    ),
+    "workspaceAddWalletsManageDescription": MessageLookupByLibrary.simpleMessage(
+      "Share your own wallets with this workspace. Linked wallets become visible to all workspace members.",
+    ),
+    "workspaceAddWalletsTitle": MessageLookupByLibrary.simpleMessage(
+      "Add Wallets",
+    ),
+    "workspaceAllOwnedWalletsLinkedDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "You can continue to the workspace or add a new wallet later.",
+        ),
+    "workspaceAllOwnedWalletsLinkedTitle": MessageLookupByLibrary.simpleMessage(
+      "All of your wallets are already linked",
+    ),
+    "workspaceContinueToDetailsAction": MessageLookupByLibrary.simpleMessage(
+      "Continue to Workspace",
+    ),
+    "workspaceMembers": MessageLookupByLibrary.simpleMessage("Members"),
     "workspaceMembersCount": m12,
+    "workspaceMembersEmpty": MessageLookupByLibrary.simpleMessage(
+      "No members have joined this workspace yet.",
+    ),
     "workspaceNameHint": MessageLookupByLibrary.simpleMessage(
       "e.g. Mobile Store",
     ),
     "workspaceNameLabel": MessageLookupByLibrary.simpleMessage(
       "Workspace Name",
     ),
+    "workspaceNoOwnedWalletsDescription": MessageLookupByLibrary.simpleMessage(
+      "Add a wallet first, then you can share it with this workspace.",
+    ),
+    "workspaceNoOwnedWalletsTitle": MessageLookupByLibrary.simpleMessage(
+      "You do not have any wallets yet",
+    ),
     "workspaceOwner": MessageLookupByLibrary.simpleMessage("Owner"),
+    "workspaceOwnerBadge": MessageLookupByLibrary.simpleMessage("Owner"),
+    "workspaceSkipWalletsAction": MessageLookupByLibrary.simpleMessage(
+      "Skip for now",
+    ),
+    "workspaceWalletAlreadyAdded": MessageLookupByLibrary.simpleMessage(
+      "Already Added",
+    ),
+    "workspaceWalletAvailable": MessageLookupByLibrary.simpleMessage(
+      "Available",
+    ),
+    "workspaceWalletSelected": MessageLookupByLibrary.simpleMessage("Selected"),
+    "workspaceWalletSelectionSummary": m13,
+    "workspaceWallets": MessageLookupByLibrary.simpleMessage("Wallets"),
+    "workspaceWalletsCount": m14,
+    "workspaceWalletsEmptyDescription": MessageLookupByLibrary.simpleMessage(
+      "This workspace will show shared wallets here once they are linked.",
+    ),
+    "workspaceWalletsEmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "No wallets linked yet",
+    ),
     "workspaces": MessageLookupByLibrary.simpleMessage("Workspaces"),
     "yourName": MessageLookupByLibrary.simpleMessage("Your Name"),
     "yourWallets": MessageLookupByLibrary.simpleMessage("Your Wallets"),

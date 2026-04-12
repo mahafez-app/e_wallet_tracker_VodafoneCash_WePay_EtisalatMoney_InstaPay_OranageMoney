@@ -25,7 +25,9 @@ class TransactionWalletFilterRow extends ConsumerWidget {
       height: 40.responsiveHeight,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        padding: AppResponsive.symmetricPadding(horizontal: AppSpacing.lg),
+        padding: AppResponsive.symmetricPadding(
+          horizontal: AppSpacing.lg,
+        ).copyWith(top: AppSpacing.sm),
         children: [
           _WalletChip(
             label: context.l10n.transactions_filter_allWallets,
@@ -34,7 +36,7 @@ class TransactionWalletFilterRow extends ConsumerWidget {
           ),
           ...routeData.wallets.map(
             (wallet) => Padding(
-              padding: AppResponsive.onlyPadding(left: AppSpacing.sm),
+              padding: AppResponsive.onlyPadding(start: AppSpacing.sm),
               child: _WalletChip(
                 label: wallet.walletLabel,
                 isSelected: state.selectedWalletId == wallet.walletId,

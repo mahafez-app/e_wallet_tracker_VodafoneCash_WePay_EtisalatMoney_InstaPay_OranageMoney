@@ -60,12 +60,15 @@ class _CreateWorkspaceBody extends ConsumerWidget {
 
     if (!_hasSuccessfulSubmission(previous, next)) return;
 
-    if (Navigator.of(context).canPop()) {
-      context.pop(next.createdWorkspaceId);
+    final workspaceId = next.createdWorkspaceId;
+    if (workspaceId == null || workspaceId.isEmpty) {
+      context.go(AppRoutes.home);
       return;
     }
 
-    context.go(AppRoutes.home);
+    context.go(
+      AppRoutes.workspaceWalletSelectionPath(workspaceId, fromCreation: true),
+    );
   }
 
   bool _hasNewFailure(

@@ -1,8 +1,10 @@
 // ignore_for_file: unused_element_parameter
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/domain/entities/workspace_entity.dart';
+import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/theme/app_color_extension.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
@@ -23,7 +25,7 @@ class HomeWorkspaceCard extends StatelessWidget {
     final l10n = context.l10n;
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () => context.push(AppRoutes.workspaceDetailsPath(workspace.id)),
       child: Container(
         padding: AppResponsive.allPadding(AppSpacing.xl),
         decoration: BoxDecoration(

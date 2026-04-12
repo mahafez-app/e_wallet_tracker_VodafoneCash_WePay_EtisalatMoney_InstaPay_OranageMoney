@@ -151,7 +151,7 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
 
     await _firestore.collection(_usersCollection).doc(uid).update({
-      'displayName': displayName,
+      'name': displayName,
       'nameConfirmed': true,
     });
   }

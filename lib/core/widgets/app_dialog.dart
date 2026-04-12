@@ -132,7 +132,7 @@ class AppDialog extends StatelessWidget {
                 if (cancelLabel != null)
                   Expanded(
                     child: Padding(
-                      padding: AppResponsive.onlyPadding(right: AppSpacing.sm),
+                      padding: AppResponsive.onlyPadding(start: AppSpacing.sm),
                       child: OutlinedButton(
                         onPressed: onCancel ?? () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(

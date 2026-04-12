@@ -7,6 +7,7 @@ import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
+import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
 import '../../../../../core/widgets/transactions/no_transactions_card.dart';
 import '../../../../../core/widgets/transactions/transaction_card.dart';
@@ -50,7 +51,7 @@ class WorkspaceTransactionsSection extends StatelessWidget {
                               (wallet) => WalletFilterOption(
                                 walletId: wallet.id,
                                 walletLabel:
-                                    '${wallet.provider.displayName(context)} · ${wallet.phoneNumber}',
+                                    '${wallet.provider.displayName(context)} · ${wallet.phoneNumber.formattedEgyptianPhoneNumber}',
                               ),
                             )
                             .toList(),

@@ -41,13 +41,19 @@ class _HomeBody extends ConsumerWidget {
 
     // Side-effect: prompt for SMS permission the first time data arrives.
     ref.listen(homeDashboardProvider, (_, next) {
+      if (!_isCurrentRoute(context)) {
+        return;
+      }
+
       if (next case AsyncData(:final value)) {
         ref
             .read(smsPermissionControllerProvider.notifier)
             .checkAndPromptIfNeeded(
               hasWallets: value.wallets.isNotEmpty,
               navigateToPermission: () {
-                if (context.mounted) context.push(AppRoutes.smsPermissions);
+                if (context.mounted && _isCurrentRoute(context)) {
+                  context.push(AppRoutes.smsPermissions);
+                }
               },
             );
       }
@@ -77,6 +83,10 @@ class _HomeBody extends ConsumerWidget {
       ),
       AsyncError(:final error) => AppErrorView(error: error),
     };
+  }
+
+  bool _isCurrentRoute(BuildContext context) {
+    return ModalRoute.of(context)?.isCurrent ?? false;
   }
 }
 

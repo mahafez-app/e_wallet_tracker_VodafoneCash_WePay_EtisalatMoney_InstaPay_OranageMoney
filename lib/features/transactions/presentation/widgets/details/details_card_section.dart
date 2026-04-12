@@ -10,6 +10,7 @@ import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
+import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
 import '../../providers/transaction_details_controller.dart';
 
@@ -167,7 +168,7 @@ class _WalletChip extends StatelessWidget {
         AppSpacing.sm.horizontalSpace,
         Expanded(
           child: Text(
-            '${transaction.provider.displayName(context)} · ${transaction.phoneNumber}',
+            '${transaction.provider.displayName(context)} · ${transaction.phoneNumber.formattedEgyptianPhoneNumber}',
             style: theme.textTheme.labelMedium?.copyWith(
               fontWeight: FontWeight.w600,
               color: theme.colorScheme.onSurface,

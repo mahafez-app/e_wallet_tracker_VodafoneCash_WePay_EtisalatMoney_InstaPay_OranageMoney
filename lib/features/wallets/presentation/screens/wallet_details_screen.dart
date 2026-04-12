@@ -11,8 +11,9 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/utils/extensions/date_extensions.dart';
+import '../../../../core/utils/extensions/localization_extension.dart';
+import '../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../core/utils/extensions/wallet_provider_ext.dart';
 import '../../../../core/widgets/app_loader.dart';
 import '../../../../core/widgets/balance_card.dart';
@@ -144,7 +145,7 @@ class _RecentTransactionsSection extends StatelessWidget {
                 final contextData = WalletTransactionsRouteData(
                   walletId: details.wallet.id,
                   walletLabel:
-                      '${details.wallet.provider.displayName(context)} · ${details.wallet.phoneNumber}',
+                      '${details.wallet.provider.displayName(context)} · ${details.wallet.phoneNumber.formattedEgyptianPhoneNumber}',
                 );
                 context.push(AppRoutes.transactionsPath(), extra: contextData);
               },

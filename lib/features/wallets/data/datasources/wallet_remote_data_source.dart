@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/data/models/wallet_dto.dart';
 import '../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../core/error/failures.dart';
+import '../../../../core/utils/egyptian_phone_number.dart';
 
 abstract interface class WalletRemoteDataSource {
   Future<List<WalletDto>> addWallets({
@@ -51,17 +52,12 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       throw const UnknownFailure(technicalMessage: 'User is not logged in');
     }
 
-    // Check for existing wallets to prevent duplicates
-    final existingQuery = await _firestore
-        .collection('wallets')
-        .where('ownerUid', isEqualTo: currentUser.uid)
-        .where('phoneNumber', isEqualTo: phoneNumber)
-        .where('provider', whereIn: providers)
-        .get();
-
-    final existingProvidersSet = existingQuery.docs
-        .map((doc) => doc.data()['provider'] as String)
-        .toSet();
+    final normalizedPhoneNumber = EgyptianPhoneNumber.normalize(phoneNumber);
+    final existingProvidersSet = await _findExistingProviders(
+      ownerUid: currentUser.uid,
+      normalizedPhoneNumber: normalizedPhoneNumber,
+      providers: providers,
+    );
 
     final providersToCreate = providers
         .where((p) => !existingProvidersSet.contains(p))
@@ -69,8 +65,9 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
 
     if (providersToCreate.isEmpty) {
       throw const ValidationFailure(
-        code: 'wallet-all-exists',
-        technicalMessage: 'All selected wallets already exist for this number.',
+        code: 'wallet-already-exists',
+        technicalMessage:
+            'A wallet already exists for this owner, provider, and phone number.',
       );
     }
 
@@ -82,7 +79,7 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       final docRef = _firestore.collection('wallets').doc();
       final walletDto = WalletDto(
         id: docRef.id,
-        phoneNumber: phoneNumber,
+        phoneNumber: normalizedPhoneNumber,
         provider: WalletProvider.fromString(providerStr),
         deviceId: deviceId,
         ownerUid: currentUser.uid,
@@ -100,5 +97,27 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
     await batch.commit();
 
     return createdWallets;
+  }
+
+  Future<Set<String>> _findExistingProviders({
+    required String ownerUid,
+    required String normalizedPhoneNumber,
+    required List<String> providers,
+  }) async {
+    final existingQuery = await _firestore
+        .collection('wallets')
+        .where('ownerUid', isEqualTo: ownerUid)
+        .where('provider', whereIn: providers)
+        .get();
+
+    return existingQuery.docs
+        .map(WalletDto.fromFirestore)
+        .where(
+          (wallet) =>
+              EgyptianPhoneNumber.normalize(wallet.phoneNumber) ==
+              normalizedPhoneNumber,
+        )
+        .map((wallet) => wallet.provider.toValue)
+        .toSet();
   }
 }

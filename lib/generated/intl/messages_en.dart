@@ -110,6 +110,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Continue with Google",
     ),
     "createAccount": MessageLookupByLibrary.simpleMessage("Create Account"),
+    "createWalletEmptyDescription": MessageLookupByLibrary.simpleMessage(
+      "Connect a wallet on this device to start tracking balances and transactions automatically.",
+    ),
+    "createWalletEmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "Add your first wallet",
+    ),
     "createWorkspaceAction": MessageLookupByLibrary.simpleMessage(
       "Create Workspace",
     ),
@@ -232,8 +238,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorWalletAllExists": MessageLookupByLibrary.simpleMessage(
       "All selected wallets are already added for this phone number.",
     ),
+    "errorWalletAlreadyExists": MessageLookupByLibrary.simpleMessage(
+      "This wallet is already added.",
+    ),
+    "errorWalletPhoneNumberInvalid": MessageLookupByLibrary.simpleMessage(
+      "Please enter a valid Egyptian mobile number.",
+    ),
     "errorWalletPhoneNumberRequired": MessageLookupByLibrary.simpleMessage(
       "Please enter a phone number",
+    ),
+    "errorWalletProviderMismatch": MessageLookupByLibrary.simpleMessage(
+      "This phone number only supports its matching mobile wallet provider and InstaPay.",
     ),
     "errorWalletProviderRequired": MessageLookupByLibrary.simpleMessage(
       "Please select at least one provider",

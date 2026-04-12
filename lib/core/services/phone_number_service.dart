@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:mobile_number/mobile_number.dart';
 
+import '../utils/egyptian_phone_number.dart';
+
 abstract interface class PhoneNumberService {
   Future<List<String>> getDevicePhoneNumbers();
 }
@@ -27,14 +29,20 @@ class PhoneNumberServiceImpl implements PhoneNumberService {
           .map((simCard) => simCard.number)
           .whereType<String>()
           .where(_hasUsablePhoneNumber)
-          .map(_cleanPhoneNumber)
+          .map(EgyptianPhoneNumber.normalize)
+          .where(EgyptianPhoneNumber.isValidMobileNumber)
           .toSet()
           .toList();
     }
 
     final singleNumber = await MobileNumber.mobileNumber;
     if (_hasUsablePhoneNumber(singleNumber)) {
-      return [_cleanPhoneNumber(singleNumber!)];
+      final normalizedPhoneNumber = EgyptianPhoneNumber.normalize(
+        singleNumber!,
+      );
+      if (EgyptianPhoneNumber.isValidMobileNumber(normalizedPhoneNumber)) {
+        return [normalizedPhoneNumber];
+      }
     }
 
     return [];
@@ -42,15 +50,5 @@ class PhoneNumberServiceImpl implements PhoneNumberService {
 
   bool _hasUsablePhoneNumber(String? value) {
     return value != null && value.isNotEmpty && value != 'null';
-  }
-
-  String _cleanPhoneNumber(String number) {
-    var cleaned = number.replaceAll(RegExp(r'[^\d+]'), '');
-    if (cleaned.startsWith('+20')) {
-      cleaned = '0${cleaned.substring(3)}';
-    } else if (cleaned.startsWith('20') && cleaned.length == 12) {
-      cleaned = '0${cleaned.substring(2)}';
-    }
-    return cleaned;
   }
 }

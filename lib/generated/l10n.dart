@@ -988,6 +988,26 @@ class S {
     );
   }
 
+  /// `أضف أول محفظة`
+  String get createWalletEmptyTitle {
+    return Intl.message(
+      'أضف أول محفظة',
+      name: 'createWalletEmptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اربط محفظة موجودة على هذا الجهاز علشان تبدأ تتابع الرصيد والمعاملات تلقائياً.`
+  String get createWalletEmptyDescription {
+    return Intl.message(
+      'اربط محفظة موجودة على هذا الجهاز علشان تبدأ تتابع الرصيد والمعاملات تلقائياً.',
+      name: 'createWalletEmptyDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `المحافظ`
   String get workspaceWallets {
     return Intl.message(
@@ -1929,11 +1949,41 @@ class S {
     );
   }
 
+  /// `أدخل رقم موبايل مصري صحيح.`
+  String get errorWalletPhoneNumberInvalid {
+    return Intl.message(
+      'أدخل رقم موبايل مصري صحيح.',
+      name: 'errorWalletPhoneNumberInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `اختر شركة واحدة على الأقل`
   String get errorWalletProviderRequired {
     return Intl.message(
       'اختر شركة واحدة على الأقل',
       name: 'errorWalletProviderRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `رقم الموبايل ده يدعم فقط شركة المحفظة المطابقة له وإنستاباي.`
+  String get errorWalletProviderMismatch {
+    return Intl.message(
+      'رقم الموبايل ده يدعم فقط شركة المحفظة المطابقة له وإنستاباي.',
+      name: 'errorWalletProviderMismatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذه المحفظة مضافة بالفعل.`
+  String get errorWalletAlreadyExists {
+    return Intl.message(
+      'هذه المحفظة مضافة بالفعل.',
+      name: 'errorWalletAlreadyExists',
       desc: '',
       args: [],
     );

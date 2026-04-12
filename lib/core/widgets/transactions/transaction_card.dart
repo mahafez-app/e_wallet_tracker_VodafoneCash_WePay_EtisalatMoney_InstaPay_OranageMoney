@@ -10,6 +10,7 @@ import '../../theme/app_spacing.dart';
 import '../../utils/extensions/amount_extension.dart';
 import '../../utils/extensions/date_extensions.dart';
 import '../../utils/extensions/localization_extension.dart';
+import '../../utils/extensions/phone_number_extension.dart';
 import '../../utils/extensions/wallet_provider_ext.dart';
 
 class TransactionCard extends StatelessWidget {
@@ -132,7 +133,7 @@ class TransactionCard extends StatelessWidget {
                     iconBg: theme.colorScheme.onSurface.withAlpha(18),
                     label: l10n.walletLabel,
                     value:
-                        '${transaction.provider.displayName(context)} · ${transaction.phoneNumber}',
+                        '${transaction.provider.displayName(context)} · ${transaction.phoneNumber.formattedEgyptianPhoneNumber}',
                   ),
                   if (counterparty != null) ...[
                     AppSpacing.xs.verticalSpace,

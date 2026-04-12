@@ -8,6 +8,7 @@ import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
+import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
 
 class WorkspaceWalletSelectionCard extends StatelessWidget {
@@ -98,7 +99,7 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
             ),
             AppSpacing.sm.verticalSpace,
             Text(
-              wallet.phoneNumber,
+              wallet.phoneNumber.formattedEgyptianPhoneNumber,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),

@@ -1,14 +1,15 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
-import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
-
 import 'package:go_router/go_router.dart';
-import 'package:wallet_tracker/core/domain/entities/wallet_entity.dart';
 
+import '../../../../core/domain/entities/wallet_entity.dart';
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/wallets/wallet_card.dart';
+import 'home_section_header.dart';
 
 class HomeWalletsSection extends StatelessWidget {
   const HomeWalletsSection({super.key, required this.wallets});
@@ -17,88 +18,85 @@ class HomeWalletsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = context.l10n;
-    final theme = Theme.of(context);
+    final l10n = context.l10n;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          s.yourWallets,
-          style: theme.textTheme.titleLarge?.copyWith(
-            color: theme.colorScheme.onSurface,
-            fontWeight: FontWeight.w700,
-          ),
+        HomeSectionHeader(
+          title: l10n.yourWallets,
+          actionLabel: l10n.addWallet,
+          icon: Icons.add_card_outlined,
+          onPressed: () => context.push(AppRoutes.addWallet),
         ),
         AppSpacing.md.verticalSpace,
-        SizedBox(
-          height: 151.responsiveHeight,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: wallets.length + 1,
-            separatorBuilder: (_, _) => AppSpacing.md.horizontalSpace,
-            itemBuilder: (context, index) {
-              if (index == wallets.length) return const _AddWalletCard();
-              final wallet = wallets[index];
-              return GestureDetector(
-                onTap: () =>
-                    context.push(AppRoutes.walletDetailsPath(wallet.id)),
-                child: WalletCard(
-                  provider: wallet.provider,
-                  phoneNumber: wallet.phoneNumber,
-                  balance: wallet.currentBalance,
-                ),
-              );
-            },
+        if (wallets.isEmpty)
+          const _AddWalletEmptyCard()
+        else
+          SizedBox(
+            height: 151.responsiveHeight,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: wallets.length,
+              separatorBuilder: (_, _) => AppSpacing.md.horizontalSpace,
+              itemBuilder: (context, index) {
+                final wallet = wallets[index];
+                return GestureDetector(
+                  onTap: () =>
+                      context.push(AppRoutes.walletDetailsPath(wallet.id)),
+                  child: WalletCard(
+                    provider: wallet.provider,
+                    phoneNumber: wallet.phoneNumber,
+                    balance: wallet.currentBalance,
+                  ),
+                );
+              },
+            ),
           ),
-        ),
       ],
     );
   }
 }
 
-class _AddWalletCard extends StatelessWidget {
-  const _AddWalletCard();
+class _AddWalletEmptyCard extends StatelessWidget {
+  const _AddWalletEmptyCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final s = context.l10n;
+    final l10n = context.l10n;
     final theme = Theme.of(context);
-    final colors = context.appColors;
-    final primary = theme.colorScheme.primary;
 
     return GestureDetector(
       onTap: () => context.push(AppRoutes.addWallet),
       child: Container(
-        width: 192.responsiveWidth,
-        padding: AppResponsive.symmetricPadding(horizontal: 20, vertical: 33),
+        width: double.infinity,
+        padding: AppResponsive.allPadding(AppSpacing.xl),
         decoration: BoxDecoration(
-          color: colors.addWalletBackground,
-          border: Border.all(
-            width: 2.responsiveWidth,
-            color: colors.addWalletBorderColor,
-          ),
+          color: theme.colorScheme.surfaceContainerHighest.withAlpha(76),
           borderRadius: BorderRadius.circular(24.responsiveRadius),
+          border: Border.all(color: theme.colorScheme.outlineVariant),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 48.responsiveRadius,
-              height: 48.responsiveRadius,
-              decoration: BoxDecoration(
-                color: primary.withAlpha(25), // 0.1
-                shape: BoxShape.circle,
-              ),
-              child: Icon(Icons.add, color: primary),
+            Icon(
+              Icons.account_balance_wallet_outlined,
+              color: theme.colorScheme.primary,
+              size: 28.responsiveRadius,
             ),
             AppSpacing.md.verticalSpace,
             Text(
-              s.addWallet,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleSmall?.copyWith(
+              l10n.createWalletEmptyTitle,
+              style: theme.textTheme.titleMedium?.copyWith(
                 color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            AppSpacing.xs.verticalSpace,
+            Text(
+              l10n.createWalletEmptyDescription,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ],

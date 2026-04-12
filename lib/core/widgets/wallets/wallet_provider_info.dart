@@ -4,6 +4,7 @@ import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart
 import 'package:wallet_tracker/core/domain/enums/wallet_provider.dart';
 import 'package:wallet_tracker/core/theme/app_responsive.dart';
 import 'package:wallet_tracker/core/theme/app_spacing.dart';
+import 'package:wallet_tracker/core/utils/extensions/phone_number_extension.dart';
 import 'package:wallet_tracker/core/utils/extensions/wallet_provider_ext.dart';
 
 class WalletProviderInfo extends StatelessWidget {
@@ -47,7 +48,7 @@ class WalletProviderInfo extends StatelessWidget {
               ),
             ),
             Text(
-              phoneNumber,
+              phoneNumber.formattedEgyptianPhoneNumber,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.outline,
               ),

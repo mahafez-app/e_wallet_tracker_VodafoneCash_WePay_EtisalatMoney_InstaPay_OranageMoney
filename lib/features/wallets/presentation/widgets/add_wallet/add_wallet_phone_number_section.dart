@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/app_constants.dart';
+import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../../core/widgets/app_text_field.dart';
-import '../../providers/add_wallet_controller.dart';
+import '../../providers/add_wallet_state.dart';
 
 class AddWalletPhoneNumberSection extends StatelessWidget {
   const AddWalletPhoneNumberSection({
@@ -84,7 +86,6 @@ class _ManualPhoneNumberFieldState extends State<_ManualPhoneNumberField> {
   @override
   Widget build(BuildContext context) {
     final s = context.l10n;
-    final theme = Theme.of(context);
 
     return AppTextField(
       label: s.phoneNumber,
@@ -92,20 +93,10 @@ class _ManualPhoneNumberFieldState extends State<_ManualPhoneNumberField> {
       hintText: AppConstants.egyptPhoneHint,
       keyboardType: TextInputType.phone,
       onChanged: widget.onChanged,
-      prefixIcon: Padding(
-        padding: AppResponsive.symmetricPadding(horizontal: AppSpacing.md),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              AppConstants.egyptCountryCode,
-              style: theme.textTheme.titleSmall,
-            ),
-            AppSpacing.xs.horizontalSpace,
-            Text(AppConstants.egyptFlag, style: theme.textTheme.titleMedium),
-          ],
-        ),
-      ),
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(11),
+      ],
     );
   }
 }
@@ -190,7 +181,7 @@ class _PhoneNumberOption extends StatelessWidget {
               ),
               AppSpacing.md.horizontalSpace,
               Text(
-                phoneNumber,
+                phoneNumber.formattedEgyptianPhoneNumber,
                 style: isSelected
                     ? theme.textTheme.titleMedium?.copyWith(
                         color: theme.colorScheme.primary,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../theme/app_responsive.dart';
 import '../theme/app_spacing.dart';
@@ -18,6 +19,7 @@ class AppTextField extends StatelessWidget {
     this.initialValue,
     this.fillColor,
     this.labelStyle,
+    this.inputFormatters,
   });
 
   final String label;
@@ -32,6 +34,7 @@ class AppTextField extends StatelessWidget {
   final String? initialValue;
   final Color? fillColor;
   final TextStyle? labelStyle;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +54,7 @@ class AppTextField extends StatelessWidget {
           obscureText: obscureText,
           validator: validator,
           onChanged: onChanged,
+          inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hintText,
             suffixIcon: suffixIcon,

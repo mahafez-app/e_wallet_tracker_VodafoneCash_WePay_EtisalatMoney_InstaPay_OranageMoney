@@ -41,7 +41,7 @@ final class WalletDto extends WalletEntity {
   Map<String, dynamic> toFirestore() {
     return {
       'phoneNumber': phoneNumber,
-      'provider': provider.name,
+      'provider': provider.toValue,
       'deviceId': deviceId,
       'ownerUid': ownerUid,
       'currentBalance': currentBalance,

@@ -32,7 +32,10 @@ extension FailureMessaging on BuildContext {
       StorageFailure() => l10n.errorStorage,
       ValidationFailure(:final code) => switch (code) {
         'wallet-phone-required' => l10n.errorWalletPhoneNumberRequired,
+        'wallet-phone-invalid' => l10n.errorWalletPhoneNumberInvalid,
         'wallet-provider-required' => l10n.errorWalletProviderRequired,
+        'wallet-provider-mismatch' => l10n.errorWalletProviderMismatch,
+        'wallet-already-exists' => l10n.errorWalletAlreadyExists,
         'wallet-all-exists' => l10n.errorWalletAllExists,
         'workspace-name-required' => l10n.errorWorkspaceNameRequired,
         'workspace-wallet-selection-required' =>

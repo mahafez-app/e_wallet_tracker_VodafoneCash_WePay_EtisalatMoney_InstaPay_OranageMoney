@@ -8,6 +8,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
+import 'home_section_header.dart';
 import 'workspaces/home_workspace_card.dart';
 
 class HomeWorkspacesSection extends StatelessWidget {
@@ -18,27 +19,15 @@ class HomeWorkspacesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              l10n.workspaces,
-              style: theme.textTheme.titleLarge?.copyWith(
-                color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            TextButton.icon(
-              onPressed: () => context.push(AppRoutes.addWorkspace),
-              icon: const Icon(Icons.add_business_outlined),
-              label: Text(l10n.addWorkspace),
-            ),
-          ],
+        HomeSectionHeader(
+          title: l10n.workspaces,
+          actionLabel: l10n.addWorkspace,
+          icon: Icons.add_business_outlined,
+          onPressed: () => context.push(AppRoutes.addWorkspace),
         ),
         AppSpacing.md.verticalSpace,
         if (workspaces.isEmpty)

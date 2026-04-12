@@ -12,6 +12,7 @@ import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../../../settings/presentation/providers/sms_permission_controller.dart';
 import '../providers/add_wallet_controller.dart';
+import '../providers/add_wallet_state.dart';
 import '../widgets/add_wallet/add_wallet_content.dart';
 
 class AddWalletScreen extends StatelessWidget {

@@ -6,7 +6,7 @@ import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/widgets/app_button.dart';
 import '../../../../../core/widgets/info_card.dart';
-import '../../providers/add_wallet_controller.dart';
+import '../../providers/add_wallet_state.dart';
 import 'add_wallet_phone_number_section.dart';
 import 'add_wallet_provider_grid.dart';
 

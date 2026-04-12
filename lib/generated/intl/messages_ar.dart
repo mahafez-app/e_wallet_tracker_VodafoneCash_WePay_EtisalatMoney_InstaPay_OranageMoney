@@ -106,6 +106,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "كمل باستخدام جوجل",
     ),
     "createAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
+    "createWalletEmptyDescription": MessageLookupByLibrary.simpleMessage(
+      "اربط محفظة موجودة على هذا الجهاز علشان تبدأ تتابع الرصيد والمعاملات تلقائياً.",
+    ),
+    "createWalletEmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "أضف أول محفظة",
+    ),
     "createWorkspaceAction": MessageLookupByLibrary.simpleMessage(
       "إنشاء مساحة العمل",
     ),
@@ -228,8 +234,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorWalletAllExists": MessageLookupByLibrary.simpleMessage(
       "كل المحافظ المختارة مضافة بالفعل لهذا الرقم.",
     ),
+    "errorWalletAlreadyExists": MessageLookupByLibrary.simpleMessage(
+      "هذه المحفظة مضافة بالفعل.",
+    ),
+    "errorWalletPhoneNumberInvalid": MessageLookupByLibrary.simpleMessage(
+      "أدخل رقم موبايل مصري صحيح.",
+    ),
     "errorWalletPhoneNumberRequired": MessageLookupByLibrary.simpleMessage(
       "أدخل رقم الموبايل",
+    ),
+    "errorWalletProviderMismatch": MessageLookupByLibrary.simpleMessage(
+      "رقم الموبايل ده يدعم فقط شركة المحفظة المطابقة له وإنستاباي.",
     ),
     "errorWalletProviderRequired": MessageLookupByLibrary.simpleMessage(
       "اختر شركة واحدة على الأقل",

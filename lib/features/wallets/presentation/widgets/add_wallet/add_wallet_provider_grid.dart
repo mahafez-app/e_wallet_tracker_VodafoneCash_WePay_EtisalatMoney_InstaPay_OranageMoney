@@ -4,7 +4,7 @@ import '../../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../providers/add_wallet_controller.dart';
+import '../../providers/add_wallet_state.dart';
 
 class AddWalletProviderGrid extends StatelessWidget {
   const AddWalletProviderGrid({
@@ -37,6 +37,7 @@ class AddWalletProviderGrid extends StatelessWidget {
         return _ProviderCard(
           key: ValueKey('_ProviderCard_${provider.name}'),
           provider: provider,
+          isEnabled: state.allowedProviders.contains(provider),
           isSelected: state.selectedProviders.contains(provider),
           onTap: () => onProviderToggled(provider),
         );
@@ -49,11 +50,13 @@ class _ProviderCard extends StatelessWidget {
   const _ProviderCard({
     super.key,
     required this.provider,
+    required this.isEnabled,
     required this.isSelected,
     required this.onTap,
   });
 
   final WalletProvider provider;
+  final bool isEnabled;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -64,17 +67,21 @@ class _ProviderCard extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onTap,
+        onTap: isEnabled ? onTap : null,
         borderRadius: BorderRadius.circular(12.responsiveRadius),
         child: Ink(
           decoration: BoxDecoration(
             color: isSelected
                 ? theme.colorScheme.primaryContainer.withAlpha(30)
+                : !isEnabled
+                ? theme.colorScheme.surfaceContainerLowest
                 : theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(12.responsiveRadius),
             border: Border.all(
               color: isSelected
                   ? theme.colorScheme.primary
+                  : !isEnabled
+                  ? theme.colorScheme.outlineVariant.withAlpha(120)
                   : theme.colorScheme.outlineVariant,
               width: isSelected ? 2.responsiveWidth : 1.responsiveWidth,
             ),
@@ -87,10 +94,17 @@ class _ProviderCard extends StatelessWidget {
                 Container(
                   padding: AppResponsive.allPadding(AppSpacing.xs),
                   decoration: BoxDecoration(
-                    color: provider.brandColor.withAlpha(30),
+                    color: isEnabled
+                        ? provider.brandColor.withAlpha(30)
+                        : theme.colorScheme.surfaceContainerHighest,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(provider.icon, color: provider.brandColor),
+                  child: Icon(
+                    provider.icon,
+                    color: isEnabled
+                        ? provider.brandColor
+                        : theme.colorScheme.outline,
+                  ),
                 ),
                 AppSpacing.xs.verticalSpace,
                 Text(
@@ -100,7 +114,9 @@ class _ProviderCard extends StatelessWidget {
                           color: theme.colorScheme.primary,
                         )
                       : theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface,
+                          color: isEnabled
+                              ? theme.colorScheme.onSurface
+                              : theme.colorScheme.outline,
                         ),
                   textAlign: TextAlign.center,
                   maxLines: 2,

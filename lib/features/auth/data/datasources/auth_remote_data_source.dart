@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../models/user_dto.dart';
 
@@ -45,18 +46,15 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Stream<UserDto?> get authStateChanges {
-    return _firebaseAuth.authStateChanges().asyncExpand((firebaseUser) async* {
+    return _firebaseAuth.authStateChanges().switchMap((firebaseUser) {
       if (firebaseUser == null) {
-        yield null;
-        return;
+        return Stream.value(null);
       }
 
-      // Listen to Firestore document changes for realtime profile updates
-      yield* _firestore
+      return _firestore
           .collection(_usersCollection)
           .doc(firebaseUser.uid)
           .snapshots()
-          // Only emit when the profile has been successfully created
           .where((doc) => doc.exists && doc.data() != null)
           .map(
             (doc) =>

@@ -16,6 +16,7 @@ abstract final class AppRoutes {
   static const String addWallet = '/add-wallet';
   static const String addWorkspace = '/add-workspace';
   static const String workspaceDetails = '/workspace/:workspaceId';
+  static const String workspaceSettings = '/workspace/:workspaceId/settings';
   static const String workspaceWalletSelection =
       '/workspace/:workspaceId/wallets';
   static const String smsPermissions = '/sms-permissions';
@@ -26,6 +27,8 @@ abstract final class AppRoutes {
   static String profilePath(String userId) => '/profile/$userId';
   static String workspaceDetailsPath(String workspaceId) =>
       '/workspace/$workspaceId';
+  static String workspaceSettingsPath(String workspaceId) =>
+      '/workspace/$workspaceId/settings';
   static String workspaceWalletSelectionPath(
     String workspaceId, {
     bool fromCreation = false,

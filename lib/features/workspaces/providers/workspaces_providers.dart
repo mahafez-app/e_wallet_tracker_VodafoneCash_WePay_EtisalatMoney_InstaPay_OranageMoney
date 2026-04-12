@@ -6,7 +6,10 @@ import '../data/repositories/workspace_repository_impl.dart';
 import '../domain/repositories/workspace_repository.dart';
 import '../domain/usecases/add_wallets_to_workspace_usecase.dart';
 import '../domain/usecases/create_workspace_usecase.dart';
+import '../domain/usecases/delete_workspace_usecase.dart';
 import '../domain/usecases/get_workspace_details_usecase.dart';
+import '../domain/usecases/remove_workspace_member_usecase.dart';
+import '../domain/usecases/update_workspace_name_usecase.dart';
 import '../domain/usecases/watch_workspace_details_usecase.dart';
 
 final workspaceRemoteDataSourceProvider = Provider<WorkspaceRemoteDataSource>(
@@ -26,11 +29,25 @@ final createWorkspaceUseCaseProvider = Provider<CreateWorkspaceUseCase>(
   (ref) => CreateWorkspaceUseCase(ref.watch(workspaceRepositoryProvider)),
 );
 
+final updateWorkspaceNameUseCaseProvider = Provider<UpdateWorkspaceNameUseCase>(
+  (ref) => UpdateWorkspaceNameUseCase(ref.watch(workspaceRepositoryProvider)),
+);
+
 final addWalletsToWorkspaceUseCaseProvider =
     Provider<AddWalletsToWorkspaceUseCase>(
       (ref) =>
           AddWalletsToWorkspaceUseCase(ref.watch(workspaceRepositoryProvider)),
     );
+
+final removeWorkspaceMemberUseCaseProvider =
+    Provider<RemoveWorkspaceMemberUseCase>(
+      (ref) =>
+          RemoveWorkspaceMemberUseCase(ref.watch(workspaceRepositoryProvider)),
+    );
+
+final deleteWorkspaceUseCaseProvider = Provider<DeleteWorkspaceUseCase>(
+  (ref) => DeleteWorkspaceUseCase(ref.watch(workspaceRepositoryProvider)),
+);
 
 final getWorkspaceDetailsUseCaseProvider = Provider<GetWorkspaceDetailsUseCase>(
   (ref) => GetWorkspaceDetailsUseCase(ref.watch(workspaceRepositoryProvider)),

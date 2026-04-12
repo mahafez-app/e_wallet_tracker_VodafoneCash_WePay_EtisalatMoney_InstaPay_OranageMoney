@@ -129,6 +129,40 @@
   "workspaceWallets": "المحافظ",
   "workspaceMembers": "الأعضاء",
   "workspaceInviteMemberAction": "دعوة عضو",
+  "workspaceSettingsTitle": "إعدادات المساحة",
+  "workspaceSettingsInfoSection": "معلومات المساحة",
+  "workspaceSettingsInviteByEmailAction": "دعوة عضو",
+  "workspaceSettingsPendingInvitationsSection": "الدعوات المعلقة",
+  "workspaceSettingsPendingInvitationsEmpty": "لا توجد دعوات معلقة لهذه المساحة الآن.",
+  "workspaceSettingsDangerZone": "منطقة الخطر",
+  "workspaceSettingsEditNameTitle": "تعديل اسم المساحة",
+  "workspaceSettingsEditNameDescription": "حدّث الاسم الظاهر للمساحة في كل الشاشات المشتركة.",
+  "workspaceSettingsEditNameAction": "حفظ التعديلات",
+  "workspaceSettingsRemoveMemberAction": "حذف",
+  "workspaceSettingsCancelInvitationAction": "إلغاء",
+  "workspaceSettingsDeleteWorkspaceAction": "حذف مساحة العمل",
+  "workspaceSettingsDeleteWorkspaceDescription": "سيتم حذف جميع البيانات المرتبطة وسجلات الوصول نهائيًا.",
+  "workspaceSettingsNameUpdatedSuccess": "تم تحديث اسم مساحة العمل بنجاح.",
+  "workspaceSettingsMemberRemovedSuccess": "تم حذف العضو بنجاح.",
+  "workspaceSettingsInvitationCancelledSuccess": "تم إلغاء الدعوة بنجاح.",
+  "workspaceSettingsRemoveMemberConfirmTitle": "حذف العضو؟",
+  "workspaceSettingsRemoveMemberConfirmMessage": "سيتم حذف {memberName} من مساحة العمل. يمكنك دعوته مرة أخرى لاحقًا.",
+  "@workspaceSettingsRemoveMemberConfirmMessage": {
+    "placeholders": {
+      "memberName": {}
+    }
+  },
+  "workspaceSettingsCancelInvitationConfirmTitle": "إلغاء الدعوة؟",
+  "workspaceSettingsCancelInvitationConfirmMessage": "سيتم حذف الدعوة المرسلة إلى {email} فورًا.",
+  "@workspaceSettingsCancelInvitationConfirmMessage": {
+    "placeholders": {
+      "email": {}
+    }
+  },
+  "workspaceSettingsDeleteWorkspaceConfirmTitle": "حذف مساحة العمل؟",
+  "workspaceSettingsDeleteWorkspaceConfirmMessage": "سيؤدي هذا إلى حذف مساحة العمل وأذونات الأعضاء وروابط المحافظ والدعوات المعلقة نهائيًا.",
+  "commonDeleteAction": "حذف",
+  "commonCancelAction": "إلغاء",
   "workspaceAddWalletsTitle": "إضافة محافظ",
   "workspaceAddWalletsAction": "إضافة محافظ",
   "workspaceAddWalletsCreateDescription": "اختر المحافظ التي تريد إظهارها في مساحة العمل الآن. يمكنك إضافة المزيد لاحقًا.",
@@ -213,6 +247,8 @@
   "errorWalletAllExists": "جميع المحافظ المختارة مضافة بالفعل لهذا الرقم.",
   "errorWorkspaceNameRequired": "يرجى إدخال اسم مساحة العمل",
   "errorWorkspaceWalletSelectionRequired": "يرجى اختيار محفظة واحدة على الأقل",
+  "errorWorkspaceOwnerRemovalNotAllowed": "لا يمكن حذف مالك مساحة العمل.",
+  "errorWorkspaceMemberNotFound": "هذا العضو غير موجود داخل مساحة العمل الآن.",
   "errorInvitationSelfNotAllowed": "لا يمكنك دعوة نفسك إلى مساحة العمل.",
   "errorInvitationAlreadyPending": "توجد دعوة معلقة بالفعل لهذا البريد الإلكتروني.",
   "errorInvitationUserNotFound": "هذا البريد الإلكتروني غير مرتبط بأي حساب محافظ.",

@@ -54,12 +54,12 @@ class AppButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(label),
+              Text(label, textAlign: TextAlign.center),
               AppSpacing.sm.horizontalSpace,
               trailingIcon!,
             ],
           )
-        : Text(label);
+        : Text(label, textAlign: TextAlign.center);
 
     final ButtonStyle? customStyle =
         foregroundColor != null || backgroundColor != null

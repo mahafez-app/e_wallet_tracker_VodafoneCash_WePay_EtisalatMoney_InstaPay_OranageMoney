@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/enums/invitation_status.dart';
 import '../models/invitation_dto.dart';
+import '../models/workspace_pending_invitation_dto.dart';
 
 typedef WorkspaceContext = ({
   DocumentReference<Map<String, dynamic>> reference,
@@ -78,6 +79,30 @@ class InvitationRemoteQueryService {
     return snapshot.docs.map(InvitationDto.fromFirestore).toList();
   }
 
+  Future<List<WorkspacePendingInvitationDto>> getWorkspacePendingInvitations(
+    String workspaceId,
+  ) async {
+    final currentUid = this.currentUid;
+    final workspace = await getWorkspaceContext(workspaceId);
+    _ensureWorkspaceOwner(workspace.data, currentUid);
+
+    final snapshot = await _invitesCollection
+        .where('workspaceId', isEqualTo: workspaceId)
+        .where('status', isEqualTo: InvitationStatus.pending.name)
+        .get();
+
+    if (snapshot.docs.isEmpty) {
+      return const <WorkspacePendingInvitationDto>[];
+    }
+
+    final futures = snapshot.docs.map(_mapWorkspacePendingInvitation);
+    final invitations = await Future.wait(futures);
+    invitations.sort(
+      (left, right) => right.createdAt.compareTo(left.createdAt),
+    );
+    return invitations;
+  }
+
   Future<WorkspaceContext> getWorkspaceContext(String workspaceId) async {
     final document = await _workspacesCollection.doc(workspaceId).get();
     final data = document.data();
@@ -149,5 +174,44 @@ class InvitationRemoteQueryService {
         .doc(userId)
         .get();
     return memberDoc.exists;
+  }
+
+  Future<WorkspacePendingInvitationDto> _mapWorkspacePendingInvitation(
+    DocumentSnapshot<Map<String, dynamic>> document,
+  ) async {
+    final invitation = InvitationDto.fromFirestore(document);
+    final user = await getUserById(invitation.invitedUserId);
+    final email = (user?.data['email'] as String?)?.trim();
+
+    return WorkspacePendingInvitationDto(
+      id: invitation.id,
+      workspaceId: invitation.workspaceId,
+      email: email != null && email.isNotEmpty
+          ? email
+          : invitation.invitedUserId,
+      createdAt: invitation.createdAt,
+    );
+  }
+
+  Future<UserContext?> getUserById(String uid) async {
+    final document = await _usersCollection.doc(uid).get();
+    final data = document.data();
+    if (!document.exists || data == null) {
+      return null;
+    }
+
+    return (uid: document.id, data: data);
+  }
+
+  void _ensureWorkspaceOwner(
+    Map<String, dynamic> workspaceData,
+    String currentUid,
+  ) {
+    final ownerUid = workspaceData['ownerUid'] as String? ?? '';
+    if (ownerUid != currentUid) {
+      throw const PermissionFailure(
+        technicalMessage: 'Only the workspace owner can manage invitations.',
+      );
+    }
   }
 }

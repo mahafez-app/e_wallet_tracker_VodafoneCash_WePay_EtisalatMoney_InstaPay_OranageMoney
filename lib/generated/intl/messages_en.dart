@@ -64,10 +64,16 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m17(count) =>
       "${Intl.plural(count, zero: 'No members', one: '1 member', other: '${count} members')}";
 
-  static String m18(ownedCount, linkedCount) =>
+  static String m18(email) =>
+      "The invitation sent to ${email} will be removed immediately.";
+
+  static String m19(memberName) =>
+      "You will remove ${memberName} from this workspace. They can be invited again later.";
+
+  static String m20(ownedCount, linkedCount) =>
       "You own ${ownedCount} wallets, and ${linkedCount} are already linked to this workspace.";
 
-  static String m19(count) =>
+  static String m21(count) =>
       "${Intl.plural(count, zero: 'No wallets', one: '1 wallet', other: '${count} wallets')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -95,6 +101,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "chooseProvider": MessageLookupByLibrary.simpleMessage(
       "Choose Service Provider",
     ),
+    "commonCancelAction": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "commonDeleteAction": MessageLookupByLibrary.simpleMessage("Delete"),
     "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
     "confirmName": MessageLookupByLibrary.simpleMessage("Confirm Name"),
     "confirmNameMessage": MessageLookupByLibrary.simpleMessage(
@@ -232,9 +240,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorWalletProviderRequired": MessageLookupByLibrary.simpleMessage(
       "Please select at least one provider",
     ),
+    "errorWorkspaceMemberNotFound": MessageLookupByLibrary.simpleMessage(
+      "This member is no longer available in the workspace.",
+    ),
     "errorWorkspaceNameRequired": MessageLookupByLibrary.simpleMessage(
       "Please enter a workspace name",
     ),
+    "errorWorkspaceOwnerRemovalNotAllowed":
+        MessageLookupByLibrary.simpleMessage(
+          "The workspace owner cannot be removed.",
+        ),
     "errorWorkspaceWalletSelectionRequired":
         MessageLookupByLibrary.simpleMessage(
           "Please select at least one wallet",
@@ -510,6 +525,65 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "workspaceOwner": MessageLookupByLibrary.simpleMessage("Owner"),
     "workspaceOwnerBadge": MessageLookupByLibrary.simpleMessage("Owner"),
+    "workspaceSettingsCancelInvitationAction":
+        MessageLookupByLibrary.simpleMessage("Cancel"),
+    "workspaceSettingsCancelInvitationConfirmMessage": m18,
+    "workspaceSettingsCancelInvitationConfirmTitle":
+        MessageLookupByLibrary.simpleMessage("Cancel invitation?"),
+    "workspaceSettingsDangerZone": MessageLookupByLibrary.simpleMessage(
+      "Danger Zone",
+    ),
+    "workspaceSettingsDeleteWorkspaceAction":
+        MessageLookupByLibrary.simpleMessage("Delete workspace"),
+    "workspaceSettingsDeleteWorkspaceConfirmMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "This will permanently delete the workspace, its member access, wallet links, and pending invitations.",
+        ),
+    "workspaceSettingsDeleteWorkspaceConfirmTitle":
+        MessageLookupByLibrary.simpleMessage("Delete workspace?"),
+    "workspaceSettingsDeleteWorkspaceDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "All linked data and access records will be removed permanently.",
+        ),
+    "workspaceSettingsEditNameAction": MessageLookupByLibrary.simpleMessage(
+      "Save changes",
+    ),
+    "workspaceSettingsEditNameDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Update the visible name used across the workspace and shared views.",
+        ),
+    "workspaceSettingsEditNameTitle": MessageLookupByLibrary.simpleMessage(
+      "Edit workspace name",
+    ),
+    "workspaceSettingsInfoSection": MessageLookupByLibrary.simpleMessage(
+      "Workspace Info",
+    ),
+    "workspaceSettingsInvitationCancelledSuccess":
+        MessageLookupByLibrary.simpleMessage(
+          "Invitation cancelled successfully.",
+        ),
+    "workspaceSettingsInviteByEmailAction":
+        MessageLookupByLibrary.simpleMessage("Invite member"),
+    "workspaceSettingsMemberRemovedSuccess":
+        MessageLookupByLibrary.simpleMessage("Member removed successfully."),
+    "workspaceSettingsNameUpdatedSuccess": MessageLookupByLibrary.simpleMessage(
+      "Workspace name updated successfully.",
+    ),
+    "workspaceSettingsPendingInvitationsEmpty":
+        MessageLookupByLibrary.simpleMessage(
+          "There are no pending invitations for this workspace right now.",
+        ),
+    "workspaceSettingsPendingInvitationsSection":
+        MessageLookupByLibrary.simpleMessage("Pending Invitations"),
+    "workspaceSettingsRemoveMemberAction": MessageLookupByLibrary.simpleMessage(
+      "Remove",
+    ),
+    "workspaceSettingsRemoveMemberConfirmMessage": m19,
+    "workspaceSettingsRemoveMemberConfirmTitle":
+        MessageLookupByLibrary.simpleMessage("Remove member?"),
+    "workspaceSettingsTitle": MessageLookupByLibrary.simpleMessage(
+      "Workspace Settings",
+    ),
     "workspaceSkipWalletsAction": MessageLookupByLibrary.simpleMessage(
       "Skip for now",
     ),
@@ -520,9 +594,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Available",
     ),
     "workspaceWalletSelected": MessageLookupByLibrary.simpleMessage("Selected"),
-    "workspaceWalletSelectionSummary": m18,
+    "workspaceWalletSelectionSummary": m20,
     "workspaceWallets": MessageLookupByLibrary.simpleMessage("Wallets"),
-    "workspaceWalletsCount": m19,
+    "workspaceWalletsCount": m21,
     "workspaceWalletsEmptyDescription": MessageLookupByLibrary.simpleMessage(
       "This workspace will show shared wallets here once they are linked.",
     ),

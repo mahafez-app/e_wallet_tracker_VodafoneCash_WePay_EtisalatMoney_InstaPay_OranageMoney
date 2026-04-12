@@ -17,6 +17,7 @@ import '../../features/wallets/presentation/screens/wallet_details_screen.dart';
 import '../../features/workspaces/presentation/screens/create_workspace_screen.dart';
 import '../../features/workspaces/presentation/screens/select_workspace_wallets_screen.dart';
 import '../../features/workspaces/presentation/screens/workspace_details_screen.dart';
+import '../../features/workspaces/presentation/screens/workspace_settings_screen.dart';
 import '../widgets/not_found_screen.dart';
 import 'app_routes.dart';
 
@@ -148,6 +149,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final workspaceId = state.pathParameters['workspaceId']!;
           return WorkspaceDetailsScreen(workspaceId: workspaceId);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.workspaceSettings,
+        builder: (context, state) {
+          final workspaceId = state.pathParameters['workspaceId']!;
+          return WorkspaceSettingsScreen(workspaceId: workspaceId);
         },
       ),
       GoRoute(

@@ -78,6 +78,16 @@ class InvitationRemoteCommandService {
     await batch.commit();
   }
 
+  Future<void> cancelInvitation(String invitationId) async {
+    final ownerUid = _currentUid;
+    final invitation = await _queryService.getPendingInvitation(invitationId);
+    final workspace = await _queryService.getWorkspaceContext(
+      invitation.workspaceId,
+    );
+    _ensureWorkspaceOwner(workspace.data, ownerUid);
+    await _invitesCollection.doc(invitationId).delete();
+  }
+
   String _normalizeEmail(String email) => email.trim().toLowerCase();
 
   void _ensureWorkspaceOwner(

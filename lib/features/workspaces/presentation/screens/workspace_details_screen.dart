@@ -30,10 +30,9 @@ class WorkspaceDetailsScreen extends StatelessWidget {
         title: _WorkspaceDetailsTitle(workspaceId: workspaceId),
         actions: [
           IconButton(
-            onPressed: () => context.push(
-              AppRoutes.workspaceWalletSelectionPath(workspaceId),
-            ),
-            icon: const Icon(Icons.account_balance_wallet_outlined),
+            onPressed: () =>
+                context.push(AppRoutes.workspaceSettingsPath(workspaceId)),
+            icon: const Icon(Icons.settings_outlined),
           ),
         ],
       ),

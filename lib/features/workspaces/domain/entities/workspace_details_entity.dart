@@ -35,6 +35,20 @@ class WorkspaceDetailsEntity extends Equatable {
     return workspace.latestActivityAt;
   }
 
+  WorkspaceDetailsEntity copyWith({
+    WorkspaceEntity? workspace,
+    List<WalletEntity>? wallets,
+    List<WorkspaceMemberEntity>? members,
+    List<TransactionEntity>? recentTransactions,
+  }) {
+    return WorkspaceDetailsEntity(
+      workspace: workspace ?? this.workspace,
+      wallets: wallets ?? this.wallets,
+      members: members ?? this.members,
+      recentTransactions: recentTransactions ?? this.recentTransactions,
+    );
+  }
+
   @override
   List<Object?> get props => [workspace, wallets, members, recentTransactions];
 }

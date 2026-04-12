@@ -1003,6 +1003,241 @@ class S {
     );
   }
 
+  /// `إعدادات المساحة`
+  String get workspaceSettingsTitle {
+    return Intl.message(
+      'إعدادات المساحة',
+      name: 'workspaceSettingsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `معلومات المساحة`
+  String get workspaceSettingsInfoSection {
+    return Intl.message(
+      'معلومات المساحة',
+      name: 'workspaceSettingsInfoSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `دعوة عضو`
+  String get workspaceSettingsInviteByEmailAction {
+    return Intl.message(
+      'دعوة عضو',
+      name: 'workspaceSettingsInviteByEmailAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الدعوات المعلقة`
+  String get workspaceSettingsPendingInvitationsSection {
+    return Intl.message(
+      'الدعوات المعلقة',
+      name: 'workspaceSettingsPendingInvitationsSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد دعوات معلقة لهذه المساحة الآن.`
+  String get workspaceSettingsPendingInvitationsEmpty {
+    return Intl.message(
+      'لا توجد دعوات معلقة لهذه المساحة الآن.',
+      name: 'workspaceSettingsPendingInvitationsEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `منطقة الخطر`
+  String get workspaceSettingsDangerZone {
+    return Intl.message(
+      'منطقة الخطر',
+      name: 'workspaceSettingsDangerZone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تعديل اسم المساحة`
+  String get workspaceSettingsEditNameTitle {
+    return Intl.message(
+      'تعديل اسم المساحة',
+      name: 'workspaceSettingsEditNameTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حدّث الاسم الظاهر للمساحة في كل الشاشات المشتركة.`
+  String get workspaceSettingsEditNameDescription {
+    return Intl.message(
+      'حدّث الاسم الظاهر للمساحة في كل الشاشات المشتركة.',
+      name: 'workspaceSettingsEditNameDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حفظ التعديلات`
+  String get workspaceSettingsEditNameAction {
+    return Intl.message(
+      'حفظ التعديلات',
+      name: 'workspaceSettingsEditNameAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف`
+  String get workspaceSettingsRemoveMemberAction {
+    return Intl.message(
+      'حذف',
+      name: 'workspaceSettingsRemoveMemberAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إلغاء`
+  String get workspaceSettingsCancelInvitationAction {
+    return Intl.message(
+      'إلغاء',
+      name: 'workspaceSettingsCancelInvitationAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف مساحة العمل`
+  String get workspaceSettingsDeleteWorkspaceAction {
+    return Intl.message(
+      'حذف مساحة العمل',
+      name: 'workspaceSettingsDeleteWorkspaceAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم حذف جميع البيانات المرتبطة وسجلات الوصول نهائيًا.`
+  String get workspaceSettingsDeleteWorkspaceDescription {
+    return Intl.message(
+      'سيتم حذف جميع البيانات المرتبطة وسجلات الوصول نهائيًا.',
+      name: 'workspaceSettingsDeleteWorkspaceDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم تحديث اسم مساحة العمل بنجاح.`
+  String get workspaceSettingsNameUpdatedSuccess {
+    return Intl.message(
+      'تم تحديث اسم مساحة العمل بنجاح.',
+      name: 'workspaceSettingsNameUpdatedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم حذف العضو بنجاح.`
+  String get workspaceSettingsMemberRemovedSuccess {
+    return Intl.message(
+      'تم حذف العضو بنجاح.',
+      name: 'workspaceSettingsMemberRemovedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم إلغاء الدعوة بنجاح.`
+  String get workspaceSettingsInvitationCancelledSuccess {
+    return Intl.message(
+      'تم إلغاء الدعوة بنجاح.',
+      name: 'workspaceSettingsInvitationCancelledSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف العضو؟`
+  String get workspaceSettingsRemoveMemberConfirmTitle {
+    return Intl.message(
+      'حذف العضو؟',
+      name: 'workspaceSettingsRemoveMemberConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم حذف {memberName} من مساحة العمل. يمكنك دعوته مرة أخرى لاحقًا.`
+  String workspaceSettingsRemoveMemberConfirmMessage(Object memberName) {
+    return Intl.message(
+      'سيتم حذف $memberName من مساحة العمل. يمكنك دعوته مرة أخرى لاحقًا.',
+      name: 'workspaceSettingsRemoveMemberConfirmMessage',
+      desc: '',
+      args: [memberName],
+    );
+  }
+
+  /// `إلغاء الدعوة؟`
+  String get workspaceSettingsCancelInvitationConfirmTitle {
+    return Intl.message(
+      'إلغاء الدعوة؟',
+      name: 'workspaceSettingsCancelInvitationConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم حذف الدعوة المرسلة إلى {email} فورًا.`
+  String workspaceSettingsCancelInvitationConfirmMessage(Object email) {
+    return Intl.message(
+      'سيتم حذف الدعوة المرسلة إلى $email فورًا.',
+      name: 'workspaceSettingsCancelInvitationConfirmMessage',
+      desc: '',
+      args: [email],
+    );
+  }
+
+  /// `حذف مساحة العمل؟`
+  String get workspaceSettingsDeleteWorkspaceConfirmTitle {
+    return Intl.message(
+      'حذف مساحة العمل؟',
+      name: 'workspaceSettingsDeleteWorkspaceConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيؤدي هذا إلى حذف مساحة العمل وأذونات الأعضاء وروابط المحافظ والدعوات المعلقة نهائيًا.`
+  String get workspaceSettingsDeleteWorkspaceConfirmMessage {
+    return Intl.message(
+      'سيؤدي هذا إلى حذف مساحة العمل وأذونات الأعضاء وروابط المحافظ والدعوات المعلقة نهائيًا.',
+      name: 'workspaceSettingsDeleteWorkspaceConfirmMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف`
+  String get commonDeleteAction {
+    return Intl.message('حذف', name: 'commonDeleteAction', desc: '', args: []);
+  }
+
+  /// `إلغاء`
+  String get commonCancelAction {
+    return Intl.message(
+      'إلغاء',
+      name: 'commonCancelAction',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `إضافة محافظ`
   String get workspaceAddWalletsTitle {
     return Intl.message(
@@ -1474,6 +1709,26 @@ class S {
     return Intl.message(
       'يرجى اختيار محفظة واحدة على الأقل',
       name: 'errorWorkspaceWalletSelectionRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا يمكن حذف مالك مساحة العمل.`
+  String get errorWorkspaceOwnerRemovalNotAllowed {
+    return Intl.message(
+      'لا يمكن حذف مالك مساحة العمل.',
+      name: 'errorWorkspaceOwnerRemovalNotAllowed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذا العضو غير موجود داخل مساحة العمل الآن.`
+  String get errorWorkspaceMemberNotFound {
+    return Intl.message(
+      'هذا العضو غير موجود داخل مساحة العمل الآن.',
+      name: 'errorWorkspaceMemberNotFound',
       desc: '',
       args: [],
     );

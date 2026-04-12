@@ -22,6 +22,20 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
   }
 
   @override
+  Future<Result<WorkspaceEntity>> updateWorkspaceName({
+    required String workspaceId,
+    required String name,
+  }) {
+    return executeAndHandleErrors(() async {
+      final workspace = await _remote.updateWorkspaceName(
+        workspaceId: workspaceId,
+        name: name,
+      );
+      return workspace.toEntity();
+    }, tag: 'WorkspaceRepositoryImpl.updateWorkspaceName');
+  }
+
+  @override
   Future<Result<int>> addWalletsToWorkspace({
     required String workspaceId,
     required List<String> walletIds,
@@ -32,6 +46,28 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
         walletIds: walletIds,
       ),
       tag: 'WorkspaceRepositoryImpl.addWalletsToWorkspace',
+    );
+  }
+
+  @override
+  Future<Result<void>> removeWorkspaceMember({
+    required String workspaceId,
+    required String memberUid,
+  }) {
+    return executeAndHandleErrors(
+      () => _remote.removeWorkspaceMember(
+        workspaceId: workspaceId,
+        memberUid: memberUid,
+      ),
+      tag: 'WorkspaceRepositoryImpl.removeWorkspaceMember',
+    );
+  }
+
+  @override
+  Future<Result<void>> deleteWorkspace({required String workspaceId}) {
+    return executeAndHandleErrors(
+      () => _remote.deleteWorkspace(workspaceId: workspaceId),
+      tag: 'WorkspaceRepositoryImpl.deleteWorkspace',
     );
   }
 

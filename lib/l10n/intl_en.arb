@@ -129,6 +129,40 @@
   "workspaceWallets": "Wallets",
   "workspaceMembers": "Members",
   "workspaceInviteMemberAction": "Invite member",
+  "workspaceSettingsTitle": "Workspace Settings",
+  "workspaceSettingsInfoSection": "Workspace Info",
+  "workspaceSettingsInviteByEmailAction": "Invite member",
+  "workspaceSettingsPendingInvitationsSection": "Pending Invitations",
+  "workspaceSettingsPendingInvitationsEmpty": "There are no pending invitations for this workspace right now.",
+  "workspaceSettingsDangerZone": "Danger Zone",
+  "workspaceSettingsEditNameTitle": "Edit workspace name",
+  "workspaceSettingsEditNameDescription": "Update the visible name used across the workspace and shared views.",
+  "workspaceSettingsEditNameAction": "Save changes",
+  "workspaceSettingsRemoveMemberAction": "Remove",
+  "workspaceSettingsCancelInvitationAction": "Cancel",
+  "workspaceSettingsDeleteWorkspaceAction": "Delete workspace",
+  "workspaceSettingsDeleteWorkspaceDescription": "All linked data and access records will be removed permanently.",
+  "workspaceSettingsNameUpdatedSuccess": "Workspace name updated successfully.",
+  "workspaceSettingsMemberRemovedSuccess": "Member removed successfully.",
+  "workspaceSettingsInvitationCancelledSuccess": "Invitation cancelled successfully.",
+  "workspaceSettingsRemoveMemberConfirmTitle": "Remove member?",
+  "workspaceSettingsRemoveMemberConfirmMessage": "You will remove {memberName} from this workspace. They can be invited again later.",
+  "@workspaceSettingsRemoveMemberConfirmMessage": {
+    "placeholders": {
+      "memberName": {}
+    }
+  },
+  "workspaceSettingsCancelInvitationConfirmTitle": "Cancel invitation?",
+  "workspaceSettingsCancelInvitationConfirmMessage": "The invitation sent to {email} will be removed immediately.",
+  "@workspaceSettingsCancelInvitationConfirmMessage": {
+    "placeholders": {
+      "email": {}
+    }
+  },
+  "workspaceSettingsDeleteWorkspaceConfirmTitle": "Delete workspace?",
+  "workspaceSettingsDeleteWorkspaceConfirmMessage": "This will permanently delete the workspace, its member access, wallet links, and pending invitations.",
+  "commonDeleteAction": "Delete",
+  "commonCancelAction": "Cancel",
   "workspaceAddWalletsTitle": "Add Wallets",
   "workspaceAddWalletsAction": "Add Wallets",
   "workspaceAddWalletsCreateDescription": "Choose which of your wallets should appear in this workspace now. You can add more later.",
@@ -213,6 +247,8 @@
   "errorWalletAllExists": "All selected wallets are already added for this phone number.",
   "errorWorkspaceNameRequired": "Please enter a workspace name",
   "errorWorkspaceWalletSelectionRequired": "Please select at least one wallet",
+  "errorWorkspaceOwnerRemovalNotAllowed": "The workspace owner cannot be removed.",
+  "errorWorkspaceMemberNotFound": "This member is no longer available in the workspace.",
   "errorInvitationSelfNotAllowed": "You cannot invite yourself to this workspace.",
   "errorInvitationAlreadyPending": "A pending invitation already exists for this email.",
   "errorInvitationUserNotFound": "This email is not linked to any Mahafez account.",

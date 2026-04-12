@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/invitation_dto.dart';
+import '../models/workspace_pending_invitation_dto.dart';
 import 'invitation_remote_command_service.dart';
 import 'invitation_remote_query_service.dart';
 
@@ -13,11 +14,17 @@ abstract interface class InvitationsRemoteDataSource {
 
   Future<List<InvitationDto>> getPendingInvitations();
 
+  Future<List<WorkspacePendingInvitationDto>> getWorkspacePendingInvitations(
+    String workspaceId,
+  );
+
   Future<List<InvitationDto>> getRecentRespondedInvitations();
 
   Future<void> acceptInvitation(String invitationId);
 
   Future<void> declineInvitation(String invitationId);
+
+  Future<void> cancelInvitation(String invitationId);
 }
 
 class InvitationsRemoteDataSourceImpl implements InvitationsRemoteDataSource {
@@ -64,6 +71,13 @@ class InvitationsRemoteDataSourceImpl implements InvitationsRemoteDataSource {
   }
 
   @override
+  Future<List<WorkspacePendingInvitationDto>> getWorkspacePendingInvitations(
+    String workspaceId,
+  ) {
+    return _queryService.getWorkspacePendingInvitations(workspaceId);
+  }
+
+  @override
   Future<List<InvitationDto>> getRecentRespondedInvitations() {
     return _queryService.getRecentRespondedInvitations();
   }
@@ -82,5 +96,10 @@ class InvitationsRemoteDataSourceImpl implements InvitationsRemoteDataSource {
       invitationId: invitationId,
       accept: false,
     );
+  }
+
+  @override
+  Future<void> cancelInvitation(String invitationId) {
+    return _commandService.cancelInvitation(invitationId);
   }
 }

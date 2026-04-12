@@ -1,6 +1,7 @@
 import '../../../../core/error/result.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/invitation_entity.dart';
+import '../../domain/entities/workspace_pending_invitation_entity.dart';
 import '../../domain/repositories/invitations_repository.dart';
 import '../datasources/invitations_remote_data_source.dart';
 
@@ -30,6 +31,17 @@ class InvitationsRepositoryImpl implements InvitationsRepository {
   }
 
   @override
+  Future<Result<List<WorkspacePendingInvitationEntity>>>
+  getWorkspacePendingInvitations(String workspaceId) {
+    return executeAndHandleErrors(() async {
+      final invitations = await _remote.getWorkspacePendingInvitations(
+        workspaceId,
+      );
+      return invitations.map((invitation) => invitation.toEntity()).toList();
+    }, tag: 'InvitationsRepositoryImpl.getWorkspacePendingInvitations');
+  }
+
+  @override
   Future<Result<List<InvitationEntity>>> getRecentRespondedInvitations() {
     return executeAndHandleErrors(() async {
       final invitations = await _remote.getRecentRespondedInvitations();
@@ -50,6 +62,14 @@ class InvitationsRepositoryImpl implements InvitationsRepository {
     return executeAndHandleErrors(
       () => _remote.declineInvitation(invitationId),
       tag: 'InvitationsRepositoryImpl.declineInvitation',
+    );
+  }
+
+  @override
+  Future<Result<void>> cancelInvitation(String invitationId) {
+    return executeAndHandleErrors(
+      () => _remote.cancelInvitation(invitationId),
+      tag: 'InvitationsRepositoryImpl.cancelInvitation',
     );
   }
 }

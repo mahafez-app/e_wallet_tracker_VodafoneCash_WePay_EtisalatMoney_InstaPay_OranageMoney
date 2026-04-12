@@ -33,8 +33,6 @@ final class WorkspaceDto extends WorkspaceEntity {
       'name': name,
       'ownerUid': ownerUid,
       'createdAt': Timestamp.fromDate(createdAt),
-      'totalReceived': totalReceived,
-      'totalSent': totalSent,
       'walletsCount': walletsCount,
       if (latestActivityAt != null)
         'latestActivityAt': Timestamp.fromDate(latestActivityAt!),

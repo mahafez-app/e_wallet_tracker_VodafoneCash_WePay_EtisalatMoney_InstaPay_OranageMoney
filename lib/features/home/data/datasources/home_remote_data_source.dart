@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:wallet_tracker/core/data/models/wallet_dto.dart';
 
 import '../../../../core/data/models/workspace_dto.dart';
@@ -7,6 +8,7 @@ import '../../../../core/data/models/workspace_dto.dart';
 abstract interface class HomeRemoteDataSource {
   Stream<List<WalletDto>> watchUserWallets();
   Stream<List<WorkspaceDto>> watchUserWorkspaces();
+  Stream<List<WalletDto>> watchWorkspaceWallets(String workspaceId);
   Stream<int> watchPendingInvitationsCount();
 }
 
@@ -44,28 +46,58 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         .collectionGroup('members')
         .where('uid', isEqualTo: _uid)
         .snapshots()
-        .asyncMap((memberSnapshot) async {
+        .switchMap((memberSnapshot) {
           final workspaceIds = memberSnapshot.docs
               .map((doc) => doc.reference.parent.parent?.id)
               .whereType<String>()
               .toSet()
               .toList();
 
-          if (workspaceIds.isEmpty) return <WorkspaceDto>[];
+          if (workspaceIds.isEmpty) {
+            return Stream.value(const <WorkspaceDto>[]);
+          }
 
-          final futures = workspaceIds.map(
-            (id) => _firestore
-                .collection('workspaces')
-                .where(FieldPath.documentId, isEqualTo: id)
-                .get(),
+          final workspaceStreams = workspaceIds.map(
+            (id) => _firestore.collection('workspaces').doc(id).snapshots(),
           );
 
-          final snapshots = await Future.wait(futures);
+          return Rx.combineLatestList(workspaceStreams).map((documents) {
+            return documents
+                .where((document) => document.exists)
+                .map(WorkspaceDto.fromFirestore)
+                .toList();
+          });
+        });
+  }
 
-          return snapshots
-              .expand((s) => s.docs)
-              .map((doc) => WorkspaceDto.fromFirestore(doc))
+  @override
+  Stream<List<WalletDto>> watchWorkspaceWallets(String workspaceId) {
+    return _firestore
+        .collection('workspaces')
+        .doc(workspaceId)
+        .collection('wallets')
+        .orderBy('addedAt')
+        .snapshots()
+        .switchMap((snapshot) {
+          final walletIds = snapshot.docs
+              .map((doc) => doc.data()['walletId'] as String? ?? doc.id)
               .toList();
+
+          if (walletIds.isEmpty) {
+            return Stream.value(const <WalletDto>[]);
+          }
+
+          final walletStreams = walletIds.map(
+            (walletId) =>
+                _firestore.collection('wallets').doc(walletId).snapshots(),
+          );
+
+          return Rx.combineLatestList(walletStreams).map((documents) {
+            return documents
+                .where((document) => document.exists)
+                .map(WalletDto.fromFirestore)
+                .toList();
+          });
         });
   }
 

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
+import '../../../../core/utils/extensions/name_extension.dart';
 import '../../../auth/providers/auth_providers.dart';
 
 class HomeHeaderWidget extends ConsumerWidget {
@@ -32,7 +33,7 @@ class HomeHeaderWidget extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _UserAvatarAndName(userName: user?.name),
+          _UserAvatarAndName(userName: (user?.name).firstNameOrNull),
           _HeaderActions(
             invitationsCount: invitationsCount,
             onOpenInvitations: onOpenInvitations,

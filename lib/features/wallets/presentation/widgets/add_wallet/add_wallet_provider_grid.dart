@@ -92,23 +92,11 @@ class _ProviderCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  padding: AppResponsive.allPadding(AppSpacing.xs),
-                  decoration: BoxDecoration(
-                    color: isEnabled
-                        ? provider.brandColor.withAlpha(30)
-                        : theme.colorScheme.surfaceContainerHighest,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Opacity(
-                    opacity: isEnabled ? 1 : 0.45,
-                    child: WalletProviderIcon(
-                      provider: provider,
-                      size: 22.responsiveRadius,
-                      fallbackColor: isEnabled
-                          ? provider.brandColor
-                          : theme.colorScheme.outline,
-                    ),
+                Opacity(
+                  opacity: isEnabled ? 1 : 0.45,
+                  child: WalletProviderIcon(
+                    provider: provider,
+                    size: 40.responsiveRadius,
                   ),
                 ),
                 AppSpacing.xs.verticalSpace,

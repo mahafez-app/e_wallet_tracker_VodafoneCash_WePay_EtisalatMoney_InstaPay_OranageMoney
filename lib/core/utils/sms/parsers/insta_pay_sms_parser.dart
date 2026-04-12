@@ -13,6 +13,7 @@ class InstaPaySmsParser extends SmsParser {
     'InstaPay',
     'Insta-Pay',
     'BanK-AlAhly',
+    'BankAlAhly',
     'NBE',
     'CIB',
     'Banque-Misr',

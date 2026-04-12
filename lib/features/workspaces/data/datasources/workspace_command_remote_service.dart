@@ -47,8 +47,6 @@ class WorkspaceCommandRemoteService {
       name: trimmedName,
       ownerUid: currentUser.uid,
       walletsCount: 0,
-      totalReceived: 0,
-      totalSent: 0,
       createdAt: now,
     );
 
@@ -121,7 +119,7 @@ class WorkspaceCommandRemoteService {
       await batch.commit();
     }
 
-    await _syncWorkspaceAggregate(workspaceId);
+    await _syncWorkspaceMetadata(workspaceId);
     return walletIdsToLink.length;
   }
 
@@ -219,7 +217,7 @@ class WorkspaceCommandRemoteService {
     }
   }
 
-  Future<void> _syncWorkspaceAggregate(String workspaceId) async {
+  Future<void> _syncWorkspaceMetadata(String workspaceId) async {
     final linkedWallets = await _queryService.getWorkspaceWallets(workspaceId);
 
     final latestActivityAt = linkedWallets.isEmpty
@@ -232,14 +230,6 @@ class WorkspaceCommandRemoteService {
 
     await _workspacesCollection.doc(workspaceId).update({
       'walletsCount': linkedWallets.length,
-      'totalReceived': linkedWallets.fold<double>(
-        0,
-        (total, wallet) => total + wallet.totalReceived,
-      ),
-      'totalSent': linkedWallets.fold<double>(
-        0,
-        (total, wallet) => total + wallet.totalSent,
-      ),
       'latestActivityAt': latestActivityAt == null
           ? null
           : Timestamp.fromDate(latestActivityAt),

@@ -9,7 +9,7 @@ class OrangeMoneySmsParser extends SmsParser {
   WalletProvider get provider => WalletProvider.orangeMoney;
 
   @override
-  List<String> get senderIds => ['Orange-Cash', 'OrangeCash', 'Orange-Money'];
+  List<String> get senderIds => ['Orange-Cash', 'OrangeCash', 'Orange-Money', 'OrangeMoney'];
 
   @override
   List<RegExp> get receivePatterns => [

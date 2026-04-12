@@ -9,7 +9,7 @@ class EtisalatCashSmsParser extends SmsParser {
   WalletProvider get provider => WalletProvider.etisalatCash;
 
   @override
-  List<String> get senderIds => ['Etisalat', 'E-Cash', 'ECash'];
+  List<String> get senderIds => ['Etisalat', 'E-Cash', 'ECash', 'Etisalat-Cash', 'EtisalatCash'];
 
   @override
   List<RegExp> get receivePatterns => [

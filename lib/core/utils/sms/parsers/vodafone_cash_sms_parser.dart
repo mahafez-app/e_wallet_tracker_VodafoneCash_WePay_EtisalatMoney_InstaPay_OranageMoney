@@ -9,7 +9,7 @@ class VodafoneCashSmsParser extends SmsParser {
   WalletProvider get provider => WalletProvider.vodafoneCash;
 
   @override
-  List<String> get senderIds => ['VF-Cash', 'VFCash', 'Vodafone-Cash'];
+  List<String> get senderIds => ['VF-Cash', 'VFCash', 'Vodafone-Cash', 'VodafoneCash'];
 
   @override
   List<RegExp> get receivePatterns => [

@@ -34,7 +34,6 @@ class WalletProviderIcon extends StatelessWidget {
                 assetPath,
                 width: size,
                 height: size,
-                fit: BoxFit.contain,
                 colorFilter: fallbackColor != null
                     ? ColorFilter.mode(fallbackColor!, BlendMode.srcIn)
                     : null,

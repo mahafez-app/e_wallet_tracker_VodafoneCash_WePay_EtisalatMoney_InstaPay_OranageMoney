@@ -31,19 +31,20 @@ final invitationDisplayProvider = FutureProvider.autoDispose
         );
       }
 
-      final workspaceResult = await ref
+      final workspaceFuture = ref
           .read(getWorkspaceDetailsUseCaseProvider)
           .call(GetWorkspaceDetailsParams(workspaceId: invitation.workspaceId));
-      final inviterResult = await ref
+      final inviterFuture = ref
           .read(getUserProfileUseCaseProvider)
           .call(GetUserProfileParams(invitation.invitedByUid));
+      final workspaceResult = await workspaceFuture;
+      final inviterResult = await inviterFuture;
       final workspaceName = workspaceResult.dataOrNull?.workspace.name;
       final inviterName = inviterResult.dataOrNull?.name;
 
       return InvitationDisplayData(
         workspaceName: workspaceName ?? cachedWorkspaceName ?? '',
-        inviterName:
-            inviterName ?? cachedInviterName ?? invitation.invitedByUid,
+        inviterName: inviterName ?? cachedInviterName ?? '',
         isWorkspaceUnavailable: workspaceName == null,
       );
     });

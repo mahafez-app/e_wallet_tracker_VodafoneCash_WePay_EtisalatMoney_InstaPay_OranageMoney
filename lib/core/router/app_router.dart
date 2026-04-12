@@ -12,8 +12,8 @@ import '../../features/settings/presentation/screens/sms_permissions_screen.dart
 import '../../features/settings/presentation/screens/user_settings_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/transactions/presentation/navigation/transactions_route_data.dart';
-import '../../features/wallets/presentation/screens/add_wallet_screen.dart';
 import '../../features/transactions/presentation/screens/transactions_screen.dart';
+import '../../features/wallets/presentation/screens/add_wallet_screen.dart';
 import '../../features/wallets/presentation/screens/wallet_details_screen.dart';
 import '../../features/workspaces/presentation/screens/create_workspace_screen.dart';
 import '../../features/workspaces/presentation/screens/select_workspace_wallets_screen.dart';

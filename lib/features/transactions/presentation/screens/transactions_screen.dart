@@ -2,11 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wallet_tracker/core/theme/app_responsive.dart';
+import 'package:wallet_tracker/core/theme/app_spacing.dart';
 
 import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_error_view.dart';
-import '../../../../core/widgets/app_loader.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../navigation/transactions_route_data.dart';
 import '../providers/transactions_controller.dart';
@@ -15,6 +16,7 @@ import '../widgets/filter_bar/transactions_filter_bar.dart';
 import '../widgets/list/transactions_date_grouped_list.dart';
 import '../widgets/list/transactions_empty_view.dart';
 import '../widgets/list/transactions_load_more_footer.dart';
+import '../widgets/list/transactions_loading_view.dart';
 
 class TransactionsScreen extends StatelessWidget {
   const TransactionsScreen({super.key, required this.transactionsContext});
@@ -81,6 +83,7 @@ class _TransactionsBody extends ConsumerWidget {
     return Column(
       children: [
         TransactionsFilterBar(routeData: context_),
+        AppSpacing.sm.verticalSpace,
         Expanded(child: _TransactionsContent(context_: context_)),
       ],
     );
@@ -98,7 +101,9 @@ class _TransactionsContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(transactionsControllerProvider(context_));
 
-    if (state.isLoadingInitial) return const AppLoader();
+    if (state.isLoadingInitial) {
+      return const TransactionsLoadingView();
+    }
 
     if (state.error != null && state.transactions.isEmpty) {
       return AppErrorView(error: state.error!);

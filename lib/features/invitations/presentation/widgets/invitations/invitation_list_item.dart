@@ -5,6 +5,7 @@ import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../domain/entities/invitation_entity.dart';
 import '../../providers/invitation_display_provider.dart';
 import 'invitation_card.dart';
+import 'invitation_card_skeleton.dart';
 
 class InvitationListItem extends ConsumerWidget {
   const InvitationListItem({
@@ -27,6 +28,10 @@ class InvitationListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final display = ref.watch(invitationDisplayProvider(invitation));
+    if (display.isLoading) {
+      return const InvitationCardSkeleton();
+    }
+
     final resolvedWorkspaceName = display.asData?.value.workspaceName;
     final workspaceName = resolvedWorkspaceName?.trim().isNotEmpty == true
         ? resolvedWorkspaceName!

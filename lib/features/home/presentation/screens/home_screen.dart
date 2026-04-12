@@ -9,13 +9,13 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/widgets/app_error_view.dart';
-import '../../../../core/widgets/app_loader.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../../../settings/presentation/providers/sms_permission_controller.dart';
 import '../../domain/entities/home_dashboard_entity.dart';
 import '../providers/home_dashboard_provider.dart';
 import '../widgets/home_global_stats_widget.dart';
 import '../widgets/home_header_widget.dart';
+import '../widgets/home_loading_view.dart';
 import '../widgets/home_wallets_section.dart';
 import '../widgets/home_workspaces_section.dart';
 
@@ -41,9 +41,7 @@ class _HomeBody extends ConsumerWidget {
 
     // Side-effect: prompt for SMS permission the first time data arrives.
     ref.listen(homeDashboardProvider, (_, next) {
-      if (!_isCurrentRoute(context)) {
-        return;
-      }
+      if (!_isCurrentRoute(context)) return;
 
       if (next case AsyncData(:final value)) {
         ref
@@ -73,7 +71,7 @@ class _HomeBody extends ConsumerWidget {
     });
 
     return switch (ref.watch(homeDashboardProvider)) {
-      AsyncLoading() => const AppLoader(),
+      AsyncLoading() => const HomeLoadingView(),
       AsyncData(:final value) => _HomeDataView(
         dashboard: value,
         onRefresh: () async {

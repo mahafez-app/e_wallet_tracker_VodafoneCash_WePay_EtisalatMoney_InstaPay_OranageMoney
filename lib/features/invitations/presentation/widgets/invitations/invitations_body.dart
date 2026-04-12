@@ -7,11 +7,11 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../../core/widgets/app_error_view.dart';
-import '../../../../../core/widgets/app_loader.dart';
 import '../../../../../core/widgets/app_snackbar.dart';
 import '../../providers/invitations_controller.dart';
 import '../../providers/invitations_state.dart';
 import 'invitations_content.dart';
+import 'invitations_loading_content.dart';
 
 class InvitationsBody extends ConsumerWidget {
   const InvitationsBody({super.key});
@@ -25,7 +25,7 @@ class InvitationsBody extends ConsumerWidget {
 
     final state = ref.watch(invitationsControllerProvider);
     return switch (state) {
-      AsyncLoading() => const AppLoader(),
+      AsyncLoading() => const InvitationsLoadingContent(),
       AsyncError(:final error) => AppErrorView(
         error: error,
         onRetry: () => ref.invalidate(invitationsControllerProvider),
@@ -63,11 +63,6 @@ class InvitationsBody extends ConsumerWidget {
     BuildContext context,
     InvitationActionFeedback feedback,
   ) async {
-    await Future<void>.delayed(const Duration(milliseconds: 1200));
-    if (!context.mounted) {
-      return;
-    }
-
     context.push(
       AppRoutes.workspaceDetailsPath(feedback.invitation.workspaceId),
     );

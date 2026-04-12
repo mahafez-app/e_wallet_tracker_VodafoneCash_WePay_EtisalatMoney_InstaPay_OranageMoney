@@ -7,8 +7,8 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_dialog.dart';
 import '../../../../core/widgets/app_error_view.dart';
-import '../../../../core/widgets/app_loader.dart';
 import '../../domain/entities/workspace_details_entity.dart';
+import '../widgets/details/workspace_details_loading_view.dart';
 
 bool isWorkspaceUnavailableError(Object error) {
   return switch (error) {
@@ -76,7 +76,7 @@ class _WorkspaceUnavailableGuardState<T>
     final state = widget.state;
 
     return switch (state) {
-      AsyncLoading() => const AppLoader(),
+      AsyncLoading() => const WorkspaceDetailsLoadingView(),
       AsyncError(:final error) => _buildFromError(context, error),
       AsyncData(:final value) => _buildFromData(context, value),
     };

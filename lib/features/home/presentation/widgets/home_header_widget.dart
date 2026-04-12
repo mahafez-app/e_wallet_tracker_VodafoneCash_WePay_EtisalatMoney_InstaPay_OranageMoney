@@ -13,10 +13,12 @@ class HomeHeaderWidget extends ConsumerWidget {
     super.key,
     required this.invitationsCount,
     required this.onOpenInvitations,
+    required this.onOpenSettings,
   });
 
   final int invitationsCount;
   final VoidCallback onOpenInvitations;
+  final VoidCallback onOpenSettings;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,12 +33,55 @@ class HomeHeaderWidget extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _UserAvatarAndName(userName: user?.name),
-          _InvitationsIconBadge(
-            count: invitationsCount,
-            onTap: onOpenInvitations,
+          _HeaderActions(
+            invitationsCount: invitationsCount,
+            onOpenInvitations: onOpenInvitations,
+            onOpenSettings: onOpenSettings,
           ),
         ],
       ),
+    );
+  }
+}
+
+class _HeaderActions extends StatelessWidget {
+  const _HeaderActions({
+    required this.invitationsCount,
+    required this.onOpenInvitations,
+    required this.onOpenSettings,
+  });
+
+  final int invitationsCount;
+  final VoidCallback onOpenInvitations;
+  final VoidCallback onOpenSettings;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _InvitationsIconBadge(
+          count: invitationsCount,
+          onTap: onOpenInvitations,
+        ),
+        AppSpacing.xs.horizontalSpace,
+        _HeaderIconButton(icon: Icons.settings_outlined, onTap: onOpenSettings),
+      ],
+    );
+  }
+}
+
+class _HeaderIconButton extends StatelessWidget {
+  const _HeaderIconButton({required this.icon, required this.onTap});
+
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: onTap,
+      icon: Icon(icon, color: Theme.of(context).colorScheme.onSurface),
     );
   }
 }

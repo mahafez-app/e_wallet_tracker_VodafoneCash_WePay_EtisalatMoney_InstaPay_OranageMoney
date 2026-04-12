@@ -6,7 +6,6 @@ import '../../../../core/services/phone_number_service.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 import '../../domain/repositories/wallet_repository.dart';
-import '../datasources/sms_permission_data_source.dart';
 import '../datasources/wallet_details_remote_data_source.dart';
 import '../datasources/wallet_remote_data_source.dart';
 
@@ -14,18 +13,15 @@ class WalletRepositoryImpl implements WalletRepository {
   const WalletRepositoryImpl({
     required WalletRemoteDataSource remoteDataSource,
     required WalletDetailsRemoteDataSource detailsDataSource,
-    required SmsPermissionDataSource permissionDataSource,
     required PhoneNumberService phoneNumberService,
     required DeviceInfoService deviceInfoService,
   }) : _remoteDataSource = remoteDataSource,
        _detailsDataSource = detailsDataSource,
-       _permissionDataSource = permissionDataSource,
        _phoneNumberService = phoneNumberService,
        _deviceInfoService = deviceInfoService;
 
   final WalletRemoteDataSource _remoteDataSource;
   final WalletDetailsRemoteDataSource _detailsDataSource;
-  final SmsPermissionDataSource _permissionDataSource;
   final PhoneNumberService _phoneNumberService;
   final DeviceInfoService _deviceInfoService;
 
@@ -58,22 +54,6 @@ class WalletRepositoryImpl implements WalletRepository {
         deviceId: deviceId,
       );
     }, tag: 'WalletRepositoryImpl.addWallets');
-  }
-
-  @override
-  Future<Result<bool>> requestPermissions() {
-    return executeAndHandleErrors(
-      () => _permissionDataSource.requestPermissions(),
-      tag: 'WalletRepositoryImpl.requestPermissions',
-    );
-  }
-
-  @override
-  Future<Result<bool>> hasPermissions() {
-    return executeAndHandleErrors(
-      () => _permissionDataSource.hasPermissions(),
-      tag: 'WalletRepositoryImpl.hasPermissions',
-    );
   }
 
   @override

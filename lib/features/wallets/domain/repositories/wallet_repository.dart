@@ -12,9 +12,5 @@ abstract interface class WalletRepository {
     required List<String> providers,
   });
 
-  Future<Result<bool>> requestPermissions();
-
-  Future<Result<bool>> hasPermissions();
-
   Future<Result<WalletDetailsEntity>> getWalletDetails(String walletId);
 }

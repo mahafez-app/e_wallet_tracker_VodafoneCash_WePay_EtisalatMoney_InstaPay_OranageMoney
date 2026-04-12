@@ -454,6 +454,71 @@ class MessageLookup extends MessageLookupByLibrary {
     "transactions_title_wallet": m14,
     "transactions_title_workspace": m15,
     "transactions_viewingCountOfTotal": m16,
+    "userSettingsAboutSection": MessageLookupByLibrary.simpleMessage(
+      "عن التطبيق",
+    ),
+    "userSettingsAccountSection": MessageLookupByLibrary.simpleMessage(
+      "الحساب",
+    ),
+    "userSettingsAppSection": MessageLookupByLibrary.simpleMessage("التطبيق"),
+    "userSettingsAppVersionLabel": MessageLookupByLibrary.simpleMessage(
+      "إصدار التطبيق",
+    ),
+    "userSettingsDeleteAccountAction": MessageLookupByLibrary.simpleMessage(
+      "حذف الحساب",
+    ),
+    "userSettingsDeleteAccountConfirmMessage": MessageLookupByLibrary.simpleMessage(
+      "هذا الإجراء حساس وقد يؤدي إلى حذف البيانات المرتبطة بحسابك نهائياً بعد تفعيله بالكامل.",
+    ),
+    "userSettingsDeleteAccountConfirmTitle":
+        MessageLookupByLibrary.simpleMessage("حذف الحساب؟"),
+    "userSettingsDeleteAccountUnavailableMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "إخفاء الحساب فقط لا يكفي هنا، لأننا نحتاج أولاً إلى تنظيف المحافظ ومساحات العمل والدعوات المرتبطة به بشكل آمن. سنفعل هذا الإجراء بعد إضافة مسار حذف كامل للبيانات.",
+        ),
+    "userSettingsDeleteAccountUnavailableTitle":
+        MessageLookupByLibrary.simpleMessage("حذف الحساب غير متاح حالياً"),
+    "userSettingsEditNameAction": MessageLookupByLibrary.simpleMessage(
+      "تعديل الاسم",
+    ),
+    "userSettingsEditNameDescription": MessageLookupByLibrary.simpleMessage(
+      "غيّر الاسم الظاهر في التطبيق وسجل النشاط.",
+    ),
+    "userSettingsEditNameSaveAction": MessageLookupByLibrary.simpleMessage(
+      "حفظ التعديلات",
+    ),
+    "userSettingsEditNameTitle": MessageLookupByLibrary.simpleMessage(
+      "تعديل الاسم",
+    ),
+    "userSettingsNameUpdatedSuccess": MessageLookupByLibrary.simpleMessage(
+      "تم تحديث الاسم بنجاح.",
+    ),
+    "userSettingsNoEmailLabel": MessageLookupByLibrary.simpleMessage(
+      "لا يوجد بريد إلكتروني مرتبط",
+    ),
+    "userSettingsOpenSystemSettingsAction":
+        MessageLookupByLibrary.simpleMessage("فتح الإعدادات"),
+    "userSettingsSignOutAction": MessageLookupByLibrary.simpleMessage(
+      "تسجيل الخروج",
+    ),
+    "userSettingsSignOutConfirmMessage": MessageLookupByLibrary.simpleMessage(
+      "سيتم إنهاء جلستك الحالية على هذا الجهاز، ويمكنك تسجيل الدخول مرة أخرى في أي وقت.",
+    ),
+    "userSettingsSignOutConfirmTitle": MessageLookupByLibrary.simpleMessage(
+      "تسجيل الخروج؟",
+    ),
+    "userSettingsSmsPermissionCheckingLabel":
+        MessageLookupByLibrary.simpleMessage("جاري التحقق من حالة الإذن..."),
+    "userSettingsSmsPermissionDisabledLabel":
+        MessageLookupByLibrary.simpleMessage(
+          "غير مفعّل، والتطبيق لن يعمل بدونه.",
+        ),
+    "userSettingsSmsPermissionEnabledLabel":
+        MessageLookupByLibrary.simpleMessage("مفعّل"),
+    "userSettingsSmsPermissionTitle": MessageLookupByLibrary.simpleMessage(
+      "إذن قراءة الرسائل",
+    ),
+    "userSettingsTitle": MessageLookupByLibrary.simpleMessage("الإعدادات"),
     "viaLabel": MessageLookupByLibrary.simpleMessage("عبر"),
     "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
     "walletDetails": MessageLookupByLibrary.simpleMessage("تفاصيل المحفظة"),

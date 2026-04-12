@@ -8,10 +8,11 @@ import '../../features/auth/presentation/screens/sign_up_screen.dart';
 import '../../features/auth/providers/auth_providers.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/invitations/presentation/screens/invitations_screen.dart';
+import '../../features/settings/presentation/screens/sms_permissions_screen.dart';
+import '../../features/settings/presentation/screens/user_settings_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/transactions/presentation/navigation/transactions_route_data.dart';
 import '../../features/wallets/presentation/screens/add_wallet_screen.dart';
-import '../../features/wallets/presentation/screens/sms_permissions_screen.dart';
 import '../../features/transactions/presentation/screens/transactions_screen.dart';
 import '../../features/wallets/presentation/screens/wallet_details_screen.dart';
 import '../../features/workspaces/presentation/screens/create_workspace_screen.dart';
@@ -132,9 +133,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.settings,
-        builder: (context, state) => const Scaffold(
-          body: Center(child: Text('Settings Screen - To be implemented')),
-        ),
+        builder: (context, state) => const UserSettingsScreen(),
       ),
       GoRoute(
         path: AppRoutes.addWallet,

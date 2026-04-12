@@ -485,6 +485,13 @@ class _Header extends StatelessWidget {
 - Arrow `=>` only when the entire body fits in a single expression.
 - No trailing inline comments. Explanatory comments go on the preceding line.
 
+### File Size
+
+- Maximum 200 lines per non-generated file. Split screens, widgets, providers,
+  repositories, and use cases before crossing the limit.
+- If a file approaches 200 lines, extract by responsibility immediately. Do not
+  wait for a future cleanup pass.
+
 ### Variables
 
 - `final` by default for every variable, field, and parameter.

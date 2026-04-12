@@ -21,27 +21,31 @@ import 'background_sms_handler.dart';
 /// when the provider is disposed.
 class SmsTransactionService {
   SmsTransactionService({
-    required List<WalletEntity> wallets,
     required SaveTransactionUseCase saveTransactionUseCase,
-  }) : _wallets = wallets,
-       _saveTransactionUseCase = saveTransactionUseCase;
+  }) : _saveTransactionUseCase = saveTransactionUseCase;
 
-  final List<WalletEntity> _wallets;
+  List<WalletEntity> _wallets = const [];
   final SaveTransactionUseCase _saveTransactionUseCase;
+  bool _isListening = false;
 
   static const _tag = 'SmsTransactionService';
 
+  void updateWallets(List<WalletEntity> wallets) {
+    _wallets = wallets;
+  }
+
   void startListening() {
+    if (_isListening) {
+      return;
+    }
+
     Telephony.instance.listenIncomingSms(
       onNewMessage: _handleForegroundMessage,
       onBackgroundMessage: backgroundSmsHandler,
       listenInBackground: true,
     );
+    _isListening = true;
     log('SMS listener active (Wallets: ${_wallets.length})', name: _tag);
-  }
-
-  void stopListening() {
-    log('SMS listener disposed.', name: _tag);
   }
 
   void _handleForegroundMessage(SmsMessage message) {

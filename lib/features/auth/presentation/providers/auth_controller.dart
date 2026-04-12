@@ -6,7 +6,9 @@ import '../../domain/usecases/sign_up_with_email_password_usecase.dart';
 import '../../domain/usecases/update_display_name_usecase.dart';
 import '../../providers/auth_providers.dart';
 
-enum AuthLoadingMethod { none, email, google, confirmName }
+enum AuthLoadingMethod { none, email, google, confirmName, signOut }
+
+const _unsetFailure = Object();
 
 final class AuthState {
   const AuthState({this.loadingMethod = AuthLoadingMethod.none, this.error});
@@ -16,10 +18,13 @@ final class AuthState {
 
   bool get isLoading => loadingMethod != AuthLoadingMethod.none;
 
-  AuthState copyWith({AuthLoadingMethod? loadingMethod, Failure? error}) {
+  AuthState copyWith({
+    AuthLoadingMethod? loadingMethod,
+    Object? error = _unsetFailure,
+  }) {
     return AuthState(
       loadingMethod: loadingMethod ?? this.loadingMethod,
-      error: error ?? this.error,
+      error: identical(error, _unsetFailure) ? this.error : error as Failure?,
     );
   }
 
@@ -113,7 +118,10 @@ final class AuthController extends Notifier<AuthState> {
   }
 
   Future<void> signOut() async {
-    state = state.copyWith(loadingMethod: AuthLoadingMethod.none, error: null);
+    state = state.copyWith(
+      loadingMethod: AuthLoadingMethod.signOut,
+      error: null,
+    );
     final result = await ref.read(signOutUseCaseProvider)();
     result.fold(
       (failure) => state = state.copyWith(

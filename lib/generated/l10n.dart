@@ -1238,6 +1238,246 @@ class S {
     );
   }
 
+  /// `الإعدادات`
+  String get userSettingsTitle {
+    return Intl.message(
+      'الإعدادات',
+      name: 'userSettingsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `التطبيق`
+  String get userSettingsAppSection {
+    return Intl.message(
+      'التطبيق',
+      name: 'userSettingsAppSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الحساب`
+  String get userSettingsAccountSection {
+    return Intl.message(
+      'الحساب',
+      name: 'userSettingsAccountSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عن التطبيق`
+  String get userSettingsAboutSection {
+    return Intl.message(
+      'عن التطبيق',
+      name: 'userSettingsAboutSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا يوجد بريد إلكتروني مرتبط`
+  String get userSettingsNoEmailLabel {
+    return Intl.message(
+      'لا يوجد بريد إلكتروني مرتبط',
+      name: 'userSettingsNoEmailLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تعديل الاسم`
+  String get userSettingsEditNameAction {
+    return Intl.message(
+      'تعديل الاسم',
+      name: 'userSettingsEditNameAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تعديل الاسم`
+  String get userSettingsEditNameTitle {
+    return Intl.message(
+      'تعديل الاسم',
+      name: 'userSettingsEditNameTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `غيّر الاسم الظاهر في التطبيق وسجل النشاط.`
+  String get userSettingsEditNameDescription {
+    return Intl.message(
+      'غيّر الاسم الظاهر في التطبيق وسجل النشاط.',
+      name: 'userSettingsEditNameDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حفظ التعديلات`
+  String get userSettingsEditNameSaveAction {
+    return Intl.message(
+      'حفظ التعديلات',
+      name: 'userSettingsEditNameSaveAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم تحديث الاسم بنجاح.`
+  String get userSettingsNameUpdatedSuccess {
+    return Intl.message(
+      'تم تحديث الاسم بنجاح.',
+      name: 'userSettingsNameUpdatedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إذن قراءة الرسائل`
+  String get userSettingsSmsPermissionTitle {
+    return Intl.message(
+      'إذن قراءة الرسائل',
+      name: 'userSettingsSmsPermissionTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `جاري التحقق من حالة الإذن...`
+  String get userSettingsSmsPermissionCheckingLabel {
+    return Intl.message(
+      'جاري التحقق من حالة الإذن...',
+      name: 'userSettingsSmsPermissionCheckingLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مفعّل`
+  String get userSettingsSmsPermissionEnabledLabel {
+    return Intl.message(
+      'مفعّل',
+      name: 'userSettingsSmsPermissionEnabledLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `غير مفعّل، والتطبيق لن يعمل بدونه.`
+  String get userSettingsSmsPermissionDisabledLabel {
+    return Intl.message(
+      'غير مفعّل، والتطبيق لن يعمل بدونه.',
+      name: 'userSettingsSmsPermissionDisabledLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `فتح الإعدادات`
+  String get userSettingsOpenSystemSettingsAction {
+    return Intl.message(
+      'فتح الإعدادات',
+      name: 'userSettingsOpenSystemSettingsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تسجيل الخروج`
+  String get userSettingsSignOutAction {
+    return Intl.message(
+      'تسجيل الخروج',
+      name: 'userSettingsSignOutAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تسجيل الخروج؟`
+  String get userSettingsSignOutConfirmTitle {
+    return Intl.message(
+      'تسجيل الخروج؟',
+      name: 'userSettingsSignOutConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم إنهاء جلستك الحالية على هذا الجهاز، ويمكنك تسجيل الدخول مرة أخرى في أي وقت.`
+  String get userSettingsSignOutConfirmMessage {
+    return Intl.message(
+      'سيتم إنهاء جلستك الحالية على هذا الجهاز، ويمكنك تسجيل الدخول مرة أخرى في أي وقت.',
+      name: 'userSettingsSignOutConfirmMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف الحساب`
+  String get userSettingsDeleteAccountAction {
+    return Intl.message(
+      'حذف الحساب',
+      name: 'userSettingsDeleteAccountAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف الحساب؟`
+  String get userSettingsDeleteAccountConfirmTitle {
+    return Intl.message(
+      'حذف الحساب؟',
+      name: 'userSettingsDeleteAccountConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذا الإجراء حساس وقد يؤدي إلى حذف البيانات المرتبطة بحسابك نهائياً بعد تفعيله بالكامل.`
+  String get userSettingsDeleteAccountConfirmMessage {
+    return Intl.message(
+      'هذا الإجراء حساس وقد يؤدي إلى حذف البيانات المرتبطة بحسابك نهائياً بعد تفعيله بالكامل.',
+      name: 'userSettingsDeleteAccountConfirmMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف الحساب غير متاح حالياً`
+  String get userSettingsDeleteAccountUnavailableTitle {
+    return Intl.message(
+      'حذف الحساب غير متاح حالياً',
+      name: 'userSettingsDeleteAccountUnavailableTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إخفاء الحساب فقط لا يكفي هنا، لأننا نحتاج أولاً إلى تنظيف المحافظ ومساحات العمل والدعوات المرتبطة به بشكل آمن. سنفعل هذا الإجراء بعد إضافة مسار حذف كامل للبيانات.`
+  String get userSettingsDeleteAccountUnavailableMessage {
+    return Intl.message(
+      'إخفاء الحساب فقط لا يكفي هنا، لأننا نحتاج أولاً إلى تنظيف المحافظ ومساحات العمل والدعوات المرتبطة به بشكل آمن. سنفعل هذا الإجراء بعد إضافة مسار حذف كامل للبيانات.',
+      name: 'userSettingsDeleteAccountUnavailableMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إصدار التطبيق`
+  String get userSettingsAppVersionLabel {
+    return Intl.message(
+      'إصدار التطبيق',
+      name: 'userSettingsAppVersionLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `حذف`
   String get commonDeleteAction {
     return Intl.message('حذف', name: 'commonDeleteAction', desc: '', args: []);

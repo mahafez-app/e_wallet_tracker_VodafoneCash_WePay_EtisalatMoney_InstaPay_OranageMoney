@@ -1,0 +1,149 @@
+// ignore_for_file: unused_element_parameter
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../core/theme/app_responsive.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/app_validators.dart';
+import '../../../../core/utils/extensions/localization_extension.dart';
+import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_text_field.dart';
+import '../../../auth/providers/auth_providers.dart';
+import '../../../auth/presentation/providers/auth_controller.dart';
+
+class EditDisplayNameBottomSheet extends StatelessWidget {
+  const EditDisplayNameBottomSheet({super.key, required this.currentName});
+
+  final String currentName;
+
+  static Future<void> show(
+    BuildContext context, {
+    required String currentName,
+  }) {
+    return showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: EditDisplayNameBottomSheet(currentName: currentName),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _EditDisplayNameSheetBody(currentName: currentName);
+  }
+}
+
+class _EditDisplayNameSheetBody extends ConsumerStatefulWidget {
+  const _EditDisplayNameSheetBody({super.key, required this.currentName});
+
+  final String currentName;
+
+  @override
+  ConsumerState<_EditDisplayNameSheetBody> createState() =>
+      _EditDisplayNameSheetBodyState();
+}
+
+class _EditDisplayNameSheetBodyState
+    extends ConsumerState<_EditDisplayNameSheetBody> {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _nameController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.currentName);
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen<AuthState>(authNotifierProvider, (previous, next) {
+      final hasCompletedUpdate =
+          previous?.loadingMethod == AuthLoadingMethod.confirmName &&
+          next.loadingMethod == AuthLoadingMethod.none &&
+          next.error == null;
+
+      if (hasCompletedUpdate && context.mounted) {
+        Navigator.of(context).pop();
+      }
+    });
+
+    final user = ref.watch(currentUserProvider);
+    final authState = ref.watch(authNotifierProvider);
+
+    return Padding(
+      padding: AppSpacing.pagePadding,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppSpacing.sm.verticalSpace,
+            Text(
+              context.l10n.userSettingsEditNameTitle,
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            AppSpacing.sm.verticalSpace,
+            Text(
+              context.l10n.userSettingsEditNameDescription,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            AppSpacing.lg.verticalSpace,
+            AppTextField(
+              label: context.l10n.fullName,
+              hintText: context.l10n.fullNamePlaceholder,
+              controller: _nameController,
+              keyboardType: TextInputType.name,
+              onChanged: (_) {},
+              validator: (value) => AppValidators.required(context, value),
+            ),
+            AppSpacing.lg.verticalSpace,
+            SizedBox(
+              width: double.infinity,
+              child: AppButton(
+                label: context.l10n.userSettingsEditNameSaveAction,
+                isLoading:
+                    authState.loadingMethod == AuthLoadingMethod.confirmName,
+                onPressed: user == null ? null : () => _submit(user.uid),
+              ),
+            ),
+            AppSpacing.lg.verticalSpace,
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _submit(String uid) {
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (!isValid) {
+      return;
+    }
+
+    final displayName = _nameController.text.trim();
+    if (displayName == widget.currentName.trim()) {
+      Navigator.of(context).pop();
+      return;
+    }
+
+    ref
+        .read(authNotifierProvider.notifier)
+        .updateDisplayName(uid: uid, displayName: displayName);
+  }
+}

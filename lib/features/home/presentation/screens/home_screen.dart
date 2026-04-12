@@ -7,8 +7,11 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/providers/sms_providers.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/widgets/app_error_view.dart';
 import '../../../../core/widgets/app_loader.dart';
+import '../../../../core/widgets/app_snackbar.dart';
+import '../../../settings/presentation/providers/sms_permission_controller.dart';
 import '../../domain/entities/home_dashboard_entity.dart';
 import '../providers/home_dashboard_provider.dart';
 import '../widgets/home_global_stats_widget.dart';
@@ -40,14 +43,27 @@ class _HomeBody extends ConsumerWidget {
     ref.listen(homeDashboardProvider, (_, next) {
       if (next case AsyncData(:final value)) {
         ref
-            .read(smsPermissionPromptControllerProvider.notifier)
+            .read(smsPermissionControllerProvider.notifier)
             .checkAndPromptIfNeeded(
               hasWallets: value.wallets.isNotEmpty,
-              navigate: () {
+              navigateToPermission: () {
                 if (context.mounted) context.push(AppRoutes.smsPermissions);
               },
             );
       }
+    });
+    ref.listen<SmsPermissionState>(smsPermissionControllerProvider, (
+      previous,
+      next,
+    ) {
+      if (next.error == null) return;
+
+      AppSnackbar.show(
+        context,
+        message: next.error!.toLocalizedString(context),
+        type: AppSnackbarType.error,
+      );
+      ref.read(smsPermissionControllerProvider.notifier).clearError();
     });
 
     return switch (ref.watch(homeDashboardProvider)) {
@@ -86,6 +102,7 @@ class _HomeDataView extends StatelessWidget {
             HomeHeaderWidget(
               invitationsCount: dashboard.invitationsCount,
               onOpenInvitations: () => context.push(AppRoutes.invitations),
+              onOpenSettings: () => context.push(AppRoutes.settings),
             ),
             Padding(
               padding: AppSpacing.pagePadding,

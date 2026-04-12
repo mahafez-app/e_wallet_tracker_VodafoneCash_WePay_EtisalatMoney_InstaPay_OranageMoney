@@ -464,6 +464,71 @@ class MessageLookup extends MessageLookupByLibrary {
     "transactions_title_wallet": m14,
     "transactions_title_workspace": m15,
     "transactions_viewingCountOfTotal": m16,
+    "userSettingsAboutSection": MessageLookupByLibrary.simpleMessage("About"),
+    "userSettingsAccountSection": MessageLookupByLibrary.simpleMessage(
+      "Account",
+    ),
+    "userSettingsAppSection": MessageLookupByLibrary.simpleMessage("App"),
+    "userSettingsAppVersionLabel": MessageLookupByLibrary.simpleMessage(
+      "App version",
+    ),
+    "userSettingsDeleteAccountAction": MessageLookupByLibrary.simpleMessage(
+      "Delete account",
+    ),
+    "userSettingsDeleteAccountConfirmMessage": MessageLookupByLibrary.simpleMessage(
+      "This is a sensitive action and, once fully implemented, will permanently remove data linked to your account.",
+    ),
+    "userSettingsDeleteAccountConfirmTitle":
+        MessageLookupByLibrary.simpleMessage("Delete account?"),
+    "userSettingsDeleteAccountUnavailableMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "A partial delete would leave linked wallets, workspaces, and invitations behind. This action will be enabled after we add a safe full-data cleanup flow.",
+        ),
+    "userSettingsDeleteAccountUnavailableTitle":
+        MessageLookupByLibrary.simpleMessage(
+          "Delete account is not available yet",
+        ),
+    "userSettingsEditNameAction": MessageLookupByLibrary.simpleMessage(
+      "Edit name",
+    ),
+    "userSettingsEditNameDescription": MessageLookupByLibrary.simpleMessage(
+      "Update the name shown across the app and activity history.",
+    ),
+    "userSettingsEditNameSaveAction": MessageLookupByLibrary.simpleMessage(
+      "Save changes",
+    ),
+    "userSettingsEditNameTitle": MessageLookupByLibrary.simpleMessage(
+      "Edit name",
+    ),
+    "userSettingsNameUpdatedSuccess": MessageLookupByLibrary.simpleMessage(
+      "Name updated successfully.",
+    ),
+    "userSettingsNoEmailLabel": MessageLookupByLibrary.simpleMessage(
+      "No email linked to this account",
+    ),
+    "userSettingsOpenSystemSettingsAction":
+        MessageLookupByLibrary.simpleMessage("Open settings"),
+    "userSettingsSignOutAction": MessageLookupByLibrary.simpleMessage(
+      "Sign out",
+    ),
+    "userSettingsSignOutConfirmMessage": MessageLookupByLibrary.simpleMessage(
+      "This will end your current session on this device. You can sign in again at any time.",
+    ),
+    "userSettingsSignOutConfirmTitle": MessageLookupByLibrary.simpleMessage(
+      "Sign out?",
+    ),
+    "userSettingsSmsPermissionCheckingLabel":
+        MessageLookupByLibrary.simpleMessage("Checking permission status..."),
+    "userSettingsSmsPermissionDisabledLabel":
+        MessageLookupByLibrary.simpleMessage(
+          "Disabled, and the app cannot work without it.",
+        ),
+    "userSettingsSmsPermissionEnabledLabel":
+        MessageLookupByLibrary.simpleMessage("Enabled"),
+    "userSettingsSmsPermissionTitle": MessageLookupByLibrary.simpleMessage(
+      "SMS read permission",
+    ),
+    "userSettingsTitle": MessageLookupByLibrary.simpleMessage("Settings"),
     "viaLabel": MessageLookupByLibrary.simpleMessage("Via"),
     "viewAll": MessageLookupByLibrary.simpleMessage("View All"),
     "walletDetails": MessageLookupByLibrary.simpleMessage("Wallet Details"),

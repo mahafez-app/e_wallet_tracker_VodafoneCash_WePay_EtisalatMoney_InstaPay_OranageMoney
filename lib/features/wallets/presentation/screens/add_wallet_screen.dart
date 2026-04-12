@@ -10,7 +10,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_snackbar.dart';
-import '../../providers/wallets_providers.dart';
+import '../../../settings/presentation/providers/sms_permission_controller.dart';
 import '../providers/add_wallet_controller.dart';
 import '../widgets/add_wallet/add_wallet_content.dart';
 
@@ -34,6 +34,15 @@ class _AddWalletBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AddWalletState>(addWalletControllerProvider, (previous, next) {
       _handleStateChange(previous, next, ref, context);
+    });
+    ref.listen<SmsPermissionState>(smsPermissionControllerProvider, (
+      previous,
+      next,
+    ) {
+      if (next.error == null) return;
+
+      _showFailureSnackbar(context, next.error!);
+      ref.read(smsPermissionControllerProvider.notifier).clearError();
     });
 
     final state = ref.watch(addWalletControllerProvider);
@@ -65,16 +74,21 @@ class _AddWalletBody extends ConsumerWidget {
 
     if (!_hasSuccessfulSubmission(previous, next)) return;
 
-    final hasPermission = await _checkSmsPermission(ref);
-    if (!context.mounted) return;
-
-    if (hasPermission) {
-      context.go(AppRoutes.home);
-      return;
-    }
-
-    ref.read(hasPromptedWalletPermissionsSessionProvider.notifier).state = true;
-    context.push(AppRoutes.smsPermissions);
+    ref.invalidate(smsReadinessProvider);
+    ref
+        .read(smsPermissionControllerProvider.notifier)
+        .handleWalletSetupFlow(
+          navigateHome: () {
+            if (context.mounted) {
+              context.go(AppRoutes.home);
+            }
+          },
+          navigateToPermission: () {
+            if (context.mounted) {
+              context.push(AppRoutes.smsPermissions);
+            }
+          },
+        );
   }
 
   bool _hasNewLoadFailure(AddWalletState? previous, AddWalletState next) {
@@ -91,11 +105,6 @@ class _AddWalletBody extends ConsumerWidget {
   bool _hasSuccessfulSubmission(AddWalletState? previous, AddWalletState next) {
     return previous?.submissionStatus != AddWalletSubmissionStatus.success &&
         next.submissionStatus == AddWalletSubmissionStatus.success;
-  }
-
-  Future<bool> _checkSmsPermission(WidgetRef ref) async {
-    final result = await ref.read(checkSmsPermissionUseCaseProvider)();
-    return result.dataOrNull == true;
   }
 
   void _showFailureSnackbar(BuildContext context, Failure failure) {

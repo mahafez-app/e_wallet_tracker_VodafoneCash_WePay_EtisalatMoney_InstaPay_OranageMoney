@@ -13,6 +13,7 @@ import '../../../auth/providers/auth_providers.dart';
 import '../../../invitations/presentation/widgets/invitations/invite_member_bottom_sheet.dart';
 import '../../domain/entities/workspace_details_entity.dart';
 import '../providers/workspace_details_controller.dart';
+import 'workspace_unavailable_guard.dart';
 import '../widgets/details/workspace_members_section.dart';
 import '../widgets/details/workspace_summary_card.dart';
 import '../widgets/details/workspace_transactions_section.dart';
@@ -77,11 +78,35 @@ class _WorkspaceDetailsBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(workspaceDetailsControllerProvider(workspaceId));
+    final currentUserId = ref.watch(currentUserProvider)?.uid;
+
+    ref.listen<AsyncValue<WorkspaceDetailsEntity>>(
+      workspaceDetailsControllerProvider(workspaceId),
+      (_, next) {
+        final error = next.asError?.error;
+        if (error != null && isWorkspaceUnavailableError(error)) {
+          showWorkspaceUnavailableDialog(context);
+          return;
+        }
+
+        final details = next.asData?.value;
+        if (details != null &&
+            isWorkspaceAccessRevoked(details, currentUserId)) {
+          showWorkspaceUnavailableDialog(context);
+        }
+      },
+    );
 
     return switch (state) {
       AsyncLoading() => const AppLoader(),
-      AsyncError(:final error) => AppErrorView(error: error),
-      AsyncData(:final value) => _WorkspaceDetailsDataView(details: value),
+      AsyncError(:final error) =>
+        isWorkspaceUnavailableError(error)
+            ? const SizedBox.shrink()
+            : AppErrorView(error: error),
+      AsyncData(:final value) =>
+        isWorkspaceAccessRevoked(value, currentUserId)
+            ? const SizedBox.shrink()
+            : _WorkspaceDetailsDataView(details: value),
     };
   }
 }

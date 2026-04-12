@@ -1441,6 +1441,36 @@ class S {
     );
   }
 
+  /// `مساحة العمل لم تعد متاحة`
+  String get workspaceUnavailableTitle {
+    return Intl.message(
+      'مساحة العمل لم تعد متاحة',
+      name: 'workspaceUnavailableTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `يبدو أن مساحة العمل دي تم حذفها أو تم إلغاء وصولك لها. هنرجعك للرئيسية.`
+  String get workspaceUnavailableMessage {
+    return Intl.message(
+      'يبدو أن مساحة العمل دي تم حذفها أو تم إلغاء وصولك لها. هنرجعك للرئيسية.',
+      name: 'workspaceUnavailableMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `العودة للرئيسية`
+  String get workspaceUnavailableAction {
+    return Intl.message(
+      'العودة للرئيسية',
+      name: 'workspaceUnavailableAction',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `الإعدادات`
   String get userSettingsTitle {
     return Intl.message(

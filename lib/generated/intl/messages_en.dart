@@ -746,6 +746,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "workspaceSkipWalletsAction": MessageLookupByLibrary.simpleMessage(
       "Skip for now",
     ),
+    "workspaceUnavailableAction": MessageLookupByLibrary.simpleMessage(
+      "Back to home",
+    ),
+    "workspaceUnavailableMessage": MessageLookupByLibrary.simpleMessage(
+      "It looks like this workspace was deleted or your access was removed. We’ll take you back home.",
+    ),
+    "workspaceUnavailableTitle": MessageLookupByLibrary.simpleMessage(
+      "Workspace is no longer available",
+    ),
     "workspaceUnknownMember": MessageLookupByLibrary.simpleMessage(
       "Unknown member",
     ),

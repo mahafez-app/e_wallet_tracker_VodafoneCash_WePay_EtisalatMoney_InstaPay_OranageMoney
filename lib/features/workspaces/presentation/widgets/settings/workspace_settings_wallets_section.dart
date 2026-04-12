@@ -152,25 +152,22 @@ class _WorkspaceSettingsWalletTile extends StatelessWidget {
               ],
             ),
           ),
-          IconButton(
-            onPressed: canRemove && !isRemoving ? onRemove : null,
-            tooltip: canRemove
-                ? context.l10n.workspaceSettingsRemoveWalletAction
-                : context.l10n.workspaceSettingsWalletReadOnlyTooltip,
-            icon: isRemoving
-                ? SizedBox.square(
-                    dimension: AppSpacing.lg.responsiveWidth,
-                    child: CircularProgressIndicator(
-                      strokeWidth: AppSpacing.xxs.responsiveWidth,
+          if (canRemove || isRemoving)
+            IconButton(
+              onPressed: isRemoving ? null : onRemove,
+              tooltip: context.l10n.workspaceSettingsRemoveWalletAction,
+              icon: isRemoving
+                  ? SizedBox.square(
+                      dimension: AppSpacing.lg.responsiveWidth,
+                      child: CircularProgressIndicator(
+                        strokeWidth: AppSpacing.xxs.responsiveWidth,
+                      ),
+                    )
+                  : Icon(
+                      Icons.delete_outline_rounded,
+                      color: theme.colorScheme.error,
                     ),
-                  )
-                : Icon(
-                    Icons.delete_outline_rounded,
-                    color: canRemove
-                        ? theme.colorScheme.error
-                        : theme.colorScheme.outline,
-                  ),
-          ),
+            ),
         ],
       ),
     );

@@ -728,6 +728,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "workspaceSkipWalletsAction": MessageLookupByLibrary.simpleMessage(
       "تخطي حالياً",
     ),
+    "workspaceUnavailableAction": MessageLookupByLibrary.simpleMessage(
+      "العودة للرئيسية",
+    ),
+    "workspaceUnavailableMessage": MessageLookupByLibrary.simpleMessage(
+      "يبدو أن مساحة العمل دي تم حذفها أو تم إلغاء وصولك لها. هنرجعك للرئيسية.",
+    ),
+    "workspaceUnavailableTitle": MessageLookupByLibrary.simpleMessage(
+      "مساحة العمل لم تعد متاحة",
+    ),
     "workspaceUnknownMember": MessageLookupByLibrary.simpleMessage(
       "عضو غير معروف",
     ),

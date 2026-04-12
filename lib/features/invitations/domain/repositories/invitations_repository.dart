@@ -13,6 +13,9 @@ abstract interface class InvitationsRepository {
   Future<Result<List<WorkspacePendingInvitationEntity>>>
   getWorkspacePendingInvitations(String workspaceId);
 
+  Stream<Result<List<WorkspacePendingInvitationEntity>>>
+  watchWorkspacePendingInvitations(String workspaceId);
+
   Future<Result<List<InvitationEntity>>> getRecentRespondedInvitations();
 
   Future<Result<void>> acceptInvitation(String invitationId);

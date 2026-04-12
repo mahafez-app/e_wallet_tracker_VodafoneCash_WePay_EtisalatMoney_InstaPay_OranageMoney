@@ -29,18 +29,8 @@ class WorkspaceSettingsWalletsSection extends StatelessWidget {
   final String? removingWalletId;
   final ValueChanged<WalletEntity> onRemoveWallet;
 
-  List<WalletEntity> get _visibleWallets {
-    if (canManageAllWallets) {
-      return wallets;
-    }
-
-    return wallets.where((wallet) => wallet.ownerUid == currentUserId).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final visibleWallets = _visibleWallets;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,7 +45,7 @@ class WorkspaceSettingsWalletsSection extends StatelessWidget {
           ),
         ),
         AppSpacing.md.verticalSpace,
-        if (visibleWallets.isEmpty)
+        if (wallets.isEmpty)
           WorkspaceSettingsEmptyStateCard(
             message: canManageAllWallets
                 ? context.l10n.workspaceSettingsWalletsEmptyOwner
@@ -63,14 +53,17 @@ class WorkspaceSettingsWalletsSection extends StatelessWidget {
           )
         else
           Column(
-            children: visibleWallets
+            children: wallets
                 .map(
                   (wallet) => Padding(
                     padding: AppResponsive.onlyPadding(bottom: AppSpacing.md),
                     child: _WorkspaceSettingsWalletTile(
                       wallet: wallet,
                       ownerName: memberNamesByUid[wallet.ownerUid],
-                      showOwnerName: canManageAllWallets,
+                      showOwnerName: true,
+                      canRemove:
+                          canManageAllWallets ||
+                          wallet.ownerUid == currentUserId,
                       isRemoving: removingWalletId == wallet.id,
                       onRemove: () => onRemoveWallet(wallet),
                     ),
@@ -88,6 +81,7 @@ class _WorkspaceSettingsWalletTile extends StatelessWidget {
     required this.wallet,
     required this.ownerName,
     required this.showOwnerName,
+    required this.canRemove,
     required this.isRemoving,
     required this.onRemove,
   });
@@ -95,6 +89,7 @@ class _WorkspaceSettingsWalletTile extends StatelessWidget {
   final WalletEntity wallet;
   final String? ownerName;
   final bool showOwnerName;
+  final bool canRemove;
   final bool isRemoving;
   final VoidCallback onRemove;
 
@@ -158,8 +153,10 @@ class _WorkspaceSettingsWalletTile extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: isRemoving ? null : onRemove,
-            tooltip: context.l10n.workspaceSettingsRemoveWalletAction,
+            onPressed: canRemove && !isRemoving ? onRemove : null,
+            tooltip: canRemove
+                ? context.l10n.workspaceSettingsRemoveWalletAction
+                : context.l10n.workspaceSettingsWalletReadOnlyTooltip,
             icon: isRemoving
                 ? SizedBox.square(
                     dimension: AppSpacing.lg.responsiveWidth,
@@ -169,7 +166,9 @@ class _WorkspaceSettingsWalletTile extends StatelessWidget {
                   )
                 : Icon(
                     Icons.delete_outline_rounded,
-                    color: theme.colorScheme.error,
+                    color: canRemove
+                        ? theme.colorScheme.error
+                        : theme.colorScheme.outline,
                   ),
           ),
         ],

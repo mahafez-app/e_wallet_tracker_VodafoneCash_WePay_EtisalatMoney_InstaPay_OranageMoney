@@ -18,8 +18,10 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(_current != null,
-        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+    assert(
+      _current != null,
+      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
+    );
     return _current!;
   }
 
@@ -41,8 +43,10 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(instance != null,
-        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    assert(
+      instance != null,
+      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
+    );
     return instance!;
   }
 
@@ -272,12 +276,7 @@ class S {
 
   /// `404`
   String get notFoundStatusCode {
-    return Intl.message(
-      '404',
-      name: 'notFoundStatusCode',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('404', name: 'notFoundStatusCode', desc: '', args: []);
   }
 
   /// `الصفحة غير موجودة`
@@ -292,82 +291,42 @@ class S {
 
   /// `محافظ`
   String get appName {
-    return Intl.message(
-      'محافظ',
-      name: 'appName',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('محافظ', name: 'appName', desc: '', args: []);
   }
 
   /// `تسجيل الدخول`
   String get signIn {
-    return Intl.message(
-      'تسجيل الدخول',
-      name: 'signIn',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('تسجيل الدخول', name: 'signIn', desc: '', args: []);
   }
 
   /// `إنشاء حساب`
   String get signUp {
-    return Intl.message(
-      'إنشاء حساب',
-      name: 'signUp',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('إنشاء حساب', name: 'signUp', desc: '', args: []);
   }
 
   /// `البريد الإلكتروني`
   String get email {
-    return Intl.message(
-      'البريد الإلكتروني',
-      name: 'email',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('البريد الإلكتروني', name: 'email', desc: '', args: []);
   }
 
   /// `كلمة المرور`
   String get password {
-    return Intl.message(
-      'كلمة المرور',
-      name: 'password',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('كلمة المرور', name: 'password', desc: '', args: []);
   }
 
   /// `الاسم`
   String get displayName {
-    return Intl.message(
-      'الاسم',
-      name: 'displayName',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('الاسم', name: 'displayName', desc: '', args: []);
   }
 
   /// `اسمك`
   String get yourName {
-    return Intl.message(
-      'اسمك',
-      name: 'yourName',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('اسمك', name: 'yourName', desc: '', args: []);
   }
 
   /// `تأكيد`
   String get confirm {
-    return Intl.message(
-      'تأكيد',
-      name: 'confirm',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('تأكيد', name: 'confirm', desc: '', args: []);
   }
 
   /// `تسجيل الدخول بجوجل`
@@ -452,12 +411,7 @@ class S {
 
   /// `تأكيد الاسم`
   String get confirmName {
-    return Intl.message(
-      'تأكيد الاسم',
-      name: 'confirmName',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('تأكيد الاسم', name: 'confirmName', desc: '', args: []);
   }
 
   /// `أكد اسمك عشان نكمل`
@@ -472,12 +426,7 @@ class S {
 
   /// `أو`
   String get or {
-    return Intl.message(
-      'أو',
-      name: 'or',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('أو', name: 'or', desc: '', args: []);
   }
 
   /// `تابع محافظ شغلك بسهولة ومن مكان واحد`
@@ -512,12 +461,7 @@ class S {
 
   /// `أنشئ حسابك`
   String get signUpNow {
-    return Intl.message(
-      'أنشئ حسابك',
-      name: 'signUpNow',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('أنشئ حسابك', name: 'signUpNow', desc: '', args: []);
   }
 
   /// `example@email.com`
@@ -542,12 +486,7 @@ class S {
 
   /// `الاسم الكامل`
   String get fullName {
-    return Intl.message(
-      'الاسم الكامل',
-      name: 'fullName',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('الاسم الكامل', name: 'fullName', desc: '', args: []);
   }
 
   /// `مثلاً: أحمد محمود`
@@ -592,12 +531,7 @@ class S {
 
   /// `أهلاً بيك`
   String get welcome {
-    return Intl.message(
-      'أهلاً بيك',
-      name: 'welcome',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('أهلاً بيك', name: 'welcome', desc: '', args: []);
   }
 
   /// `إجمالي الرصيد`
@@ -622,62 +556,32 @@ class S {
 
   /// `ج.م`
   String get currency {
-    return Intl.message(
-      'ج.م',
-      name: 'currency',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('ج.م', name: 'currency', desc: '', args: []);
   }
 
   /// `إجمالي الصادر`
   String get totalOut {
-    return Intl.message(
-      'إجمالي الصادر',
-      name: 'totalOut',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('إجمالي الصادر', name: 'totalOut', desc: '', args: []);
   }
 
   /// `إجمالي الوارد`
   String get totalIn {
-    return Intl.message(
-      'إجمالي الوارد',
-      name: 'totalIn',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('إجمالي الوارد', name: 'totalIn', desc: '', args: []);
   }
 
   /// `محافظك`
   String get yourWallets {
-    return Intl.message(
-      'محافظك',
-      name: 'yourWallets',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('محافظك', name: 'yourWallets', desc: '', args: []);
   }
 
   /// `عرض الكل`
   String get viewAll {
-    return Intl.message(
-      'عرض الكل',
-      name: 'viewAll',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('عرض الكل', name: 'viewAll', desc: '', args: []);
   }
 
   /// `مساحات العمل`
   String get workspaces {
-    return Intl.message(
-      'مساحات العمل',
-      name: 'workspaces',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('مساحات العمل', name: 'workspaces', desc: '', args: []);
   }
 
   /// `إضافة مساحة عمل`
@@ -692,22 +596,12 @@ class S {
 
   /// `إضافة محفظة`
   String get addWallet {
-    return Intl.message(
-      'إضافة محفظة',
-      name: 'addWallet',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('إضافة محفظة', name: 'addWallet', desc: '', args: []);
   }
 
   /// `نشط`
   String get walletStatusActive {
-    return Intl.message(
-      'نشط',
-      name: 'walletStatusActive',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('نشط', name: 'walletStatusActive', desc: '', args: []);
   }
 
   /// `{count, plural, =0{لا توجد محافظ نشطة} =1{محفظة واحدة نشطة} =2{محفظتان نشطتان} few{{count} محافظ نشطة} many{{count} محفظة نشطة} other{{count} محفظة نشطة}}`
@@ -744,22 +638,12 @@ class S {
 
   /// `آخر نشاط`
   String get lastActivity {
-    return Intl.message(
-      'آخر نشاط',
-      name: 'lastActivity',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('آخر نشاط', name: 'lastActivity', desc: '', args: []);
   }
 
   /// `الآن`
   String get justNow {
-    return Intl.message(
-      'الآن',
-      name: 'justNow',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('الآن', name: 'justNow', desc: '', args: []);
   }
 
   /// `منذ {minutes} دقيقة`
@@ -774,12 +658,7 @@ class S {
 
   /// `ج.م`
   String get egp {
-    return Intl.message(
-      'ج.م',
-      name: 'egp',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('ج.م', name: 'egp', desc: '', args: []);
   }
 
   /// `إضافة محفظة`
@@ -834,12 +713,7 @@ class S {
 
   /// `لاحقاً`
   String get notNow {
-    return Intl.message(
-      'لاحقاً',
-      name: 'notNow',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('لاحقاً', name: 'notNow', desc: '', args: []);
   }
 
   /// `أورانج كاش`
@@ -884,12 +758,7 @@ class S {
 
   /// `وي باي`
   String get providerWePay {
-    return Intl.message(
-      'وي باي',
-      name: 'providerWePay',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('وي باي', name: 'providerWePay', desc: '', args: []);
   }
 
   /// `محفظة أخرى`
@@ -1044,12 +913,7 @@ class S {
 
   /// `المالك`
   String get workspaceOwner {
-    return Intl.message(
-      'المالك',
-      name: 'workspaceOwner',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('المالك', name: 'workspaceOwner', desc: '', args: []);
   }
 
   /// `مالك`
@@ -1234,10 +1098,10 @@ class S {
     );
   }
 
-  /// `راجع الأعضاء المشاركين، واحذف محافظك من المساحة أو غادرها عند الحاجة.`
+  /// `راجع الأعضاء والمحافظ المرتبطة، واحذف محافظك عند الحاجة أو غادر المساحة.`
   String get workspaceSettingsMemberDescription {
     return Intl.message(
-      'راجع الأعضاء المشاركين، واحذف محافظك من المساحة أو غادرها عند الحاجة.',
+      'راجع الأعضاء والمحافظ المرتبطة، واحذف محافظك عند الحاجة أو غادر المساحة.',
       name: 'workspaceSettingsMemberDescription',
       desc: '',
       args: [],
@@ -1264,10 +1128,10 @@ class S {
     );
   }
 
-  /// `تقدر تحذف فقط المحافظ التي أضفتها أنت إلى هذه المساحة.`
+  /// `تقدر تشوف كل المحافظ المرتبطة هنا، لكن تحذف فقط المحافظ التي أضفتها أنت.`
   String get workspaceSettingsWalletsMemberDescription {
     return Intl.message(
-      'تقدر تحذف فقط المحافظ التي أضفتها أنت إلى هذه المساحة.',
+      'تقدر تشوف كل المحافظ المرتبطة هنا، لكن تحذف فقط المحافظ التي أضفتها أنت.',
       name: 'workspaceSettingsWalletsMemberDescription',
       desc: '',
       args: [],
@@ -1284,10 +1148,10 @@ class S {
     );
   }
 
-  /// `لم تضف أي محافظ إلى هذه المساحة حتى الآن.`
+  /// `لا توجد محافظ مرتبطة بهذه المساحة حتى الآن.`
   String get workspaceSettingsWalletsEmptyMember {
     return Intl.message(
-      'لم تضف أي محافظ إلى هذه المساحة حتى الآن.',
+      'لا توجد محافظ مرتبطة بهذه المساحة حتى الآن.',
       name: 'workspaceSettingsWalletsEmptyMember',
       desc: '',
       args: [],
@@ -1309,6 +1173,16 @@ class S {
     return Intl.message(
       'عضو غير معروف',
       name: 'workspaceUnknownMember',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `فقط مالك المحفظة يمكنه حذفها`
+  String get workspaceSettingsWalletReadOnlyTooltip {
+    return Intl.message(
+      'فقط مالك المحفظة يمكنه حذفها',
+      name: 'workspaceSettingsWalletReadOnlyTooltip',
       desc: '',
       args: [],
     );
@@ -1496,7 +1370,9 @@ class S {
 
   /// `سيتم حذف محفظة {providerName} المرتبطة بالرقم {phoneNumber} من مساحة العمل.`
   String workspaceSettingsRemoveWalletConfirmMessage(
-      Object providerName, Object phoneNumber) {
+    Object providerName,
+    Object phoneNumber,
+  ) {
     return Intl.message(
       'سيتم حذف محفظة $providerName المرتبطة بالرقم $phoneNumber من مساحة العمل.',
       name: 'workspaceSettingsRemoveWalletConfirmMessage',
@@ -1807,12 +1683,7 @@ class S {
 
   /// `حذف`
   String get commonDeleteAction {
-    return Intl.message(
-      'حذف',
-      name: 'commonDeleteAction',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('حذف', name: 'commonDeleteAction', desc: '', args: []);
   }
 
   /// `إلغاء`
@@ -2061,11 +1932,31 @@ class S {
     );
   }
 
-  /// `بانتظارك`
+  /// `معلقة`
   String get invitationsPendingStatus {
     return Intl.message(
-      'بانتظارك',
+      'معلقة',
       name: 'invitationsPendingStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مساحة عمل محذوفة`
+  String get invitationsDeletedWorkspaceFallback {
+    return Intl.message(
+      'مساحة عمل محذوفة',
+      name: 'invitationsDeletedWorkspaceFallback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مرسل غير معروف`
+  String get invitationsUnknownInviterFallback {
+    return Intl.message(
+      'مرسل غير معروف',
+      name: 'invitationsUnknownInviterFallback',
       desc: '',
       args: [],
     );
@@ -2613,42 +2504,22 @@ class S {
 
   /// `محفظتك`
   String get walletLabel {
-    return Intl.message(
-      'محفظتك',
-      name: 'walletLabel',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('محفظتك', name: 'walletLabel', desc: '', args: []);
   }
 
   /// `من`
   String get fromLabel {
-    return Intl.message(
-      'من',
-      name: 'fromLabel',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('من', name: 'fromLabel', desc: '', args: []);
   }
 
   /// `إلى`
   String get toLabel {
-    return Intl.message(
-      'إلى',
-      name: 'toLabel',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('إلى', name: 'toLabel', desc: '', args: []);
   }
 
   /// `عبر`
   String get viaLabel {
-    return Intl.message(
-      'عبر',
-      name: 'viaLabel',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('عبر', name: 'viaLabel', desc: '', args: []);
   }
 
   /// `حالة السداد`
@@ -2943,12 +2814,7 @@ class S {
 
   /// `تراجع`
   String get transaction_undo {
-    return Intl.message(
-      'تراجع',
-      name: 'transaction_undo',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('تراجع', name: 'transaction_undo', desc: '', args: []);
   }
 
   /// `تم التعديل`
@@ -2973,12 +2839,7 @@ class S {
 
   /// `حفظ`
   String get transaction_save {
-    return Intl.message(
-      'حفظ',
-      name: 'transaction_save',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('حفظ', name: 'transaction_save', desc: '', args: []);
   }
 
   /// `نص الرسالة`

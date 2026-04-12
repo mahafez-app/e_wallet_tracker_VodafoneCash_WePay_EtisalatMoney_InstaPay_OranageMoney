@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../domain/enums/invitation_status.dart';
@@ -101,6 +102,37 @@ class InvitationRemoteQueryService {
       (left, right) => right.createdAt.compareTo(left.createdAt),
     );
     return invitations;
+  }
+
+  Stream<List<WorkspacePendingInvitationDto>> watchWorkspacePendingInvitations(
+    String workspaceId,
+  ) async* {
+    final currentUid = this.currentUid;
+    final workspace = await getWorkspaceContext(workspaceId);
+    _ensureWorkspaceOwner(workspace.data, currentUid);
+
+    final snapshotStream = _invitesCollection
+        .where('workspaceId', isEqualTo: workspaceId)
+        .where('status', isEqualTo: InvitationStatus.pending.name)
+        .snapshots();
+
+    yield* snapshotStream.switchMap((snapshot) {
+      if (snapshot.docs.isEmpty) {
+        return Stream.value(const <WorkspacePendingInvitationDto>[]);
+      }
+
+      final future =
+          Future.wait(snapshot.docs.map(_mapWorkspacePendingInvitation)).then((
+            invitations,
+          ) {
+            invitations.sort(
+              (left, right) => right.createdAt.compareTo(left.createdAt),
+            );
+            return invitations;
+          });
+
+      return Stream.fromFuture(future);
+    });
   }
 
   Future<WorkspaceContext> getWorkspaceContext(String workspaceId) async {

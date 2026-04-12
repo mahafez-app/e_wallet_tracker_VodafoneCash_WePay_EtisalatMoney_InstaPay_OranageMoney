@@ -18,6 +18,10 @@ abstract interface class InvitationsRemoteDataSource {
     String workspaceId,
   );
 
+  Stream<List<WorkspacePendingInvitationDto>> watchWorkspacePendingInvitations(
+    String workspaceId,
+  );
+
   Future<List<InvitationDto>> getRecentRespondedInvitations();
 
   Future<void> acceptInvitation(String invitationId);
@@ -75,6 +79,13 @@ class InvitationsRemoteDataSourceImpl implements InvitationsRemoteDataSource {
     String workspaceId,
   ) {
     return _queryService.getWorkspacePendingInvitations(workspaceId);
+  }
+
+  @override
+  Stream<List<WorkspacePendingInvitationDto>> watchWorkspacePendingInvitations(
+    String workspaceId,
+  ) {
+    return _queryService.watchWorkspacePendingInvitations(workspaceId);
   }
 
   @override

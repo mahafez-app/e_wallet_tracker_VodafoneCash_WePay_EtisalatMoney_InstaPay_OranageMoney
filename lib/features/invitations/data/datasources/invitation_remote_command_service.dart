@@ -34,6 +34,9 @@ class InvitationRemoteCommandService {
     _ensureNotSelfInvite(invitedUser.uid, ownerUid);
     await _ensureNoPendingInvitation(workspaceId, invitedUser.uid);
     await _ensureUserIsNotWorkspaceMember(workspace.reference, invitedUser.uid);
+    final inviter = await _queryService.getUserById(ownerUid);
+    final workspaceName = (workspace.data['name'] as String?)?.trim();
+    final inviterName = (inviter?.data['name'] as String?)?.trim();
 
     final invitation = InvitationDto(
       id: _invitesCollection.doc().id,
@@ -43,6 +46,8 @@ class InvitationRemoteCommandService {
       role: 'member',
       status: InvitationStatus.pending,
       createdAt: DateTime.now(),
+      workspaceName: workspaceName,
+      inviterName: inviterName,
     );
     await _invitesCollection.doc(invitation.id).set(invitation.toFirestore());
   }

@@ -87,12 +87,14 @@ class InvitationsContent extends ConsumerWidget {
       return;
     }
 
+    final workspaceName = display.workspaceName.trim().isNotEmpty
+        ? display.workspaceName
+        : context.l10n.invitationsDeletedWorkspaceFallback;
+
     final didConfirm = await AppDialog.show<bool>(
       context,
       title: context.l10n.invitationDeclineConfirmTitle,
-      message: context.l10n.invitationDeclineConfirmMessage(
-        display.workspaceName,
-      ),
+      message: context.l10n.invitationDeclineConfirmMessage(workspaceName),
       confirmLabel: context.l10n.invitationsDeclineAction,
       cancelLabel: MaterialLocalizations.of(context).cancelButtonLabel,
       type: AppDialogType.warning,

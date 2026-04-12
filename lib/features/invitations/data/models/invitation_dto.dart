@@ -12,6 +12,8 @@ final class InvitationDto extends InvitationEntity {
     required super.role,
     required super.status,
     required super.createdAt,
+    super.workspaceName,
+    super.inviterName,
   });
 
   factory InvitationDto.fromFirestore(
@@ -26,6 +28,8 @@ final class InvitationDto extends InvitationEntity {
       role: data['role'] as String? ?? 'member',
       status: InvitationStatus.fromValue(data['status'] as String?),
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      workspaceName: data['workspaceName'] as String?,
+      inviterName: data['inviterName'] as String?,
     );
   }
 
@@ -36,6 +40,8 @@ final class InvitationDto extends InvitationEntity {
     'role': role,
     'status': status.name,
     'createdAt': Timestamp.fromDate(createdAt),
+    'workspaceName': workspaceName,
+    'inviterName': inviterName,
   };
 
   InvitationEntity toEntity() {
@@ -47,6 +53,8 @@ final class InvitationDto extends InvitationEntity {
       role: role,
       status: status,
       createdAt: createdAt,
+      workspaceName: workspaceName,
+      inviterName: inviterName,
     );
   }
 }

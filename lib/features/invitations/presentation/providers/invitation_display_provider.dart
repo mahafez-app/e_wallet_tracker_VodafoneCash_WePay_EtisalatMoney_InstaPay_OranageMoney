@@ -10,27 +10,40 @@ class InvitationDisplayData {
   const InvitationDisplayData({
     required this.workspaceName,
     required this.inviterName,
+    required this.isWorkspaceUnavailable,
   });
 
   final String workspaceName;
   final String inviterName;
+  final bool isWorkspaceUnavailable;
 }
 
 final invitationDisplayProvider = FutureProvider.autoDispose
     .family<InvitationDisplayData, InvitationEntity>((ref, invitation) async {
+      final cachedWorkspaceName = invitation.workspaceName?.trim();
+      final cachedInviterName = invitation.inviterName?.trim();
+      if (cachedWorkspaceName?.isNotEmpty == true &&
+          cachedInviterName?.isNotEmpty == true) {
+        return InvitationDisplayData(
+          workspaceName: cachedWorkspaceName!,
+          inviterName: cachedInviterName!,
+          isWorkspaceUnavailable: false,
+        );
+      }
+
       final workspaceResult = await ref
           .read(getWorkspaceDetailsUseCaseProvider)
           .call(GetWorkspaceDetailsParams(workspaceId: invitation.workspaceId));
       final inviterResult = await ref
           .read(getUserProfileUseCaseProvider)
           .call(GetUserProfileParams(invitation.invitedByUid));
-      final workspaceName =
-          workspaceResult.dataOrNull?.workspace.name ?? invitation.workspaceId;
-      final inviterName =
-          inviterResult.dataOrNull?.name ?? invitation.invitedByUid;
+      final workspaceName = workspaceResult.dataOrNull?.workspace.name;
+      final inviterName = inviterResult.dataOrNull?.name;
 
       return InvitationDisplayData(
-        workspaceName: workspaceName,
-        inviterName: inviterName,
+        workspaceName: workspaceName ?? cachedWorkspaceName ?? '',
+        inviterName:
+            inviterName ?? cachedInviterName ?? invitation.invitedByUid,
+        isWorkspaceUnavailable: workspaceName == null,
       );
     });

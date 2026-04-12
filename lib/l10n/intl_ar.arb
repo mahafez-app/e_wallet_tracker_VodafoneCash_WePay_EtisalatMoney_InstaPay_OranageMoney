@@ -137,12 +137,12 @@
   "workspaceSettingsPendingInvitationsSection": "الدعوات المعلقة",
   "workspaceSettingsPendingInvitationsEmpty": "لا توجد دعوات معلقة لهذه المساحة حالياً.",
   "workspaceSettingsAccessSection": "وصولك للمساحة",
-  "workspaceSettingsMemberDescription": "راجع الأعضاء المشاركين، واحذف محافظك من المساحة أو غادرها عند الحاجة.",
+  "workspaceSettingsMemberDescription": "راجع الأعضاء والمحافظ المرتبطة، واحذف محافظك عند الحاجة أو غادر المساحة.",
   "workspaceSettingsManageAccessAction": "إدارة الوصول",
   "workspaceSettingsWalletsOwnerDescription": "راجع كل المحافظ المرتبطة بهذه المساحة، واحذف أي محفظة لا يجب أن تبقى مشتركة.",
-  "workspaceSettingsWalletsMemberDescription": "تقدر تحذف فقط المحافظ التي أضفتها أنت إلى هذه المساحة.",
+  "workspaceSettingsWalletsMemberDescription": "تقدر تشوف كل المحافظ المرتبطة هنا، لكن تحذف فقط المحافظ التي أضفتها أنت.",
   "workspaceSettingsWalletsEmptyOwner": "لا توجد محافظ مرتبطة بهذه المساحة حتى الآن.",
-  "workspaceSettingsWalletsEmptyMember": "لم تضف أي محافظ إلى هذه المساحة حتى الآن.",
+  "workspaceSettingsWalletsEmptyMember": "لا توجد محافظ مرتبطة بهذه المساحة حتى الآن.",
   "workspaceSettingsWalletOwner": "المالك: {ownerName}",
   "@workspaceSettingsWalletOwner": {
     "placeholders": {
@@ -150,6 +150,7 @@
     }
   },
   "workspaceUnknownMember": "عضو غير معروف",
+  "workspaceSettingsWalletReadOnlyTooltip": "فقط مالك المحفظة يمكنه حذفها",
   "workspaceSettingsDangerZone": "إجراءات حساسة",
   "workspaceSettingsEditNameTitle": "تعديل اسم المساحة",
   "workspaceSettingsEditNameDescription": "غيّر الاسم الظاهر للمساحة في كل الشاشات المشتركة.",
@@ -257,7 +258,9 @@
       }
     }
   },
-  "invitationsPendingStatus": "بانتظارك",
+  "invitationsPendingStatus": "معلقة",
+  "invitationsDeletedWorkspaceFallback": "مساحة عمل محذوفة",
+  "invitationsUnknownInviterFallback": "مرسل غير معروف",
   "invitationsAcceptAction": "قبول",
   "invitationsDeclineAction": "رفض",
   "invitationsRefreshAction": "تحديث القائمة",

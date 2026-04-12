@@ -11,6 +11,8 @@ class InvitationEntity extends Equatable {
     required this.role,
     required this.status,
     required this.createdAt,
+    this.workspaceName,
+    this.inviterName,
   });
 
   final String id;
@@ -20,6 +22,8 @@ class InvitationEntity extends Equatable {
   final String role;
   final InvitationStatus status;
   final DateTime createdAt;
+  final String? workspaceName;
+  final String? inviterName;
 
   @override
   List<Object?> get props => [
@@ -30,5 +34,7 @@ class InvitationEntity extends Equatable {
     role,
     status,
     createdAt,
+    workspaceName,
+    inviterName,
   ];
 }

@@ -11,6 +11,7 @@ import '../domain/usecases/decline_invitation_usecase.dart';
 import '../domain/usecases/get_pending_invitations_usecase.dart';
 import '../domain/usecases/get_recent_responded_invitations_usecase.dart';
 import '../domain/usecases/get_workspace_pending_invitations_usecase.dart';
+import '../domain/usecases/watch_workspace_pending_invitations_usecase.dart';
 
 final invitationsRemoteDataSourceProvider =
     Provider<InvitationsRemoteDataSource>(
@@ -40,6 +41,13 @@ final getPendingInvitationsUseCaseProvider =
 final getWorkspacePendingInvitationsUseCaseProvider =
     Provider<GetWorkspacePendingInvitationsUseCase>(
       (ref) => GetWorkspacePendingInvitationsUseCase(
+        ref.watch(invitationsRepositoryProvider),
+      ),
+    );
+
+final watchWorkspacePendingInvitationsUseCaseProvider =
+    Provider<WatchWorkspacePendingInvitationsUseCase>(
+      (ref) => WatchWorkspacePendingInvitationsUseCase(
         ref.watch(invitationsRepositoryProvider),
       ),
     );

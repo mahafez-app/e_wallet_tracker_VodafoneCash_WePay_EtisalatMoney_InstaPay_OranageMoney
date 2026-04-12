@@ -42,6 +42,19 @@ class InvitationsRepositoryImpl implements InvitationsRepository {
   }
 
   @override
+  Stream<Result<List<WorkspacePendingInvitationEntity>>>
+  watchWorkspacePendingInvitations(String workspaceId) {
+    return executeStreamAndHandleErrors(() {
+      return _remote
+          .watchWorkspacePendingInvitations(workspaceId)
+          .map(
+            (invitations) =>
+                invitations.map((invitation) => invitation.toEntity()).toList(),
+          );
+    }, tag: 'InvitationsRepositoryImpl.watchWorkspacePendingInvitations');
+  }
+
+  @override
   Future<Result<List<InvitationEntity>>> getRecentRespondedInvitations() {
     return executeAndHandleErrors(() async {
       final invitations = await _remote.getRecentRespondedInvitations();

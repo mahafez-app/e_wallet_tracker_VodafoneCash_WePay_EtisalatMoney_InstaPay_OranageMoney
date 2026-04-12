@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'workspace_settings_controller_commands_mixin.dart';
 import 'workspace_settings_controller_internal_mixin.dart';
+import 'workspace_settings_controller_live_sync_mixin.dart';
 import 'workspace_settings_state.dart';
 
 final workspaceSettingsControllerProvider = AsyncNotifierProvider.autoDispose
@@ -12,7 +13,8 @@ final workspaceSettingsControllerProvider = AsyncNotifierProvider.autoDispose
 class WorkspaceSettingsController extends AsyncNotifier<WorkspaceSettingsState>
     with
         WorkspaceSettingsControllerCommandsMixin,
-        WorkspaceSettingsControllerInternalMixin {
+        WorkspaceSettingsControllerInternalMixin,
+        WorkspaceSettingsControllerLiveSyncMixin {
   WorkspaceSettingsController(this.workspaceId);
 
   @override
@@ -20,6 +22,12 @@ class WorkspaceSettingsController extends AsyncNotifier<WorkspaceSettingsState>
 
   @override
   Future<WorkspaceSettingsState> build() {
-    return loadState();
+    return _buildState();
+  }
+
+  Future<WorkspaceSettingsState> _buildState() async {
+    final initialState = await loadState();
+    bindLiveState(ownerUid: initialState.details.workspace.ownerUid);
+    return initialState;
   }
 }

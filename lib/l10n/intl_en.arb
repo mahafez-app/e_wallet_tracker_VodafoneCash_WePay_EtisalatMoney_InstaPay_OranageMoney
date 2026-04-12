@@ -137,12 +137,12 @@
   "workspaceSettingsPendingInvitationsSection": "Pending Invitations",
   "workspaceSettingsPendingInvitationsEmpty": "There are no pending invitations for this workspace right now.",
   "workspaceSettingsAccessSection": "Your access",
-  "workspaceSettingsMemberDescription": "Review the shared members and remove your own wallets or leave the workspace when needed.",
+  "workspaceSettingsMemberDescription": "Review the shared members and linked wallets, remove your own wallets when needed, or leave the workspace.",
   "workspaceSettingsManageAccessAction": "Manage access",
   "workspaceSettingsWalletsOwnerDescription": "Review every linked wallet in this workspace and remove any wallet that should no longer be shared.",
-  "workspaceSettingsWalletsMemberDescription": "You can remove only the wallets you added to this workspace.",
+  "workspaceSettingsWalletsMemberDescription": "You can review every linked wallet here, but you can remove only the wallets you added.",
   "workspaceSettingsWalletsEmptyOwner": "There are no linked wallets in this workspace yet.",
-  "workspaceSettingsWalletsEmptyMember": "You have not linked any wallets to this workspace yet.",
+  "workspaceSettingsWalletsEmptyMember": "There are no linked wallets in this workspace yet.",
   "workspaceSettingsWalletOwner": "Owner: {ownerName}",
   "@workspaceSettingsWalletOwner": {
     "placeholders": {
@@ -150,6 +150,7 @@
     }
   },
   "workspaceUnknownMember": "Unknown member",
+  "workspaceSettingsWalletReadOnlyTooltip": "Only the wallet owner can remove this wallet",
   "workspaceSettingsDangerZone": "Sensitive actions",
   "workspaceSettingsEditNameTitle": "Edit workspace name",
   "workspaceSettingsEditNameDescription": "Update the visible name used across the workspace and shared views.",
@@ -257,7 +258,9 @@
       }
     }
   },
-  "invitationsPendingStatus": "Awaiting response",
+  "invitationsPendingStatus": "Pending",
+  "invitationsDeletedWorkspaceFallback": "Deleted workspace",
+  "invitationsUnknownInviterFallback": "Unknown sender",
   "invitationsAcceptAction": "Accept",
   "invitationsDeclineAction": "Decline",
   "invitationsRefreshAction": "Refresh list",

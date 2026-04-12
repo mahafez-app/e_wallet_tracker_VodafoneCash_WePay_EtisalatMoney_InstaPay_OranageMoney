@@ -18,8 +18,10 @@ class InvitationFeedbackCard extends ConsumerWidget {
     final colors = context.appColors;
     final theme = Theme.of(context);
     final display = ref.watch(invitationDisplayProvider(feedback.invitation));
-    final workspaceName =
-        display.asData?.value.workspaceName ?? feedback.invitation.workspaceId;
+    final resolvedWorkspaceName = display.asData?.value.workspaceName;
+    final workspaceName = resolvedWorkspaceName?.trim().isNotEmpty == true
+        ? resolvedWorkspaceName!
+        : context.l10n.invitationsDeletedWorkspaceFallback;
 
     final title = switch (feedback.action) {
       InvitationActionType.accept => context.l10n.invitationAcceptSuccess(

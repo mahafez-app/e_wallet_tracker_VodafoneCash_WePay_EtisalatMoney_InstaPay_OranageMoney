@@ -80,6 +80,7 @@ class TransactionsController extends Notifier<TransactionsState> {
       case WorkspaceTransactionsRouteData():
         await _loadWorkspacePage(
           arg as WorkspaceTransactionsRouteData,
+          isFirstPage: true,
           requestId: requestId,
         );
     }
@@ -87,14 +88,22 @@ class TransactionsController extends Notifier<TransactionsState> {
 
   Future<void> loadMore() async {
     if (state.isLoadingMore || !state.hasMore) return;
-    if (arg is! WalletTransactionsRouteData) return;
 
     state = state.copyWith(isLoadingMore: true);
-    await _loadWalletPage(
-      arg as WalletTransactionsRouteData,
-      isFirstPage: false,
-      requestId: _activeRequestId,
-    );
+    switch (arg) {
+      case WalletTransactionsRouteData():
+        await _loadWalletPage(
+          arg as WalletTransactionsRouteData,
+          isFirstPage: false,
+          requestId: _activeRequestId,
+        );
+      case WorkspaceTransactionsRouteData():
+        await _loadWorkspacePage(
+          arg as WorkspaceTransactionsRouteData,
+          isFirstPage: false,
+          requestId: _activeRequestId,
+        );
+    }
   }
 
   Future<void> _loadWalletPage(
@@ -110,7 +119,9 @@ class TransactionsController extends Notifier<TransactionsState> {
         type: state.resolvedType,
         dateRange: state.resolvedDateRange,
         limit: _pageSize,
-        cursor: isFirstPage ? null : state.nextCursor,
+        cursor: isFirstPage
+            ? null
+            : state.nextCursor as WalletTransactionsPageCursor?,
       ),
     );
 
@@ -143,7 +154,7 @@ class TransactionsController extends Notifier<TransactionsState> {
   void _setWalletPageSuccess({
     required List<TransactionEntity> transactions,
     required int totalCount,
-    required TransactionPageCursor? nextCursor,
+    required TransactionsPageCursor? nextCursor,
     required bool isFirstPage,
   }) {
     final mergedTransactions = isFirstPage
@@ -161,6 +172,7 @@ class TransactionsController extends Notifier<TransactionsState> {
 
   Future<void> _loadWorkspacePage(
     WorkspaceTransactionsRouteData context, {
+    required bool isFirstPage,
     required int requestId,
   }) async {
     final walletIds = _resolveWorkspaceWalletIds(context);
@@ -170,6 +182,10 @@ class TransactionsController extends Notifier<TransactionsState> {
         walletIds: walletIds,
         type: state.resolvedType,
         dateRange: state.resolvedDateRange,
+        limit: _pageSize,
+        cursor: isFirstPage
+            ? null
+            : state.nextCursor as WorkspaceTransactionsPageCursor?,
       ),
     );
 
@@ -180,14 +196,12 @@ class TransactionsController extends Notifier<TransactionsState> {
         log('TransactionsController: $failure', name: 'Presentation');
         _setLoadFailure(failure);
       },
-      (transactions) {
-        state = state.copyWith(
-          transactions: transactions,
-          totalCount: transactions.length,
-          isLoadingInitial: false,
-          error: null,
-        );
-      },
+      (page) => _setWalletPageSuccess(
+        transactions: page.transactions,
+        totalCount: page.totalCount,
+        nextCursor: page.nextCursor,
+        isFirstPage: isFirstPage,
+      ),
     );
   }
 

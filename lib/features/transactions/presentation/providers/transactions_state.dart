@@ -41,7 +41,7 @@ final class TransactionsState extends Equatable {
   final int totalCount;
 
   /// Null when there are no more pages.
-  final TransactionPageCursor? nextCursor;
+  final TransactionsPageCursor? nextCursor;
 
   final bool isLoadingInitial;
   final bool isLoadingMore;
@@ -135,7 +135,7 @@ final class TransactionsState extends Equatable {
     totalCount: totalCount ?? this.totalCount,
     nextCursor: identical(nextCursor, _sentinel)
         ? this.nextCursor
-        : nextCursor as TransactionPageCursor?,
+        : nextCursor as TransactionsPageCursor?,
     isLoadingInitial: isLoadingInitial ?? this.isLoadingInitial,
     isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     error: identical(error, _sentinel) ? this.error : error as Failure?,

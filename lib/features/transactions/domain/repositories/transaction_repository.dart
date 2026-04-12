@@ -16,15 +16,16 @@ abstract interface class TransactionRepository {
     TransactionType? type,
     TransactionDateRange? dateRange,
     int limit = 20,
-    TransactionPageCursor? cursor,
+    WalletTransactionsPageCursor? cursor,
   });
 
   /// Merged + sorted list of transactions across multiple wallet IDs.
-  Future<Result<List<TransactionEntity>>> getWorkspaceTransactions({
+  Future<Result<TransactionPage>> getWorkspaceTransactions({
     required List<String> walletIds,
     TransactionType? type,
     TransactionDateRange? dateRange,
     int limit = 20,
+    WorkspaceTransactionsPageCursor? cursor,
   });
 
   // ── Mutations ────────────────────────────────────────────────────────────

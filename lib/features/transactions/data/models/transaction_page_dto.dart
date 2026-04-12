@@ -10,5 +10,5 @@ final class TransactionPageDto {
 
   final List<TransactionDto> transactions;
   final int totalCount;
-  final TransactionPageCursor? nextCursor;
+  final TransactionsPageCursor? nextCursor;
 }

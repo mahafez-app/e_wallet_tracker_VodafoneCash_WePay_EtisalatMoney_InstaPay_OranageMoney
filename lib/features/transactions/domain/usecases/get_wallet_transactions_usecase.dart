@@ -35,5 +35,5 @@ final class GetWalletTransactionsParams {
   final TransactionType? type;
   final TransactionDateRange? dateRange;
   final int limit;
-  final TransactionPageCursor? cursor;
+  final WalletTransactionsPageCursor? cursor;
 }

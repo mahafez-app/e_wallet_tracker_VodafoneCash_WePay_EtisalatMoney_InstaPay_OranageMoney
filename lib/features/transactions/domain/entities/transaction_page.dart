@@ -2,8 +2,12 @@ import 'package:equatable/equatable.dart';
 
 import '../../../../core/domain/entities/transaction_entity.dart';
 
-final class TransactionPageCursor extends Equatable {
-  const TransactionPageCursor({
+sealed class TransactionsPageCursor extends Equatable {
+  const TransactionsPageCursor();
+}
+
+final class WalletTransactionsPageCursor extends TransactionsPageCursor {
+  const WalletTransactionsPageCursor({
     required this.createdAt,
     required this.transactionId,
   });
@@ -15,6 +19,18 @@ final class TransactionPageCursor extends Equatable {
   List<Object?> get props => [createdAt, transactionId];
 }
 
+final class WorkspaceTransactionsPageCursor extends TransactionsPageCursor {
+  const WorkspaceTransactionsPageCursor({required this.walletCursors});
+
+  final Map<String, WalletTransactionsPageCursor> walletCursors;
+
+  @override
+  List<Object?> get props => [
+    walletCursors.entries.toList()
+      ..sort((left, right) => left.key.compareTo(right.key)),
+  ];
+}
+
 final class TransactionPage extends Equatable {
   const TransactionPage({
     required this.transactions,
@@ -24,7 +40,7 @@ final class TransactionPage extends Equatable {
 
   final List<TransactionEntity> transactions;
   final int totalCount;
-  final TransactionPageCursor? nextCursor;
+  final TransactionsPageCursor? nextCursor;
 
   bool get hasMore => nextCursor != null;
 

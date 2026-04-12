@@ -7,14 +7,18 @@ import '../../domain/entities/note_entity.dart';
 import '../../domain/entities/transaction_history_entry_entity.dart';
 import '../../domain/entities/transaction_page.dart';
 import '../../domain/repositories/transaction_repository.dart';
-import '../datasources/transaction_remote_data_source.dart';
+import '../datasources/wallet_transaction_remote_data_source.dart';
+import '../datasources/workspace_transaction_remote_data_source.dart';
 
 final class TransactionRepositoryImpl implements TransactionRepository {
   const TransactionRepositoryImpl({
-    required TransactionRemoteDataSource remoteDataSource,
-  }) : _remoteDataSource = remoteDataSource;
+    required WalletTransactionRemoteDataSource walletRemoteDataSource,
+    required WorkspaceTransactionRemoteDataSource workspaceRemoteDataSource,
+  }) : _walletRemoteDataSource = walletRemoteDataSource,
+       _workspaceRemoteDataSource = workspaceRemoteDataSource;
 
-  final TransactionRemoteDataSource _remoteDataSource;
+  final WalletTransactionRemoteDataSource _walletRemoteDataSource;
+  final WorkspaceTransactionRemoteDataSource _workspaceRemoteDataSource;
 
   // ── Queries ──────────────────────────────────────────────────────────────
 
@@ -24,9 +28,9 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     TransactionType? type,
     TransactionDateRange? dateRange,
     int limit = 20,
-    TransactionPageCursor? cursor,
+    WalletTransactionsPageCursor? cursor,
   }) => executeAndHandleErrors(() async {
-    final result = await _remoteDataSource.getWalletTransactions(
+    final result = await _walletRemoteDataSource.getWalletTransactions(
       walletId: walletId,
       type: type,
       dateRange: dateRange,
@@ -41,19 +45,25 @@ final class TransactionRepositoryImpl implements TransactionRepository {
   }, tag: 'TransactionRepository.getWalletTransactions');
 
   @override
-  Future<Result<List<TransactionEntity>>> getWorkspaceTransactions({
+  Future<Result<TransactionPage>> getWorkspaceTransactions({
     required List<String> walletIds,
     TransactionType? type,
     TransactionDateRange? dateRange,
     int limit = 20,
+    WorkspaceTransactionsPageCursor? cursor,
   }) => executeAndHandleErrors(() async {
-    final dtos = await _remoteDataSource.getWorkspaceTransactions(
+    final result = await _workspaceRemoteDataSource.getWorkspaceTransactions(
       walletIds: walletIds,
       type: type,
       dateRange: dateRange,
       limit: limit,
+      cursor: cursor,
     );
-    return dtos.map((e) => e.toEntity()).toList();
+    return TransactionPage(
+      transactions: result.transactions.map((e) => e.toEntity()).toList(),
+      totalCount: result.totalCount,
+      nextCursor: result.nextCursor,
+    );
   }, tag: 'TransactionRepository.getWorkspaceTransactions');
 
   // ── Mutations ────────────────────────────────────────────────────────────
@@ -65,7 +75,7 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     required String userId,
     required String userName,
   }) => executeAndHandleErrors(
-    () => _remoteDataSource.markAsPaid(
+    () => _walletRemoteDataSource.markAsPaid(
       walletId: walletId,
       transactionId: transactionId,
       userId: userId,
@@ -81,7 +91,7 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     required String userId,
     required String userName,
   }) => executeAndHandleErrors(
-    () => _remoteDataSource.markAsUnpaid(
+    () => _walletRemoteDataSource.markAsUnpaid(
       walletId: walletId,
       transactionId: transactionId,
       userId: userId,
@@ -93,7 +103,7 @@ final class TransactionRepositoryImpl implements TransactionRepository {
   @override
   Future<Result<void>> saveTransaction(TransactionEntity transaction) =>
       executeAndHandleErrors(
-        () => _remoteDataSource.saveTransaction(transaction),
+        () => _walletRemoteDataSource.saveTransaction(transaction),
         tag: 'TransactionRepository.saveTransaction',
       );
 
@@ -107,7 +117,7 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     required String userId,
     required String userName,
   }) => executeAndHandleErrors(
-    () => _remoteDataSource.addNote(
+    () => _walletRemoteDataSource.addNote(
       walletId: walletId,
       transactionId: transactionId,
       text: text,
@@ -124,7 +134,7 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     required String noteId,
     required String text,
   }) => executeAndHandleErrors(
-    () => _remoteDataSource.editNote(
+    () => _walletRemoteDataSource.editNote(
       walletId: walletId,
       transactionId: transactionId,
       noteId: noteId,
@@ -139,7 +149,7 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     required String transactionId,
     required String noteId,
   }) => executeAndHandleErrors(
-    () => _remoteDataSource.deleteNote(
+    () => _walletRemoteDataSource.deleteNote(
       walletId: walletId,
       transactionId: transactionId,
       noteId: noteId,
@@ -152,7 +162,7 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     required String walletId,
     required String transactionId,
   }) => executeStreamAndHandleErrors(
-    () => _remoteDataSource
+    () => _walletRemoteDataSource
         .getNotes(walletId: walletId, transactionId: transactionId)
         .map((dtos) => dtos.map((d) => d.toEntity()).toList()),
     tag: 'TransactionRepository.getNotes',
@@ -163,7 +173,7 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     required String walletId,
     required String transactionId,
   }) => executeStreamAndHandleErrors(
-    () => _remoteDataSource
+    () => _walletRemoteDataSource
         .getTransactionHistory(walletId: walletId, transactionId: transactionId)
         .map((dtos) => dtos.map((d) => d.toEntity()).toList()),
     tag: 'TransactionRepository.getTransactionHistory',

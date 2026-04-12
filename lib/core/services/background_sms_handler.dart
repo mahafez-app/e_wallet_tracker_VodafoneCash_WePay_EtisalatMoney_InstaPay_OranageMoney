@@ -7,7 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../features/transactions/data/datasources/transaction_remote_data_source.dart';
+import '../../features/transactions/data/datasources/transaction_firestore_support.dart';
+import '../../features/transactions/data/datasources/wallet_transaction_remote_data_source.dart';
 import '../../firebase_options.dart';
 import '../data/models/wallet_dto.dart';
 import '../domain/entities/transaction_entity.dart';
@@ -157,8 +158,8 @@ Future<void> _processAndSaveBackgroundTransaction({
 }
 
 Future<void> _saveBackgroundTransaction(TransactionEntity transaction) async {
-  final remoteDataSource = TransactionRemoteDataSourceImpl(
-    firestore: FirebaseFirestore.instance,
+  final remoteDataSource = WalletTransactionRemoteDataSourceImpl(
+    support: TransactionFirestoreSupport(firestore: FirebaseFirestore.instance),
   );
   try {
     await remoteDataSource.saveTransaction(transaction);

@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/firebase_providers.dart';
-import '../data/datasources/transaction_remote_data_source.dart';
+import '../data/datasources/transaction_firestore_support.dart';
+import '../data/datasources/wallet_transaction_remote_data_source.dart';
+import '../data/datasources/workspace_transaction_remote_data_source.dart';
 import '../data/repositories/transaction_repository_impl.dart';
 import '../domain/repositories/transaction_repository.dart';
 import '../domain/usecases/get_wallet_transactions_usecase.dart';
@@ -12,16 +14,34 @@ import '../domain/usecases/save_transaction_usecase.dart';
 
 // ── Infrastructure ───────────────────────────────────────────────────────────
 
-final transactionRemoteDataSourceProvider =
-    Provider<TransactionRemoteDataSource>((ref) {
-      return TransactionRemoteDataSourceImpl(
-        firestore: ref.watch(firestoreProvider),
+final transactionFirestoreSupportProvider =
+    Provider<TransactionFirestoreSupport>(
+      (ref) =>
+          TransactionFirestoreSupport(firestore: ref.watch(firestoreProvider)),
+    );
+
+final walletTransactionRemoteDataSourceProvider =
+    Provider<WalletTransactionRemoteDataSource>((ref) {
+      return WalletTransactionRemoteDataSourceImpl(
+        support: ref.watch(transactionFirestoreSupportProvider),
+      );
+    });
+
+final workspaceTransactionRemoteDataSourceProvider =
+    Provider<WorkspaceTransactionRemoteDataSource>((ref) {
+      return WorkspaceTransactionRemoteDataSourceImpl(
+        support: ref.watch(transactionFirestoreSupportProvider),
       );
     });
 
 final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
   return TransactionRepositoryImpl(
-    remoteDataSource: ref.watch(transactionRemoteDataSourceProvider),
+    walletRemoteDataSource: ref.watch(
+      walletTransactionRemoteDataSourceProvider,
+    ),
+    workspaceRemoteDataSource: ref.watch(
+      workspaceTransactionRemoteDataSourceProvider,
+    ),
   );
 });
 

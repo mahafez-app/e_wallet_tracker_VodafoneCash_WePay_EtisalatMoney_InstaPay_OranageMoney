@@ -70,18 +70,9 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(
-                  width: 40.responsiveRadius,
-                  height: 40.responsiveRadius,
-                  decoration: BoxDecoration(
-                    color: wallet.provider.brandColor.withAlpha(18),
-                    borderRadius: BorderRadius.circular(12.responsiveRadius),
-                  ),
-                  child: WalletProviderIcon(
-                    provider: wallet.provider,
-                    size: 24.responsiveRadius,
-                    fallbackColor: wallet.provider.brandColor,
-                  ),
+                WalletProviderIcon(
+                  provider: wallet.provider,
+                  size: AppSpacing.xxl.responsiveRadius,
                 ),
                 AppSpacing.sm.horizontalSpace,
                 Expanded(

@@ -8,6 +8,7 @@ import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/widgets/app_button.dart';
 import '../../../../../core/widgets/app_text_field.dart';
 import '../../providers/workspace_settings_controller.dart';
+import '../../providers/workspace_settings_state.dart';
 
 class EditWorkspaceNameBottomSheet extends StatelessWidget {
   const EditWorkspaceNameBottomSheet({

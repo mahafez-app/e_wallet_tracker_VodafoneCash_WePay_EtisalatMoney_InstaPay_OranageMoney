@@ -8,6 +8,7 @@ import '../domain/usecases/add_wallets_to_workspace_usecase.dart';
 import '../domain/usecases/create_workspace_usecase.dart';
 import '../domain/usecases/delete_workspace_usecase.dart';
 import '../domain/usecases/get_workspace_details_usecase.dart';
+import '../domain/usecases/remove_wallets_from_workspace_usecase.dart';
 import '../domain/usecases/remove_workspace_member_usecase.dart';
 import '../domain/usecases/update_workspace_name_usecase.dart';
 import '../domain/usecases/watch_workspace_details_usecase.dart';
@@ -37,6 +38,13 @@ final addWalletsToWorkspaceUseCaseProvider =
     Provider<AddWalletsToWorkspaceUseCase>(
       (ref) =>
           AddWalletsToWorkspaceUseCase(ref.watch(workspaceRepositoryProvider)),
+    );
+
+final removeWalletsFromWorkspaceUseCaseProvider =
+    Provider<RemoveWalletsFromWorkspaceUseCase>(
+      (ref) => RemoveWalletsFromWorkspaceUseCase(
+        ref.watch(workspaceRepositoryProvider),
+      ),
     );
 
 final removeWorkspaceMemberUseCaseProvider =

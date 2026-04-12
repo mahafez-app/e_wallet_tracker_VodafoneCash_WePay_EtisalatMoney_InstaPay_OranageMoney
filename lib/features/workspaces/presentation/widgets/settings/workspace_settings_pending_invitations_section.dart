@@ -6,7 +6,7 @@ import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../invitations/domain/entities/workspace_pending_invitation_entity.dart';
-import '../../providers/workspace_settings_controller.dart';
+import '../../providers/workspace_settings_state.dart';
 import 'workspace_settings_empty_state_card.dart';
 import 'workspace_settings_section_title.dart';
 
@@ -14,24 +14,18 @@ class WorkspaceSettingsPendingInvitationsSection extends StatelessWidget {
   const WorkspaceSettingsPendingInvitationsSection({
     super.key,
     required this.invitations,
-    required this.canManageWorkspace,
     required this.cancellingInvitationId,
     required this.action,
     required this.onCancelInvitation,
   });
 
   final List<WorkspacePendingInvitationEntity> invitations;
-  final bool canManageWorkspace;
   final String? cancellingInvitationId;
   final WorkspaceSettingsAction action;
   final ValueChanged<WorkspacePendingInvitationEntity> onCancelInvitation;
 
   @override
   Widget build(BuildContext context) {
-    if (!canManageWorkspace) {
-      return const SizedBox.shrink();
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

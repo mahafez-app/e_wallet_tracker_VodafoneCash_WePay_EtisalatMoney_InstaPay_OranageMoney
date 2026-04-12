@@ -22,6 +22,11 @@ abstract interface class WorkspaceRemoteDataSource {
     required List<String> walletIds,
   });
 
+  Future<int> removeWalletsFromWorkspace({
+    required String workspaceId,
+    required List<String> walletIds,
+  });
+
   Future<void> removeWorkspaceMember({
     required String workspaceId,
     required String memberUid,
@@ -34,6 +39,8 @@ abstract interface class WorkspaceRemoteDataSource {
   Stream<WorkspaceDto> watchWorkspace(String workspaceId);
 
   Future<List<WorkspaceMemberDto>> getWorkspaceMembers(String workspaceId);
+
+  Stream<List<WorkspaceMemberDto>> watchWorkspaceMembers(String workspaceId);
 
   Future<List<WalletDto>> getWorkspaceWallets(String workspaceId);
 
@@ -104,6 +111,17 @@ class WorkspaceRemoteDataSourceImpl implements WorkspaceRemoteDataSource {
   }
 
   @override
+  Future<int> removeWalletsFromWorkspace({
+    required String workspaceId,
+    required List<String> walletIds,
+  }) {
+    return _commandService.removeWalletsFromWorkspace(
+      workspaceId: workspaceId,
+      walletIds: walletIds,
+    );
+  }
+
+  @override
   Future<void> removeWorkspaceMember({
     required String workspaceId,
     required String memberUid,
@@ -132,6 +150,11 @@ class WorkspaceRemoteDataSourceImpl implements WorkspaceRemoteDataSource {
   @override
   Future<List<WorkspaceMemberDto>> getWorkspaceMembers(String workspaceId) {
     return _queryService.getWorkspaceMembers(workspaceId);
+  }
+
+  @override
+  Stream<List<WorkspaceMemberDto>> watchWorkspaceMembers(String workspaceId) {
+    return _queryService.watchWorkspaceMembers(workspaceId);
   }
 
   @override

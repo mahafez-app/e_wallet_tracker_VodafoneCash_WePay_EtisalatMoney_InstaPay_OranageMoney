@@ -19,21 +19,9 @@ class TransactionWalletChip extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          width: 26.responsiveRadius,
-          height: 26.responsiveRadius,
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(8.responsiveRadius),
-            border: Border.all(
-              color: transaction.provider.brandColor.withAlpha(50),
-            ),
-          ),
-          child: WalletProviderIcon(
-            provider: transaction.provider,
-            size: 16.responsiveRadius,
-            fallbackColor: transaction.provider.brandColor,
-          ),
+        WalletProviderIcon(
+          provider: transaction.provider,
+          size: AppSpacing.xl.responsiveRadius,
         ),
         AppSpacing.sm.horizontalSpace,
         Expanded(

@@ -68,6 +68,6 @@ class InvitationsBody extends ConsumerWidget {
       return;
     }
 
-    context.go(AppRoutes.workspaceDetailsPath(feedback.invitation.workspaceId));
+    context.push(AppRoutes.workspaceDetailsPath(feedback.invitation.workspaceId));
   }
 }

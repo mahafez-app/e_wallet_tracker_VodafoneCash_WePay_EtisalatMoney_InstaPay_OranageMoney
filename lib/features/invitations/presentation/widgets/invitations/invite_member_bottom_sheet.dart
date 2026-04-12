@@ -19,11 +19,11 @@ class InviteMemberBottomSheet extends StatelessWidget {
 
   final String workspaceId;
 
-  static Future<void> show(
+  static Future<bool?> show(
     BuildContext context, {
     required String workspaceId,
   }) {
-    return showModalBottomSheet<void>(
+    return showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       builder: (context) => Padding(
@@ -81,7 +81,7 @@ class _InviteMemberBottomSheetBodyState
             message: context.l10n.invitationSentSuccess,
             type: AppSnackbarType.success,
           );
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(true);
         }
       },
     );

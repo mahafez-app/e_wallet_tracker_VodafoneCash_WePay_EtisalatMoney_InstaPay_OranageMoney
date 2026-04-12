@@ -25,19 +25,11 @@ class WalletProviderInfo extends StatelessWidget {
     final theme = Theme.of(context);
     return Row(
       children: [
-        Container(
-          padding: AppResponsive.allPadding(AppSpacing.xs),
-          decoration: BoxDecoration(
-            color: provider.brandColor.withAlpha(25),
-            borderRadius: BorderRadius.circular(borderRadius.responsiveRadius),
-          ),
-          child: WalletProviderIcon(
-            provider: provider,
-            size: 24.responsiveRadius,
-            fallbackColor: provider.brandColor,
-          ),
+        WalletProviderIcon(
+          provider: provider,
+          size: AppSpacing.xl.responsiveRadius,
         ),
-        AppSpacing.sm.horizontalSpace,
+        AppSpacing.md.horizontalSpace,
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

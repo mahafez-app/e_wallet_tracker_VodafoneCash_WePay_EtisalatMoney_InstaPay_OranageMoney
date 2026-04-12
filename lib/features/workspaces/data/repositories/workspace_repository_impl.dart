@@ -50,6 +50,20 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
   }
 
   @override
+  Future<Result<int>> removeWalletsFromWorkspace({
+    required String workspaceId,
+    required List<String> walletIds,
+  }) {
+    return executeAndHandleErrors(
+      () => _remote.removeWalletsFromWorkspace(
+        workspaceId: workspaceId,
+        walletIds: walletIds,
+      ),
+      tag: 'WorkspaceRepositoryImpl.removeWalletsFromWorkspace',
+    );
+  }
+
+  @override
   Future<Result<void>> removeWorkspaceMember({
     required String workspaceId,
     required String memberUid,
@@ -106,13 +120,9 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
     int transactionsPreviewLimit = 5,
   }) {
     return executeStreamAndHandleErrors(() {
-      final membersStream = Stream.fromFuture(
-        _remote.getWorkspaceMembers(workspaceId),
-      );
-
       return Rx.combineLatest3(
         _remote.watchWorkspace(workspaceId),
-        membersStream,
+        _remote.watchWorkspaceMembers(workspaceId),
         _remote.watchWorkspaceWallets(workspaceId),
         (workspace, members, wallets) => (workspace, members, wallets),
       ).asyncMap((data) async {

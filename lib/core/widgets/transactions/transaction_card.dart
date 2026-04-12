@@ -132,8 +132,7 @@ class TransactionCard extends StatelessWidget {
                   TransactionInfoChip(
                     leading: WalletProviderIcon(
                       provider: transaction.provider,
-                      size: 16.responsiveRadius,
-                      fallbackColor: transaction.provider.brandColor,
+                      size: AppSpacing.xl.responsiveRadius,
                     ),
                     leadingBackgroundColor: theme.colorScheme.surface,
                     label: l10n.walletLabel,

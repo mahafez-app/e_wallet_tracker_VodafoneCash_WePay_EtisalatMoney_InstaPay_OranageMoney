@@ -15,6 +15,11 @@ abstract interface class WorkspaceRepository {
     required List<String> walletIds,
   });
 
+  Future<Result<int>> removeWalletsFromWorkspace({
+    required String workspaceId,
+    required List<String> walletIds,
+  });
+
   Future<Result<void>> removeWorkspaceMember({
     required String workspaceId,
     required String memberUid,

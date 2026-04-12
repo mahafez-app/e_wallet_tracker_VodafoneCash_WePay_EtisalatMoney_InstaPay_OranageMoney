@@ -136,22 +136,48 @@
   "workspaceSettingsInviteByEmailAction": "دعوة عضو",
   "workspaceSettingsPendingInvitationsSection": "الدعوات المعلقة",
   "workspaceSettingsPendingInvitationsEmpty": "لا توجد دعوات معلقة لهذه المساحة حالياً.",
+  "workspaceSettingsAccessSection": "وصولك للمساحة",
+  "workspaceSettingsMemberDescription": "راجع الأعضاء المشاركين، واحذف محافظك من المساحة أو غادرها عند الحاجة.",
+  "workspaceSettingsManageAccessAction": "إدارة الوصول",
+  "workspaceSettingsWalletsOwnerDescription": "راجع كل المحافظ المرتبطة بهذه المساحة، واحذف أي محفظة لا يجب أن تبقى مشتركة.",
+  "workspaceSettingsWalletsMemberDescription": "تقدر تحذف فقط المحافظ التي أضفتها أنت إلى هذه المساحة.",
+  "workspaceSettingsWalletsEmptyOwner": "لا توجد محافظ مرتبطة بهذه المساحة حتى الآن.",
+  "workspaceSettingsWalletsEmptyMember": "لم تضف أي محافظ إلى هذه المساحة حتى الآن.",
+  "workspaceSettingsWalletOwner": "المالك: {ownerName}",
+  "@workspaceSettingsWalletOwner": {
+    "placeholders": {
+      "ownerName": {}
+    }
+  },
+  "workspaceUnknownMember": "عضو غير معروف",
   "workspaceSettingsDangerZone": "إجراءات حساسة",
   "workspaceSettingsEditNameTitle": "تعديل اسم المساحة",
   "workspaceSettingsEditNameDescription": "غيّر الاسم الظاهر للمساحة في كل الشاشات المشتركة.",
   "workspaceSettingsEditNameAction": "حفظ التعديلات",
   "workspaceSettingsRemoveMemberAction": "حذف",
+  "workspaceSettingsRemoveWalletAction": "حذف المحفظة",
   "workspaceSettingsCancelInvitationAction": "إلغاء",
+  "workspaceSettingsLeaveWorkspaceAction": "مغادرة المساحة",
+  "workspaceSettingsLeaveWorkspaceDescription": "سيتم حذف عضويتك والمحافظ التي ربطتها بهذه المساحة.",
   "workspaceSettingsDeleteWorkspaceAction": "حذف مساحة العمل",
   "workspaceSettingsDeleteWorkspaceDescription": "سيتم حذف كل البيانات المرتبطة بالمساحة نهائياً.",
   "workspaceSettingsNameUpdatedSuccess": "تم تغيير اسم مساحة العمل.",
   "workspaceSettingsMemberRemovedSuccess": "تم حذف العضو.",
+  "workspaceSettingsWalletRemovedSuccess": "تم حذف المحفظة من مساحة العمل.",
   "workspaceSettingsInvitationCancelledSuccess": "تم إلغاء الدعوة.",
   "workspaceSettingsRemoveMemberConfirmTitle": "حذف العضو؟",
-  "workspaceSettingsRemoveMemberConfirmMessage": "سيتم حذف {memberName} من مساحة العمل. تقدر تبعت له دعوة مرة تانية لاحقاً.",
+  "workspaceSettingsRemoveMemberConfirmMessage": "سيتم حذف {memberName} من مساحة العمل، وسيتم أيضاً حذف أي محافظ ربطها بهذه المساحة. تقدر تبعت له دعوة مرة تانية لاحقاً.",
   "@workspaceSettingsRemoveMemberConfirmMessage": {
     "placeholders": {
       "memberName": {}
+    }
+  },
+  "workspaceSettingsRemoveWalletConfirmTitle": "حذف المحفظة؟",
+  "workspaceSettingsRemoveWalletConfirmMessage": "سيتم حذف محفظة {providerName} المرتبطة بالرقم {phoneNumber} من مساحة العمل.",
+  "@workspaceSettingsRemoveWalletConfirmMessage": {
+    "placeholders": {
+      "providerName": {},
+      "phoneNumber": {}
     }
   },
   "workspaceSettingsCancelInvitationConfirmTitle": "إلغاء الدعوة؟",
@@ -161,6 +187,8 @@
       "email": {}
     }
   },
+  "workspaceSettingsLeaveWorkspaceConfirmTitle": "مغادرة مساحة العمل؟",
+  "workspaceSettingsLeaveWorkspaceConfirmMessage": "ستفقد الوصول إلى هذه المساحة، وسيتم حذف المحافظ التي ربطتها بها.",
   "workspaceSettingsDeleteWorkspaceConfirmTitle": "حذف مساحة العمل؟",
   "workspaceSettingsDeleteWorkspaceConfirmMessage": "سيتم حذف مساحة العمل وأذونات الأعضاء وربط المحافظ والدعوات المعلقة نهائياً.",
   "userSettingsTitle": "الإعدادات",

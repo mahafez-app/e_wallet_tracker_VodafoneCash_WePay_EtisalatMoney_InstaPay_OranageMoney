@@ -136,22 +136,48 @@
   "workspaceSettingsInviteByEmailAction": "Invite member",
   "workspaceSettingsPendingInvitationsSection": "Pending Invitations",
   "workspaceSettingsPendingInvitationsEmpty": "There are no pending invitations for this workspace right now.",
+  "workspaceSettingsAccessSection": "Your access",
+  "workspaceSettingsMemberDescription": "Review the shared members and remove your own wallets or leave the workspace when needed.",
+  "workspaceSettingsManageAccessAction": "Manage access",
+  "workspaceSettingsWalletsOwnerDescription": "Review every linked wallet in this workspace and remove any wallet that should no longer be shared.",
+  "workspaceSettingsWalletsMemberDescription": "You can remove only the wallets you added to this workspace.",
+  "workspaceSettingsWalletsEmptyOwner": "There are no linked wallets in this workspace yet.",
+  "workspaceSettingsWalletsEmptyMember": "You have not linked any wallets to this workspace yet.",
+  "workspaceSettingsWalletOwner": "Owner: {ownerName}",
+  "@workspaceSettingsWalletOwner": {
+    "placeholders": {
+      "ownerName": {}
+    }
+  },
+  "workspaceUnknownMember": "Unknown member",
   "workspaceSettingsDangerZone": "Sensitive actions",
   "workspaceSettingsEditNameTitle": "Edit workspace name",
   "workspaceSettingsEditNameDescription": "Update the visible name used across the workspace and shared views.",
   "workspaceSettingsEditNameAction": "Save changes",
   "workspaceSettingsRemoveMemberAction": "Remove",
+  "workspaceSettingsRemoveWalletAction": "Remove wallet",
   "workspaceSettingsCancelInvitationAction": "Cancel",
+  "workspaceSettingsLeaveWorkspaceAction": "Leave workspace",
+  "workspaceSettingsLeaveWorkspaceDescription": "Your membership and your linked wallets will be removed from this workspace.",
   "workspaceSettingsDeleteWorkspaceAction": "Delete workspace",
   "workspaceSettingsDeleteWorkspaceDescription": "All linked data and access records will be removed permanently.",
   "workspaceSettingsNameUpdatedSuccess": "Workspace name updated successfully.",
   "workspaceSettingsMemberRemovedSuccess": "Member removed successfully.",
+  "workspaceSettingsWalletRemovedSuccess": "Wallet removed from the workspace successfully.",
   "workspaceSettingsInvitationCancelledSuccess": "Invitation cancelled successfully.",
   "workspaceSettingsRemoveMemberConfirmTitle": "Remove member?",
-  "workspaceSettingsRemoveMemberConfirmMessage": "You will remove {memberName} from this workspace. They can be invited again later.",
+  "workspaceSettingsRemoveMemberConfirmMessage": "You will remove {memberName} from this workspace, and any wallets they linked here will be removed too. They can be invited again later.",
   "@workspaceSettingsRemoveMemberConfirmMessage": {
     "placeholders": {
       "memberName": {}
+    }
+  },
+  "workspaceSettingsRemoveWalletConfirmTitle": "Remove wallet?",
+  "workspaceSettingsRemoveWalletConfirmMessage": "The {providerName} wallet linked to {phoneNumber} will be removed from this workspace.",
+  "@workspaceSettingsRemoveWalletConfirmMessage": {
+    "placeholders": {
+      "providerName": {},
+      "phoneNumber": {}
     }
   },
   "workspaceSettingsCancelInvitationConfirmTitle": "Cancel invitation?",
@@ -161,6 +187,8 @@
       "email": {}
     }
   },
+  "workspaceSettingsLeaveWorkspaceConfirmTitle": "Leave workspace?",
+  "workspaceSettingsLeaveWorkspaceConfirmMessage": "You will lose access to this workspace, and the wallets you linked here will be removed from it.",
   "workspaceSettingsDeleteWorkspaceConfirmTitle": "Delete workspace?",
   "workspaceSettingsDeleteWorkspaceConfirmMessage": "This will permanently delete the workspace, its member access, wallet links, and pending invitations.",
   "userSettingsTitle": "Settings",

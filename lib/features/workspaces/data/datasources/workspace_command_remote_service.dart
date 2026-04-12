@@ -123,19 +123,66 @@ class WorkspaceCommandRemoteService {
     return walletIdsToLink.length;
   }
 
+  Future<int> removeWalletsFromWorkspace({
+    required String workspaceId,
+    required List<String> walletIds,
+  }) async {
+    final currentUser = _currentUser;
+    final workspaceRef = _workspacesCollection.doc(workspaceId);
+    final workspaceSnapshot = await workspaceRef.get();
+    final workspaceData = _getWorkspaceDataOrThrow(workspaceSnapshot);
+    final uniqueWalletIds = walletIds.toSet().toList();
+
+    if (uniqueWalletIds.isEmpty) {
+      return 0;
+    }
+
+    final linkedWallets = await _queryService.getWorkspaceWallets(workspaceId);
+    final walletMap = {for (final wallet in linkedWallets) wallet.id: wallet};
+
+    final walletIdsToRemove = <String>[];
+    for (final walletId in uniqueWalletIds) {
+      final wallet = walletMap[walletId];
+      if (wallet == null) {
+        continue;
+      }
+
+      _ensureWalletRemovalAllowed(
+        workspaceData: workspaceData,
+        currentUid: currentUser.uid,
+        walletOwnerUid: wallet.ownerUid,
+      );
+      walletIdsToRemove.add(walletId);
+    }
+
+    if (walletIdsToRemove.isEmpty) {
+      return 0;
+    }
+
+    await _deleteDocumentsInBatches(
+      walletIdsToRemove
+          .map((walletId) => workspaceRef.collection('wallets').doc(walletId))
+          .toList(),
+    );
+    await _syncWorkspaceMetadata(workspaceId);
+    return walletIdsToRemove.length;
+  }
+
   Future<void> removeWorkspaceMember({
     required String workspaceId,
     required String memberUid,
   }) async {
     final currentUser = _currentUser;
-    final workspaceSnapshot = await _workspacesCollection
-        .doc(workspaceId)
-        .get();
+    final workspaceRef = _workspacesCollection.doc(workspaceId);
+    final workspaceSnapshot = await workspaceRef.get();
     final workspaceData = _getWorkspaceDataOrThrow(workspaceSnapshot);
-
-    _ensureWorkspaceOwner(workspaceData, currentUser.uid);
-
     final ownerUid = workspaceData['ownerUid'] as String? ?? '';
+    final isSelfRemoval = memberUid == currentUser.uid;
+
+    if (!isSelfRemoval) {
+      _ensureWorkspaceOwner(workspaceData, currentUser.uid);
+    }
+
     if (memberUid == ownerUid) {
       throw const ValidationFailure(
         code: 'workspace-owner-removal-not-allowed',
@@ -143,9 +190,7 @@ class WorkspaceCommandRemoteService {
       );
     }
 
-    final memberRef = workspaceSnapshot.reference
-        .collection('members')
-        .doc(memberUid);
+    final memberRef = workspaceRef.collection('members').doc(memberUid);
     final memberSnapshot = await memberRef.get();
     if (!memberSnapshot.exists) {
       throw const ValidationFailure(
@@ -154,7 +199,14 @@ class WorkspaceCommandRemoteService {
       );
     }
 
-    await memberRef.delete();
+    final linkedWallets = await _queryService.getWorkspaceWallets(workspaceId);
+    final walletReferences = linkedWallets
+        .where((wallet) => wallet.ownerUid == memberUid)
+        .map((wallet) => workspaceRef.collection('wallets').doc(wallet.id))
+        .toList();
+
+    await _deleteDocumentsInBatches([memberRef, ...walletReferences]);
+    await _syncWorkspaceMetadata(workspaceId);
   }
 
   Future<void> deleteWorkspace({required String workspaceId}) async {
@@ -215,6 +267,22 @@ class WorkspaceCommandRemoteService {
         technicalMessage: 'Only the workspace owner can manage the workspace.',
       );
     }
+  }
+
+  void _ensureWalletRemovalAllowed({
+    required Map<String, dynamic> workspaceData,
+    required String currentUid,
+    required String walletOwnerUid,
+  }) {
+    final ownerUid = workspaceData['ownerUid'] as String? ?? '';
+    if (ownerUid == currentUid || walletOwnerUid == currentUid) {
+      return;
+    }
+
+    throw const PermissionFailure(
+      technicalMessage:
+          'Only the workspace owner or the wallet owner can remove a wallet.',
+    );
   }
 
   Future<void> _syncWorkspaceMetadata(String workspaceId) async {

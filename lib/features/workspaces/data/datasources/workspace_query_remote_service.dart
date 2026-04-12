@@ -59,6 +59,24 @@ class WorkspaceQueryRemoteService {
     return Future.wait(futures);
   }
 
+  Stream<List<WorkspaceMemberDto>> watchWorkspaceMembers(String workspaceId) {
+    final membersStream = _workspacesCollection
+        .doc(workspaceId)
+        .collection('members')
+        .orderBy('joinedAt')
+        .snapshots();
+
+    return membersStream.switchMap((snapshot) {
+      if (snapshot.docs.isEmpty) {
+        return Stream.value(const <WorkspaceMemberDto>[]);
+      }
+
+      return Stream.fromFuture(
+        Future.wait(snapshot.docs.map(_getWorkspaceMemberProfile)),
+      );
+    });
+  }
+
   Future<List<WalletDto>> getWorkspaceWallets(String workspaceId) async {
     final linkedWalletIds = await _getLinkedWalletIds(workspaceId);
     if (linkedWalletIds.isEmpty) {

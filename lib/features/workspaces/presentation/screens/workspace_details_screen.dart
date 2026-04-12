@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_error_view.dart';
 import '../../../../core/widgets/app_loader.dart';
 import '../../../auth/providers/auth_providers.dart';
@@ -28,15 +29,34 @@ class WorkspaceDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: _WorkspaceDetailsTitle(workspaceId: workspaceId),
-        actions: [
-          IconButton(
-            onPressed: () =>
-                context.push(AppRoutes.workspaceSettingsPath(workspaceId)),
-            icon: const Icon(Icons.settings_outlined),
-          ),
-        ],
+        actions: [_WorkspaceDetailsActions(workspaceId: workspaceId)],
       ),
       body: SafeArea(child: _WorkspaceDetailsBody(workspaceId: workspaceId)),
+    );
+  }
+}
+
+class _WorkspaceDetailsActions extends ConsumerWidget {
+  const _WorkspaceDetailsActions({required this.workspaceId});
+
+  final String workspaceId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(workspaceDetailsControllerProvider(workspaceId));
+    final currentUserId = ref.watch(currentUserProvider)?.uid;
+    final isOwner =
+        currentUserId != null &&
+        currentUserId == state.asData?.value.workspace.ownerUid;
+
+    if (!isOwner) {
+      return const SizedBox.shrink();
+    }
+
+    return IconButton(
+      onPressed: () =>
+          context.push(AppRoutes.workspaceSettingsPath(workspaceId)),
+      icon: const Icon(Icons.settings_outlined),
     );
   }
 }
@@ -81,6 +101,7 @@ class _WorkspaceDetailsDataView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(currentUserProvider);
     final canInviteMembers = currentUser?.uid == details.workspace.ownerUid;
+    final canManageAccess = currentUser != null && !canInviteMembers;
 
     return SingleChildScrollView(
       padding: AppSpacing.pagePadding,
@@ -88,6 +109,10 @@ class _WorkspaceDetailsDataView extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           WorkspaceSummaryCard(details: details),
+          if (canManageAccess) ...[
+            AppSpacing.lg.verticalSpace,
+            _WorkspaceAccessCard(workspaceId: details.workspace.id),
+          ],
           AppSpacing.lg.verticalSpace,
           WorkspaceWalletsSection(
             wallets: details.wallets,
@@ -106,6 +131,59 @@ class _WorkspaceDetailsDataView extends ConsumerWidget {
                     workspaceId: details.workspace.id,
                   )
                 : null,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WorkspaceAccessCard extends StatelessWidget {
+  const _WorkspaceAccessCard({super.key, required this.workspaceId});
+
+  final String workspaceId;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: AppResponsive.allPadding(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppSpacing.lg.responsiveRadius),
+        border: Border.all(color: theme.colorScheme.outlineVariant),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.workspaceSettingsAccessSection,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Text(
+                  context.l10n.workspaceSettingsMemberDescription,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          AppSpacing.md.horizontalSpace,
+          Expanded(
+            child: OutlinedButton.icon(
+              onPressed: () =>
+                  context.push(AppRoutes.workspaceSettingsPath(workspaceId)),
+              icon: const Icon(Icons.tune_rounded),
+              label: Text(context.l10n.workspaceSettingsManageAccessAction),
+            ),
           ),
         ],
       ),

@@ -12,6 +12,8 @@ import '../../utils/extensions/date_extensions.dart';
 import '../../utils/extensions/localization_extension.dart';
 import '../../utils/extensions/phone_number_extension.dart';
 import '../../utils/extensions/wallet_provider_ext.dart';
+import '../wallets/wallet_provider_icon.dart';
+import 'transaction_info_chip.dart';
 
 class TransactionCard extends StatelessWidget {
   const TransactionCard({
@@ -127,20 +129,26 @@ class TransactionCard extends StatelessWidget {
                 ),
                 if (showProviderInfo) ...[
                   AppSpacing.md.verticalSpace,
-                  _InfoChip(
-                    icon: Icons.account_balance_wallet,
-                    iconColor: theme.colorScheme.onPrimaryContainer,
-                    iconBg: theme.colorScheme.onSurface.withAlpha(18),
+                  TransactionInfoChip(
+                    leading: WalletProviderIcon(
+                      provider: transaction.provider,
+                      size: 16.responsiveRadius,
+                      fallbackColor: transaction.provider.brandColor,
+                    ),
+                    leadingBackgroundColor: theme.colorScheme.surface,
                     label: l10n.walletLabel,
                     value:
                         '${transaction.provider.displayName(context)} · ${transaction.phoneNumber.formattedEgyptianPhoneNumber}',
                   ),
                   if (counterparty != null) ...[
                     AppSpacing.xs.verticalSpace,
-                    _InfoChip(
-                      icon: Icons.person_outline_rounded,
-                      iconColor: typeColor,
-                      iconBg: typeColor.withAlpha(30),
+                    TransactionInfoChip(
+                      leading: Icon(
+                        Icons.person_outline_rounded,
+                        size: 13.responsiveRadius,
+                        color: typeColor,
+                      ),
+                      leadingBackgroundColor: typeColor.withAlpha(30),
                       label: isReceive ? l10n.fromLabel : l10n.toLabel,
                       value: counterparty,
                     ),
@@ -148,14 +156,17 @@ class TransactionCard extends StatelessWidget {
                 ],
                 if (isReceive) ...[
                   AppSpacing.xs.verticalSpace,
-                  _InfoChip(
-                    icon: transaction.isPaid!
-                        ? Icons.check_circle_rounded
-                        : Icons.radio_button_unchecked_rounded,
-                    iconColor: transaction.isPaid!
-                        ? colors.success
-                        : theme.colorScheme.onSurfaceVariant.withAlpha(150),
-                    iconBg: transaction.isPaid!
+                  TransactionInfoChip(
+                    leading: Icon(
+                      transaction.isPaid!
+                          ? Icons.check_circle_rounded
+                          : Icons.radio_button_unchecked_rounded,
+                      size: 13.responsiveRadius,
+                      color: transaction.isPaid!
+                          ? colors.success
+                          : theme.colorScheme.onSurfaceVariant.withAlpha(150),
+                    ),
+                    leadingBackgroundColor: transaction.isPaid!
                         ? colors.success.withAlpha(30)
                         : theme.colorScheme.onSurface.withAlpha(18),
                     label: l10n.paymentStatus,
@@ -164,74 +175,6 @@ class TransactionCard extends StatelessWidget {
                         : l10n.transactionStatusUnpaid,
                   ),
                 ],
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _InfoChip extends StatelessWidget {
-  const _InfoChip({
-    super.key,
-    required this.icon,
-    required this.iconColor,
-    required this.iconBg,
-    required this.label,
-    required this.value,
-  });
-
-  final IconData icon;
-  final Color iconColor;
-  final Color iconBg;
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withAlpha(80),
-        borderRadius: BorderRadius.circular(10.responsiveRadius),
-      ),
-      padding: EdgeInsets.symmetric(
-        horizontal: 10.responsiveWidth,
-        vertical: 7.responsiveHeight,
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 26.responsiveRadius,
-            height: 26.responsiveRadius,
-            decoration: BoxDecoration(
-              color: iconBg,
-              borderRadius: BorderRadius.circular(8.responsiveRadius),
-            ),
-            child: Icon(icon, size: 13.responsiveRadius, color: iconColor),
-          ),
-          AppSpacing.sm.horizontalSpace,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label.toUpperCase(),
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant.withAlpha(200),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  value,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
               ],
             ),
           ),

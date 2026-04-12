@@ -80,7 +80,7 @@ abstract final class AppColors {
   static const Color vodafoneRed = Color(0xFFE60000);
   static const Color orangeMoney = Color(0xFFFF7900);
   static const Color etisalatGreen = Color(0xFF7CB342);
-  static const Color instaPayNavy = Color(0xFF003C71);
+  static const Color instaPayNavy = Color(0xFF9b51e0);
   static const Color wePayPurple = Color(0xFF5D1D50);
   static const Color fawryYellow = Color(0xFFFACC15);
   static const Color bankSlate = Color(0xFF64748B);

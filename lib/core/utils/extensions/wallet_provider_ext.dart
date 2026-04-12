@@ -3,6 +3,7 @@ import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart
 
 import '../../domain/enums/wallet_provider.dart';
 import '../../theme/app_colors.dart';
+import '../app_assets.dart';
 
 extension WalletProviderDisplay on WalletProvider {
   String displayName(BuildContext context) => switch (this) {
@@ -23,21 +24,12 @@ extension WalletProviderDisplay on WalletProvider {
     WalletProvider.unknown => AppColors.providerUnknownNeutral,
   };
 
-  Color get onBrandColor => switch (this) {
-    WalletProvider.vodafoneCash => AppColors.white,
-    WalletProvider.etisalatCash => AppColors.white,
-    WalletProvider.instaPay => AppColors.white,
-    WalletProvider.wePay => AppColors.white,
-    WalletProvider.orangeMoney => AppColors.black,
-    WalletProvider.unknown => AppColors.black,
-  };
-
-  IconData get icon => switch (this) {
-    WalletProvider.vodafoneCash => Icons.phone_android,
-    WalletProvider.orangeMoney => Icons.phone_android,
-    WalletProvider.etisalatCash => Icons.phone_android,
-    WalletProvider.wePay => Icons.phone_android,
-    WalletProvider.instaPay => Icons.flash_on,
-    WalletProvider.unknown => Icons.account_balance_wallet,
+  String? get iconAssetPath => switch (this) {
+    WalletProvider.vodafoneCash => AppAssets.iconVodafone,
+    WalletProvider.orangeMoney => AppAssets.iconOrange,
+    WalletProvider.etisalatCash => AppAssets.iconEtisalat,
+    WalletProvider.wePay => AppAssets.iconWe,
+    WalletProvider.instaPay => AppAssets.iconInstaPay,
+    WalletProvider.unknown => null,
   };
 }

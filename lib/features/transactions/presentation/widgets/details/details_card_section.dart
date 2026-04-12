@@ -10,9 +10,10 @@ import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/utils/extensions/phone_number_extension.dart';
-import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
 import '../../providers/transaction_details_controller.dart';
+import 'details_card_row.dart';
+import 'paid_status_chip.dart';
+import 'transaction_wallet_chip.dart';
 
 /// Details card with wallet, date/time, and (for receive) paid status chips.
 class DetailsCardSection extends ConsumerWidget {
@@ -44,14 +45,14 @@ class DetailsCardSection extends ConsumerWidget {
       ),
       child: Column(
         children: [
-          _DetailRow(
+          DetailsCardRow(
             label: l10n.transaction_wallet,
-            child: _WalletChip(transaction: transaction),
+            child: TransactionWalletChip(transaction: transaction),
           ),
-          _Divider(),
+          const DetailsCardDivider(),
           if (transaction.counterpartyNumber != null &&
               transaction.counterpartyNumber!.trim().isNotEmpty) ...[
-            _DetailRow(
+            DetailsCardRow(
               label: transaction.type == TransactionType.receive
                   ? l10n.transaction_receivedFrom
                   : l10n.transaction_sentTo,
@@ -64,9 +65,9 @@ class DetailsCardSection extends ConsumerWidget {
                 textAlign: TextAlign.start,
               ),
             ),
-            _Divider(),
+            const DetailsCardDivider(),
           ],
-          _DetailRow(
+          DetailsCardRow(
             label: l10n.transaction_dateTime,
             child: Text(
               dateTimeText,
@@ -78,7 +79,7 @@ class DetailsCardSection extends ConsumerWidget {
             ),
           ),
           if (transaction.type == TransactionType.receive) ...[
-            _Divider(),
+            const DetailsCardDivider(),
             _PaidStatusRow(
               transaction: transaction,
               controllerTransaction: controllerTransaction ?? transaction,
@@ -90,97 +91,6 @@ class DetailsCardSection extends ConsumerWidget {
     );
   }
 }
-
-class _DetailRow extends StatelessWidget {
-  const _DetailRow({super.key, required this.label, required this.child});
-
-  final String label;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: AppResponsive.symmetricPadding(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.md,
-      ),
-      child: Row(
-        spacing: AppSpacing.lg,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Text(
-              label,
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ),
-          Expanded(flex: 3, child: child),
-        ],
-      ),
-    );
-  }
-}
-
-class _Divider extends StatelessWidget {
-  const _Divider({super.key});
-
-  @override
-  Widget build(BuildContext context) => Divider(
-    height: 1,
-    thickness: 0.5,
-    indent: AppSpacing.lg.responsiveWidth,
-    endIndent: AppSpacing.lg.responsiveWidth,
-    color: Theme.of(context).colorScheme.outlineVariant.withAlpha(60),
-  );
-}
-
-class _WalletChip extends StatelessWidget {
-  const _WalletChip({super.key, required this.transaction});
-
-  final TransactionEntity transaction;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final brandColor = transaction.provider.brandColor;
-    final onBrand = transaction.provider.onBrandColor;
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 26.responsiveRadius,
-          height: 26.responsiveRadius,
-          decoration: BoxDecoration(
-            color: brandColor,
-            borderRadius: BorderRadius.circular(8.responsiveRadius),
-          ),
-          child: Icon(
-            transaction.provider.icon,
-            size: 13.responsiveRadius,
-            color: onBrand,
-          ),
-        ),
-        AppSpacing.sm.horizontalSpace,
-        Expanded(
-          child: Text(
-            '${transaction.provider.displayName(context)} · ${transaction.phoneNumber.formattedEgyptianPhoneNumber}',
-            style: theme.textTheme.labelMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: theme.colorScheme.onSurface,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// ── Paid status chips ─────────────────────────────────────────────────────────
 
 class _PaidStatusRow extends ConsumerWidget {
   const _PaidStatusRow({
@@ -197,8 +107,6 @@ class _PaidStatusRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.appColors;
-    final isPaid = transaction.isPaid ?? false;
-
     final controller = isReadOnly
         ? null
         : ref.read(
@@ -207,74 +115,29 @@ class _PaidStatusRow extends ConsumerWidget {
             ).notifier,
           );
 
-    return _DetailRow(
+    return DetailsCardRow(
       label: context.l10n.paymentStatus,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _PaidChip(
+          PaidStatusChip(
             label: context.l10n.transactionStatusPaid,
-            isActive: isPaid,
+            isActive: transaction.isPaid ?? false,
             activeColor: colors.success,
-            onTap: isReadOnly || isPaid ? null : () => controller?.markAsPaid(),
+            onTap: isReadOnly || (transaction.isPaid ?? false)
+                ? null
+                : () => controller?.markAsPaid(),
           ),
           AppSpacing.sm.horizontalSpace,
-          _PaidChip(
+          PaidStatusChip(
             label: context.l10n.transactionStatusUnpaid,
-            isActive: !isPaid,
+            isActive: !(transaction.isPaid ?? false),
             activeColor: colors.danger,
-            onTap: isReadOnly || !isPaid
+            onTap: isReadOnly || !(transaction.isPaid ?? false)
                 ? null
                 : () => controller?.markAsUnpaid(),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _PaidChip extends StatelessWidget {
-  const _PaidChip({
-    super.key,
-    required this.label,
-    required this.isActive,
-    required this.activeColor,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool isActive;
-  final Color activeColor;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: AppResponsive.symmetricPadding(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.xs,
-        ),
-        decoration: BoxDecoration(
-          color: isActive ? activeColor : Colors.transparent,
-          border: Border.all(
-            color: isActive
-                ? activeColor
-                : theme.colorScheme.outlineVariant.withAlpha(150),
-          ),
-          borderRadius: BorderRadius.circular(20.responsiveRadius),
-        ),
-        child: Text(
-          label,
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: isActive ? Colors.white : theme.colorScheme.onSurfaceVariant,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
       ),
     );
   }

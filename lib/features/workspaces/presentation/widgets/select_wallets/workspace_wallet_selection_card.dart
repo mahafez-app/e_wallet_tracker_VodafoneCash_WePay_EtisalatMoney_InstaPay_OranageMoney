@@ -10,6 +10,7 @@ import '../../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
+import '../../../../../core/widgets/wallets/wallet_provider_icon.dart';
 
 class WorkspaceWalletSelectionCard extends StatelessWidget {
   const WorkspaceWalletSelectionCard({
@@ -69,6 +70,20 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
           children: [
             Row(
               children: [
+                Container(
+                  width: 40.responsiveRadius,
+                  height: 40.responsiveRadius,
+                  decoration: BoxDecoration(
+                    color: wallet.provider.brandColor.withAlpha(18),
+                    borderRadius: BorderRadius.circular(12.responsiveRadius),
+                  ),
+                  child: WalletProviderIcon(
+                    provider: wallet.provider,
+                    size: 24.responsiveRadius,
+                    fallbackColor: wallet.provider.brandColor,
+                  ),
+                ),
+                AppSpacing.sm.horizontalSpace,
                 Expanded(
                   child: Text(
                     wallet.provider.displayName(context),

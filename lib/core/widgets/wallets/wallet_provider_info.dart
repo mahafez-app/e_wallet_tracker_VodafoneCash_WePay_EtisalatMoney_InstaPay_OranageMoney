@@ -6,6 +6,8 @@ import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart
 import 'package:wallet_tracker/core/utils/extensions/phone_number_extension.dart';
 import 'package:wallet_tracker/core/utils/extensions/wallet_provider_ext.dart';
 
+import 'wallet_provider_icon.dart';
+
 class WalletProviderInfo extends StatelessWidget {
   const WalletProviderInfo({
     super.key,
@@ -29,10 +31,10 @@ class WalletProviderInfo extends StatelessWidget {
             color: provider.brandColor.withAlpha(25),
             borderRadius: BorderRadius.circular(borderRadius.responsiveRadius),
           ),
-          child: Icon(
-            provider.icon,
-            color: provider.brandColor,
+          child: WalletProviderIcon(
+            provider: provider,
             size: 24.responsiveRadius,
+            fallbackColor: provider.brandColor,
           ),
         ),
         AppSpacing.sm.horizontalSpace,
@@ -54,7 +56,7 @@ class WalletProviderInfo extends StatelessWidget {
             ),
           ],
         ),
-        Spacer(),
+        const Spacer(),
         _WalletStatusBadge(provider: provider),
       ],
     );

@@ -4,6 +4,7 @@ import '../../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
+import '../../../../../core/widgets/wallets/wallet_provider_icon.dart';
 import '../../providers/add_wallet_state.dart';
 
 class AddWalletProviderGrid extends StatelessWidget {
@@ -99,11 +100,15 @@ class _ProviderCard extends StatelessWidget {
                         : theme.colorScheme.surfaceContainerHighest,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    provider.icon,
-                    color: isEnabled
-                        ? provider.brandColor
-                        : theme.colorScheme.outline,
+                  child: Opacity(
+                    opacity: isEnabled ? 1 : 0.45,
+                    child: WalletProviderIcon(
+                      provider: provider,
+                      size: 22.responsiveRadius,
+                      fallbackColor: isEnabled
+                          ? provider.brandColor
+                          : theme.colorScheme.outline,
+                    ),
                   ),
                 ),
                 AppSpacing.xs.verticalSpace,

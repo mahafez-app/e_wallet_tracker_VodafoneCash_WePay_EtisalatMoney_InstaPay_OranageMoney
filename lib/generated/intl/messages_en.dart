@@ -248,6 +248,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "fullNameValidationEmpty": MessageLookupByLibrary.simpleMessage(
       "Please enter your name",
     ),
+    "invitationAcceptDetails": MessageLookupByLibrary.simpleMessage(
+      "Your access to this workspace is ready.",
+    ),
     "invitationAcceptSuccess": m3,
     "invitationDeclineConfirmMessage": m4,
     "invitationDeclineConfirmTitle": MessageLookupByLibrary.simpleMessage(
@@ -278,6 +281,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "invitationsPendingCount": m7,
     "invitationsPendingStatus": MessageLookupByLibrary.simpleMessage(
       "Awaiting response",
+    ),
+    "invitationsRecentResponsesTitle": MessageLookupByLibrary.simpleMessage(
+      "Recent responses",
     ),
     "invitationsRefreshAction": MessageLookupByLibrary.simpleMessage(
       "Refresh list",

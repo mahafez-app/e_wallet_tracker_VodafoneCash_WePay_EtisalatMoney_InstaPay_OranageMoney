@@ -30,6 +30,14 @@ class InvitationsRepositoryImpl implements InvitationsRepository {
   }
 
   @override
+  Future<Result<List<InvitationEntity>>> getRecentRespondedInvitations() {
+    return executeAndHandleErrors(() async {
+      final invitations = await _remote.getRecentRespondedInvitations();
+      return invitations.map((invitation) => invitation.toEntity()).toList();
+    }, tag: 'InvitationsRepositoryImpl.getRecentRespondedInvitations');
+  }
+
+  @override
   Future<Result<void>> acceptInvitation(String invitationId) {
     return executeAndHandleErrors(
       () => _remote.acceptInvitation(invitationId),

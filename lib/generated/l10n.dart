@@ -1299,6 +1299,16 @@ class S {
     );
   }
 
+  /// `أحدث الردود`
+  String get invitationsRecentResponsesTitle {
+    return Intl.message(
+      'أحدث الردود',
+      name: 'invitationsRecentResponsesTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `دعوة من {name}`
   String invitationSentBy(Object name) {
     return Intl.message(
@@ -1316,6 +1326,16 @@ class S {
       name: 'invitationAcceptSuccess',
       desc: '',
       args: [workspaceName],
+    );
+  }
+
+  /// `أصبح بإمكانك العمل داخل مساحة العمل الآن.`
+  String get invitationAcceptDetails {
+    return Intl.message(
+      'أصبح بإمكانك العمل داخل مساحة العمل الآن.',
+      name: 'invitationAcceptDetails',
+      desc: '',
+      args: [],
     );
   }
 

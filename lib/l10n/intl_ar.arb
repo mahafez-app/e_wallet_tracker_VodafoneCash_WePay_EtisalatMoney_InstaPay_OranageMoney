@@ -175,6 +175,7 @@
   "invitationsRefreshAction": "تحديث القائمة",
   "invitationsHowItWorksTitle": "كيف تعمل الدعوات",
   "invitationsHowItWorksDescription": "لا يمكن إرسال دعوة مساحة العمل إلا إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المرتبط بالحساب.",
+  "invitationsRecentResponsesTitle": "أحدث الردود",
   "invitationSentBy": "دعوة من {name}",
   "@invitationSentBy": {
     "placeholders": {
@@ -187,6 +188,7 @@
       "workspaceName": {}
     }
   },
+  "invitationAcceptDetails": "أصبح بإمكانك العمل داخل مساحة العمل الآن.",
   "invitationDeclineSuccess": "تم رفض دعوتك إلى مساحة العمل {workspaceName}.",
   "@invitationDeclineSuccess": {
     "placeholders": {

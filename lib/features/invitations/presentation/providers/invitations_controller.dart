@@ -1,88 +1,12 @@
 import 'dart:async';
 
-import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/invitation_entity.dart';
+import '../../domain/enums/invitation_status.dart';
 import '../../providers/invitations_providers.dart';
-
-enum InvitationActionType { accept, decline }
-
-final class InvitationActionFeedback extends Equatable {
-  const InvitationActionFeedback.success({
-    required this.action,
-    required this.invitation,
-  }) : failure = null;
-
-  const InvitationActionFeedback.failure({
-    required this.action,
-    required this.invitation,
-    required this.failure,
-  });
-
-  final InvitationActionType action;
-  final InvitationEntity invitation;
-  final Failure? failure;
-
-  bool get isSuccess => failure == null;
-
-  @override
-  List<Object?> get props => [action, invitation, failure];
-}
-
-const _invitationsUnsetValue = Object();
-
-class InvitationsState extends Equatable {
-  const InvitationsState({
-    required this.invitations,
-    required this.processingInvitationId,
-    required this.processingAction,
-    required this.feedback,
-  });
-
-  final List<InvitationEntity> invitations;
-  final String? processingInvitationId;
-  final InvitationActionType? processingAction;
-  final InvitationActionFeedback? feedback;
-
-  bool isAccepting(String invitationId) =>
-      processingInvitationId == invitationId &&
-      processingAction == InvitationActionType.accept;
-
-  bool isDeclining(String invitationId) =>
-      processingInvitationId == invitationId &&
-      processingAction == InvitationActionType.decline;
-
-  InvitationsState copyWith({
-    List<InvitationEntity>? invitations,
-    Object? processingInvitationId = _invitationsUnsetValue,
-    Object? processingAction = _invitationsUnsetValue,
-    Object? feedback = _invitationsUnsetValue,
-  }) {
-    return InvitationsState(
-      invitations: invitations ?? this.invitations,
-      processingInvitationId:
-          identical(processingInvitationId, _invitationsUnsetValue)
-          ? this.processingInvitationId
-          : processingInvitationId as String?,
-      processingAction: identical(processingAction, _invitationsUnsetValue)
-          ? this.processingAction
-          : processingAction as InvitationActionType?,
-      feedback: identical(feedback, _invitationsUnsetValue)
-          ? this.feedback
-          : feedback as InvitationActionFeedback?,
-    );
-  }
-
-  @override
-  List<Object?> get props => [
-    invitations,
-    processingInvitationId,
-    processingAction,
-    feedback,
-  ];
-}
+import 'invitations_state.dart';
 
 final invitationsControllerProvider =
     AsyncNotifierProvider.autoDispose<InvitationsController, InvitationsState>(
@@ -92,14 +16,19 @@ final invitationsControllerProvider =
 class InvitationsController extends AsyncNotifier<InvitationsState> {
   @override
   Future<InvitationsState> build() async {
-    final result = await ref.read(getPendingInvitationsUseCaseProvider).call();
-    return result.fold(
+    final pendingResult = await ref
+        .read(getPendingInvitationsUseCaseProvider)
+        .call();
+    final recentFeedbacks = await _loadRecentFeedbacks();
+
+    return pendingResult.fold(
       (failure) => throw failure,
       (invitations) => InvitationsState(
         invitations: invitations,
         processingInvitationId: null,
         processingAction: null,
         feedback: null,
+        recentFeedbacks: recentFeedbacks,
       ),
     );
   }
@@ -135,6 +64,7 @@ class InvitationsController extends AsyncNotifier<InvitationsState> {
     if (currentState?.processingInvitationId != null) {
       return;
     }
+
     final invitation = _findInvitation(currentState, invitationId);
     if (currentState == null || invitation == null) {
       return;
@@ -156,30 +86,83 @@ class InvitationsController extends AsyncNotifier<InvitationsState> {
     }
 
     result.fold(
-      (failure) => state = AsyncValue.data(
-        currentState.copyWith(
-          processingInvitationId: null,
-          processingAction: null,
-          feedback: InvitationActionFeedback.failure(
-            action: action,
-            invitation: invitation,
-            failure: failure,
-          ),
+      (failure) => _handleFailure(currentState, invitation, action, failure),
+      (_) => _handleSuccess(currentState, invitation, action),
+    );
+  }
+
+  void _handleFailure(
+    InvitationsState currentState,
+    InvitationEntity invitation,
+    InvitationActionType action,
+    Failure failure,
+  ) {
+    state = AsyncValue.data(
+      currentState.copyWith(
+        processingInvitationId: null,
+        processingAction: null,
+        feedback: InvitationActionFeedback.failure(
+          action: action,
+          invitation: invitation,
+          failure: failure,
         ),
       ),
-      (_) => state = AsyncValue.data(
-        currentState.copyWith(
-          invitations: currentState.invitations
-              .where((invitation) => invitation.id != invitationId)
-              .toList(),
-          processingInvitationId: null,
-          processingAction: null,
-          feedback: InvitationActionFeedback.success(
-            action: action,
-            invitation: invitation,
-          ),
+    );
+  }
+
+  void _handleSuccess(
+    InvitationsState currentState,
+    InvitationEntity invitation,
+    InvitationActionType action,
+  ) {
+    final feedback = InvitationActionFeedback.success(
+      action: action,
+      invitation: invitation,
+    );
+
+    state = AsyncValue.data(
+      currentState.copyWith(
+        invitations: currentState.invitations
+            .where((item) => item.id != invitation.id)
+            .toList(),
+        processingInvitationId: null,
+        processingAction: null,
+        feedback: feedback,
+        recentFeedbacks: _appendFeedback(
+          currentState.recentFeedbacks,
+          feedback,
         ),
       ),
+    );
+  }
+
+  List<InvitationActionFeedback> _appendFeedback(
+    List<InvitationActionFeedback> current,
+    InvitationActionFeedback feedback,
+  ) {
+    final deduplicated = current.where(
+      (item) => item.invitation.id != feedback.invitation.id,
+    );
+    return [feedback, ...deduplicated].take(2).toList();
+  }
+
+  Future<List<InvitationActionFeedback>> _loadRecentFeedbacks() async {
+    final result = await ref
+        .read(getRecentRespondedInvitationsUseCaseProvider)
+        .call();
+    return result.fold(
+      (_) => const <InvitationActionFeedback>[],
+      (invitations) => invitations.map(_mapRecentFeedback).toList(),
+    );
+  }
+
+  InvitationActionFeedback _mapRecentFeedback(InvitationEntity invitation) {
+    final action = invitation.status == InvitationStatus.accepted
+        ? InvitationActionType.accept
+        : InvitationActionType.decline;
+    return InvitationActionFeedback.success(
+      action: action,
+      invitation: invitation,
     );
   }
 

@@ -9,6 +9,8 @@ abstract interface class InvitationsRepository {
 
   Future<Result<List<InvitationEntity>>> getPendingInvitations();
 
+  Future<Result<List<InvitationEntity>>> getRecentRespondedInvitations();
+
   Future<Result<void>> acceptInvitation(String invitationId);
 
   Future<Result<void>> declineInvitation(String invitationId);

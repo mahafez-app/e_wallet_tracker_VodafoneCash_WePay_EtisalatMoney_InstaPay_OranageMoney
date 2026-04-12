@@ -175,6 +175,7 @@
   "invitationsRefreshAction": "Refresh list",
   "invitationsHowItWorksTitle": "How invitations work",
   "invitationsHowItWorksDescription": "Workspace invitations can only be sent to an existing Mahafez account using the email linked to that account.",
+  "invitationsRecentResponsesTitle": "Recent responses",
   "invitationSentBy": "Invited by {name}",
   "@invitationSentBy": {
     "placeholders": {
@@ -187,6 +188,7 @@
       "workspaceName": {}
     }
   },
+  "invitationAcceptDetails": "Your access to this workspace is ready.",
   "invitationDeclineSuccess": "You declined the invitation to {workspaceName}.",
   "@invitationDeclineSuccess": {
     "placeholders": {

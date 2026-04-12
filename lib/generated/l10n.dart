@@ -993,6 +993,16 @@ class S {
     );
   }
 
+  /// `دعوة عضو`
+  String get workspaceInviteMemberAction {
+    return Intl.message(
+      'دعوة عضو',
+      name: 'workspaceInviteMemberAction',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `إضافة محافظ`
   String get workspaceAddWalletsTitle {
     return Intl.message(
@@ -1173,6 +1183,232 @@ class S {
     );
   }
 
+  /// `الدعوات`
+  String get invitationsTitle {
+    return Intl.message(
+      'الدعوات',
+      name: 'invitationsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد دعوات معلقة`
+  String get invitationsEmptyTitle {
+    return Intl.message(
+      'لا توجد دعوات معلقة',
+      name: 'invitationsEmptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد لديك دعوات معلقة لمساحات العمل الآن.`
+  String get invitationsEmptyDescription {
+    return Intl.message(
+      'لا توجد لديك دعوات معلقة لمساحات العمل الآن.',
+      name: 'invitationsEmptyDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `راجع دعوات مساحات العمل الواردة وحدد قرارك في الوقت المناسب.`
+  String get invitationsListDescription {
+    return Intl.message(
+      'راجع دعوات مساحات العمل الواردة وحدد قرارك في الوقت المناسب.',
+      name: 'invitationsListDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count, plural, =0{لا توجد دعوات بانتظار الرد} =1{دعوة واحدة بانتظار الرد} =2{دعوتان بانتظار الرد} few{{count} دعوات بانتظار الرد} many{{count} دعوة بانتظار الرد} other{{count} دعوة بانتظار الرد}}`
+  String invitationsPendingCount(int count) {
+    return Intl.plural(
+      count,
+      zero: 'لا توجد دعوات بانتظار الرد',
+      one: 'دعوة واحدة بانتظار الرد',
+      two: 'دعوتان بانتظار الرد',
+      few: '$count دعوات بانتظار الرد',
+      many: '$count دعوة بانتظار الرد',
+      other: '$count دعوة بانتظار الرد',
+      name: 'invitationsPendingCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `بانتظار الرد`
+  String get invitationsPendingStatus {
+    return Intl.message(
+      'بانتظار الرد',
+      name: 'invitationsPendingStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `قبول`
+  String get invitationsAcceptAction {
+    return Intl.message(
+      'قبول',
+      name: 'invitationsAcceptAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `رفض`
+  String get invitationsDeclineAction {
+    return Intl.message(
+      'رفض',
+      name: 'invitationsDeclineAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تحديث القائمة`
+  String get invitationsRefreshAction {
+    return Intl.message(
+      'تحديث القائمة',
+      name: 'invitationsRefreshAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كيف تعمل الدعوات`
+  String get invitationsHowItWorksTitle {
+    return Intl.message(
+      'كيف تعمل الدعوات',
+      name: 'invitationsHowItWorksTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا يمكن إرسال دعوة مساحة العمل إلا إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المرتبط بالحساب.`
+  String get invitationsHowItWorksDescription {
+    return Intl.message(
+      'لا يمكن إرسال دعوة مساحة العمل إلا إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المرتبط بالحساب.',
+      name: 'invitationsHowItWorksDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `دعوة من {name}`
+  String invitationSentBy(Object name) {
+    return Intl.message(
+      'دعوة من $name',
+      name: 'invitationSentBy',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `تم انضمامك إلى مساحة العمل {workspaceName} بنجاح.`
+  String invitationAcceptSuccess(Object workspaceName) {
+    return Intl.message(
+      'تم انضمامك إلى مساحة العمل $workspaceName بنجاح.',
+      name: 'invitationAcceptSuccess',
+      desc: '',
+      args: [workspaceName],
+    );
+  }
+
+  /// `تم رفض دعوتك إلى مساحة العمل {workspaceName}.`
+  String invitationDeclineSuccess(Object workspaceName) {
+    return Intl.message(
+      'تم رفض دعوتك إلى مساحة العمل $workspaceName.',
+      name: 'invitationDeclineSuccess',
+      desc: '',
+      args: [workspaceName],
+    );
+  }
+
+  /// `رفض الدعوة؟`
+  String get invitationDeclineConfirmTitle {
+    return Intl.message(
+      'رفض الدعوة؟',
+      name: 'invitationDeclineConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم حذف دعوتك للانضمام إلى مساحة العمل {workspaceName}. يمكنك طلب إعادة إرسال الدعوة لاحقًا.`
+  String invitationDeclineConfirmMessage(Object workspaceName) {
+    return Intl.message(
+      'سيتم حذف دعوتك للانضمام إلى مساحة العمل $workspaceName. يمكنك طلب إعادة إرسال الدعوة لاحقًا.',
+      name: 'invitationDeclineConfirmMessage',
+      desc: '',
+      args: [workspaceName],
+    );
+  }
+
+  /// `تم إرسال الدعوة بنجاح.`
+  String get invitationSentSuccess {
+    return Intl.message(
+      'تم إرسال الدعوة بنجاح.',
+      name: 'invitationSentSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `دعوة عضو`
+  String get inviteMemberTitle {
+    return Intl.message(
+      'دعوة عضو',
+      name: 'inviteMemberTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أرسل دعوة إلى مساحة العمل عبر البريد الإلكتروني لحساب محافظ موجود بالفعل. سيجدها المستخدم المدعو في شاشة الدعوات.`
+  String get inviteMemberDescription {
+    return Intl.message(
+      'أرسل دعوة إلى مساحة العمل عبر البريد الإلكتروني لحساب محافظ موجود بالفعل. سيجدها المستخدم المدعو في شاشة الدعوات.',
+      name: 'inviteMemberDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `بريد العضو الإلكتروني`
+  String get inviteMemberEmailLabel {
+    return Intl.message(
+      'بريد العضو الإلكتروني',
+      name: 'inviteMemberEmailLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `name@example.com`
+  String get inviteMemberEmailHint {
+    return Intl.message(
+      'name@example.com',
+      name: 'inviteMemberEmailHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إرسال الدعوة`
+  String get inviteMemberSendAction {
+    return Intl.message(
+      'إرسال الدعوة',
+      name: 'inviteMemberSendAction',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `يرجى إدخال رقم الهاتف`
   String get errorWalletPhoneNumberRequired {
     return Intl.message(
@@ -1218,6 +1454,56 @@ class S {
     return Intl.message(
       'يرجى اختيار محفظة واحدة على الأقل',
       name: 'errorWorkspaceWalletSelectionRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا يمكنك دعوة نفسك إلى مساحة العمل.`
+  String get errorInvitationSelfNotAllowed {
+    return Intl.message(
+      'لا يمكنك دعوة نفسك إلى مساحة العمل.',
+      name: 'errorInvitationSelfNotAllowed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `توجد دعوة معلقة بالفعل لهذا البريد الإلكتروني.`
+  String get errorInvitationAlreadyPending {
+    return Intl.message(
+      'توجد دعوة معلقة بالفعل لهذا البريد الإلكتروني.',
+      name: 'errorInvitationAlreadyPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذا البريد الإلكتروني غير مرتبط بأي حساب محافظ.`
+  String get errorInvitationUserNotFound {
+    return Intl.message(
+      'هذا البريد الإلكتروني غير مرتبط بأي حساب محافظ.',
+      name: 'errorInvitationUserNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذا المستخدم عضو بالفعل في مساحة العمل.`
+  String get errorInvitationUserAlreadyMember {
+    return Intl.message(
+      'هذا المستخدم عضو بالفعل في مساحة العمل.',
+      name: 'errorInvitationUserAlreadyMember',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذه الدعوة لم تعد معلقة.`
+  String get errorInvitationNotPending {
+    return Intl.message(
+      'هذه الدعوة لم تعد معلقة.',
+      name: 'errorInvitationNotPending',
       desc: '',
       args: [],
     );

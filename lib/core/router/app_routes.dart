@@ -10,6 +10,7 @@ abstract final class AppRoutes {
 
   // Settings
   static const String settings = '/settings';
+  static const String invitations = '/invitations';
 
   // Wallets
   static const String addWallet = '/add-wallet';

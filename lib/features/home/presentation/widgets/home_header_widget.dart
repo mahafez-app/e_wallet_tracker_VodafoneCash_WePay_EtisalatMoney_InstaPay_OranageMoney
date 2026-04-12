@@ -9,9 +9,14 @@ import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../auth/providers/auth_providers.dart';
 
 class HomeHeaderWidget extends ConsumerWidget {
-  const HomeHeaderWidget({super.key, required this.invitationsCount});
+  const HomeHeaderWidget({
+    super.key,
+    required this.invitationsCount,
+    required this.onOpenInvitations,
+  });
 
   final int invitationsCount;
+  final VoidCallback onOpenInvitations;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,7 +31,10 @@ class HomeHeaderWidget extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _UserAvatarAndName(userName: user?.name),
-          _InvitationsIconBadge(count: invitationsCount),
+          _InvitationsIconBadge(
+            count: invitationsCount,
+            onTap: onOpenInvitations,
+          ),
         ],
       ),
     );
@@ -92,9 +100,14 @@ class _UserAvatarAndName extends StatelessWidget {
 }
 
 class _InvitationsIconBadge extends StatelessWidget {
-  const _InvitationsIconBadge({super.key, required this.count});
+  const _InvitationsIconBadge({
+    super.key,
+    required this.count,
+    required this.onTap,
+  });
 
   final int count;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +117,7 @@ class _InvitationsIconBadge extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         IconButton(
-          onPressed: () {},
+          onPressed: onTap,
           icon: Icon(Icons.mail_outline, color: colorScheme.onSurface),
         ),
         if (count > 0)

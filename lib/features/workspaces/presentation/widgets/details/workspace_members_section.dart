@@ -8,9 +8,14 @@ import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../domain/entities/workspace_member_entity.dart';
 
 class WorkspaceMembersSection extends StatelessWidget {
-  const WorkspaceMembersSection({super.key, required this.members});
+  const WorkspaceMembersSection({
+    super.key,
+    required this.members,
+    this.onInviteMember,
+  });
 
   final List<WorkspaceMemberEntity> members;
+  final VoidCallback? onInviteMember;
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +25,23 @@ class WorkspaceMembersSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.workspaceMembers,
-          style: theme.textTheme.titleMedium?.copyWith(
-            color: theme.colorScheme.onSurface,
-            fontWeight: FontWeight.w700,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              l10n.workspaceMembers,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            if (onInviteMember != null)
+              TextButton.icon(
+                onPressed: onInviteMember,
+                icon: const Icon(Icons.person_add_alt_1_rounded),
+                label: Text(l10n.workspaceInviteMemberAction),
+              ),
+          ],
         ),
         AppSpacing.md.verticalSpace,
         if (members.isEmpty)

@@ -128,6 +128,7 @@
   "createWorkspaceEmptyDescription": "Group business wallets, track activity, and bring your team into one shared space.",
   "workspaceWallets": "Wallets",
   "workspaceMembers": "Members",
+  "workspaceInviteMemberAction": "Invite member",
   "workspaceAddWalletsTitle": "Add Wallets",
   "workspaceAddWalletsAction": "Add Wallets",
   "workspaceAddWalletsCreateDescription": "Choose which of your wallets should appear in this workspace now. You can add more later.",
@@ -156,11 +157,65 @@
   "workspaceWalletsEmptyTitle": "No wallets linked yet",
   "workspaceWalletsEmptyDescription": "This workspace will show shared wallets here once they are linked.",
   "workspaceMembersEmpty": "No members have joined this workspace yet.",
+  "invitationsTitle": "Invitations",
+  "invitationsEmptyTitle": "No pending invitations",
+  "invitationsEmptyDescription": "You do not have any pending workspace invitations right now.",
+  "invitationsListDescription": "Review incoming workspace invitations and respond when you are ready.",
+  "invitationsPendingCount": "{count, plural, =0{No invitations waiting} =1{1 invitation waiting} other{{count} invitations waiting}}",
+  "@invitationsPendingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "invitationsPendingStatus": "Awaiting response",
+  "invitationsAcceptAction": "Accept",
+  "invitationsDeclineAction": "Decline",
+  "invitationsRefreshAction": "Refresh list",
+  "invitationsHowItWorksTitle": "How invitations work",
+  "invitationsHowItWorksDescription": "Workspace invitations can only be sent to an existing Mahafez account using the email linked to that account.",
+  "invitationSentBy": "Invited by {name}",
+  "@invitationSentBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "invitationAcceptSuccess": "You joined {workspaceName} successfully.",
+  "@invitationAcceptSuccess": {
+    "placeholders": {
+      "workspaceName": {}
+    }
+  },
+  "invitationDeclineSuccess": "You declined the invitation to {workspaceName}.",
+  "@invitationDeclineSuccess": {
+    "placeholders": {
+      "workspaceName": {}
+    }
+  },
+  "invitationDeclineConfirmTitle": "Decline invitation?",
+  "invitationDeclineConfirmMessage": "You will remove the invitation to join {workspaceName}. You can ask the workspace owner to send a new invitation later.",
+  "@invitationDeclineConfirmMessage": {
+    "placeholders": {
+      "workspaceName": {}
+    }
+  },
+  "invitationSentSuccess": "Invitation sent successfully.",
+  "inviteMemberTitle": "Invite a member",
+  "inviteMemberDescription": "Send a workspace invitation to an existing Mahafez account by email. The invited user will see it in their invitations inbox.",
+  "inviteMemberEmailLabel": "Member email",
+  "inviteMemberEmailHint": "name@example.com",
+  "inviteMemberSendAction": "Send invitation",
   "errorWalletPhoneNumberRequired": "Please enter a phone number",
   "errorWalletProviderRequired": "Please select at least one provider",
   "errorWalletAllExists": "All selected wallets are already added for this phone number.",
   "errorWorkspaceNameRequired": "Please enter a workspace name",
   "errorWorkspaceWalletSelectionRequired": "Please select at least one wallet",
+  "errorInvitationSelfNotAllowed": "You cannot invite yourself to this workspace.",
+  "errorInvitationAlreadyPending": "A pending invitation already exists for this email.",
+  "errorInvitationUserNotFound": "This email is not linked to any Mahafez account.",
+  "errorInvitationUserAlreadyMember": "This user is already a member of the workspace.",
+  "errorInvitationNotPending": "This invitation is no longer pending.",
   "transactionTypeReceive": "Receive",
   "transactionTypeSend": "Send",
   "transactionStatusPaid": "Paid",

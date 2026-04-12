@@ -83,7 +83,10 @@ class _HomeDataView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HomeHeaderWidget(invitationsCount: dashboard.invitationsCount),
+            HomeHeaderWidget(
+              invitationsCount: dashboard.invitationsCount,
+              onOpenInvitations: () => context.push(AppRoutes.invitations),
+            ),
             Padding(
               padding: AppSpacing.pagePadding,
               child: Column(

@@ -71,12 +71,12 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Stream<int> watchPendingInvitationsCount() {
-    final email = _auth.currentUser?.email;
-    if (email == null) return Stream.value(0);
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return Stream.value(0);
 
     return _firestore
         .collection('invites')
-        .where('email', isEqualTo: email)
+        .where('invitedUserId', isEqualTo: uid)
         .where('status', isEqualTo: 'pending')
         .snapshots()
         .map((snapshot) => snapshot.size);

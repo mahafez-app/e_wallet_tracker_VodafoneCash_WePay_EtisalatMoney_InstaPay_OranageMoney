@@ -28,32 +28,46 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(code) => "Validation failed: ${code}";
 
-  static String m3(minutes) => "${minutes} mins ago";
+  static String m3(workspaceName) =>
+      "You joined ${workspaceName} successfully.";
 
-  static String m4(amount) => "Received ${amount} EGP";
+  static String m4(workspaceName) =>
+      "You will remove the invitation to join ${workspaceName}. You can ask the workspace owner to send a new invitation later.";
 
-  static String m5(amount) => "Sent ${amount} EGP";
+  static String m5(workspaceName) =>
+      "You declined the invitation to ${workspaceName}.";
 
-  static String m6(name) => "By ${name}";
+  static String m6(name) => "Invited by ${name}";
 
-  static String m7(status) => "Marked as ${status}";
+  static String m7(count) =>
+      "${Intl.plural(count, zero: 'No invitations waiting', one: '1 invitation waiting', other: '${count} invitations waiting')}";
 
-  static String m8(type) => "Transaction Receipt — ${type}";
+  static String m8(minutes) => "${minutes} mins ago";
 
-  static String m9(name) => "Transactions: ${name}";
+  static String m9(amount) => "Received ${amount} EGP";
 
-  static String m10(name) => "Workspace: ${name}";
+  static String m10(amount) => "Sent ${amount} EGP";
 
-  static String m11(count, total) =>
+  static String m11(name) => "By ${name}";
+
+  static String m12(status) => "Marked as ${status}";
+
+  static String m13(type) => "Transaction Receipt — ${type}";
+
+  static String m14(name) => "Transactions: ${name}";
+
+  static String m15(name) => "Workspace: ${name}";
+
+  static String m16(count, total) =>
       "Viewing ${count} of ${total} transactions";
 
-  static String m12(count) =>
+  static String m17(count) =>
       "${Intl.plural(count, zero: 'No members', one: '1 member', other: '${count} members')}";
 
-  static String m13(ownedCount, linkedCount) =>
+  static String m18(ownedCount, linkedCount) =>
       "You own ${ownedCount} wallets, and ${linkedCount} are already linked to this workspace.";
 
-  static String m14(count) =>
+  static String m19(count) =>
       "${Intl.plural(count, zero: 'No wallets', one: '1 wallet', other: '${count} wallets')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -165,6 +179,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "Resource conflict. Please try again.",
     ),
     "errorForbidden": MessageLookupByLibrary.simpleMessage("Access forbidden."),
+    "errorInvitationAlreadyPending": MessageLookupByLibrary.simpleMessage(
+      "A pending invitation already exists for this email.",
+    ),
+    "errorInvitationNotPending": MessageLookupByLibrary.simpleMessage(
+      "This invitation is no longer pending.",
+    ),
+    "errorInvitationSelfNotAllowed": MessageLookupByLibrary.simpleMessage(
+      "You cannot invite yourself to this workspace.",
+    ),
+    "errorInvitationUserAlreadyMember": MessageLookupByLibrary.simpleMessage(
+      "This user is already a member of the workspace.",
+    ),
+    "errorInvitationUserNotFound": MessageLookupByLibrary.simpleMessage(
+      "This email is not linked to any Mahafez account.",
+    ),
     "errorNetwork": MessageLookupByLibrary.simpleMessage(
       "No internet connection. Please check your network.",
     ),
@@ -219,9 +248,59 @@ class MessageLookup extends MessageLookupByLibrary {
     "fullNameValidationEmpty": MessageLookupByLibrary.simpleMessage(
       "Please enter your name",
     ),
+    "invitationAcceptSuccess": m3,
+    "invitationDeclineConfirmMessage": m4,
+    "invitationDeclineConfirmTitle": MessageLookupByLibrary.simpleMessage(
+      "Decline invitation?",
+    ),
+    "invitationDeclineSuccess": m5,
+    "invitationSentBy": m6,
+    "invitationSentSuccess": MessageLookupByLibrary.simpleMessage(
+      "Invitation sent successfully.",
+    ),
+    "invitationsAcceptAction": MessageLookupByLibrary.simpleMessage("Accept"),
+    "invitationsDeclineAction": MessageLookupByLibrary.simpleMessage("Decline"),
+    "invitationsEmptyDescription": MessageLookupByLibrary.simpleMessage(
+      "You do not have any pending workspace invitations right now.",
+    ),
+    "invitationsEmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "No pending invitations",
+    ),
+    "invitationsHowItWorksDescription": MessageLookupByLibrary.simpleMessage(
+      "Workspace invitations can only be sent to an existing Mahafez account using the email linked to that account.",
+    ),
+    "invitationsHowItWorksTitle": MessageLookupByLibrary.simpleMessage(
+      "How invitations work",
+    ),
+    "invitationsListDescription": MessageLookupByLibrary.simpleMessage(
+      "Review incoming workspace invitations and respond when you are ready.",
+    ),
+    "invitationsPendingCount": m7,
+    "invitationsPendingStatus": MessageLookupByLibrary.simpleMessage(
+      "Awaiting response",
+    ),
+    "invitationsRefreshAction": MessageLookupByLibrary.simpleMessage(
+      "Refresh list",
+    ),
+    "invitationsTitle": MessageLookupByLibrary.simpleMessage("Invitations"),
+    "inviteMemberDescription": MessageLookupByLibrary.simpleMessage(
+      "Send a workspace invitation to an existing Mahafez account by email. The invited user will see it in their invitations inbox.",
+    ),
+    "inviteMemberEmailHint": MessageLookupByLibrary.simpleMessage(
+      "name@example.com",
+    ),
+    "inviteMemberEmailLabel": MessageLookupByLibrary.simpleMessage(
+      "Member email",
+    ),
+    "inviteMemberSendAction": MessageLookupByLibrary.simpleMessage(
+      "Send invitation",
+    ),
+    "inviteMemberTitle": MessageLookupByLibrary.simpleMessage(
+      "Invite a member",
+    ),
     "justNow": MessageLookupByLibrary.simpleMessage("Just Now"),
     "lastActivity": MessageLookupByLibrary.simpleMessage("Last Activity"),
-    "minutesAgo": m3,
+    "minutesAgo": m8,
     "nameWillBeDisplayed": MessageLookupByLibrary.simpleMessage(
       "Your name will be displayed when updating payment status to facilitate tracking financial transactions",
     ),
@@ -283,15 +362,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "transactionDetails": MessageLookupByLibrary.simpleMessage(
       "Transaction Details",
     ),
-    "transactionMessageReceive": m4,
-    "transactionMessageSend": m5,
+    "transactionMessageReceive": m9,
+    "transactionMessageSend": m10,
     "transactionStatusPaid": MessageLookupByLibrary.simpleMessage("Paid"),
     "transactionStatusUnpaid": MessageLookupByLibrary.simpleMessage("Unpaid"),
     "transactionTypeReceive": MessageLookupByLibrary.simpleMessage("Receive"),
     "transactionTypeSend": MessageLookupByLibrary.simpleMessage("Send"),
     "transaction_addNote": MessageLookupByLibrary.simpleMessage("Add Note"),
     "transaction_amount": MessageLookupByLibrary.simpleMessage("Amount"),
-    "transaction_by": m6,
+    "transaction_by": m11,
     "transaction_cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "transaction_date": MessageLookupByLibrary.simpleMessage("Date"),
     "transaction_dateTime": MessageLookupByLibrary.simpleMessage("Date & Time"),
@@ -309,7 +388,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "transaction_history": MessageLookupByLibrary.simpleMessage(
       "Change History",
     ),
-    "transaction_markedAs": m7,
+    "transaction_markedAs": m12,
     "transaction_noteDeleted": MessageLookupByLibrary.simpleMessage(
       "Note deleted",
     ),
@@ -317,7 +396,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Write your note here…",
     ),
     "transaction_notes": MessageLookupByLibrary.simpleMessage("Notes"),
-    "transaction_receiptHeader": m8,
+    "transaction_receiptHeader": m13,
     "transaction_receivedFrom": MessageLookupByLibrary.simpleMessage(
       "Received From",
     ),
@@ -363,9 +442,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "All Wallets",
     ),
     "transactions_loadMore": MessageLookupByLibrary.simpleMessage("Load More"),
-    "transactions_title_wallet": m9,
-    "transactions_title_workspace": m10,
-    "transactions_viewingCountOfTotal": m11,
+    "transactions_title_wallet": m14,
+    "transactions_title_workspace": m15,
+    "transactions_viewingCountOfTotal": m16,
     "viaLabel": MessageLookupByLibrary.simpleMessage("Via"),
     "viewAll": MessageLookupByLibrary.simpleMessage("View All"),
     "walletDetails": MessageLookupByLibrary.simpleMessage("Wallet Details"),
@@ -403,8 +482,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "workspaceContinueToDetailsAction": MessageLookupByLibrary.simpleMessage(
       "Continue to Workspace",
     ),
+    "workspaceInviteMemberAction": MessageLookupByLibrary.simpleMessage(
+      "Invite member",
+    ),
     "workspaceMembers": MessageLookupByLibrary.simpleMessage("Members"),
-    "workspaceMembersCount": m12,
+    "workspaceMembersCount": m17,
     "workspaceMembersEmpty": MessageLookupByLibrary.simpleMessage(
       "No members have joined this workspace yet.",
     ),
@@ -432,9 +514,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Available",
     ),
     "workspaceWalletSelected": MessageLookupByLibrary.simpleMessage("Selected"),
-    "workspaceWalletSelectionSummary": m13,
+    "workspaceWalletSelectionSummary": m18,
     "workspaceWallets": MessageLookupByLibrary.simpleMessage("Wallets"),
-    "workspaceWalletsCount": m14,
+    "workspaceWalletsCount": m19,
     "workspaceWalletsEmptyDescription": MessageLookupByLibrary.simpleMessage(
       "This workspace will show shared wallets here once they are linked.",
     ),

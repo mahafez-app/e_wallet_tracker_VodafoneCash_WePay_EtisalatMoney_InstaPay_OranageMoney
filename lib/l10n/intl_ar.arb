@@ -128,6 +128,7 @@
   "createWorkspaceEmptyDescription": "اجمع محافظ النشاط، وتابع الحركة، وأضف فريقك داخل مساحة مشتركة واحدة.",
   "workspaceWallets": "المحافظ",
   "workspaceMembers": "الأعضاء",
+  "workspaceInviteMemberAction": "دعوة عضو",
   "workspaceAddWalletsTitle": "إضافة محافظ",
   "workspaceAddWalletsAction": "إضافة محافظ",
   "workspaceAddWalletsCreateDescription": "اختر المحافظ التي تريد إظهارها في مساحة العمل الآن. يمكنك إضافة المزيد لاحقًا.",
@@ -156,11 +157,65 @@
   "workspaceWalletsEmptyTitle": "لا توجد محافظ مرتبطة بعد",
   "workspaceWalletsEmptyDescription": "ستظهر المحافظ المشتركة هنا بعد ربطها بمساحة العمل.",
   "workspaceMembersEmpty": "لم ينضم أي أعضاء إلى مساحة العمل بعد.",
+  "invitationsTitle": "الدعوات",
+  "invitationsEmptyTitle": "لا توجد دعوات معلقة",
+  "invitationsEmptyDescription": "لا توجد لديك دعوات معلقة لمساحات العمل الآن.",
+  "invitationsListDescription": "راجع دعوات مساحات العمل الواردة وحدد قرارك في الوقت المناسب.",
+  "invitationsPendingCount": "{count, plural, =0{لا توجد دعوات بانتظار الرد} =1{دعوة واحدة بانتظار الرد} =2{دعوتان بانتظار الرد} few{{count} دعوات بانتظار الرد} many{{count} دعوة بانتظار الرد} other{{count} دعوة بانتظار الرد}}",
+  "@invitationsPendingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "invitationsPendingStatus": "بانتظار الرد",
+  "invitationsAcceptAction": "قبول",
+  "invitationsDeclineAction": "رفض",
+  "invitationsRefreshAction": "تحديث القائمة",
+  "invitationsHowItWorksTitle": "كيف تعمل الدعوات",
+  "invitationsHowItWorksDescription": "لا يمكن إرسال دعوة مساحة العمل إلا إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المرتبط بالحساب.",
+  "invitationSentBy": "دعوة من {name}",
+  "@invitationSentBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "invitationAcceptSuccess": "تم انضمامك إلى مساحة العمل {workspaceName} بنجاح.",
+  "@invitationAcceptSuccess": {
+    "placeholders": {
+      "workspaceName": {}
+    }
+  },
+  "invitationDeclineSuccess": "تم رفض دعوتك إلى مساحة العمل {workspaceName}.",
+  "@invitationDeclineSuccess": {
+    "placeholders": {
+      "workspaceName": {}
+    }
+  },
+  "invitationDeclineConfirmTitle": "رفض الدعوة؟",
+  "invitationDeclineConfirmMessage": "سيتم حذف دعوتك للانضمام إلى مساحة العمل {workspaceName}. يمكنك طلب إعادة إرسال الدعوة لاحقًا.",
+  "@invitationDeclineConfirmMessage": {
+    "placeholders": {
+      "workspaceName": {}
+    }
+  },
+  "invitationSentSuccess": "تم إرسال الدعوة بنجاح.",
+  "inviteMemberTitle": "دعوة عضو",
+  "inviteMemberDescription": "أرسل دعوة إلى مساحة العمل عبر البريد الإلكتروني لحساب محافظ موجود بالفعل. سيجدها المستخدم المدعو في شاشة الدعوات.",
+  "inviteMemberEmailLabel": "بريد العضو الإلكتروني",
+  "inviteMemberEmailHint": "name@example.com",
+  "inviteMemberSendAction": "إرسال الدعوة",
   "errorWalletPhoneNumberRequired": "يرجى إدخال رقم الهاتف",
   "errorWalletProviderRequired": "يرجى اختيار مزود خدمة واحد على الأقل",
   "errorWalletAllExists": "جميع المحافظ المختارة مضافة بالفعل لهذا الرقم.",
   "errorWorkspaceNameRequired": "يرجى إدخال اسم مساحة العمل",
   "errorWorkspaceWalletSelectionRequired": "يرجى اختيار محفظة واحدة على الأقل",
+  "errorInvitationSelfNotAllowed": "لا يمكنك دعوة نفسك إلى مساحة العمل.",
+  "errorInvitationAlreadyPending": "توجد دعوة معلقة بالفعل لهذا البريد الإلكتروني.",
+  "errorInvitationUserNotFound": "هذا البريد الإلكتروني غير مرتبط بأي حساب محافظ.",
+  "errorInvitationUserAlreadyMember": "هذا المستخدم عضو بالفعل في مساحة العمل.",
+  "errorInvitationNotPending": "هذه الدعوة لم تعد معلقة.",
   "transactionTypeReceive": "استلام",
   "transactionTypeSend": "إرسال",
   "transactionStatusPaid": "مدفوع",

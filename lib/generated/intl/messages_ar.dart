@@ -28,31 +28,45 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(code) => "فشل التحقق: ${code}";
 
-  static String m3(minutes) => "منذ ${minutes} دقيقة";
+  static String m3(workspaceName) =>
+      "تم انضمامك إلى مساحة العمل ${workspaceName} بنجاح.";
 
-  static String m4(amount) => "تم استلام ${amount} ج.م";
+  static String m4(workspaceName) =>
+      "سيتم حذف دعوتك للانضمام إلى مساحة العمل ${workspaceName}. يمكنك طلب إعادة إرسال الدعوة لاحقًا.";
 
-  static String m5(amount) => "تم إرسال ${amount} ج.م";
+  static String m5(workspaceName) =>
+      "تم رفض دعوتك إلى مساحة العمل ${workspaceName}.";
 
-  static String m6(name) => "بواسطة ${name}";
+  static String m6(name) => "دعوة من ${name}";
 
-  static String m7(status) => "تم التحديد كـ ${status}";
+  static String m7(count) =>
+      "${Intl.plural(count, zero: 'لا توجد دعوات بانتظار الرد', one: 'دعوة واحدة بانتظار الرد', two: 'دعوتان بانتظار الرد', few: '${count} دعوات بانتظار الرد', many: '${count} دعوة بانتظار الرد', other: '${count} دعوة بانتظار الرد')}";
 
-  static String m8(type) => "إيصال معاملة — ${type}";
+  static String m8(minutes) => "منذ ${minutes} دقيقة";
 
-  static String m9(name) => "معاملات ${name}";
+  static String m9(amount) => "تم استلام ${amount} ج.م";
 
-  static String m10(name) => "معاملات ${name}";
+  static String m10(amount) => "تم إرسال ${amount} ج.م";
 
-  static String m11(count, total) => "عرض ${count} من أصل ${total} معاملة";
+  static String m11(name) => "بواسطة ${name}";
 
-  static String m12(count) =>
+  static String m12(status) => "تم التحديد كـ ${status}";
+
+  static String m13(type) => "إيصال معاملة — ${type}";
+
+  static String m14(name) => "معاملات ${name}";
+
+  static String m15(name) => "معاملات ${name}";
+
+  static String m16(count, total) => "عرض ${count} من أصل ${total} معاملة";
+
+  static String m17(count) =>
       "${Intl.plural(count, zero: 'لا يوجد أعضاء', one: 'عضو واحد', two: 'عضوان', few: '${count} أعضاء', many: '${count} عضوًا', other: '${count} عضو')}";
 
-  static String m13(ownedCount, linkedCount) =>
+  static String m18(ownedCount, linkedCount) =>
       "أنت تملك ${ownedCount} محافظ، و${linkedCount} منها مرتبطة بالفعل بهذه المساحة.";
 
-  static String m14(count) =>
+  static String m19(count) =>
       "${Intl.plural(count, zero: 'لا توجد محافظ', one: 'محفظة واحدة', two: 'محفظتان', few: '${count} محافظ', many: '${count} محفظة', other: '${count} محفظة')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -158,6 +172,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "تضارب المورد. يرجى المحاولة مرة أخرى.",
     ),
     "errorForbidden": MessageLookupByLibrary.simpleMessage("الوصول ممنوع."),
+    "errorInvitationAlreadyPending": MessageLookupByLibrary.simpleMessage(
+      "توجد دعوة معلقة بالفعل لهذا البريد الإلكتروني.",
+    ),
+    "errorInvitationNotPending": MessageLookupByLibrary.simpleMessage(
+      "هذه الدعوة لم تعد معلقة.",
+    ),
+    "errorInvitationSelfNotAllowed": MessageLookupByLibrary.simpleMessage(
+      "لا يمكنك دعوة نفسك إلى مساحة العمل.",
+    ),
+    "errorInvitationUserAlreadyMember": MessageLookupByLibrary.simpleMessage(
+      "هذا المستخدم عضو بالفعل في مساحة العمل.",
+    ),
+    "errorInvitationUserNotFound": MessageLookupByLibrary.simpleMessage(
+      "هذا البريد الإلكتروني غير مرتبط بأي حساب محافظ.",
+    ),
     "errorNetwork": MessageLookupByLibrary.simpleMessage(
       "لا توجد اتصالات إنترنت. يرجى التحقق من شبكتك.",
     ),
@@ -208,9 +237,57 @@ class MessageLookup extends MessageLookupByLibrary {
     "fullNameValidationEmpty": MessageLookupByLibrary.simpleMessage(
       "يرجى إدخال اسمك",
     ),
+    "invitationAcceptSuccess": m3,
+    "invitationDeclineConfirmMessage": m4,
+    "invitationDeclineConfirmTitle": MessageLookupByLibrary.simpleMessage(
+      "رفض الدعوة؟",
+    ),
+    "invitationDeclineSuccess": m5,
+    "invitationSentBy": m6,
+    "invitationSentSuccess": MessageLookupByLibrary.simpleMessage(
+      "تم إرسال الدعوة بنجاح.",
+    ),
+    "invitationsAcceptAction": MessageLookupByLibrary.simpleMessage("قبول"),
+    "invitationsDeclineAction": MessageLookupByLibrary.simpleMessage("رفض"),
+    "invitationsEmptyDescription": MessageLookupByLibrary.simpleMessage(
+      "لا توجد لديك دعوات معلقة لمساحات العمل الآن.",
+    ),
+    "invitationsEmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "لا توجد دعوات معلقة",
+    ),
+    "invitationsHowItWorksDescription": MessageLookupByLibrary.simpleMessage(
+      "لا يمكن إرسال دعوة مساحة العمل إلا إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المرتبط بالحساب.",
+    ),
+    "invitationsHowItWorksTitle": MessageLookupByLibrary.simpleMessage(
+      "كيف تعمل الدعوات",
+    ),
+    "invitationsListDescription": MessageLookupByLibrary.simpleMessage(
+      "راجع دعوات مساحات العمل الواردة وحدد قرارك في الوقت المناسب.",
+    ),
+    "invitationsPendingCount": m7,
+    "invitationsPendingStatus": MessageLookupByLibrary.simpleMessage(
+      "بانتظار الرد",
+    ),
+    "invitationsRefreshAction": MessageLookupByLibrary.simpleMessage(
+      "تحديث القائمة",
+    ),
+    "invitationsTitle": MessageLookupByLibrary.simpleMessage("الدعوات"),
+    "inviteMemberDescription": MessageLookupByLibrary.simpleMessage(
+      "أرسل دعوة إلى مساحة العمل عبر البريد الإلكتروني لحساب محافظ موجود بالفعل. سيجدها المستخدم المدعو في شاشة الدعوات.",
+    ),
+    "inviteMemberEmailHint": MessageLookupByLibrary.simpleMessage(
+      "name@example.com",
+    ),
+    "inviteMemberEmailLabel": MessageLookupByLibrary.simpleMessage(
+      "بريد العضو الإلكتروني",
+    ),
+    "inviteMemberSendAction": MessageLookupByLibrary.simpleMessage(
+      "إرسال الدعوة",
+    ),
+    "inviteMemberTitle": MessageLookupByLibrary.simpleMessage("دعوة عضو"),
     "justNow": MessageLookupByLibrary.simpleMessage("الآن"),
     "lastActivity": MessageLookupByLibrary.simpleMessage("آخر نشاط"),
-    "minutesAgo": m3,
+    "minutesAgo": m8,
     "nameWillBeDisplayed": MessageLookupByLibrary.simpleMessage(
       "سيظهر اسمك عند تحديث حالة الدفع لتسهيل تتبع العمليات المالية",
     ),
@@ -272,8 +349,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "transactionDetails": MessageLookupByLibrary.simpleMessage(
       "تفاصيل المعاملة",
     ),
-    "transactionMessageReceive": m4,
-    "transactionMessageSend": m5,
+    "transactionMessageReceive": m9,
+    "transactionMessageSend": m10,
     "transactionStatusPaid": MessageLookupByLibrary.simpleMessage("مدفوع"),
     "transactionStatusUnpaid": MessageLookupByLibrary.simpleMessage(
       "غير مدفوع",
@@ -282,7 +359,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "transactionTypeSend": MessageLookupByLibrary.simpleMessage("إرسال"),
     "transaction_addNote": MessageLookupByLibrary.simpleMessage("إضافة ملاحظة"),
     "transaction_amount": MessageLookupByLibrary.simpleMessage("المبلغ"),
-    "transaction_by": m6,
+    "transaction_by": m11,
     "transaction_cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
     "transaction_date": MessageLookupByLibrary.simpleMessage("التاريخ"),
     "transaction_dateTime": MessageLookupByLibrary.simpleMessage(
@@ -300,7 +377,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "transaction_history": MessageLookupByLibrary.simpleMessage(
       "سجل التغييرات",
     ),
-    "transaction_markedAs": m7,
+    "transaction_markedAs": m12,
     "transaction_noteDeleted": MessageLookupByLibrary.simpleMessage(
       "تم حذف الملاحظة",
     ),
@@ -308,7 +385,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "اكتب ملاحظتك هنا…",
     ),
     "transaction_notes": MessageLookupByLibrary.simpleMessage("ملاحظات"),
-    "transaction_receiptHeader": m8,
+    "transaction_receiptHeader": m13,
     "transaction_receivedFrom": MessageLookupByLibrary.simpleMessage(
       "مُستلَم من",
     ),
@@ -352,9 +429,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "transactions_loadMore": MessageLookupByLibrary.simpleMessage(
       "تحميل المزيد",
     ),
-    "transactions_title_wallet": m9,
-    "transactions_title_workspace": m10,
-    "transactions_viewingCountOfTotal": m11,
+    "transactions_title_wallet": m14,
+    "transactions_title_workspace": m15,
+    "transactions_viewingCountOfTotal": m16,
     "viaLabel": MessageLookupByLibrary.simpleMessage("عبر"),
     "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
     "walletDetails": MessageLookupByLibrary.simpleMessage("تفاصيل المحفظة"),
@@ -390,8 +467,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "workspaceContinueToDetailsAction": MessageLookupByLibrary.simpleMessage(
       "المتابعة إلى مساحة العمل",
     ),
+    "workspaceInviteMemberAction": MessageLookupByLibrary.simpleMessage(
+      "دعوة عضو",
+    ),
     "workspaceMembers": MessageLookupByLibrary.simpleMessage("الأعضاء"),
-    "workspaceMembersCount": m12,
+    "workspaceMembersCount": m17,
     "workspaceMembersEmpty": MessageLookupByLibrary.simpleMessage(
       "لم ينضم أي أعضاء إلى مساحة العمل بعد.",
     ),
@@ -417,9 +497,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "workspaceWalletAvailable": MessageLookupByLibrary.simpleMessage("متاحة"),
     "workspaceWalletSelected": MessageLookupByLibrary.simpleMessage("محددة"),
-    "workspaceWalletSelectionSummary": m13,
+    "workspaceWalletSelectionSummary": m18,
     "workspaceWallets": MessageLookupByLibrary.simpleMessage("المحافظ"),
-    "workspaceWalletsCount": m14,
+    "workspaceWalletsCount": m19,
     "workspaceWalletsEmptyDescription": MessageLookupByLibrary.simpleMessage(
       "ستظهر المحافظ المشتركة هنا بعد ربطها بمساحة العمل.",
     ),

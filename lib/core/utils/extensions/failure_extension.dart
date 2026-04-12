@@ -37,6 +37,12 @@ extension FailureMessaging on BuildContext {
         'workspace-name-required' => l10n.errorWorkspaceNameRequired,
         'workspace-wallet-selection-required' =>
           l10n.errorWorkspaceWalletSelectionRequired,
+        'invitation-self-not-allowed' => l10n.errorInvitationSelfNotAllowed,
+        'invitation-already-pending' => l10n.errorInvitationAlreadyPending,
+        'invitation-user-not-found' => l10n.errorInvitationUserNotFound,
+        'invitation-user-already-member' =>
+          l10n.errorInvitationUserAlreadyMember,
+        'invitation-not-pending' => l10n.errorInvitationNotPending,
         _ =>
           code != null
               ? l10n.errorValidationWithCode(code)

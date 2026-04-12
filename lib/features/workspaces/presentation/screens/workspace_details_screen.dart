@@ -9,6 +9,8 @@ import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/app_error_view.dart';
 import '../../../../core/widgets/app_loader.dart';
+import '../../../auth/providers/auth_providers.dart';
+import '../../../invitations/presentation/widgets/invitations/invite_member_bottom_sheet.dart';
 import '../../domain/entities/workspace_details_entity.dart';
 import '../providers/workspace_details_controller.dart';
 import '../widgets/details/workspace_members_section.dart';
@@ -71,13 +73,16 @@ class _WorkspaceDetailsBody extends ConsumerWidget {
   }
 }
 
-class _WorkspaceDetailsDataView extends StatelessWidget {
+class _WorkspaceDetailsDataView extends ConsumerWidget {
   const _WorkspaceDetailsDataView({super.key, required this.details});
 
   final WorkspaceDetailsEntity details;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(currentUserProvider);
+    final canInviteMembers = currentUser?.uid == details.workspace.ownerUid;
+
     return SingleChildScrollView(
       padding: AppSpacing.pagePadding,
       child: Column(
@@ -94,7 +99,15 @@ class _WorkspaceDetailsDataView extends StatelessWidget {
           AppSpacing.xxl.verticalSpace,
           WorkspaceTransactionsSection(details: details),
           AppSpacing.xxl.verticalSpace,
-          WorkspaceMembersSection(members: details.members),
+          WorkspaceMembersSection(
+            members: details.members,
+            onInviteMember: canInviteMembers
+                ? () => InviteMemberBottomSheet.show(
+                    context,
+                    workspaceId: details.workspace.id,
+                  )
+                : null,
+          ),
         ],
       ),
     );

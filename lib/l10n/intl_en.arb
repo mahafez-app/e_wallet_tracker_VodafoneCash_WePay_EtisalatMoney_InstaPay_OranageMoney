@@ -70,6 +70,7 @@
   "yourWallets": "Your Wallets",
   "viewAll": "View All",
   "workspaces": "Workspaces",
+  "addWorkspace": "Add Workspace",
   "addWallet": "Add Wallet",
   "walletStatusActive": "Active",
   "activeWalletsCount": "{count, plural, =0{No active wallets} =1{1 active wallet} few{{count} active wallets} other{{count} active wallets}}",
@@ -97,9 +98,29 @@
   "smsPermissionPrivacyTitle": "Complete Privacy",
   "smsPermissionPrivacyDesc": "We only read financial messages and device phone numbers required for wallet setup; your data is encrypted and never shared.",
   "addWalletAction": "Add Wallet",
+  "createWorkspaceTitle": "Create Workspace",
+  "createWorkspaceDescription": "Workspaces help you organize business wallets and collaborate with trusted members in one place.",
+  "workspaceNameLabel": "Workspace Name",
+  "workspaceNameHint": "e.g. Mobile Store",
+  "createWorkspacePreviewLabel": "Workspace Preview",
+  "createWorkspacePreviewFallback": "New Workspace",
+  "createWorkspacePreviewDescription": "You can add wallets and invite members after creating this workspace.",
+  "workspaceOwner": "Owner",
+  "workspaceMembersCount": "{count, plural, =0{No members} =1{1 member} other{{count} members}}",
+  "@workspaceMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "createWorkspaceAction": "Create Workspace",
+  "createWorkspaceEmptyTitle": "Create your first workspace",
+  "createWorkspaceEmptyDescription": "Group business wallets, track activity, and bring your team into one shared space.",
   "errorWalletPhoneNumberRequired": "Please enter a phone number",
   "errorWalletProviderRequired": "Please select at least one provider",
   "errorWalletAllExists": "All selected wallets are already added for this phone number.",
+  "errorWorkspaceNameRequired": "Please enter a workspace name",
   "transactionTypeReceive": "Receive",
   "transactionTypeSend": "Send",
   "transactionStatusPaid": "Paid",

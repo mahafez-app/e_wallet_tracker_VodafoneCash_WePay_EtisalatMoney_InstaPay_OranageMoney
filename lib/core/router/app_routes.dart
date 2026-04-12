@@ -13,6 +13,7 @@ abstract final class AppRoutes {
 
   // Wallets
   static const String addWallet = '/add-wallet';
+  static const String addWorkspace = '/add-workspace';
   static const String smsPermissions = '/sms-permissions';
   static const String walletDetails = '/wallet/:walletId';
   static const String transactions = '/transactions';

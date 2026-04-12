@@ -11,6 +11,7 @@ import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/transactions/presentation/navigation/transactions_route_data.dart';
 import '../../features/wallets/presentation/screens/add_wallet_screen.dart';
 import '../../features/wallets/presentation/screens/sms_permissions_screen.dart';
+import '../../features/workspaces/presentation/screens/create_workspace_screen.dart';
 import '../../features/transactions/presentation/screens/transactions_screen.dart';
 import '../../features/wallets/presentation/screens/wallet_details_screen.dart';
 import '../widgets/not_found_screen.dart';
@@ -130,6 +131,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.addWallet,
         builder: (context, state) => const AddWalletScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.addWorkspace,
+        builder: (context, state) => const CreateWorkspaceScreen(),
       ),
       GoRoute(
         path: AppRoutes.smsPermissions,

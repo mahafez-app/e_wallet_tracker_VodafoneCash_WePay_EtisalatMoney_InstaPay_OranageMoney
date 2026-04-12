@@ -34,6 +34,7 @@ extension FailureMessaging on BuildContext {
         'wallet-phone-required' => l10n.errorWalletPhoneNumberRequired,
         'wallet-provider-required' => l10n.errorWalletProviderRequired,
         'wallet-all-exists' => l10n.errorWalletAllExists,
+        'workspace-name-required' => l10n.errorWorkspaceNameRequired,
         _ =>
           code != null
               ? l10n.errorValidationWithCode(code)

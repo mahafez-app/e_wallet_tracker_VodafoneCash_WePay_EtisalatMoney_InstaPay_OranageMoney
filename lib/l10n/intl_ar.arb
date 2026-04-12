@@ -70,6 +70,7 @@
   "yourWallets": "محافظك",
   "viewAll": "عرض الكل",
   "workspaces": "مساحات العمل",
+  "addWorkspace": "إضافة مساحة عمل",
   "addWallet": "إضافة محفظة",
   "walletStatusActive": "نشط",
   "activeWalletsCount": "{count, plural, =0{لا توجد محافظ نشطة} =1{محفظة واحدة نشطة} =2{محفظتان نشطتان} few{{count} محافظ نشطة} many{{count} محفظة نشطة} other{{count} محفظة نشطة}}",
@@ -97,9 +98,29 @@
   "smsPermissionPrivacyTitle": "خصوصية تامة",
   "smsPermissionPrivacyDesc": "نقرأ فقط الرسائل المالية وأرقام الهاتف اللازمة لإعداد المحافظ؛ بياناتك مشفرة ولا يتم مشاركتها أبدا.",
   "addWalletAction": "إضافة المحفظة",
+  "createWorkspaceTitle": "إنشاء مساحة عمل",
+  "createWorkspaceDescription": "مساحات العمل تساعدك على تنظيم محافظ النشاط التجاري والتعاون مع الأعضاء الموثوقين من مكان واحد.",
+  "workspaceNameLabel": "اسم مساحة العمل",
+  "workspaceNameHint": "مثلاً: محل موبايلات",
+  "createWorkspacePreviewLabel": "معاينة مساحة العمل",
+  "createWorkspacePreviewFallback": "مساحة عمل جديدة",
+  "createWorkspacePreviewDescription": "يمكنك إضافة المحافظ ودعوة الأعضاء بعد إنشاء مساحة العمل.",
+  "workspaceOwner": "المالك",
+  "workspaceMembersCount": "{count, plural, =0{لا يوجد أعضاء} =1{عضو واحد} =2{عضوان} few{{count} أعضاء} many{{count} عضوًا} other{{count} عضو}}",
+  "@workspaceMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "createWorkspaceAction": "إنشاء مساحة العمل",
+  "createWorkspaceEmptyTitle": "أنشئ أول مساحة عمل",
+  "createWorkspaceEmptyDescription": "اجمع محافظ النشاط، وتابع الحركة، وأضف فريقك داخل مساحة مشتركة واحدة.",
   "errorWalletPhoneNumberRequired": "يرجى إدخال رقم الهاتف",
   "errorWalletProviderRequired": "يرجى اختيار مزود خدمة واحد على الأقل",
   "errorWalletAllExists": "جميع المحافظ المختارة مضافة بالفعل لهذا الرقم.",
+  "errorWorkspaceNameRequired": "يرجى إدخال اسم مساحة العمل",
   "transactionTypeReceive": "استلام",
   "transactionTypeSend": "إرسال",
   "transactionStatusPaid": "مدفوع",

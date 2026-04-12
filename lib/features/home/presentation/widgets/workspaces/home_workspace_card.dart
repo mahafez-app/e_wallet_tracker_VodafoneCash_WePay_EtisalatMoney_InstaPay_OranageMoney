@@ -22,62 +22,65 @@ class HomeWorkspaceCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final l10n = context.l10n;
 
-    return Container(
-      padding: AppResponsive.allPadding(AppSpacing.xl),
-      decoration: BoxDecoration(
-        color: colors.cardBackground,
-        border: Border.all(color: colors.cardBorder),
-        borderRadius: BorderRadius.circular(16.responsiveRadius),
-        boxShadow: [
-          BoxShadow(
-            color: colors.cardShadow,
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _WorkspaceHeader(
-                name: workspace.name,
-                walletsCount: workspace.walletsCount,
-              ),
-              _WorkspaceLastActivity(
-                latestActivityAt: workspace.latestActivityAt,
-              ),
-            ],
-          ),
-          AppSpacing.lg.verticalSpace,
-          Row(
-            children: [
-              Expanded(
-                child: _WorkspaceStat(
-                  title: l10n.totalIn,
-                  amount: workspace.totalReceived.toCurrencyText(
-                    context,
-                    decimalDigits: 0,
-                  ),
-                  amountColor: colorScheme.secondary,
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        padding: AppResponsive.allPadding(AppSpacing.xl),
+        decoration: BoxDecoration(
+          color: colors.cardBackground,
+          border: Border.all(color: colors.cardBorder),
+          borderRadius: BorderRadius.circular(16.responsiveRadius),
+          boxShadow: [
+            BoxShadow(
+              color: colors.cardShadow,
+              blurRadius: 2,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _WorkspaceHeader(
+                  name: workspace.name,
+                  walletsCount: workspace.walletsCount,
                 ),
-              ),
-              AppSpacing.md.horizontalSpace,
-              Expanded(
-                child: _WorkspaceStat(
-                  title: l10n.totalOut,
-                  amount: workspace.totalSent.toCurrencyText(
-                    context,
-                    decimalDigits: 0,
-                  ),
-                  amountColor: colorScheme.error,
+                _WorkspaceLastActivity(
+                  latestActivityAt: workspace.latestActivityAt,
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+            AppSpacing.lg.verticalSpace,
+            Row(
+              children: [
+                Expanded(
+                  child: _WorkspaceStat(
+                    title: l10n.totalIn,
+                    amount: workspace.totalReceived.toCurrencyText(
+                      context,
+                      decimalDigits: 0,
+                    ),
+                    amountColor: colorScheme.secondary,
+                  ),
+                ),
+                AppSpacing.md.horizontalSpace,
+                Expanded(
+                  child: _WorkspaceStat(
+                    title: l10n.totalOut,
+                    amount: workspace.totalSent.toCurrencyText(
+                      context,
+                      decimalDigits: 0,
+                    ),
+                    amountColor: colorScheme.error,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

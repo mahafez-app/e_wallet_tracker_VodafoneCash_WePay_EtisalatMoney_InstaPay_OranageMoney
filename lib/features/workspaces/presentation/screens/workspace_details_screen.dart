@@ -7,17 +7,15 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/widgets/app_error_view.dart';
-import '../../../../core/widgets/app_loader.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../invitations/presentation/widgets/invitations/invite_member_bottom_sheet.dart';
 import '../../domain/entities/workspace_details_entity.dart';
 import '../providers/workspace_details_controller.dart';
-import 'workspace_unavailable_guard.dart';
 import '../widgets/details/workspace_members_section.dart';
 import '../widgets/details/workspace_summary_card.dart';
 import '../widgets/details/workspace_transactions_section.dart';
 import '../widgets/details/workspace_wallets_section.dart';
+import 'workspace_unavailable_guard.dart';
 
 class WorkspaceDetailsScreen extends StatelessWidget {
   const WorkspaceDetailsScreen({super.key, required this.workspaceId});
@@ -79,35 +77,12 @@ class _WorkspaceDetailsBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(workspaceDetailsControllerProvider(workspaceId));
     final currentUserId = ref.watch(currentUserProvider)?.uid;
-
-    ref.listen<AsyncValue<WorkspaceDetailsEntity>>(
-      workspaceDetailsControllerProvider(workspaceId),
-      (_, next) {
-        final error = next.asError?.error;
-        if (error != null && isWorkspaceUnavailableError(error)) {
-          showWorkspaceUnavailableDialog(context);
-          return;
-        }
-
-        final details = next.asData?.value;
-        if (details != null &&
-            isWorkspaceAccessRevoked(details, currentUserId)) {
-          showWorkspaceUnavailableDialog(context);
-        }
-      },
+    return WorkspaceUnavailableGuard<WorkspaceDetailsEntity>(
+      state: state,
+      currentUserId: currentUserId,
+      detailsSelector: (details) => details,
+      dataBuilder: (_, details) => _WorkspaceDetailsDataView(details: details),
     );
-
-    return switch (state) {
-      AsyncLoading() => const AppLoader(),
-      AsyncError(:final error) =>
-        isWorkspaceUnavailableError(error)
-            ? const SizedBox.shrink()
-            : AppErrorView(error: error),
-      AsyncData(:final value) =>
-        isWorkspaceAccessRevoked(value, currentUserId)
-            ? const SizedBox.shrink()
-            : _WorkspaceDetailsDataView(details: value),
-    };
   }
 }
 

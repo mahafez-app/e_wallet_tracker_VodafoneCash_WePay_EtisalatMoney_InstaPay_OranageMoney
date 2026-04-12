@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/app_error_view.dart';
-import '../../../../core/widgets/app_loader.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../providers/workspace_settings_controller.dart';
 import '../providers/workspace_settings_state.dart';
-import 'workspace_settings_helpers.dart';
-import 'workspace_unavailable_guard.dart';
 import '../widgets/settings/edit_workspace_name_bottom_sheet.dart';
 import '../widgets/settings/workspace_settings_content.dart';
+import 'workspace_settings_helpers.dart';
+import 'workspace_unavailable_guard.dart';
 
 class WorkspaceSettingsScreen extends StatelessWidget {
   const WorkspaceSettingsScreen({super.key, required this.workspaceId});
@@ -39,20 +38,6 @@ class _WorkspaceSettingsBody extends ConsumerWidget {
     ref.listen<AsyncValue<WorkspaceSettingsState>>(
       workspaceSettingsControllerProvider(workspaceId),
       (previous, next) {
-        final error = next.asError?.error;
-        if (error != null && isWorkspaceUnavailableError(error)) {
-          showWorkspaceUnavailableDialog(context);
-          return;
-        }
-
-        final currentUserId = ref.read(currentUserProvider)?.uid;
-        final details = next.asData?.value.details;
-        if (details != null &&
-            isWorkspaceAccessRevoked(details, currentUserId)) {
-          showWorkspaceUnavailableDialog(context);
-          return;
-        }
-
         final feedback = next.asData?.value.feedback;
         if (feedback == null) {
           return;
@@ -64,37 +49,29 @@ class _WorkspaceSettingsBody extends ConsumerWidget {
 
     final state = ref.watch(workspaceSettingsControllerProvider(workspaceId));
     final currentUserId = ref.watch(currentUserProvider)?.uid;
-
-    return switch (state) {
-      AsyncLoading() => const AppLoader(),
-      AsyncError(:final error) =>
-        isWorkspaceUnavailableError(error)
-            ? const SizedBox.shrink()
-            : AppErrorView(error: error),
-      AsyncData(:final value) =>
-        isWorkspaceAccessRevoked(value.details, currentUserId)
-            ? const SizedBox.shrink()
-            : WorkspaceSettingsContent(
-                state: value,
-                currentUserId: currentUserId,
-                onEditWorkspaceName: () => EditWorkspaceNameBottomSheet.show(
-                  context,
-                  workspaceId: workspaceId,
-                  currentName: value.details.workspace.name,
-                ),
-                onInviteMember: () =>
-                    showInviteMemberSheet(context, controller, workspaceId),
-                onRemoveMember: (member) =>
-                    showRemoveMemberDialog(context, controller, member),
-                onRemoveWallet: (wallet) =>
-                    showRemoveWalletDialog(context, controller, wallet),
-                onCancelInvitation: (invitation) =>
-                    showCancelInvitationDialog(context, controller, invitation),
-                onLeaveWorkspace: () =>
-                    showLeaveWorkspaceDialog(context, controller),
-                onDeleteWorkspace: () =>
-                    showDeleteWorkspaceDialog(context, controller),
-              ),
-    };
+    return WorkspaceUnavailableGuard<WorkspaceSettingsState>(
+      state: state,
+      currentUserId: currentUserId,
+      detailsSelector: (settings) => settings.details,
+      dataBuilder: (_, value) => WorkspaceSettingsContent(
+        state: value,
+        currentUserId: currentUserId,
+        onEditWorkspaceName: () => EditWorkspaceNameBottomSheet.show(
+          context,
+          workspaceId: workspaceId,
+          currentName: value.details.workspace.name,
+        ),
+        onInviteMember: () =>
+            showInviteMemberSheet(context, controller, workspaceId),
+        onRemoveMember: (member) =>
+            showRemoveMemberDialog(context, controller, member),
+        onRemoveWallet: (wallet) =>
+            showRemoveWalletDialog(context, controller, wallet),
+        onCancelInvitation: (invitation) =>
+            showCancelInvitationDialog(context, controller, invitation),
+        onLeaveWorkspace: () => showLeaveWorkspaceDialog(context, controller),
+        onDeleteWorkspace: () => showDeleteWorkspaceDialog(context, controller),
+      ),
+    );
   }
 }

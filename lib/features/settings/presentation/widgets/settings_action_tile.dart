@@ -55,7 +55,7 @@ class SettingsActionTile extends StatelessWidget {
               )
             else if (showTrailing)
               Icon(
-                Icons.chevron_left_rounded,
+                Icons.arrow_forward_ios_rounded,
                 color: isDanger
                     ? colorScheme.error.withAlpha(120)
                     : colorScheme.outline,

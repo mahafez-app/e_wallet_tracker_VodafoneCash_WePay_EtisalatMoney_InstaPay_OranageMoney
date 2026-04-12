@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../core/widgets/app_button.dart';
+import '../../../../../core/widgets/transactions/no_transactions_card.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
@@ -19,54 +21,55 @@ class TransactionsEmptyView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     final controller = ref.read(
       transactionsControllerProvider(routeData).notifier,
     );
+    final footer = hasActiveFilter
+        ? SizedBox(
+            width: double.infinity,
+            child: AppButton(
+              label: context.l10n.transactions_clearFilters,
+              type: AppButtonType.secondary,
+              icon: Icon(
+                Icons.filter_alt_off_rounded,
+                size: AppSpacing.lg.responsiveRadius,
+              ),
+              onPressed: controller.clearAllFilters,
+            ),
+          )
+        : null;
 
     return Center(
       child: Padding(
         padding: AppSpacing.pagePadding,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              width: 80.responsiveRadius,
-              height: 80.responsiveRadius,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest.withAlpha(120),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                hasActiveFilter
-                    ? Icons.search_off_rounded
-                    : Icons.receipt_long_outlined,
-                size: 36.responsiveRadius,
-                color: theme.colorScheme.onSurfaceVariant.withAlpha(160),
-              ),
+            NoTransactionsCard(
+              title: hasActiveFilter
+                  ? context.l10n.transactions_emptyWithFilterTitle
+                  : context.l10n.transactions_emptyTitle,
+              description: hasActiveFilter
+                  ? context.l10n.transactions_emptyWithFilterDescription
+                  : _emptyDescription(context),
+              variant: NoTransactionsCardVariant.fullScreen,
+              footer: footer,
             ),
-            AppSpacing.lg.verticalSpace,
-            Text(
-              hasActiveFilter
-                  ? context.l10n.transactions_emptyWithFilter
-                  : context.l10n.noTransactionsTitle,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            if (hasActiveFilter) ...{
-              AppSpacing.lg.verticalSpace,
-              OutlinedButton.icon(
-                onPressed: () => controller.clearAllFilters(),
-                icon: const Icon(Icons.filter_alt_off_rounded),
-                label: Text(context.l10n.transactions_clearFilters),
-              ),
-            },
+            if (!hasActiveFilter) ...[
+              AppSpacing.xl.verticalSpace,
+              const TransactionsEmptyHintCard(),
+            ],
           ],
         ),
       ),
     );
   }
+
+  String _emptyDescription(BuildContext context) => switch (routeData) {
+    WalletTransactionsRouteData() =>
+      context.l10n.transactions_emptyWalletDescription,
+    WorkspaceTransactionsRouteData() =>
+      context.l10n.transactions_emptyWorkspaceDescription,
+  };
 }

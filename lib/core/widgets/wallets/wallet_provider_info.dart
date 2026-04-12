@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
-
 import 'package:wallet_tracker/core/domain/enums/wallet_provider.dart';
 import 'package:wallet_tracker/core/theme/app_responsive.dart';
 import 'package:wallet_tracker/core/theme/app_spacing.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 import 'package:wallet_tracker/core/utils/extensions/phone_number_extension.dart';
 import 'package:wallet_tracker/core/utils/extensions/wallet_provider_ext.dart';
 
@@ -72,7 +71,7 @@ class _WalletStatusBadge extends StatelessWidget {
     return Container(
       padding: AppResponsive.symmetricPadding(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: provider.brandColor.withAlpha(25),
+        color: provider.brandColor.withAlpha(100),
         borderRadius: BorderRadius.all(Radius.circular(100.responsiveRadius)),
       ),
       child: Row(

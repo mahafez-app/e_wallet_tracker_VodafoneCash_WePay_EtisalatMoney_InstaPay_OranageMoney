@@ -25,6 +25,7 @@ class WorkspaceTransactionsSection extends StatelessWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final hasWallets = details.wallets.isNotEmpty;
+    final hasTransactions = details.recentTransactions.isNotEmpty;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,32 +40,34 @@ class WorkspaceTransactionsSection extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            TextButton(
-              onPressed: hasWallets
-                  ? () => context.push(
-                      AppRoutes.transactionsPath(),
-                      extra: WorkspaceTransactionsRouteData(
-                        workspaceId: details.workspace.id,
-                        workspaceName: details.workspace.name,
-                        wallets: details.wallets
-                            .map(
-                              (wallet) => WalletFilterOption(
-                                walletId: wallet.id,
-                                walletLabel:
-                                    '${wallet.provider.displayName(context)} · ${wallet.phoneNumber.formattedEgyptianPhoneNumber}',
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    )
-                  : null,
-              child: Text(l10n.viewAll),
-            ),
+            if (hasTransactions && hasWallets)
+              TextButton(
+                onPressed: () => context.push(
+                  AppRoutes.transactionsPath(),
+                  extra: WorkspaceTransactionsRouteData(
+                    workspaceId: details.workspace.id,
+                    workspaceName: details.workspace.name,
+                    wallets: details.wallets
+                        .map(
+                          (wallet) => WalletFilterOption(
+                            walletId: wallet.id,
+                            walletLabel:
+                                '${wallet.provider.displayName(context)} · ${wallet.phoneNumber.formattedEgyptianPhoneNumber}',
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+                child: Text(l10n.viewAll),
+              ),
           ],
         ),
         AppSpacing.md.verticalSpace,
-        if (details.recentTransactions.isEmpty)
-          const NoTransactionsCard()
+        if (!hasTransactions)
+          NoTransactionsCard(
+            title: l10n.transactions_emptyTitle,
+            description: l10n.transactions_emptyWorkspaceDescription,
+          )
         else
           ...details.recentTransactions.map(
             (transaction) => GestureDetector(

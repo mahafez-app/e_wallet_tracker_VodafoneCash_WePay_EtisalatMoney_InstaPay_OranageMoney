@@ -97,7 +97,7 @@ class WorkspaceSettingsDangerZoneSection extends StatelessWidget {
                     )
                   else
                     Icon(
-                      Icons.chevron_left_rounded,
+                      Icons.arrow_forward_ios_rounded,
                       color: theme.colorScheme.error.withAlpha(100),
                     ),
                 ],

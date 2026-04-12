@@ -468,8 +468,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "transactions_date_yesterday": MessageLookupByLibrary.simpleMessage(
       "Yesterday",
     ),
+    "transactions_emptyHintDescription": MessageLookupByLibrary.simpleMessage(
+      "When activity is detected on a connected wallet, we sync it here for you automatically.",
+    ),
+    "transactions_emptyHintTitle": MessageLookupByLibrary.simpleMessage(
+      "Automatic tracking",
+    ),
+    "transactions_emptyTitle": MessageLookupByLibrary.simpleMessage(
+      "No transactions yet",
+    ),
+    "transactions_emptyWalletDescription": MessageLookupByLibrary.simpleMessage(
+      "This wallet has no transactions yet. New messages will appear here automatically.",
+    ),
     "transactions_emptyWithFilter": MessageLookupByLibrary.simpleMessage(
       "No transactions match the selected filter",
+    ),
+    "transactions_emptyWithFilterDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "Try clearing one or more filters to see more activity.",
+        ),
+    "transactions_emptyWithFilterTitle": MessageLookupByLibrary.simpleMessage(
+      "No matching transactions",
+    ),
+    "transactions_emptyWorkspaceDescription": MessageLookupByLibrary.simpleMessage(
+      "This workspace has no transactions yet. Activity from any linked wallet will appear here automatically.",
     ),
     "transactions_filter_all": MessageLookupByLibrary.simpleMessage("All"),
     "transactions_filter_allWallets": MessageLookupByLibrary.simpleMessage(

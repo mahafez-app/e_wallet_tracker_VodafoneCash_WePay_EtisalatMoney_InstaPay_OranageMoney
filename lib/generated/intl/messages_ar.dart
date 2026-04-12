@@ -458,8 +458,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "transactions_date_today": MessageLookupByLibrary.simpleMessage("اليوم"),
     "transactions_date_week": MessageLookupByLibrary.simpleMessage("الأسبوع"),
     "transactions_date_yesterday": MessageLookupByLibrary.simpleMessage("أمس"),
+    "transactions_emptyHintDescription": MessageLookupByLibrary.simpleMessage(
+      "أول ما نرصد نشاط على محفظة مرتبطة، هنضيفه هنا تلقائياً.",
+    ),
+    "transactions_emptyHintTitle": MessageLookupByLibrary.simpleMessage(
+      "متابعة تلقائية",
+    ),
+    "transactions_emptyTitle": MessageLookupByLibrary.simpleMessage(
+      "لا توجد معاملات بعد",
+    ),
+    "transactions_emptyWalletDescription": MessageLookupByLibrary.simpleMessage(
+      "لا توجد معاملات على هذه المحفظة حتى الآن. أول ما توصلك رسائل جديدة هتظهر هنا تلقائياً.",
+    ),
     "transactions_emptyWithFilter": MessageLookupByLibrary.simpleMessage(
       "لا توجد معاملات مطابقة للفلاتر المحددة",
+    ),
+    "transactions_emptyWithFilterDescription":
+        MessageLookupByLibrary.simpleMessage(
+          "جرّب مسح فلتر أو أكثر لعرض معاملات إضافية.",
+        ),
+    "transactions_emptyWithFilterTitle": MessageLookupByLibrary.simpleMessage(
+      "لا توجد معاملات مطابقة",
+    ),
+    "transactions_emptyWorkspaceDescription": MessageLookupByLibrary.simpleMessage(
+      "لا توجد معاملات داخل مساحة العمل دي حتى الآن. أي نشاط من المحافظ المرتبطة هيظهر هنا تلقائياً.",
     ),
     "transactions_filter_all": MessageLookupByLibrary.simpleMessage("الكل"),
     "transactions_filter_allWallets": MessageLookupByLibrary.simpleMessage(

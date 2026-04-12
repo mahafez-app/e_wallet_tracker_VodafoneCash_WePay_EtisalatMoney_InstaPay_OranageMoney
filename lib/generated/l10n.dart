@@ -2139,6 +2139,56 @@ class S {
     );
   }
 
+  /// `لا توجد معاملات بعد`
+  String get transactions_emptyTitle {
+    return Intl.message(
+      'لا توجد معاملات بعد',
+      name: 'transactions_emptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد معاملات على هذه المحفظة حتى الآن. أول ما توصلك رسائل جديدة هتظهر هنا تلقائياً.`
+  String get transactions_emptyWalletDescription {
+    return Intl.message(
+      'لا توجد معاملات على هذه المحفظة حتى الآن. أول ما توصلك رسائل جديدة هتظهر هنا تلقائياً.',
+      name: 'transactions_emptyWalletDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد معاملات داخل مساحة العمل دي حتى الآن. أي نشاط من المحافظ المرتبطة هيظهر هنا تلقائياً.`
+  String get transactions_emptyWorkspaceDescription {
+    return Intl.message(
+      'لا توجد معاملات داخل مساحة العمل دي حتى الآن. أي نشاط من المحافظ المرتبطة هيظهر هنا تلقائياً.',
+      name: 'transactions_emptyWorkspaceDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `متابعة تلقائية`
+  String get transactions_emptyHintTitle {
+    return Intl.message(
+      'متابعة تلقائية',
+      name: 'transactions_emptyHintTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أول ما نرصد نشاط على محفظة مرتبطة، هنضيفه هنا تلقائياً.`
+  String get transactions_emptyHintDescription {
+    return Intl.message(
+      'أول ما نرصد نشاط على محفظة مرتبطة، هنضيفه هنا تلقائياً.',
+      name: 'transactions_emptyHintDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `لا توجد معاملات حتى الآن. أول ما توصلك رسائل جديدة هتظهر هنا.`
   String get noTransactionsTitle {
     return Intl.message(
@@ -2634,6 +2684,26 @@ class S {
     return Intl.message(
       'لا توجد معاملات مطابقة للفلاتر المحددة',
       name: 'transactions_emptyWithFilter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد معاملات مطابقة`
+  String get transactions_emptyWithFilterTitle {
+    return Intl.message(
+      'لا توجد معاملات مطابقة',
+      name: 'transactions_emptyWithFilterTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `جرّب مسح فلتر أو أكثر لعرض معاملات إضافية.`
+  String get transactions_emptyWithFilterDescription {
+    return Intl.message(
+      'جرّب مسح فلتر أو أكثر لعرض معاملات إضافية.',
+      name: 'transactions_emptyWithFilterDescription',
       desc: '',
       args: [],
     );

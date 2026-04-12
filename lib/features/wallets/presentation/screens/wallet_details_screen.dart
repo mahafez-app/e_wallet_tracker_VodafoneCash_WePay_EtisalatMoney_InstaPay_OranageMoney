@@ -128,6 +128,7 @@ class _RecentTransactionsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = context.l10n;
+    final hasTransactions = details.recentTransactions.isNotEmpty;
 
     return Column(
       children: [
@@ -140,28 +141,35 @@ class _RecentTransactionsSection extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            TextButton(
-              onPressed: () {
-                final contextData = WalletTransactionsRouteData(
-                  walletId: details.wallet.id,
-                  walletLabel:
-                      '${details.wallet.provider.displayName(context)} · ${details.wallet.phoneNumber.formattedEgyptianPhoneNumber}',
-                );
-                context.push(AppRoutes.transactionsPath(), extra: contextData);
-              },
-              child: Text(
-                l10n.viewAll,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  color: theme.colorScheme.primary,
-                  fontWeight: FontWeight.w700,
+            if (hasTransactions)
+              TextButton(
+                onPressed: () {
+                  final contextData = WalletTransactionsRouteData(
+                    walletId: details.wallet.id,
+                    walletLabel:
+                        '${details.wallet.provider.displayName(context)} · ${details.wallet.phoneNumber.formattedEgyptianPhoneNumber}',
+                  );
+                  context.push(
+                    AppRoutes.transactionsPath(),
+                    extra: contextData,
+                  );
+                },
+                child: Text(
+                  l10n.viewAll,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
         AppSpacing.md.verticalSpace,
-        if (details.recentTransactions.isEmpty)
-          const NoTransactionsCard()
+        if (!hasTransactions)
+          NoTransactionsCard(
+            title: l10n.transactions_emptyTitle,
+            description: l10n.transactions_emptyWalletDescription,
+          )
         else
           ...details.recentTransactions.map(
             (tx) => GestureDetector(

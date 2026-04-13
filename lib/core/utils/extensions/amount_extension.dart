@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'localization_extension.dart';
 
 extension AmountFormatting on num {
-  String toLocalizedAmount(BuildContext context, {int decimalDigits = 2}) {
+  String toLocalizedAmount(BuildContext context, {int decimalDigits = 0}) {
     final locale = Localizations.localeOf(context).toLanguageTag();
     return NumberFormat.decimalPatternDigits(
       locale: locale,
@@ -14,7 +14,7 @@ extension AmountFormatting on num {
 
   String toCurrencyText(
     BuildContext context, {
-    int decimalDigits = 2,
+    int decimalDigits = 0,
     String? sign,
   }) {
     final buffer = StringBuffer();

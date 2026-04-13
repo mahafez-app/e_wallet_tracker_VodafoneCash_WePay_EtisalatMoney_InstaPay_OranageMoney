@@ -26,8 +26,14 @@ class WorkspaceSettingsController extends AsyncNotifier<WorkspaceSettingsState>
   }
 
   Future<WorkspaceSettingsState> _buildState() async {
-    final initialState = await loadState();
-    bindLiveState(ownerUid: initialState.details.workspace.ownerUid);
-    return initialState;
+    final stateResult = await loadStateResult();
+    return stateResult.fold(
+      (failure) =>
+          Future<WorkspaceSettingsState>.error(failure, StackTrace.current),
+      (initialState) {
+        bindLiveState(ownerUid: initialState.details.workspace.ownerUid);
+        return initialState;
+      },
+    );
   }
 }

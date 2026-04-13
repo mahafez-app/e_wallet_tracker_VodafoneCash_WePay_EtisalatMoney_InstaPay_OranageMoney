@@ -205,9 +205,8 @@ class _WorkspaceStat extends StatelessWidget {
           AppSpacing.xs.verticalSpace,
           Text(
             amount,
-            style: theme.textTheme.bodyMedium?.copyWith(
+            style: theme.textTheme.titleSmall?.copyWith(
               color: amountColor,
-              fontSize: 14.responsiveFont,
               fontWeight: FontWeight.w700,
             ),
           ),

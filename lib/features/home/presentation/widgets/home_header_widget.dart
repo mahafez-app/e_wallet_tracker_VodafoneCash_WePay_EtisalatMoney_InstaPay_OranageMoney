@@ -47,6 +47,7 @@ class HomeHeaderWidget extends ConsumerWidget {
 
 class _HeaderActions extends StatelessWidget {
   const _HeaderActions({
+    super.key,
     required this.invitationsCount,
     required this.onOpenInvitations,
     required this.onOpenSettings,
@@ -73,7 +74,7 @@ class _HeaderActions extends StatelessWidget {
 }
 
 class _HeaderIconButton extends StatelessWidget {
-  const _HeaderIconButton({required this.icon, required this.onTap});
+  const _HeaderIconButton({super.key, required this.icon, required this.onTap});
 
   final IconData icon;
   final VoidCallback onTap;
@@ -97,6 +98,11 @@ class _UserAvatarAndName extends StatelessWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final trimmedUserName = userName?.trim();
+    final displayName = trimmedUserName?.isNotEmpty == true
+        ? trimmedUserName!
+        : l10n.yourName;
+    final avatarLabel = displayName.substring(0, 1).toUpperCase();
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -110,9 +116,7 @@ class _UserAvatarAndName extends StatelessWidget {
           ),
           alignment: Alignment.center,
           child: Text(
-            userName != null && userName!.isNotEmpty
-                ? userName!.substring(0, 1).toUpperCase()
-                : 'U',
+            avatarLabel,
             style: theme.textTheme.titleLarge?.copyWith(
               color: colorScheme.primary,
               fontWeight: FontWeight.bold,
@@ -132,7 +136,7 @@ class _UserAvatarAndName extends StatelessWidget {
               ),
             ),
             Text(
-              userName ?? l10n.yourName,
+              displayName,
               style: theme.textTheme.titleLarge?.copyWith(
                 color: colorScheme.primary,
                 fontWeight: FontWeight.w800,
@@ -183,7 +187,6 @@ class _InvitationsIconBadge extends StatelessWidget {
                 count.toString(),
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: colorScheme.onError,
-                  fontSize: 10.responsiveFont,
                   fontWeight: FontWeight.bold,
                 ),
               ),

@@ -14,42 +14,50 @@ mixin WorkspaceSettingsControllerInternalMixin
     on AsyncNotifier<WorkspaceSettingsState> {
   String get workspaceId;
 
-  Future<WorkspaceSettingsState> loadState() async {
+  Future<Result<WorkspaceSettingsState>> loadStateResult() async {
     final detailsResult = await ref.read(getWorkspaceDetailsUseCaseProvider)(
       GetWorkspaceDetailsParams(workspaceId: workspaceId),
     );
-    final details = _getOrThrow(detailsResult);
+    final details = detailsResult.dataOrNull;
+    if (details == null) {
+      return FailureResult(detailsResult.failureOrNull!);
+    }
+
     final currentUserId = ref.read(currentUserProvider)?.uid;
-    final pendingInvitations = await _loadPendingInvitations(
+    final pendingInvitationsResult = await _loadPendingInvitationsResult(
       currentUserId: currentUserId,
       ownerUid: details.workspace.ownerUid,
     );
+    final pendingInvitations = pendingInvitationsResult.dataOrNull;
+    if (pendingInvitations == null) {
+      return FailureResult(pendingInvitationsResult.failureOrNull!);
+    }
 
-    return WorkspaceSettingsState(
-      details: details,
-      pendingInvitations: pendingInvitations,
-      action: WorkspaceSettingsAction.idle,
-      activeTargetId: null,
-      feedback: null,
+    return Success(
+      WorkspaceSettingsState(
+        details: details,
+        pendingInvitations: pendingInvitations,
+        action: WorkspaceSettingsAction.idle,
+        activeTargetId: null,
+        feedback: null,
+      ),
     );
   }
 
-  Future<List<WorkspacePendingInvitationEntity>> _loadPendingInvitations({
+  Future<Result<List<WorkspacePendingInvitationEntity>>>
+  _loadPendingInvitationsResult({
     required String? currentUserId,
     required String ownerUid,
   }) async {
     if (currentUserId != ownerUid) {
-      return const <WorkspacePendingInvitationEntity>[];
+      return const Success<List<WorkspacePendingInvitationEntity>>(
+        <WorkspacePendingInvitationEntity>[],
+      );
     }
 
-    final invitationsResult = await ref.read(
-      getWorkspacePendingInvitationsUseCaseProvider,
-    )(GetWorkspacePendingInvitationsParams(workspaceId: workspaceId));
-    return _getOrThrow(invitationsResult);
-  }
-
-  T _getOrThrow<T>(Result<T> result) {
-    return result.fold((failure) => throw failure, (data) => data);
+    return ref.read(getWorkspacePendingInvitationsUseCaseProvider)(
+      GetWorkspacePendingInvitationsParams(workspaceId: workspaceId),
+    );
   }
 
   void setLoadingState(WorkspaceSettingsAction action, {String? targetId}) {
@@ -102,26 +110,24 @@ mixin WorkspaceSettingsControllerInternalMixin
 
   Future<void> reloadState({WorkspaceSettingsFeedback? feedback}) async {
     final currentState = state.asData?.value;
-
-    try {
-      final refreshedState = await loadState();
-      if (!ref.mounted) {
-        return;
-      }
-
-      state = AsyncValue.data(refreshedState.copyWith(feedback: feedback));
-    } on Failure catch (failure) {
-      if (!ref.mounted) {
-        return;
-      }
-
-      if (currentState == null) {
-        state = AsyncValue.error(failure, StackTrace.current);
-        return;
-      }
-
-      setFailureState(failure);
+    final refreshedStateResult = await loadStateResult();
+    if (!ref.mounted) {
+      return;
     }
+
+    refreshedStateResult.fold(
+      (failure) {
+        if (currentState == null) {
+          state = AsyncValue.error(failure, StackTrace.current);
+          return;
+        }
+
+        setFailureState(failure);
+      },
+      (refreshedState) {
+        state = AsyncValue.data(refreshedState.copyWith(feedback: feedback));
+      },
+    );
   }
 
   void _setSuccessFeedback({required WorkspaceSettingsFeedbackType type}) {

@@ -31,16 +31,18 @@ class TransactionWalletFilterRow extends ConsumerWidget {
         children: [
           _WalletChip(
             label: context.l10n.transactions_filter_allWallets,
-            isSelected: state.selectedWalletId == null,
-            onTap: () => controller.setWalletFilter(null),
+            isSelected: state.useAllWallets,
+            onTap: controller.selectAllWallets,
           ),
           ...routeData.wallets.map(
             (wallet) => Padding(
               padding: AppResponsive.onlyPadding(start: AppSpacing.sm),
               child: _WalletChip(
                 label: wallet.walletLabel,
-                isSelected: state.selectedWalletId == wallet.walletId,
-                onTap: () => controller.setWalletFilter(wallet.walletId),
+                isSelected:
+                    !state.useAllWallets &&
+                    state.selectedWalletIds.contains(wallet.walletId),
+                onTap: () => controller.toggleWalletFilter(wallet.walletId),
               ),
             ),
           ),

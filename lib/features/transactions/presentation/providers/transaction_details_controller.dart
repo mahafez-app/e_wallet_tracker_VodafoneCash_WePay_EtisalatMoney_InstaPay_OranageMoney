@@ -10,6 +10,7 @@ import '../../../../features/auth/domain/entities/user_entity.dart';
 import '../../../../features/auth/providers/auth_providers.dart';
 import '../../domain/usecases/mark_paid_usecases.dart';
 import '../../domain/usecases/note_usecases.dart';
+import '../../domain/usecases/watch_transaction_usecase.dart';
 import '../../providers/transactions_providers.dart';
 import 'transaction_details_state.dart';
 
@@ -28,6 +29,7 @@ class TransactionDetailsController extends Notifier<TransactionDetailsState> {
 
   @override
   TransactionDetailsState build() {
+    _listenTransaction();
     _listenNotes();
     _listenHistory();
     return TransactionDetailsState(transaction: arg);
@@ -37,6 +39,26 @@ class TransactionDetailsController extends Notifier<TransactionDetailsState> {
   String get _transactionId => arg.id;
 
   // ── Streams ───────────────────────────────────────────────────────────────
+
+  void _listenTransaction() {
+    final subscription = ref
+        .read(watchTransactionUseCaseProvider)
+        .call(
+          WatchTransactionParams(
+            walletId: _walletId,
+            transactionId: _transactionId,
+          ),
+        )
+        .listen((result) {
+          if (!ref.mounted) return;
+          result.fold(
+            (failure) =>
+                log('Transaction stream error: $failure', name: 'Presentation'),
+            (transaction) => state = state.copyWith(transaction: transaction),
+          );
+        });
+    ref.onDispose(subscription.cancel);
+  }
 
   void _listenNotes() {
     final params = TransactionDetailsStreamParams(

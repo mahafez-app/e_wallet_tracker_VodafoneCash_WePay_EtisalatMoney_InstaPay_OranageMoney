@@ -188,7 +188,7 @@ class _CustomDateChip extends ConsumerWidget {
       ),
     );
     if (range == null) return;
-    await controller.setDatePreset(
+    controller.setDatePreset(
       DatePreset.custom,
       start: range.start,
       end: range.end,

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/firebase_providers.dart';
+import '../data/datasources/transaction_watch_remote_data_source.dart';
 import '../data/datasources/transaction_firestore_support.dart';
 import '../data/datasources/wallet_transaction_remote_data_source.dart';
 import '../data/datasources/workspace_transaction_remote_data_source.dart';
@@ -11,6 +12,7 @@ import '../domain/usecases/get_workspace_transactions_usecase.dart';
 import '../domain/usecases/mark_paid_usecases.dart';
 import '../domain/usecases/note_usecases.dart';
 import '../domain/usecases/save_transaction_usecase.dart';
+import '../domain/usecases/watch_transaction_usecase.dart';
 
 // ── Infrastructure ───────────────────────────────────────────────────────────
 
@@ -19,6 +21,13 @@ final transactionFirestoreSupportProvider =
       (ref) =>
           TransactionFirestoreSupport(firestore: ref.watch(firestoreProvider)),
     );
+
+final transactionWatchRemoteDataSourceProvider =
+    Provider<TransactionWatchRemoteDataSource>((ref) {
+      return TransactionWatchRemoteDataSourceImpl(
+        support: ref.watch(transactionFirestoreSupportProvider),
+      );
+    });
 
 final walletTransactionRemoteDataSourceProvider =
     Provider<WalletTransactionRemoteDataSource>((ref) {
@@ -36,6 +45,9 @@ final workspaceTransactionRemoteDataSourceProvider =
 
 final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
   return TransactionRepositoryImpl(
+    transactionWatchRemoteDataSource: ref.watch(
+      transactionWatchRemoteDataSourceProvider,
+    ),
     walletRemoteDataSource: ref.watch(
       walletTransactionRemoteDataSourceProvider,
     ),
@@ -64,6 +76,12 @@ final getWorkspaceTransactionsUseCaseProvider =
         ref.watch(transactionRepositoryProvider),
       );
     });
+
+final watchTransactionUseCaseProvider = Provider<WatchTransactionUseCase>((
+  ref,
+) {
+  return WatchTransactionUseCase(ref.watch(transactionRepositoryProvider));
+});
 
 final markAsPaidUseCaseProvider = Provider<MarkAsPaidUseCase>((ref) {
   return MarkAsPaidUseCase(ref.watch(transactionRepositoryProvider));

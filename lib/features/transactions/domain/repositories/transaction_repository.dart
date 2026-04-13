@@ -28,6 +28,11 @@ abstract interface class TransactionRepository {
     WorkspaceTransactionsPageCursor? cursor,
   });
 
+  Stream<Result<TransactionEntity>> watchTransaction({
+    required String walletId,
+    required String transactionId,
+  });
+
   // ── Mutations ────────────────────────────────────────────────────────────
 
   Future<Result<void>> markAsPaid({

@@ -7,16 +7,20 @@ import '../../domain/entities/note_entity.dart';
 import '../../domain/entities/transaction_history_entry_entity.dart';
 import '../../domain/entities/transaction_page.dart';
 import '../../domain/repositories/transaction_repository.dart';
+import '../datasources/transaction_watch_remote_data_source.dart';
 import '../datasources/wallet_transaction_remote_data_source.dart';
 import '../datasources/workspace_transaction_remote_data_source.dart';
 
 final class TransactionRepositoryImpl implements TransactionRepository {
   const TransactionRepositoryImpl({
+    required TransactionWatchRemoteDataSource transactionWatchRemoteDataSource,
     required WalletTransactionRemoteDataSource walletRemoteDataSource,
     required WorkspaceTransactionRemoteDataSource workspaceRemoteDataSource,
-  }) : _walletRemoteDataSource = walletRemoteDataSource,
+  }) : _transactionWatchRemoteDataSource = transactionWatchRemoteDataSource,
+       _walletRemoteDataSource = walletRemoteDataSource,
        _workspaceRemoteDataSource = workspaceRemoteDataSource;
 
+  final TransactionWatchRemoteDataSource _transactionWatchRemoteDataSource;
   final WalletTransactionRemoteDataSource _walletRemoteDataSource;
   final WorkspaceTransactionRemoteDataSource _workspaceRemoteDataSource;
 
@@ -65,6 +69,17 @@ final class TransactionRepositoryImpl implements TransactionRepository {
       nextCursor: result.nextCursor,
     );
   }, tag: 'TransactionRepository.getWorkspaceTransactions');
+
+  @override
+  Stream<Result<TransactionEntity>> watchTransaction({
+    required String walletId,
+    required String transactionId,
+  }) => executeStreamAndHandleErrors(
+    () => _transactionWatchRemoteDataSource
+        .watchTransaction(walletId: walletId, transactionId: transactionId)
+        .map((dto) => dto.toEntity()),
+    tag: 'TransactionRepository.watchTransaction',
+  );
 
   // ── Mutations ────────────────────────────────────────────────────────────
 

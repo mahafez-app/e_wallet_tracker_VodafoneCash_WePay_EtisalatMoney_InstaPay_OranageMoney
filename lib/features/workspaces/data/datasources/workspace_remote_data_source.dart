@@ -47,7 +47,12 @@ abstract interface class WorkspaceRemoteDataSource {
   Stream<List<WalletDto>> watchWorkspaceWallets(String workspaceId);
 
   Future<List<TransactionDto>> getWorkspaceTransactionsPreview({
-    required List<String> walletIds,
+    required List<WalletDto> wallets,
+    int limit = 5,
+  });
+
+  Stream<List<TransactionDto>> watchWorkspaceTransactionsPreview({
+    required List<WalletDto> wallets,
     int limit = 5,
   });
 }
@@ -169,11 +174,22 @@ class WorkspaceRemoteDataSourceImpl implements WorkspaceRemoteDataSource {
 
   @override
   Future<List<TransactionDto>> getWorkspaceTransactionsPreview({
-    required List<String> walletIds,
+    required List<WalletDto> wallets,
     int limit = 5,
   }) {
     return _previewService.getWorkspaceTransactionsPreview(
-      walletIds: walletIds,
+      wallets: wallets,
+      limit: limit,
+    );
+  }
+
+  @override
+  Stream<List<TransactionDto>> watchWorkspaceTransactionsPreview({
+    required List<WalletDto> wallets,
+    int limit = 5,
+  }) {
+    return _previewService.watchWorkspaceTransactionsPreview(
+      wallets: wallets,
       limit: limit,
     );
   }

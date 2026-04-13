@@ -1,3 +1,6 @@
+import '../entities/app_preferences_entity.dart';
+import '../enums/app_language_preference.dart';
+import '../enums/app_theme_preference.dart';
 import '../../../../core/error/result.dart';
 
 abstract interface class SettingsRepository {
@@ -6,4 +9,10 @@ abstract interface class SettingsRepository {
   Future<Result<bool>> checkSmsPermission();
 
   Future<Result<void>> openSmsPermissionSettings();
+
+  Future<Result<AppPreferencesEntity>> getAppPreferences();
+
+  Future<Result<void>> saveThemePreference(AppThemePreference preference);
+
+  Future<Result<void>> saveLanguagePreference(AppLanguagePreference preference);
 }

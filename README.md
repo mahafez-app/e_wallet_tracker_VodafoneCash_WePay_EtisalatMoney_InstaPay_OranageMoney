@@ -1,173 +1,169 @@
-# 🏦 **Mahafez** (محافظ) — Family E-Wallet Transaction Tracker
+# Mahafez (محافظ)
 
-A Flutter application for tracking shared family wallet transactions across multiple Vodafone Cash and InstaPay accounts in Egypt.
+Mahafez is a Flutter application for tracking personal and shared e-wallet activity in Egypt. It combines automatic SMS parsing on Android with Firebase-powered real-time sync so users can monitor balances, review transaction history, manage multiple wallets, and collaborate inside shared workspaces.
 
-## 📖 Project Overview
+## Overview
 
-**Mahafez** solves the problem of tracking transactions across multiple shared family wallets. When family members receive or send money through Vodafone Cash or InstaPay, the app automatically syncs transactions in real-time and provides an audit trail showing who marked payments as complete.
+The app is designed for people who actively use mobile wallets and need a clearer record of incoming and outgoing transfers across more than one account. Instead of relying on scattered SMS messages, Mahafez turns wallet activity into a structured dashboard with transaction history, collaboration flows, and workspace-level visibility.
 
-### Key Features
-- 📱 **Multi-wallet tracking** across family member devices
-- 📲 **Automatic SMS parsing** (Android) from Vodafone Cash & InstaPay
-- 🔄 **Real-time Firestore sync** across all devices
-- ✅ **Audit trail** with user attribution and timestamps
-- 🌙 **Dark/Light theme** support
-- 🇸🇦 **Arabic-first UI** (RTL) with English support
-- 👨‍👩‍👧‍👦 **Family-friendly** non-technical user interface
+## Core Features
 
-## 🏗 Project Structure
+- Multi-wallet tracking with per-wallet balances, totals, and recent activity
+- Real-time transaction sync through Firebase Authentication and Cloud Firestore
+- Android SMS ingestion for supported wallet providers, including background handling
+- Shared workspaces for grouping wallets, inviting members, and monitoring collective activity
+- Transaction details with notes, paid status, receipt capture, and sharing support
+- Arabic-first localized experience with English support
+- Light and dark themes
+- Email/password and Google authentication flows
 
-```
+## Supported Product Areas
+
+- Authentication
+- Home dashboard
+- Wallet management
+- Transactions and transaction details
+- Workspace creation and workspace settings
+- Member invitations and invitation responses
+- User settings and SMS permission flows
+
+## Architecture
+
+This project follows a feature-first Clean Architecture structure with clear separation between presentation, domain, and data layers.
+
+- `presentation` depends on domain use cases only
+- `domain` stays pure Dart and contains entities, repository contracts, and use cases
+- `data` implements repositories, DTOs, Firebase access, and error mapping
+- Riverpod is used for dependency injection and UI state management
+- Firebase SDK usage is isolated to the data layer
+- Failures are mapped into `Result<T>` instead of leaking raw exceptions upward
+
+## Tech Stack
+
+- Flutter
+- Dart
+- Riverpod
+- Firebase Core
+- Firebase Authentication
+- Cloud Firestore
+- GoRouter
+- Intl with ARB-based localization
+- Flutter ScreenUtil
+- Android SMS tooling via `another_telephony`, `flutter_sms_inbox`, and `permission_handler`
+- `share_plus` and `screenshot` for transaction receipt sharing
+
+## Project Structure
+
+```text
 lib/
 ├── core/
-│   ├── di/                 # Dependency injection & app initialization
-│   ├── error/              # Failure & error handling
-│   ├── providers/          # Riverpod providers (Firebase, theme, etc.)
-│   ├── router/             # GoRouter configuration
-│   ├── theme/              # Colors, typography, theme
-│   ├── usecase/            # Base use case class
-│   ├── utils/              # Utilities & extensions
-│   └── widgets/            # App-wide widgets (App, NotFoundScreen)
-│
-├── features/               # Feature modules (auth, transactions, wallets, etc.)
-│   ├── auth/               # Authentication (login, signup, name confirmation)
-│   ├── transactions/       # Transaction display & management
-│   ├── wallets/            # Wallet summaries
-│   └── sms/                # SMS parsing & sync
-│
-├── generated/              # Auto-generated code (localization, routing)
-├── l10n/                   # Localization files (ARB: ar, en)
-└── main.dart               # App entry point
+│   ├── data/
+│   ├── di/
+│   ├── domain/
+│   ├── error/
+│   ├── providers/
+│   ├── router/
+│   ├── services/
+│   ├── theme/
+│   ├── usecase/
+│   ├── utils/
+│   └── widgets/
+├── features/
+│   ├── auth/
+│   ├── home/
+│   ├── invitations/
+│   ├── settings/
+│   ├── transactions/
+│   ├── wallets/
+│   └── workspaces/
+├── generated/
+├── l10n/
+└── main.dart
 ```
 
-## 🛠 Tech Stack
+## App Preview And Screenshots
 
-- **UI Framework:** Flutter 3.11+
-- **State Management:** Riverpod + Flutter Hooks
-- **Backend:** Firebase (Auth + Firestore)
-- **Navigation:** GoRouter
-- **Localization:** Intl + ARB files
-- **Testing:** Mocktail + Flutter Test
-- **Build:** Build Runner (JSON serialization, localization generation)
+This repository is prepared for portfolio-style media. When you capture screens later, place them in these folders:
 
-## 📋 Documentation Files
+- `docs/previews/` for a GIF or short app preview
+- `docs/screenshots/` for still screenshots
 
-The following documentation files guide implementation:
+Suggested file names:
 
-| File | Purpose |
-|------|---------|
-| [`TECHNICAL_EXECUTION_PLAN.md`](./TECHNICAL_EXECUTION_PLAN.md) | AI-guided 4-phase implementation roadmap |
-| [`STITCH_DESIGN_BRIEF.md`](./STITCH_DESIGN_BRIEF.md) | Pixel-perfect design specifications (ready for Google Stitch) |
-| [`DESIGN_SUMMARY.md`](./DESIGN_SUMMARY.md) | Guide for using design documents |
-| [`APP_DEFINITION.md`](./APP_DEFINITION.md) | High-level product summary for stakeholders |
-| [`WALLET_TRACKER_PLAN.md`](./WALLET_TRACKER_PLAN.md) | Detailed technical specs (Firestore schema, SMS regex, security rules) |
+- `docs/previews/app-preview.gif`
+- `docs/screenshots/home.png`
+- `docs/screenshots/wallet-details.png`
+- `docs/screenshots/transactions.png`
+- `docs/screenshots/workspace-details.png`
+- `docs/screenshots/settings.png`
 
-## 🚀 Getting Started
+After adding media, you can embed it directly in this README:
+
+```md
+![App Preview](docs/previews/app-preview.gif)
+
+| Home | Wallet Details | Transactions |
+|------|----------------|--------------|
+| ![](docs/screenshots/home.png) | ![](docs/screenshots/wallet-details.png) | ![](docs/screenshots/transactions.png) |
+```
+
+## Getting Started
 
 ### Prerequisites
-- Flutter 3.11 or later
-- Dart 3.11 or later
-- Android Studio / Xcode (for iOS)
-- Firebase project configured
+
+- Flutter SDK
+- Dart SDK
+- A configured Firebase project
+- Android Studio or Xcode
+- A physical Android device if you want to test SMS ingestion
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd wallet_tracker
-   ```
+```bash
+git clone <repository-url>
+cd wallet_tracker
+flutter pub get
+flutter run
+```
 
-2. **Install dependencies**
-   ```bash
-   flutter pub get
-   ```
+## Firebase Setup
 
-3. **Generate code**
-   ```bash
-   flutter pub run build_runner build
-   ```
+1. Create a Firebase project.
+2. Enable Authentication and Firestore.
+3. Configure platform apps for Android and iOS.
+4. Generate or replace Firebase config files for this project.
+5. Ensure `lib/firebase_options.dart` matches your Firebase project.
 
-4. **Run the app**
-   ```bash
-   flutter run
-   ```
+If you are setting the project up from scratch, using `flutterfire configure` is the cleanest option.
 
-### Firebase Setup
-
-1. Create a Firebase project at [firebase.google.com](https://firebase.google.com)
-2. Download `google-services.json` (Android) and place in `android/app/`
-3. Download `GoogleService-Info.plist` (iOS) and place in `ios/Runner/`
-4. Enable Authentication (Google Sign-In + Email/Password)
-5. Set up Firestore in native mode
-
-## 📱 Platforms
-
-- **Android:** Full support (SMS reading + Firestore sync)
-- **iOS:** Read-only mode (SMS reading not available on iOS; displays synced transactions)
-
-## 🧪 Testing
+## Development Commands
 
 ```bash
-# Run unit tests
-flutter test
-
-# Run with coverage
-flutter test --coverage
-
-# Analyze code
+flutter pub get
+dart run build_runner build --delete-conflicting-outputs
 flutter analyze
+flutter test
+flutter run
 ```
 
-## 📦 Build & Release
+## Platform Notes
 
-```bash
-# Build APK (Android)
-flutter build apk
+- Android supports the full experience, including SMS permissions, foreground listeners, and background SMS transaction capture.
+- iOS can use the synced app experience, but SMS reading is not available due to platform restrictions.
 
-# Build App Bundle (Android, for Play Store)
-flutter build appbundle
+## Localization
 
-# Build iOS
-flutter build ios
-```
+The app currently supports:
 
-## 🔐 Security
+- Arabic (`ar`) as the primary locale
+- English (`en`) as a secondary locale
 
-- Firebase Security Rules enforce user authentication
-- Transaction immutability (no deletion; audit trail preserved)
-- User attribution on all status changes
-- Sensitive data (Firebase keys) are environment-specific
+Localization files live in `lib/l10n/`, and generated localization output lives in `lib/generated/`.
 
-## 🌐 Localization
+## Why This Project Is Strong For A Portfolio Or CV
 
-The app supports:
-- **Arabic (ar)** — Primary UI language (RTL)
-- **English (en)** — Secondary language (LTR)
+Mahafez demonstrates more than UI work. It shows practical Flutter engineering across app architecture, Firebase integration, state management, localization, background processing, and collaborative product flows. It is especially useful as a portfolio project because it combines real-world constraints: platform-specific behavior, real-time sync, modular architecture, and a user-facing problem with clear value.
 
-Localization strings are in `lib/l10n/*.arb`. To add new strings:
+## License
 
-1. Edit `lib/l10n/intl_en.arb` (English)
-2. Edit `lib/l10n/intl_ar.arb` (Arabic)
-3. Run: `flutter pub run build_runner build`
-
-## 🎨 Theme
-
-The app uses Material Design 3 with semantic colors:
-- **Primary Blue** for main actions
-- **Success Green** for "Paid" status
-- **Error Red** for "Unpaid" status
-- **Warning Amber** for pending actions
-
-See `lib/core/theme/` for theme configuration.
-
-## 📞 Support
-
-For issues or questions, refer to:
-- [TECHNICAL_EXECUTION_PLAN.md](./TECHNICAL_EXECUTION_PLAN.md) — Implementation roadmap
-- [WALLET_TRACKER_PLAN.md](./WALLET_TRACKER_PLAN.md) — Technical specifications
-- Flutter documentation: https://docs.flutter.dev
-
-## 📄 License
-
-This project is proprietary and for internal use only.
+This project is private and not intended for public distribution without the owner's approval.

@@ -1571,6 +1571,86 @@ class S {
     );
   }
 
+  /// `المظهر`
+  String get userSettingsThemeTitle {
+    return Intl.message(
+      'المظهر',
+      name: 'userSettingsThemeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تلقائي حسب الجهاز`
+  String get userSettingsThemeSystemOption {
+    return Intl.message(
+      'تلقائي حسب الجهاز',
+      name: 'userSettingsThemeSystemOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `فاتح`
+  String get userSettingsThemeLightOption {
+    return Intl.message(
+      'فاتح',
+      name: 'userSettingsThemeLightOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `داكن`
+  String get userSettingsThemeDarkOption {
+    return Intl.message(
+      'داكن',
+      name: 'userSettingsThemeDarkOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اللغة`
+  String get userSettingsLanguageTitle {
+    return Intl.message(
+      'اللغة',
+      name: 'userSettingsLanguageTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لغة الجهاز`
+  String get userSettingsLanguageSystemOption {
+    return Intl.message(
+      'لغة الجهاز',
+      name: 'userSettingsLanguageSystemOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `English`
+  String get userSettingsLanguageEnglishOption {
+    return Intl.message(
+      'English',
+      name: 'userSettingsLanguageEnglishOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `العربية`
+  String get userSettingsLanguageArabicOption {
+    return Intl.message(
+      'العربية',
+      name: 'userSettingsLanguageArabicOption',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `إذن قراءة الرسائل`
   String get userSettingsSmsPermissionTitle {
     return Intl.message(

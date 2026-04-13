@@ -6,7 +6,7 @@ import 'package:wallet_tracker/generated/l10n.dart';
 
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
-import 'core/theme/providers/theme_notifier.dart';
+import 'features/settings/presentation/providers/app_preferences_controller.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});
@@ -14,7 +14,8 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
-    final themeMode = ref.watch(themeModeProvider);
+    final themeMode = ref.watch(appThemeModeProvider);
+    final locale = ref.watch(appLocaleProvider);
 
     return ScreenUtilInit(
       designSize: const Size(390, 844),
@@ -35,7 +36,7 @@ class App extends ConsumerWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: S.delegate.supportedLocales,
-        locale: const Locale('ar'),
+        locale: locale,
       ),
     );
   }

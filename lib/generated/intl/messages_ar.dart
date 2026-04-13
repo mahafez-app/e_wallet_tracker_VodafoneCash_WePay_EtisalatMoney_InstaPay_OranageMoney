@@ -536,6 +536,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "userSettingsEditNameTitle": MessageLookupByLibrary.simpleMessage(
       "تعديل الاسم",
     ),
+    "userSettingsLanguageArabicOption": MessageLookupByLibrary.simpleMessage(
+      "العربية",
+    ),
+    "userSettingsLanguageEnglishOption": MessageLookupByLibrary.simpleMessage(
+      "English",
+    ),
+    "userSettingsLanguageSystemOption": MessageLookupByLibrary.simpleMessage(
+      "لغة الجهاز",
+    ),
+    "userSettingsLanguageTitle": MessageLookupByLibrary.simpleMessage("اللغة"),
     "userSettingsNameUpdatedSuccess": MessageLookupByLibrary.simpleMessage(
       "تم تحديث الاسم بنجاح.",
     ),
@@ -564,6 +574,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "userSettingsSmsPermissionTitle": MessageLookupByLibrary.simpleMessage(
       "إذن قراءة الرسائل",
     ),
+    "userSettingsThemeDarkOption": MessageLookupByLibrary.simpleMessage("داكن"),
+    "userSettingsThemeLightOption": MessageLookupByLibrary.simpleMessage(
+      "فاتح",
+    ),
+    "userSettingsThemeSystemOption": MessageLookupByLibrary.simpleMessage(
+      "تلقائي حسب الجهاز",
+    ),
+    "userSettingsThemeTitle": MessageLookupByLibrary.simpleMessage("المظهر"),
     "userSettingsTitle": MessageLookupByLibrary.simpleMessage("الإعدادات"),
     "viaLabel": MessageLookupByLibrary.simpleMessage("عبر"),
     "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),

@@ -546,6 +546,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "userSettingsEditNameTitle": MessageLookupByLibrary.simpleMessage(
       "Edit name",
     ),
+    "userSettingsLanguageArabicOption": MessageLookupByLibrary.simpleMessage(
+      "Arabic",
+    ),
+    "userSettingsLanguageEnglishOption": MessageLookupByLibrary.simpleMessage(
+      "English",
+    ),
+    "userSettingsLanguageSystemOption": MessageLookupByLibrary.simpleMessage(
+      "System default",
+    ),
+    "userSettingsLanguageTitle": MessageLookupByLibrary.simpleMessage(
+      "Language",
+    ),
     "userSettingsNameUpdatedSuccess": MessageLookupByLibrary.simpleMessage(
       "Name updated successfully.",
     ),
@@ -574,6 +586,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "userSettingsSmsPermissionTitle": MessageLookupByLibrary.simpleMessage(
       "SMS read permission",
     ),
+    "userSettingsThemeDarkOption": MessageLookupByLibrary.simpleMessage("Dark"),
+    "userSettingsThemeLightOption": MessageLookupByLibrary.simpleMessage(
+      "Light",
+    ),
+    "userSettingsThemeSystemOption": MessageLookupByLibrary.simpleMessage(
+      "System",
+    ),
+    "userSettingsThemeTitle": MessageLookupByLibrary.simpleMessage("Theme"),
     "userSettingsTitle": MessageLookupByLibrary.simpleMessage("Settings"),
     "viaLabel": MessageLookupByLibrary.simpleMessage("Via"),
     "viewAll": MessageLookupByLibrary.simpleMessage("View All"),

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
@@ -45,6 +47,7 @@ class AddWalletPhoneNumberSection extends StatelessWidget {
 
 class _ManualPhoneNumberField extends StatefulWidget {
   const _ManualPhoneNumberField({
+    super.key,
     required this.phoneNumber,
     required this.onChanged,
   });
@@ -103,6 +106,7 @@ class _ManualPhoneNumberFieldState extends State<_ManualPhoneNumberField> {
 
 class _DetectedPhoneNumbersList extends StatelessWidget {
   const _DetectedPhoneNumbersList({
+    super.key,
     required this.state,
     required this.onPhoneNumberChanged,
   });
@@ -137,6 +141,7 @@ class _DetectedPhoneNumbersList extends StatelessWidget {
 
 class _PhoneNumberOption extends StatelessWidget {
   const _PhoneNumberOption({
+    super.key,
     required this.phoneNumber,
     required this.isSelected,
     required this.onTap,

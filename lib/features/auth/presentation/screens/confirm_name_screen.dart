@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
@@ -5,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../providers/auth_controller.dart';
@@ -41,7 +42,7 @@ class ConfirmNameScreen extends StatelessWidget {
         child: SingleChildScrollView(
           padding: AppResponsive.symmetricPadding(
             horizontal: AppSpacing.lg,
-            vertical: 40,
+            vertical: AppSpacing.xxxl,
           ),
           child: const _ConfirmNameBody(),
         ),
@@ -51,17 +52,13 @@ class ConfirmNameScreen extends StatelessWidget {
 }
 
 class _ConfirmNameBody extends ConsumerWidget {
-  const _ConfirmNameBody();
+  const _ConfirmNameBody({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AuthState>(authNotifierProvider, (_, next) {
       if (!next.isLoading && next.error != null) {
-        AppSnackbar.show(
-          context,
-          message: context.failureMessage(next.error!),
-          type: AppSnackbarType.error,
-        );
+        AppSnackbar.showFailure(context, failure: next.error!);
         ref.read(authNotifierProvider.notifier).clearError();
       }
     });

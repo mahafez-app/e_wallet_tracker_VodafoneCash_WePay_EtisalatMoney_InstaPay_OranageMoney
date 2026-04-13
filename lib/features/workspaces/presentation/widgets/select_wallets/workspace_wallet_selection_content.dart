@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,7 +9,7 @@ import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/widgets/app_button.dart';
 import '../../../../../core/widgets/info_card.dart';
-import '../../providers/workspace_wallet_selection_controller.dart';
+import '../../providers/workspace_wallet_selection_state.dart';
 import 'workspace_wallet_selection_card.dart';
 
 class WorkspaceWalletSelectionContent extends StatelessWidget {
@@ -136,7 +138,10 @@ class WorkspaceWalletSelectionContent extends StatelessWidget {
 enum _WorkspaceWalletSelectionEmptyStateKey { noWallets, allLinked }
 
 class _WorkspaceWalletSelectionEmptyState extends StatelessWidget {
-  const _WorkspaceWalletSelectionEmptyState({required this.titleKey});
+  const _WorkspaceWalletSelectionEmptyState({
+    super.key,
+    required this.titleKey,
+  });
 
   final _WorkspaceWalletSelectionEmptyStateKey titleKey;
 

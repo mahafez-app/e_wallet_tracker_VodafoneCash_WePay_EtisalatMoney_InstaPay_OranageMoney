@@ -36,6 +36,7 @@ class _TransactionsDateGroupSkeleton extends StatelessWidget {
         ),
         AppSpacing.md.verticalSpace,
         const _TransactionsCardSkeleton(),
+        AppSpacing.md.verticalSpace,
         const _TransactionsCardSkeleton(),
         AppSpacing.lg.verticalSpace,
       ],

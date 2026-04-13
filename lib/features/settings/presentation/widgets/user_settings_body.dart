@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_dialog.dart';
 import '../../../../core/widgets/app_loader.dart';
@@ -59,11 +58,7 @@ class _UserSettingsBodyState extends ConsumerState<UserSettingsBody>
   Widget build(BuildContext context) {
     ref.listen<AuthState>(authNotifierProvider, (previous, next) {
       if (!next.isLoading && next.error != null) {
-        AppSnackbar.show(
-          context,
-          message: next.error!.toLocalizedString(context),
-          type: AppSnackbarType.error,
-        );
+        AppSnackbar.showFailure(context, failure: next.error!);
         ref.read(authNotifierProvider.notifier).clearError();
         return;
       }
@@ -89,11 +84,7 @@ class _UserSettingsBodyState extends ConsumerState<UserSettingsBody>
         return;
       }
 
-      AppSnackbar.show(
-        context,
-        message: next.error!.toLocalizedString(context),
-        type: AppSnackbarType.error,
-      );
+      AppSnackbar.showFailure(context, failure: next.error!);
       ref.read(smsPermissionControllerProvider.notifier).clearError();
     });
 

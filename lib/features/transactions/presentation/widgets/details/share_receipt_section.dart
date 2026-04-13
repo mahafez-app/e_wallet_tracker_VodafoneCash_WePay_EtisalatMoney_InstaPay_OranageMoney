@@ -5,25 +5,25 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:screenshot/screenshot.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../../core/error/failure_mapper.dart';
 import '../../../../../core/error/failures.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/utils/extensions/transaction_share_extension.dart';
 import '../../../../../core/widgets/app_snackbar.dart';
 import '../../providers/share_receipt/share_receipt_controller.dart';
 import '../../providers/transaction_details_controller.dart';
-import 'transaction_receipt_image.dart';
+import 'transaction_receipt_capture_service.dart';
 
 class ShareReceiptSection extends ConsumerWidget {
   const ShareReceiptSection({super.key, required this.transaction});
 
   final TransactionEntity transaction;
+  static const TransactionReceiptCaptureService _captureService =
+      TransactionReceiptCaptureService();
 
   void _share({
     required BuildContext context,
@@ -41,35 +41,10 @@ class ShareReceiptSection extends ConsumerWidget {
     required TransactionEntity transaction,
   }) async {
     try {
-      final screenshotController = ScreenshotController();
       final shareMessage = context.l10n.transaction_shareReceipt;
-      final mediaQueryData = MediaQuery.of(context);
-      final receiptWidth = mediaQueryData.size.width;
-      final receiptWidget = _ReceiptCaptureRoot(
-        width: receiptWidth,
-        child: TransactionReceiptImage(transaction: transaction),
-      );
-
-      final receiptBytes = await screenshotController.captureFromLongWidget(
-        Theme(
-          data: Theme.of(context),
-          child: MediaQuery(
-            data: mediaQueryData,
-            child: Localizations.override(
-              context: context,
-              child: Directionality(
-                textDirection: Directionality.of(context),
-                child: receiptWidget,
-              ),
-            ),
-          ),
-        ),
-        pixelRatio: 3.0,
-        delay: const Duration(milliseconds: 200),
-        constraints: BoxConstraints(
-          minWidth: receiptWidth,
-          maxWidth: receiptWidth,
-        ),
+      final receiptBytes = await _captureService.capture(
+        context: context,
+        transaction: transaction,
       );
 
       if (!context.mounted) return;
@@ -90,11 +65,7 @@ class ShareReceiptSection extends ConsumerWidget {
         stackTrace: stackTrace,
       );
       if (!context.mounted) return;
-      AppSnackbar.show(
-        context,
-        message: failure.toLocalizedString(context),
-        type: AppSnackbarType.error,
-      );
+      AppSnackbar.showFailure(context, failure: failure);
     }
   }
 
@@ -115,11 +86,7 @@ class ShareReceiptSection extends ConsumerWidget {
         if (error is! Failure && error != null) {
           log('ShareReceiptSection: $error', name: 'Presentation');
         }
-        AppSnackbar.show(
-          context,
-          message: failure.toLocalizedString(context),
-          type: AppSnackbarType.error,
-        );
+        AppSnackbar.showFailure(context, failure: failure);
       }
     });
 
@@ -146,44 +113,6 @@ class ShareReceiptSection extends ConsumerWidget {
   }
 }
 
-class _ReceiptCaptureRoot extends StatelessWidget {
-  const _ReceiptCaptureRoot({
-    super.key,
-    required this.width,
-    required this.child,
-  });
-
-  final double width;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final borderRadius = BorderRadius.circular(AppSpacing.xl.responsiveRadius);
-
-    return ColoredBox(
-      color: theme.colorScheme.surfaceContainerLow,
-      child: SizedBox(
-        width: width,
-        child: Padding(
-          padding: AppResponsive.onlyPadding(
-            top: AppSpacing.xl,
-            end: AppSpacing.md,
-            bottom: AppSpacing.xl,
-            start: AppSpacing.md,
-          ),
-          child: Material(
-            color: theme.scaffoldBackgroundColor,
-            borderRadius: borderRadius,
-            clipBehavior: Clip.antiAlias,
-            child: child,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _ShareButton extends StatelessWidget {
   const _ShareButton({
     super.key,
@@ -197,6 +126,7 @@ class _ShareButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Container(
       padding: AppResponsive.symmetricPadding(
@@ -220,9 +150,9 @@ class _ShareButton extends StatelessWidget {
               ? SizedBox(
                   width: 20.responsiveRadius,
                   height: 20.responsiveRadius,
-                  child: const CircularProgressIndicator(
+                  child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: Colors.white,
+                    color: colorScheme.onPrimary,
                   ),
                 )
               : const Icon(Icons.share_rounded),

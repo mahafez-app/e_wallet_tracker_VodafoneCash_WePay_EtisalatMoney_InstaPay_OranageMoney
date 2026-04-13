@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../../core/error/failures.dart';
 import '../models/user_dto.dart';
 
 /// Remote data source for authentication operations.
@@ -75,7 +76,10 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserDto> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     if (googleUser == null) {
-      throw Exception('Google Sign-In cancelled by user');
+      throw const AuthFailure(
+        code: 'google-sign-in-cancelled',
+        technicalMessage: 'Google sign-in cancelled by user.',
+      );
     }
 
     final GoogleSignInAuthentication googleAuth =
@@ -86,14 +90,8 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       idToken: googleAuth.idToken,
     );
 
-    final userCredential = await _firebaseAuth.signInWithCredential(credential);
-    final firebaseUser = userCredential.user;
-
-    if (firebaseUser == null) {
-      throw Exception('Failed to get user from Firebase Auth');
-    }
-
-    return await _createOrUpdateUserProfile(firebaseUser);
+    final firebaseUser = await _signInWithCredential(credential);
+    return _createOrUpdateUserProfile(firebaseUser);
   }
 
   @override
@@ -105,12 +103,10 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       email: email,
       password: password,
     );
-
-    final firebaseUser = userCredential.user;
-    if (firebaseUser == null) {
-      throw Exception('Failed to get user from Firebase Auth');
-    }
-
+    final firebaseUser = _requireFirebaseUser(
+      userCredential.user,
+      technicalMessage: 'Firebase Auth returned no user for email sign-in.',
+    );
     return await getUserProfile(firebaseUser.uid);
   }
 
@@ -124,15 +120,14 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       email: email,
       password: password,
     );
-
-    final firebaseUser = userCredential.user;
-    if (firebaseUser == null) {
-      throw Exception('Failed to create user in Firebase Auth');
-    }
+    final firebaseUser = _requireFirebaseUser(
+      userCredential.user,
+      technicalMessage: 'Firebase Auth returned no user after sign-up.',
+    );
 
     await firebaseUser.updateDisplayName(displayName);
 
-    return await _createOrUpdateUserProfile(
+    return _createOrUpdateUserProfile(
       _firebaseAuth.currentUser ?? firebaseUser,
       providedDisplayName: displayName,
     );
@@ -164,7 +159,10 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final doc = await _firestore.collection(_usersCollection).doc(uid).get();
 
     if (!doc.exists || doc.data() == null) {
-      throw Exception('User profile not found');
+      throw const ServerFailure(
+        code: '404',
+        technicalMessage: 'User profile not found.',
+      );
     }
 
     return UserDto.fromJson({'uid': uid, ...doc.data()!});
@@ -179,29 +177,57 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         .collection(_usersCollection)
         .doc(firebaseUser.uid);
     final docSnapshot = await userDoc.get();
-
-    final effDisplayName =
+    final effectiveDisplayName =
         providedDisplayName ?? firebaseUser.displayName ?? '';
 
     if (!docSnapshot.exists) {
-      // Create new user profile
-      // If providedDisplayName is null (Google sign-in), force them to confirm name.
-      final newUser = UserDto.createNew(
+      final newUser = _buildNewUserProfile(
         uid: firebaseUser.uid,
-        name: effDisplayName,
+        displayName: effectiveDisplayName,
         email: firebaseUser.email,
         nameConfirmed: providedDisplayName != null,
       );
 
       await userDoc.set(newUser.toJson());
       return newUser;
-    } else {
-      // Return the existing
-      return await getUserProfile(firebaseUser.uid);
     }
+
+    return getUserProfile(firebaseUser.uid);
   }
 
-  /// Map Firebase User to UserDto (basic mapping without Firestore fetch).
+  Future<User> _signInWithCredential(AuthCredential credential) async {
+    final userCredential = await _firebaseAuth.signInWithCredential(credential);
+    return _requireFirebaseUser(
+      userCredential.user,
+      technicalMessage: 'Firebase Auth returned no user for Google sign-in.',
+    );
+  }
+
+  User _requireFirebaseUser(
+    User? firebaseUser, {
+    required String technicalMessage,
+  }) {
+    if (firebaseUser != null) {
+      return firebaseUser;
+    }
+
+    throw AuthFailure(code: 'missing-user', technicalMessage: technicalMessage);
+  }
+
+  UserDto _buildNewUserProfile({
+    required String uid,
+    required String displayName,
+    required String? email,
+    required bool nameConfirmed,
+  }) {
+    return UserDto.createNew(
+      uid: uid,
+      name: displayName,
+      email: email,
+      nameConfirmed: nameConfirmed,
+    );
+  }
+
   UserDto _mapFirebaseUserToDto(User firebaseUser) {
     return UserDto.createNew(
       uid: firebaseUser.uid,

@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/error/failures.dart';
 import '../../../../../core/router/app_routes.dart';
-import '../../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../../core/widgets/app_error_view.dart';
 import '../../../../../core/widgets/app_loader.dart';
 import '../../../../../core/widgets/app_snackbar.dart';
 import '../../providers/workspace_wallet_selection_controller.dart';
+import '../../providers/workspace_wallet_selection_state.dart';
 import 'workspace_wallet_selection_content.dart';
 
 class SelectWorkspaceWalletsBody extends ConsumerWidget {
@@ -114,10 +114,6 @@ class SelectWorkspaceWalletsBody extends ConsumerWidget {
   }
 
   void _showFailureSnackbar(BuildContext context, Failure failure) {
-    AppSnackbar.show(
-      context,
-      message: failure.toLocalizedString(context),
-      type: AppSnackbarType.error,
-    );
+    AppSnackbar.showFailure(context, failure: failure);
   }
 }

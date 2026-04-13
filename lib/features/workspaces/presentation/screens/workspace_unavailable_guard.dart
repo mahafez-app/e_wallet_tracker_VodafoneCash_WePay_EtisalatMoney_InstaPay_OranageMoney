@@ -73,35 +73,30 @@ class _WorkspaceUnavailableGuardState<T>
 
   @override
   Widget build(BuildContext context) {
-    final state = widget.state;
-
-    return switch (state) {
+    return switch (widget.state) {
       AsyncLoading() => const WorkspaceDetailsLoadingView(),
-      AsyncError(:final error) => _buildFromError(context, error),
-      AsyncData(:final value) => _buildFromData(context, value),
+      AsyncError(:final error) when isWorkspaceUnavailableError(error) =>
+        _WorkspaceUnavailablePlaceholder(onShowDialog: _showDialogIfNeeded),
+      AsyncError(:final error) => _WorkspaceErrorView(
+        error: error,
+        onResolved: _resetDialogState,
+      ),
+      AsyncData(:final value)
+          when isWorkspaceAccessRevoked(
+            widget.detailsSelector(value),
+            widget.currentUserId,
+          ) =>
+        _WorkspaceUnavailablePlaceholder(onShowDialog: _showDialogIfNeeded),
+      AsyncData(:final value) => _WorkspaceAvailableContent<T>(
+        value: value,
+        dataBuilder: widget.dataBuilder,
+        onResolved: _resetDialogState,
+      ),
     };
   }
 
-  Widget _buildFromError(BuildContext context, Object error) {
-    if (!isWorkspaceUnavailableError(error)) {
-      _dialogShown = false;
-      return AppErrorView(error: error);
-    }
-
-    _showDialogIfNeeded(context);
-    return const SizedBox.shrink();
-  }
-
-  Widget _buildFromData(BuildContext context, T value) {
-    final details = widget.detailsSelector(value);
-    final isRevoked = isWorkspaceAccessRevoked(details, widget.currentUserId);
-    if (!isRevoked) {
-      _dialogShown = false;
-      return widget.dataBuilder(context, value);
-    }
-
-    _showDialogIfNeeded(context);
-    return const SizedBox.shrink();
+  void _resetDialogState() {
+    _dialogShown = false;
   }
 
   void _showDialogIfNeeded(BuildContext context) {
@@ -113,5 +108,48 @@ class _WorkspaceUnavailableGuardState<T>
 
       showWorkspaceUnavailableDialog(context);
     });
+  }
+}
+
+class _WorkspaceErrorView extends StatelessWidget {
+  const _WorkspaceErrorView({required this.error, required this.onResolved});
+
+  final Object error;
+  final VoidCallback onResolved;
+
+  @override
+  Widget build(BuildContext context) {
+    onResolved();
+    return AppErrorView(error: error);
+  }
+}
+
+class _WorkspaceAvailableContent<T> extends StatelessWidget {
+  const _WorkspaceAvailableContent({
+    required this.value,
+    required this.dataBuilder,
+    required this.onResolved,
+  });
+
+  final T value;
+  final Widget Function(BuildContext context, T data) dataBuilder;
+  final VoidCallback onResolved;
+
+  @override
+  Widget build(BuildContext context) {
+    onResolved();
+    return dataBuilder(context, value);
+  }
+}
+
+class _WorkspaceUnavailablePlaceholder extends StatelessWidget {
+  const _WorkspaceUnavailablePlaceholder({required this.onShowDialog});
+
+  final void Function(BuildContext context) onShowDialog;
+
+  @override
+  Widget build(BuildContext context) {
+    onShowDialog(context);
+    return const SizedBox.shrink();
   }
 }

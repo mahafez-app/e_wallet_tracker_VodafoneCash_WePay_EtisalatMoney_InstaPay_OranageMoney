@@ -4,73 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/domain/entities/wallet_entity.dart';
 import '../../../../core/error/failures.dart';
+import '../../domain/entities/workspace_details_entity.dart';
 import '../../../wallets/providers/wallets_providers.dart';
 import '../../domain/usecases/add_wallets_to_workspace_usecase.dart';
 import '../../domain/usecases/get_workspace_details_usecase.dart';
 import '../../providers/workspaces_providers.dart';
-
-const _unsetFailure = Object();
-
-enum WorkspaceWalletSelectionSubmissionStatus {
-  idle,
-  loading,
-  success,
-  failure,
-}
-
-class WorkspaceWalletSelectionState {
-  const WorkspaceWalletSelectionState({
-    required this.workspaceName,
-    required this.ownedWallets,
-    required this.linkedWalletIds,
-    required this.selectedWalletIds,
-    required this.submissionStatus,
-    required this.submissionFailure,
-    required this.linkedCount,
-  });
-
-  final String workspaceName;
-  final List<WalletEntity> ownedWallets;
-  final Set<String> linkedWalletIds;
-  final Set<String> selectedWalletIds;
-  final WorkspaceWalletSelectionSubmissionStatus submissionStatus;
-  final Failure? submissionFailure;
-  final int linkedCount;
-
-  List<WalletEntity> get selectableWallets => ownedWallets
-      .where((wallet) => !linkedWalletIds.contains(wallet.id))
-      .toList();
-
-  bool get isSubmitting =>
-      submissionStatus == WorkspaceWalletSelectionSubmissionStatus.loading;
-
-  bool get hasSelectableWallets => selectableWallets.isNotEmpty;
-
-  bool get canSubmit =>
-      !isSubmitting && (!hasSelectableWallets || selectedWalletIds.isNotEmpty);
-
-  WorkspaceWalletSelectionState copyWith({
-    String? workspaceName,
-    List<WalletEntity>? ownedWallets,
-    Set<String>? linkedWalletIds,
-    Set<String>? selectedWalletIds,
-    WorkspaceWalletSelectionSubmissionStatus? submissionStatus,
-    Object? submissionFailure = _unsetFailure,
-    int? linkedCount,
-  }) {
-    return WorkspaceWalletSelectionState(
-      workspaceName: workspaceName ?? this.workspaceName,
-      ownedWallets: ownedWallets ?? this.ownedWallets,
-      linkedWalletIds: linkedWalletIds ?? this.linkedWalletIds,
-      selectedWalletIds: selectedWalletIds ?? this.selectedWalletIds,
-      submissionStatus: submissionStatus ?? this.submissionStatus,
-      submissionFailure: identical(submissionFailure, _unsetFailure)
-          ? this.submissionFailure
-          : submissionFailure as Failure?,
-      linkedCount: linkedCount ?? this.linkedCount,
-    );
-  }
-}
+import 'workspace_wallet_selection_state.dart';
 
 final workspaceWalletSelectionControllerProvider = AsyncNotifierProvider
     .autoDispose
@@ -88,34 +27,7 @@ class WorkspaceWalletSelectionController
 
   @override
   Future<WorkspaceWalletSelectionState> build() async {
-    final walletsFuture = ref.read(getWalletsUseCaseProvider)();
-    final workspaceFuture = ref.read(getWorkspaceDetailsUseCaseProvider)(
-      GetWorkspaceDetailsParams(workspaceId: _workspaceId),
-    );
-
-    final walletsResult = await walletsFuture;
-    final workspaceResult = await workspaceFuture;
-
-    final ownedWallets = walletsResult.fold<List<WalletEntity>>(
-      (failure) => throw failure,
-      (wallets) => wallets,
-    );
-    final workspaceDetails = workspaceResult.fold(
-      (failure) => throw failure,
-      (details) => details,
-    );
-
-    return WorkspaceWalletSelectionState(
-      workspaceName: workspaceDetails.workspace.name,
-      ownedWallets: ownedWallets,
-      linkedWalletIds: workspaceDetails.wallets
-          .map((wallet) => wallet.id)
-          .toSet(),
-      selectedWalletIds: const <String>{},
-      submissionStatus: WorkspaceWalletSelectionSubmissionStatus.idle,
-      submissionFailure: null,
-      linkedCount: 0,
-    );
+    return _loadInitialState();
   }
 
   void toggleWallet(String walletId) {
@@ -130,7 +42,7 @@ class WorkspaceWalletSelectionController
       selectedWalletIds.add(walletId);
     }
 
-    state = AsyncValue.data(
+    _updateState(
       currentState.copyWith(
         selectedWalletIds: selectedWalletIds,
         submissionStatus: WorkspaceWalletSelectionSubmissionStatus.idle,
@@ -157,14 +69,51 @@ class WorkspaceWalletSelectionController
       return;
     }
 
-    state = AsyncValue.data(
-      currentState.copyWith(
+    _updateState(
+      _copyWithSubmission(
+        currentState,
         submissionStatus: WorkspaceWalletSelectionSubmissionStatus.loading,
-        submissionFailure: null,
-        linkedCount: 0,
       ),
     );
     unawaited(_submitValidated(currentState));
+  }
+
+  Future<WorkspaceWalletSelectionState> _loadInitialState() async {
+    final ownedWalletsFuture = _loadOwnedWallets();
+    final workspaceDetailsFuture = _loadWorkspaceDetails();
+
+    final ownedWallets = await ownedWalletsFuture;
+    final workspaceDetails = await workspaceDetailsFuture;
+
+    return WorkspaceWalletSelectionState(
+      workspaceName: workspaceDetails.workspace.name,
+      ownedWallets: ownedWallets,
+      linkedWalletIds: workspaceDetails.wallets
+          .map((wallet) => wallet.id)
+          .toSet(),
+      selectedWalletIds: const <String>{},
+      submissionStatus: WorkspaceWalletSelectionSubmissionStatus.idle,
+      submissionFailure: null,
+      linkedCount: 0,
+    );
+  }
+
+  Future<List<WalletEntity>> _loadOwnedWallets() async {
+    final walletsResult = await ref.read(getWalletsUseCaseProvider)();
+    return walletsResult.fold<List<WalletEntity>>(
+      (failure) => throw failure,
+      (wallets) => wallets,
+    );
+  }
+
+  Future<WorkspaceDetailsEntity> _loadWorkspaceDetails() async {
+    final workspaceResult = await ref.read(getWorkspaceDetailsUseCaseProvider)(
+      GetWorkspaceDetailsParams(workspaceId: _workspaceId),
+    );
+    return workspaceResult.fold(
+      (failure) => throw failure,
+      (details) => details,
+    );
   }
 
   Future<void> _submitValidated(
@@ -189,11 +138,11 @@ class WorkspaceWalletSelectionController
     WorkspaceWalletSelectionState currentState,
     Failure failure,
   ) {
-    state = AsyncValue.data(
-      currentState.copyWith(
+    _updateState(
+      _copyWithSubmission(
+        currentState,
         submissionStatus: WorkspaceWalletSelectionSubmissionStatus.failure,
         submissionFailure: failure,
-        linkedCount: 0,
       ),
     );
   }
@@ -202,7 +151,7 @@ class WorkspaceWalletSelectionController
     WorkspaceWalletSelectionState currentState,
     int linkedCount,
   ) {
-    state = AsyncValue.data(
+    _updateState(
       currentState.copyWith(
         linkedWalletIds: {
           ...currentState.linkedWalletIds,
@@ -214,5 +163,21 @@ class WorkspaceWalletSelectionController
         linkedCount: linkedCount,
       ),
     );
+  }
+
+  WorkspaceWalletSelectionState _copyWithSubmission(
+    WorkspaceWalletSelectionState currentState, {
+    required WorkspaceWalletSelectionSubmissionStatus submissionStatus,
+    Failure? submissionFailure,
+  }) {
+    return currentState.copyWith(
+      submissionStatus: submissionStatus,
+      submissionFailure: submissionFailure,
+      linkedCount: 0,
+    );
+  }
+
+  void _updateState(WorkspaceWalletSelectionState nextState) {
+    state = AsyncValue.data(nextState);
   }
 }

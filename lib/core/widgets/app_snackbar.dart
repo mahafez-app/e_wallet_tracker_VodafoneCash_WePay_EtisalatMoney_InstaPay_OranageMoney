@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 
+import '../error/failures.dart';
 import '../theme/app_color_extension.dart';
 import '../theme/app_responsive.dart';
 import '../theme/app_spacing.dart';
+import '../utils/extensions/failure_extension.dart';
 
 enum AppSnackbarType { success, error, info, warning }
 
 class AppSnackbar {
   const AppSnackbar._();
+
+  static void showFailure(
+    BuildContext context, {
+    required Failure failure,
+    Duration duration = const Duration(seconds: 4),
+  }) {
+    show(
+      context,
+      message: failure.toLocalizedString(context),
+      type: AppSnackbarType.error,
+      duration: duration,
+    );
+  }
 
   static void show(
     BuildContext context, {

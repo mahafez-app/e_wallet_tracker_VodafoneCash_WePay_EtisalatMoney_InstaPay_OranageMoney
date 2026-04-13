@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/providers/sms_providers.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../../../settings/presentation/providers/sms_permission_controller.dart';
@@ -109,10 +108,6 @@ class _AddWalletBody extends ConsumerWidget {
   }
 
   void _showFailureSnackbar(BuildContext context, Failure failure) {
-    AppSnackbar.show(
-      context,
-      message: failure.toLocalizedString(context),
-      type: AppSnackbarType.error,
-    );
+    AppSnackbar.showFailure(context, failure: failure);
   }
 }

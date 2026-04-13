@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../../../auth/providers/auth_providers.dart';
@@ -90,10 +89,6 @@ class _CreateWorkspaceBody extends ConsumerWidget {
   }
 
   void _showFailureSnackbar(BuildContext context, Failure failure) {
-    AppSnackbar.show(
-      context,
-      message: failure.toLocalizedString(context),
-      type: AppSnackbarType.error,
-    );
+    AppSnackbar.showFailure(context, failure: failure);
   }
 }

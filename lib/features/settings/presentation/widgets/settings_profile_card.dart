@@ -57,6 +57,7 @@ class SettingsProfileCard extends StatelessWidget {
                         end: AppSpacing.md,
                         bottom: AppSpacing.xs,
                       ),
+                      overlayColor: Colors.transparent,
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       alignment: AlignmentDirectional.centerStart,

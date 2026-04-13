@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failures.dart';
+import '../../../../core/error/result.dart';
 import '../../domain/usecases/sign_in_with_email_password_usecase.dart';
 import '../../domain/usecases/sign_up_with_email_password_usecase.dart';
 import '../../domain/usecases/update_display_name_usecase.dart';
@@ -44,17 +45,9 @@ final class AuthController extends Notifier<AuthState> {
   }
 
   Future<void> signInWithGoogle() async {
-    state = state.copyWith(
+    await _performAuthAction(
       loadingMethod: AuthLoadingMethod.google,
-      error: null,
-    );
-    final result = await ref.read(signInWithGoogleUseCaseProvider)();
-    result.fold(
-      (failure) => state = state.copyWith(
-        loadingMethod: AuthLoadingMethod.none,
-        error: failure,
-      ),
-      (_) => state = state.copyWith(loadingMethod: AuthLoadingMethod.none),
+      operation: () => ref.read(signInWithGoogleUseCaseProvider)(),
     );
   }
 
@@ -62,16 +55,11 @@ final class AuthController extends Notifier<AuthState> {
     required String email,
     required String password,
   }) async {
-    state = state.copyWith(loadingMethod: AuthLoadingMethod.email, error: null);
-    final result = await ref.read(signInWithEmailPasswordUseCaseProvider)(
-      SignInWithEmailPasswordParams(email: email, password: password),
-    );
-    result.fold(
-      (failure) => state = state.copyWith(
-        loadingMethod: AuthLoadingMethod.none,
-        error: failure,
+    await _performAuthAction(
+      loadingMethod: AuthLoadingMethod.email,
+      operation: () => ref.read(signInWithEmailPasswordUseCaseProvider)(
+        SignInWithEmailPasswordParams(email: email, password: password),
       ),
-      (_) => state = state.copyWith(loadingMethod: AuthLoadingMethod.none),
     );
   }
 
@@ -80,20 +68,15 @@ final class AuthController extends Notifier<AuthState> {
     required String password,
     required String displayName,
   }) async {
-    state = state.copyWith(loadingMethod: AuthLoadingMethod.email, error: null);
-    final result = await ref.read(signUpWithEmailPasswordUseCaseProvider)(
-      SignUpWithEmailPasswordParams(
-        email: email,
-        password: password,
-        displayName: displayName,
+    await _performAuthAction(
+      loadingMethod: AuthLoadingMethod.email,
+      operation: () => ref.read(signUpWithEmailPasswordUseCaseProvider)(
+        SignUpWithEmailPasswordParams(
+          email: email,
+          password: password,
+          displayName: displayName,
+        ),
       ),
-    );
-    result.fold(
-      (failure) => state = state.copyWith(
-        loadingMethod: AuthLoadingMethod.none,
-        error: failure,
-      ),
-      (_) => state = state.copyWith(loadingMethod: AuthLoadingMethod.none),
     );
   }
 
@@ -101,34 +84,38 @@ final class AuthController extends Notifier<AuthState> {
     required String uid,
     required String displayName,
   }) async {
-    state = state.copyWith(
+    await _performAuthAction(
       loadingMethod: AuthLoadingMethod.confirmName,
-      error: null,
-    );
-    final result = await ref.read(updateDisplayNameUseCaseProvider)(
-      UpdateDisplayNameParams(uid: uid, displayName: displayName),
-    );
-    result.fold(
-      (failure) => state = state.copyWith(
-        loadingMethod: AuthLoadingMethod.none,
-        error: failure,
+      operation: () => ref.read(updateDisplayNameUseCaseProvider)(
+        UpdateDisplayNameParams(uid: uid, displayName: displayName),
       ),
-      (_) => state = state.copyWith(loadingMethod: AuthLoadingMethod.none),
     );
   }
 
   Future<void> signOut() async {
-    state = state.copyWith(
+    await _performAuthAction(
       loadingMethod: AuthLoadingMethod.signOut,
-      error: null,
+      operation: () => ref.read(signOutUseCaseProvider)(),
     );
-    final result = await ref.read(signOutUseCaseProvider)();
-    result.fold(
-      (failure) => state = state.copyWith(
-        loadingMethod: AuthLoadingMethod.none,
-        error: failure,
-      ),
-      (_) => state = state.copyWith(loadingMethod: AuthLoadingMethod.none),
+  }
+
+  Future<void> _performAuthAction<T>({
+    required AuthLoadingMethod loadingMethod,
+    required Future<Result<T>> Function() operation,
+  }) async {
+    state = state.copyWith(loadingMethod: loadingMethod, error: null);
+    final result = await operation();
+    result.fold(_finishWithFailure, (_) => _finishWithoutFailure());
+  }
+
+  void _finishWithFailure(Failure failure) {
+    state = state.copyWith(
+      loadingMethod: AuthLoadingMethod.none,
+      error: failure,
     );
+  }
+
+  void _finishWithoutFailure() {
+    state = state.copyWith(loadingMethod: AuthLoadingMethod.none);
   }
 }

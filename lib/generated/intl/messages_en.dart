@@ -398,6 +398,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "smsPermissionTitle": MessageLookupByLibrary.simpleMessage(
       "Allow Message and Phone Access",
     ),
+    "startupFallbackMessage": MessageLookupByLibrary.simpleMessage(
+      "Please try opening Mahafez again.",
+    ),
+    "startupFallbackRetryAction": MessageLookupByLibrary.simpleMessage(
+      "Try again",
+    ),
+    "startupFallbackTitle": MessageLookupByLibrary.simpleMessage(
+      "Just a moment",
+    ),
     "toLabel": MessageLookupByLibrary.simpleMessage("To"),
     "totalBalance": MessageLookupByLibrary.simpleMessage("Total Balance"),
     "totalIn": MessageLookupByLibrary.simpleMessage("Total In"),

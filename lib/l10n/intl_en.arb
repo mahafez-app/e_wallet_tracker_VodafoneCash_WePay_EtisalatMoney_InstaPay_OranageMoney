@@ -29,6 +29,9 @@
     }
   },
   "errorUnknown": "An unexpected error occurred.",
+  "startupFallbackTitle": "Just a moment",
+  "startupFallbackMessage": "Please try opening Mahafez again.",
+  "startupFallbackRetryAction": "Try again",
   "notFoundStatusCode": "404",
   "notFoundPageTitle": "Page Not Found",
   "appName": "Mahafez",

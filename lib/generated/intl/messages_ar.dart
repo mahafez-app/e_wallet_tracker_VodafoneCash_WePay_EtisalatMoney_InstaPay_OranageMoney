@@ -388,6 +388,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "smsPermissionTitle": MessageLookupByLibrary.simpleMessage(
       "اسمح بالوصول للرسائل والموبايل",
     ),
+    "startupFallbackMessage": MessageLookupByLibrary.simpleMessage(
+      "حاول فتح محافظ مرة أخرى.",
+    ),
+    "startupFallbackRetryAction": MessageLookupByLibrary.simpleMessage(
+      "حاول مرة أخرى",
+    ),
+    "startupFallbackTitle": MessageLookupByLibrary.simpleMessage(
+      "لحظة من فضلك",
+    ),
     "toLabel": MessageLookupByLibrary.simpleMessage("إلى"),
     "totalBalance": MessageLookupByLibrary.simpleMessage("إجمالي الرصيد"),
     "totalIn": MessageLookupByLibrary.simpleMessage("إجمالي الوارد"),

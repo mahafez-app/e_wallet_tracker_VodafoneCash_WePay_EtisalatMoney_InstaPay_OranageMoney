@@ -29,6 +29,9 @@
     }
   },
   "errorUnknown": "حصلت مشكلة غير متوقعة.",
+  "startupFallbackTitle": "لحظة من فضلك",
+  "startupFallbackMessage": "حاول فتح محافظ مرة أخرى.",
+  "startupFallbackRetryAction": "حاول مرة أخرى",
   "notFoundStatusCode": "404",
   "notFoundPageTitle": "الصفحة غير موجودة",
   "appName": "محافظ",

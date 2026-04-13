@@ -26,8 +26,6 @@ class App extends ConsumerWidget {
         theme: AppTheme.light(),
         darkTheme: AppTheme.dark(),
         themeMode: themeMode,
-        // themeMode: ThemeMode.dark,
-        // themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
         localizationsDelegates: [
           S.delegate,

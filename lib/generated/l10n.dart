@@ -274,6 +274,36 @@ class S {
     );
   }
 
+  /// `لحظة من فضلك`
+  String get startupFallbackTitle {
+    return Intl.message(
+      'لحظة من فضلك',
+      name: 'startupFallbackTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حاول فتح محافظ مرة أخرى.`
+  String get startupFallbackMessage {
+    return Intl.message(
+      'حاول فتح محافظ مرة أخرى.',
+      name: 'startupFallbackMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حاول مرة أخرى`
+  String get startupFallbackRetryAction {
+    return Intl.message(
+      'حاول مرة أخرى',
+      name: 'startupFallbackRetryAction',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `404`
   String get notFoundStatusCode {
     return Intl.message('404', name: 'notFoundStatusCode', desc: '', args: []);

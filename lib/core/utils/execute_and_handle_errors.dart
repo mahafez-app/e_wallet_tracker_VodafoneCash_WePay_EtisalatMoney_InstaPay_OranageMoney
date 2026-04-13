@@ -8,11 +8,12 @@ Result<T> executeAndHandleErrorsSync<T>(
   T Function() call, {
   required String tag,
   FailureMapper mapper = const FailureMapper(),
+  String logName = 'Repository',
 }) {
   try {
     return Success(call());
   } catch (e, st) {
-    log('[$tag] ${e.runtimeType}: $e', stackTrace: st, name: 'Repository');
+    log('[$tag] ${e.runtimeType}: $e', stackTrace: st, name: logName);
     return FailureResult(mapper.map(e));
   }
 }
@@ -22,11 +23,12 @@ Future<Result<T>> executeAndHandleErrors<T>(
   Future<T> Function() call, {
   required String tag,
   FailureMapper mapper = const FailureMapper(),
+  String logName = 'Repository',
 }) async {
   try {
     return Success(await call());
   } catch (e, st) {
-    log('[$tag] ${e.runtimeType}: $e', stackTrace: st, name: 'Repository');
+    log('[$tag] ${e.runtimeType}: $e', stackTrace: st, name: logName);
     return FailureResult(mapper.map(e));
   }
 }
@@ -38,6 +40,7 @@ Stream<Result<T>> executeStreamAndHandleErrors<T>(
   Stream<T> Function() call, {
   required String tag,
   FailureMapper mapper = const FailureMapper(),
+  String logName = 'Repository',
 }) {
   try {
     return call().map<Result<T>>(Success.new).handleError((
@@ -47,7 +50,7 @@ Stream<Result<T>> executeStreamAndHandleErrors<T>(
       log(
         '[$tag] Stream error ${e.runtimeType}: $e',
         stackTrace: st,
-        name: 'Repository',
+        name: logName,
       );
       return FailureResult<T>(mapper.map(e));
     });
@@ -55,7 +58,7 @@ Stream<Result<T>> executeStreamAndHandleErrors<T>(
     log(
       '[$tag] Stream setup error ${e.runtimeType}: $e',
       stackTrace: st,
-      name: 'Repository',
+      name: logName,
     );
     return Stream.value(FailureResult(mapper.map(e)));
   }

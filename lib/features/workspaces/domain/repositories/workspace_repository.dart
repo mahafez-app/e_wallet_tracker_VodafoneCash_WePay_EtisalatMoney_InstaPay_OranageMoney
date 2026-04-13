@@ -29,11 +29,9 @@ abstract interface class WorkspaceRepository {
 
   Future<Result<WorkspaceDetailsEntity>> getWorkspaceDetails({
     required String workspaceId,
-    int transactionsPreviewLimit = 5,
   });
 
   Stream<Result<WorkspaceDetailsEntity>> watchWorkspaceDetails({
     required String workspaceId,
-    int transactionsPreviewLimit = 5,
   });
 }

@@ -4,13 +4,9 @@ import '../entities/workspace_details_entity.dart';
 import '../repositories/workspace_repository.dart';
 
 class WatchWorkspaceDetailsParams {
-  const WatchWorkspaceDetailsParams({
-    required this.workspaceId,
-    this.transactionsPreviewLimit = 5,
-  });
+  const WatchWorkspaceDetailsParams({required this.workspaceId});
 
   final String workspaceId;
-  final int transactionsPreviewLimit;
 }
 
 class WatchWorkspaceDetailsUseCase
@@ -24,9 +20,6 @@ class WatchWorkspaceDetailsUseCase
   Stream<Result<WorkspaceDetailsEntity>> call(
     WatchWorkspaceDetailsParams params,
   ) {
-    return _repository.watchWorkspaceDetails(
-      workspaceId: params.workspaceId,
-      transactionsPreviewLimit: params.transactionsPreviewLimit,
-    );
+    return _repository.watchWorkspaceDetails(workspaceId: params.workspaceId);
   }
 }

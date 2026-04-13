@@ -4,13 +4,9 @@ import '../entities/workspace_details_entity.dart';
 import '../repositories/workspace_repository.dart';
 
 class GetWorkspaceDetailsParams {
-  const GetWorkspaceDetailsParams({
-    required this.workspaceId,
-    this.transactionsPreviewLimit = 5,
-  });
+  const GetWorkspaceDetailsParams({required this.workspaceId});
 
   final String workspaceId;
-  final int transactionsPreviewLimit;
 }
 
 class GetWorkspaceDetailsUseCase
@@ -23,9 +19,6 @@ class GetWorkspaceDetailsUseCase
   Future<Result<WorkspaceDetailsEntity>> call(
     GetWorkspaceDetailsParams params,
   ) {
-    return _repository.getWorkspaceDetails(
-      workspaceId: params.workspaceId,
-      transactionsPreviewLimit: params.transactionsPreviewLimit,
-    );
+    return _repository.getWorkspaceDetails(workspaceId: params.workspaceId);
   }
 }

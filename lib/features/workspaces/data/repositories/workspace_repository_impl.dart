@@ -88,7 +88,6 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
   @override
   Future<Result<WorkspaceDetailsEntity>> getWorkspaceDetails({
     required String workspaceId,
-    int transactionsPreviewLimit = 5,
   }) {
     return executeAndHandleErrors(() async {
       final workspaceFuture = _remote.getWorkspace(workspaceId);
@@ -110,7 +109,6 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
   @override
   Stream<Result<WorkspaceDetailsEntity>> watchWorkspaceDetails({
     required String workspaceId,
-    int transactionsPreviewLimit = 5,
   }) {
     return executeStreamAndHandleErrors(() {
       return Rx.combineLatest3(

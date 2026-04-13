@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
@@ -8,10 +9,10 @@ import '../../domain/enums/app_language_preference.dart';
 import '../../domain/enums/app_theme_preference.dart';
 import '../providers/app_preferences_controller.dart';
 import '../providers/sms_permission_controller.dart';
+import 'settings_card.dart';
+import 'settings_compact_tile.dart';
 import 'settings_option_bottom_sheet.dart';
 import 'settings_section_title.dart';
-import 'settings_selection_card.dart';
-import 'settings_sms_permission_card.dart';
 
 class UserSettingsAppSection extends ConsumerWidget {
   const UserSettingsAppSection({
@@ -33,33 +34,60 @@ class UserSettingsAppSection extends ConsumerWidget {
       children: [
         SettingsSectionTitle(label: context.l10n.userSettingsAppSection),
         AppSpacing.sm.verticalSpace,
-        SettingsSmsPermissionCard(
-          state: smsPermissionState,
-          onOpenSettings: onOpenSmsSettings,
-        ),
-        AppSpacing.md.verticalSpace,
-        SettingsSelectionCard(
-          icon: Icons.palette_outlined,
-          title: context.l10n.userSettingsThemeTitle,
-          valueLabel: _themeLabel(context, appPreferences.themePreference),
-          onTap: () => _showThemeSelectionSheet(
-            context,
-            ref,
-            appPreferences.themePreference,
-          ),
-        ),
-        AppSpacing.md.verticalSpace,
-        SettingsSelectionCard(
-          icon: Icons.language_rounded,
-          title: context.l10n.userSettingsLanguageTitle,
-          valueLabel: _languageLabel(
-            context,
-            appPreferences.languagePreference,
-          ),
-          onTap: () => _showLanguageSelectionSheet(
-            context,
-            ref,
-            appPreferences.languagePreference,
+        SettingsCard(
+          child: Column(
+            children: [
+              SettingsCompactTile(
+                icon: Icons.sms_outlined,
+                title: context.l10n.userSettingsSmsPermissionTitle,
+                trailingLabel: _statusLabel(context),
+                trailingLabelColor: _statusColor(context),
+                isLoading: smsPermissionState.isOpeningSettings,
+                onTap: onOpenSmsSettings,
+              ),
+              Padding(
+                padding: AppResponsive.horizontalPadding(AppSpacing.lg),
+                child: Divider(
+                  height: 1.responsiveHeight,
+                  thickness: 1.responsiveHeight,
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+              ),
+              SettingsCompactTile(
+                icon: Icons.palette_outlined,
+                title: context.l10n.userSettingsThemeTitle,
+                trailingLabel: _themeLabel(
+                  context,
+                  appPreferences.themePreference,
+                ),
+                onTap: () => _showThemeSelectionSheet(
+                  context,
+                  ref,
+                  appPreferences.themePreference,
+                ),
+              ),
+              Padding(
+                padding: AppResponsive.horizontalPadding(AppSpacing.lg),
+                child: Divider(
+                  height: 1.responsiveHeight,
+                  thickness: 1.responsiveHeight,
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+              ),
+              SettingsCompactTile(
+                icon: Icons.language_rounded,
+                title: context.l10n.userSettingsLanguageTitle,
+                trailingLabel: _languageLabel(
+                  context,
+                  appPreferences.languagePreference,
+                ),
+                onTap: () => _showLanguageSelectionSheet(
+                  context,
+                  ref,
+                  appPreferences.languagePreference,
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -140,6 +168,26 @@ class UserSettingsAppSection extends ConsumerWidget {
     ref
         .read(appPreferencesControllerProvider.notifier)
         .setLanguagePreference(selectedLanguage);
+  }
+
+  String _statusLabel(BuildContext context) {
+    if (smsPermissionState.isChecking) {
+      return context.l10n.userSettingsSmsPermissionCheckingLabel;
+    }
+
+    return smsPermissionState.hasPermission
+        ? context.l10n.userSettingsSmsPermissionEnabledLabel
+        : context.l10n.userSettingsSmsPermissionDisabledLabel;
+  }
+
+  Color _statusColor(BuildContext context) {
+    if (smsPermissionState.isChecking) {
+      return Theme.of(context).colorScheme.onSurfaceVariant;
+    }
+
+    return smsPermissionState.hasPermission
+        ? context.appColors.success
+        : Theme.of(context).colorScheme.error;
   }
 
   String _themeLabel(BuildContext context, AppThemePreference preference) {

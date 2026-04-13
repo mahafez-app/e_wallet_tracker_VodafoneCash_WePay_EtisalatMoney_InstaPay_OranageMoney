@@ -30,34 +30,44 @@ class UserSettingsContent extends ConsumerWidget {
     );
 
     return SingleChildScrollView(
-      padding: AppResponsive.symmetricPadding(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.lg,
+      padding: AppResponsive.onlyPadding(
+        start: AppSpacing.lg,
+        top: AppSpacing.md,
+        end: AppSpacing.lg,
+        bottom: AppSpacing.xxxl,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SettingsProfileCard(
-            user: user,
-            onEditName: () => EditDisplayNameBottomSheet.show(
-              context,
-              currentName: user.name,
-            ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 680.responsiveWidth),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SettingsProfileCard(
+                user: user,
+                onEditName: () => EditDisplayNameBottomSheet.show(
+                  context,
+                  currentName: user.name,
+                ),
+              ),
+              AppSpacing.lg.verticalSpace,
+              UserSettingsAppSection(
+                smsPermissionState: smsPermissionState,
+                onOpenSmsSettings: smsPermissionController.openSettings,
+              ),
+              AppSpacing.lg.verticalSpace,
+              UserSettingsAccountSection(
+                isSigningOut:
+                    authState.loadingMethod == AuthLoadingMethod.signOut,
+              ),
+              AppSpacing.lg.verticalSpace,
+              SettingsSectionTitle(
+                label: context.l10n.userSettingsAboutSection,
+              ),
+              AppSpacing.sm.verticalSpace,
+              const SettingsAppVersionCard(),
+            ],
           ),
-          AppSpacing.xl.verticalSpace,
-          UserSettingsAppSection(
-            smsPermissionState: smsPermissionState,
-            onOpenSmsSettings: smsPermissionController.openSettings,
-          ),
-          AppSpacing.xl.verticalSpace,
-          UserSettingsAccountSection(
-            isSigningOut: authState.loadingMethod == AuthLoadingMethod.signOut,
-          ),
-          AppSpacing.xl.verticalSpace,
-          SettingsSectionTitle(label: context.l10n.userSettingsAboutSection),
-          AppSpacing.sm.verticalSpace,
-          const SettingsAppVersionCard(),
-        ],
+        ),
       ),
     );
   }

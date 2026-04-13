@@ -6,7 +6,8 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_dialog.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
-import 'settings_account_actions.dart';
+import 'settings_card.dart';
+import 'settings_compact_tile.dart';
 import 'settings_section_title.dart';
 
 class UserSettingsAccountSection extends ConsumerWidget {
@@ -21,10 +22,33 @@ class UserSettingsAccountSection extends ConsumerWidget {
       children: [
         SettingsSectionTitle(label: context.l10n.userSettingsAccountSection),
         AppSpacing.sm.verticalSpace,
-        SettingsAccountActions(
-          isSigningOut: isSigningOut,
-          onSignOut: () => _showSignOutDialog(context, ref),
-          onDeleteAccount: () => _showDeleteAccountConfirmDialog(context),
+        SettingsCard(
+          child: Column(
+            children: [
+              SettingsCompactTile(
+                icon: Icons.logout_rounded,
+                title: context.l10n.userSettingsSignOutAction,
+                isLoading: isSigningOut,
+                showChevron: false,
+                onTap: () => _showSignOutDialog(context, ref),
+              ),
+              Padding(
+                padding: AppResponsive.horizontalPadding(AppSpacing.lg),
+                child: Divider(
+                  height: 1.responsiveHeight,
+                  thickness: 1.responsiveHeight,
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+              ),
+              SettingsCompactTile(
+                icon: Icons.delete_outline_rounded,
+                title: context.l10n.userSettingsDeleteAccountAction,
+                isDanger: true,
+                showChevron: false,
+                onTap: () => _showDeleteAccountConfirmDialog(context),
+              ),
+            ],
+          ),
         ),
       ],
     );

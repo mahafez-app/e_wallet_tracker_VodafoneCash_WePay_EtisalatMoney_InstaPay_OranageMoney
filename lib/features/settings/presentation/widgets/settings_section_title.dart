@@ -11,7 +11,7 @@ class SettingsSectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppResponsive.horizontalPadding(AppSpacing.xs),
+      padding: AppResponsive.horizontalPadding(AppSpacing.sm),
       child: Text(
         label,
         style: Theme.of(context).textTheme.labelLarge?.copyWith(

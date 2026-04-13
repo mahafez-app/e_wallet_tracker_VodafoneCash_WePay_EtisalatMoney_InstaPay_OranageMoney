@@ -112,8 +112,11 @@ class TransactionsController extends Notifier<TransactionsState>
   }
 
   Future<void> selectAllWallets() async {
-    if (state.useAllWallets) return;
-    state = state.copyWith(useAllWallets: true, selectedWalletIds: const []);
+    if (state.useAllWallets && state.selectedWalletIds.isEmpty) return;
+    state = state.copyWith(
+      useAllWallets: true,
+      selectedWalletIds: const <String>[],
+    );
     await loadInitial(requestId: startRequest());
   }
 
@@ -123,22 +126,34 @@ class TransactionsController extends Notifier<TransactionsState>
     final currentSelection = state.useAllWallets
         ? <String>{walletId}
         : state.selectedWalletIds.toSet();
+
     if (!state.useAllWallets && !currentSelection.add(walletId)) {
       currentSelection.remove(walletId);
     }
 
+    state = _resolveWalletSelectionState(currentSelection);
+    await loadInitial(requestId: startRequest());
+  }
+
+  TransactionsState _resolveWalletSelectionState(
+    Set<String> selectedWalletIds,
+  ) {
+    if (selectedWalletIds.isEmpty) {
+      return state.copyWith(
+        useAllWallets: true,
+        selectedWalletIds: const <String>[],
+      );
+    }
+
     final orderedSelection = (arg as WorkspaceTransactionsRouteData).wallets
-        .where((wallet) => currentSelection.contains(wallet.walletId))
+        .where((wallet) => selectedWalletIds.contains(wallet.walletId))
         .map((wallet) => wallet.walletId)
         .toList();
 
-    state = orderedSelection.isEmpty
-        ? state.copyWith(useAllWallets: true, selectedWalletIds: const [])
-        : state.copyWith(
-            useAllWallets: false,
-            selectedWalletIds: orderedSelection,
-          );
-    await loadInitial(requestId: startRequest());
+    return state.copyWith(
+      useAllWallets: false,
+      selectedWalletIds: orderedSelection,
+    );
   }
 
   Future<void> clearAllFilters() async {

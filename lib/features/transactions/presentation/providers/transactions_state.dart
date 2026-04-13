@@ -120,7 +120,9 @@ final class TransactionsState extends Equatable {
       useAllWallets: useAllWallets ?? this.useAllWallets,
       selectedWalletIds: identical(selectedWalletIds, _sentinel)
           ? this.selectedWalletIds
-          : selectedWalletIds as List<String>,
+          : List<String>.of(
+              (selectedWalletIds as Iterable<Object?>).cast<String>(),
+            ),
       totalCount: totalCount ?? this.totalCount,
       nextCursor: identical(nextCursor, _sentinel)
           ? this.nextCursor

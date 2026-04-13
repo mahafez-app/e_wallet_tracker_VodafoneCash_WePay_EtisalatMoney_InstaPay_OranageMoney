@@ -105,7 +105,7 @@ class _WorkspaceSettingsWalletTile extends StatelessWidget {
     return Container(
       padding: AppResponsive.allPadding(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: context.appColors.cardBackground,
         borderRadius: BorderRadius.circular(AppSpacing.lg.responsiveRadius),
         border: Border.all(color: theme.colorScheme.outlineVariant),
         boxShadow: [

@@ -61,7 +61,7 @@ class WorkspaceSettingsMemberTile extends StatelessWidget {
     return Container(
       padding: AppResponsive.allPadding(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: context.appColors.cardBackground,
         borderRadius: BorderRadius.circular(AppSpacing.lg.responsiveRadius),
         border: BorderDirectional(
           end: BorderSide(color: stripeColor, width: AppSpacing.xs),

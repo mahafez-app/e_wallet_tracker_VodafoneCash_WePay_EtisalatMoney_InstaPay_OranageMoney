@@ -63,7 +63,7 @@ class _WorkspaceInfoCard extends StatelessWidget {
         child: Container(
           padding: AppResponsive.allPadding(AppSpacing.lg),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerLow,
+            color: context.appColors.cardBackground,
             borderRadius: BorderRadius.circular(AppSpacing.lg.responsiveRadius),
             boxShadow: [
               BoxShadow(

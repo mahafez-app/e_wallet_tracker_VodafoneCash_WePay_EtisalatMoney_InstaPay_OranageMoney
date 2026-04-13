@@ -15,45 +15,18 @@ class InvitationFeedbackCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colors = context.appColors;
     final theme = Theme.of(context);
     final display = ref.watch(invitationDisplayProvider(feedback.invitation));
     final resolvedWorkspaceName = display.asData?.value.workspaceName;
     final workspaceName = resolvedWorkspaceName?.trim().isNotEmpty == true
         ? resolvedWorkspaceName!
         : context.l10n.invitationsDeletedWorkspaceFallback;
-
-    final title = switch (feedback.action) {
-      InvitationActionType.accept => context.l10n.invitationAcceptSuccess(
-        workspaceName,
-      ),
-      InvitationActionType.decline => context.l10n.invitationDeclineSuccess(
-        workspaceName,
-      ),
-    };
-    final subtitle = switch (feedback.action) {
-      InvitationActionType.accept => context.l10n.invitationAcceptDetails,
-      InvitationActionType.decline => workspaceName,
-    };
-    final accentColor = feedback.action == InvitationActionType.accept
-        ? colors.success
-        : theme.colorScheme.outline;
-    final iconBackground = feedback.action == InvitationActionType.accept
-        ? colors.successContainer
-        : theme.colorScheme.surfaceContainerHigh;
-    final iconColor = feedback.action == InvitationActionType.accept
-        ? colors.success
-        : theme.colorScheme.onSurfaceVariant;
-    final icon = feedback.action == InvitationActionType.accept
-        ? Icons.check_circle_rounded
-        : Icons.cancel_rounded;
+    final style = _resolveStyle(context: context, workspaceName: workspaceName);
 
     return Container(
       padding: AppResponsive.allPadding(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: feedback.action == InvitationActionType.accept
-            ? colors.cardBackground
-            : theme.colorScheme.surfaceContainerLow,
+        color: style.backgroundColor,
         borderRadius: BorderRadius.circular(20.responsiveRadius),
       ),
       child: Stack(
@@ -65,7 +38,7 @@ class InvitationFeedbackCard extends ConsumerWidget {
             child: Container(
               width: 4.responsiveWidth,
               decoration: BoxDecoration(
-                color: accentColor,
+                color: style.accentColor,
                 borderRadius: BorderRadiusDirectional.only(
                   topStart: Radius.circular(20.responsiveRadius),
                   bottomStart: Radius.circular(20.responsiveRadius),
@@ -82,12 +55,12 @@ class InvitationFeedbackCard extends ConsumerWidget {
                   width: 44.responsiveWidth,
                   height: 44.responsiveWidth,
                   decoration: BoxDecoration(
-                    color: iconBackground,
+                    color: style.iconBackgroundColor,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    icon,
-                    color: iconColor,
+                    style.icon,
+                    color: style.iconColor,
                     size: 22.responsiveRadius,
                   ),
                 ),
@@ -97,14 +70,14 @@ class InvitationFeedbackCard extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        title,
+                        style.title,
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
                       ),
                       AppSpacing.xs.verticalSpace,
                       Text(
-                        subtitle,
+                        style.subtitle,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                           fontWeight: FontWeight.w600,
@@ -120,4 +93,53 @@ class InvitationFeedbackCard extends ConsumerWidget {
       ),
     );
   }
+
+  _InvitationFeedbackStyle _resolveStyle({
+    required BuildContext context,
+    required String workspaceName,
+  }) {
+    final colors = context.appColors;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return switch (feedback.action) {
+      InvitationActionType.accept => _InvitationFeedbackStyle(
+        title: context.l10n.invitationAcceptSuccess(workspaceName),
+        subtitle: context.l10n.invitationAcceptDetails,
+        backgroundColor: colors.cardBackground,
+        accentColor: colors.success,
+        iconBackgroundColor: colors.successContainer,
+        iconColor: colors.success,
+        icon: Icons.check_circle_rounded,
+      ),
+      InvitationActionType.decline => _InvitationFeedbackStyle(
+        title: context.l10n.invitationDeclineSuccess(workspaceName),
+        subtitle: workspaceName,
+        backgroundColor: colorScheme.surfaceContainerLow,
+        accentColor: colorScheme.outline,
+        iconBackgroundColor: colorScheme.surfaceContainerHigh,
+        iconColor: colorScheme.onSurfaceVariant,
+        icon: Icons.cancel_rounded,
+      ),
+    };
+  }
+}
+
+final class _InvitationFeedbackStyle {
+  const _InvitationFeedbackStyle({
+    required this.title,
+    required this.subtitle,
+    required this.backgroundColor,
+    required this.accentColor,
+    required this.iconBackgroundColor,
+    required this.iconColor,
+    required this.icon,
+  });
+
+  final String title;
+  final String subtitle;
+  final Color backgroundColor;
+  final Color accentColor;
+  final Color iconBackgroundColor;
+  final Color iconColor;
+  final IconData icon;
 }

@@ -23,8 +23,11 @@ class SelectWorkspaceWalletsBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final provider = workspaceWalletSelectionControllerProvider(workspaceId);
+    final controller = ref.read(provider.notifier);
+
     ref.listen<AsyncValue<WorkspaceWalletSelectionState>>(
-      workspaceWalletSelectionControllerProvider(workspaceId),
+      provider,
       (previous, next) => _handleStateChange(
         context,
         previous?.asData?.value,
@@ -32,32 +35,20 @@ class SelectWorkspaceWalletsBody extends ConsumerWidget {
       ),
     );
 
-    final stateAsync = ref.watch(
-      workspaceWalletSelectionControllerProvider(workspaceId),
-    );
+    final stateAsync = ref.watch(provider);
 
     return switch (stateAsync) {
       AsyncLoading() => const AppLoader(),
       AsyncError(:final error) => AppErrorView(
         error: error,
-        onRetry: () => ref.invalidate(
-          workspaceWalletSelectionControllerProvider(workspaceId),
-        ),
+        onRetry: () => ref.invalidate(provider),
       ),
       AsyncData(:final value) => WorkspaceWalletSelectionContent(
         workspaceId: workspaceId,
         state: value,
         isCreateFlow: isCreateFlow,
-        onToggleWallet: ref
-            .read(
-              workspaceWalletSelectionControllerProvider(workspaceId).notifier,
-            )
-            .toggleWallet,
-        onSubmit: ref
-            .read(
-              workspaceWalletSelectionControllerProvider(workspaceId).notifier,
-            )
-            .submit,
+        onToggleWallet: controller.toggleWallet,
+        onSubmit: controller.submit,
       ),
     };
   }

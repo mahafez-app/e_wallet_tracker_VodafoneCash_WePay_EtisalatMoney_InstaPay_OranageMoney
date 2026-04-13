@@ -56,10 +56,15 @@ class _UserSettingsBodyState extends ConsumerState<UserSettingsBody>
 
   @override
   Widget build(BuildContext context) {
+    final authController = ref.read(authNotifierProvider.notifier);
+    final smsPermissionController = ref.read(
+      smsPermissionControllerProvider.notifier,
+    );
+
     ref.listen<AuthState>(authNotifierProvider, (previous, next) {
       if (!next.isLoading && next.error != null) {
         AppSnackbar.showFailure(context, failure: next.error!);
-        ref.read(authNotifierProvider.notifier).clearError();
+        authController.clearError();
         return;
       }
 
@@ -85,7 +90,7 @@ class _UserSettingsBodyState extends ConsumerState<UserSettingsBody>
       }
 
       AppSnackbar.showFailure(context, failure: next.error!);
-      ref.read(smsPermissionControllerProvider.notifier).clearError();
+      smsPermissionController.clearError();
     });
 
     final user = ref.watch(currentUserProvider);
@@ -116,9 +121,7 @@ class _UserSettingsBodyState extends ConsumerState<UserSettingsBody>
           AppSpacing.sm.verticalSpace,
           SettingsSmsPermissionCard(
             state: smsPermissionState,
-            onOpenSettings: ref
-                .read(smsPermissionControllerProvider.notifier)
-                .openSettings,
+            onOpenSettings: smsPermissionController.openSettings,
           ),
           AppSpacing.xl.verticalSpace,
           SettingsSectionTitle(label: context.l10n.userSettingsAccountSection),

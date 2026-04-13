@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +19,9 @@ class SmsPermissionsBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final smsPermissionController = ref.read(
+      smsPermissionControllerProvider.notifier,
+    );
     ref.listen<SmsPermissionState>(smsPermissionControllerProvider, (
       previous,
       next,
@@ -27,7 +32,7 @@ class SmsPermissionsBody extends ConsumerWidget {
           message: next.error!.toLocalizedString(context),
           type: AppSnackbarType.error,
         );
-        ref.read(smsPermissionControllerProvider.notifier).clearError();
+        smsPermissionController.clearError();
         return;
       }
 
@@ -52,7 +57,7 @@ class SmsPermissionsBody extends ConsumerWidget {
             child: Column(
               children: [
                 AppSpacing.xxxl.verticalSpace,
-                _PermissionHeader(theme: theme),
+                const _PermissionHeader(),
                 AppSpacing.xxl.verticalSpace,
                 Text(
                   l10n.smsPermissionTitle,
@@ -91,9 +96,7 @@ class SmsPermissionsBody extends ConsumerWidget {
               AppButton(
                 label: l10n.allowAndContinue,
                 isLoading: state.isRequesting,
-                onPressed: ref
-                    .read(smsPermissionControllerProvider.notifier)
-                    .requestPermission,
+                onPressed: smsPermissionController.requestPermission,
               ),
               AppSpacing.md.verticalSpace,
               TextButton(
@@ -114,12 +117,12 @@ class SmsPermissionsBody extends ConsumerWidget {
 }
 
 class _PermissionHeader extends StatelessWidget {
-  const _PermissionHeader({required this.theme});
-
-  final ThemeData theme;
+  const _PermissionHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: AppResponsive.allPadding(AppSpacing.xl),
       decoration: BoxDecoration(

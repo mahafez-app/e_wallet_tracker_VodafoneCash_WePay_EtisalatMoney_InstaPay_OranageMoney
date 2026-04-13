@@ -36,6 +36,11 @@ class _HomeBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final smsPermissionController = ref.read(
+      smsPermissionControllerProvider.notifier,
+    );
+    final homeDashboardState = ref.watch(homeDashboardProvider);
+
     // Keep the SMS listener alive while this widget is mounted.
     ref.watch(smsTransactionListenerProvider);
 
@@ -44,16 +49,14 @@ class _HomeBody extends ConsumerWidget {
       if (!_isCurrentRoute(context)) return;
 
       if (next case AsyncData(:final value)) {
-        ref
-            .read(smsPermissionControllerProvider.notifier)
-            .checkAndPromptIfNeeded(
-              hasWallets: value.wallets.isNotEmpty,
-              navigateToPermission: () {
-                if (context.mounted && _isCurrentRoute(context)) {
-                  context.push(AppRoutes.smsPermissions);
-                }
-              },
-            );
+        smsPermissionController.checkAndPromptIfNeeded(
+          hasWallets: value.wallets.isNotEmpty,
+          navigateToPermission: () {
+            if (context.mounted && _isCurrentRoute(context)) {
+              context.push(AppRoutes.smsPermissions);
+            }
+          },
+        );
       }
     });
     ref.listen<SmsPermissionState>(smsPermissionControllerProvider, (
@@ -67,10 +70,10 @@ class _HomeBody extends ConsumerWidget {
         message: next.error!.toLocalizedString(context),
         type: AppSnackbarType.error,
       );
-      ref.read(smsPermissionControllerProvider.notifier).clearError();
+      smsPermissionController.clearError();
     });
 
-    return switch (ref.watch(homeDashboardProvider)) {
+    return switch (homeDashboardState) {
       AsyncLoading() => const HomeLoadingView(),
       AsyncData(:final value) => _HomeDataView(
         dashboard: value,

@@ -71,45 +71,51 @@ class ShareReceiptSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<void>>(shareReceiptControllerProvider, (
-      previous,
-      state,
-    ) {
-      if (state.hasError && !state.isLoading) {
-        final error = state.error;
-        if (previous?.error == error) return;
-        final failure = error is Failure
-            ? error
-            : const UnknownFailure(
-                technicalMessage: 'Unexpected share receipt failure.',
-              );
-        if (error is! Failure && error != null) {
-          log('ShareReceiptSection: $error', name: 'Presentation');
-        }
-        AppSnackbar.showFailure(context, failure: failure);
-      }
-    });
-
-    final detailsState = ref.watch(
-      transactionDetailsControllerProvider(transaction),
+    ref.listen<AsyncValue<void>>(
+      shareReceiptControllerProvider,
+      (previous, next) => _handleShareStateChange(context, previous, next),
     );
-    final isCapturing = ref.watch(shareReceiptControllerProvider).isLoading;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _ShareButton(
-          isCapturing: isCapturing,
-          onSharePressed: () {
-            _share(
-              context: context,
-              ref: ref,
-              transaction: detailsState.transaction,
-            );
-          },
-        ),
-      ],
+    final detailsProvider = transactionDetailsControllerProvider(transaction);
+    final detailsState = ref.watch(detailsProvider);
+    final shareState = ref.watch(shareReceiptControllerProvider);
+
+    return _ShareButton(
+      isCapturing: shareState.isLoading,
+      onSharePressed: () {
+        _share(
+          context: context,
+          ref: ref,
+          transaction: detailsState.transaction,
+        );
+      },
     );
+  }
+
+  void _handleShareStateChange(
+    BuildContext context,
+    AsyncValue<void>? previous,
+    AsyncValue<void> next,
+  ) {
+    if (!next.hasError || next.isLoading) {
+      return;
+    }
+
+    final error = next.error;
+    if (previous?.error == error) {
+      return;
+    }
+
+    final failure = error is Failure
+        ? error
+        : const UnknownFailure(
+            technicalMessage: 'Unexpected share receipt failure.',
+          );
+    if (error is! Failure && error != null) {
+      log('ShareReceiptSection: $error', name: 'Presentation');
+    }
+
+    AppSnackbar.showFailure(context, failure: failure);
   }
 }
 

@@ -35,6 +35,7 @@ class App extends ConsumerWidget {
         ],
         supportedLocales: S.delegate.supportedLocales,
         locale: locale,
+        onGenerateTitle: (context) => S.of(context).appName,
       ),
     );
   }

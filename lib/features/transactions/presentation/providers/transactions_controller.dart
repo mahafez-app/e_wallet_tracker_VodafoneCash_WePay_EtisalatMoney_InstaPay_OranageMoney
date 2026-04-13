@@ -6,11 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/error/failures.dart';
-import '../../../../core/error/result.dart';
+import '../../../../core/providers/transaction_events_provider.dart';
 import '../../domain/entities/transaction_page.dart';
 import '../../domain/usecases/get_wallet_transactions_usecase.dart';
 import '../../domain/usecases/get_workspace_transactions_usecase.dart';
-import '../../domain/usecases/watch_transaction_usecase.dart';
 import '../../providers/transactions_providers.dart';
 import '../navigation/transactions_route_data.dart';
 import 'transactions_state.dart';
@@ -27,20 +26,17 @@ class TransactionsController extends Notifier<TransactionsState>
     with _TransactionsControllerPagination, _TransactionsControllerLiveSync {
   TransactionsController(this.arg);
 
-  static const int pageSize = 10;
+  static const int walletPageSize = 10;
+  static const int workspacePageSize = 5;
 
   @override
   final TransactionsRouteData arg;
-
-  @override
-  final Map<String, StreamSubscription<Result<TransactionEntity>>>
-  itemSubscriptions = <String, StreamSubscription<Result<TransactionEntity>>>{};
   bool _didScheduleInitialLoad = false;
   int _activeRequestId = 0;
 
   @override
   TransactionsState build() {
-    ref.onDispose(disposeItemSubscriptions);
+    bindTransactionUpdates();
     _scheduleInitialLoad();
     return const TransactionsState();
   }
@@ -57,6 +53,12 @@ class TransactionsController extends Notifier<TransactionsState>
   @override
   bool isStaleRequest(int requestId) =>
       !ref.mounted || requestId != _activeRequestId;
+
+  @override
+  int resolvePageSize(TransactionsRouteData routeData) => switch (routeData) {
+    WalletTransactionsRouteData() => walletPageSize,
+    WorkspaceTransactionsRouteData() => workspacePageSize,
+  };
 
   Future<void> loadMore() async {
     if (state.isLoadingMore || !state.hasMore) return;

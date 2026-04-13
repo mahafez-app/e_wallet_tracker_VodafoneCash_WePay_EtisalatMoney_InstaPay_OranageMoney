@@ -2512,6 +2512,26 @@ class S {
     );
   }
 
+  /// `افتح كل معاملات مساحة العمل دي علشان تشوف كل معاملات المحافظ المرتبطة في مكان واحد.`
+  String get workspaceTransactionsCtaDescription {
+    return Intl.message(
+      'افتح كل معاملات مساحة العمل دي علشان تشوف كل معاملات المحافظ المرتبطة في مكان واحد.',
+      name: 'workspaceTransactionsCtaDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `افتح كل معاملات مساحة العمل دي علشان تشوف كل معاملات المحافظ المرتبطة في مكان واحد.`
+  String get workspaceTransactionsCtaDescriptionWithActivity {
+    return Intl.message(
+      'افتح كل معاملات مساحة العمل دي علشان تشوف كل معاملات المحافظ المرتبطة في مكان واحد.',
+      name: 'workspaceTransactionsCtaDescriptionWithActivity',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `متابعة تلقائية`
   String get transactions_emptyHintTitle {
     return Intl.message(
@@ -2577,6 +2597,16 @@ class S {
     return Intl.message(
       'جميع المعاملات',
       name: 'allTransactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عرض كل المعاملات`
+  String get viewAllTransactions {
+    return Intl.message(
+      'عرض كل المعاملات',
+      name: 'viewAllTransactions',
       desc: '',
       args: [],
     );

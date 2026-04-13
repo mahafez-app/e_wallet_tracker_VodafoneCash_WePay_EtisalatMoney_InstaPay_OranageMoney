@@ -7,12 +7,9 @@ mixin _TransactionsControllerPagination on Notifier<TransactionsState> {
 
   int startRequest();
 
-  void disposeItemSubscriptions();
-
-  void syncItemSubscriptions(List<TransactionEntity> transactions);
+  int resolvePageSize(TransactionsRouteData routeData);
 
   Future<void> loadInitial({required int requestId}) async {
-    disposeItemSubscriptions();
     state = state.copyWith(
       isLoadingInitial: true,
       isLoadingMore: false,
@@ -48,7 +45,7 @@ mixin _TransactionsControllerPagination on Notifier<TransactionsState> {
         walletId: context.walletId,
         type: state.resolvedType,
         dateRange: state.resolvedDateRange,
-        limit: TransactionsController.pageSize,
+        limit: resolvePageSize(context),
         cursor: isFirstPage
             ? null
             : state.nextCursor as WalletTransactionsPageCursor?,
@@ -71,7 +68,7 @@ mixin _TransactionsControllerPagination on Notifier<TransactionsState> {
         walletIds: resolveWorkspaceWalletIds(context),
         type: state.resolvedType,
         dateRange: state.resolvedDateRange,
-        limit: TransactionsController.pageSize,
+        limit: resolvePageSize(context),
         cursor: isFirstPage
             ? null
             : state.nextCursor as WorkspaceTransactionsPageCursor?,
@@ -121,7 +118,6 @@ mixin _TransactionsControllerPagination on Notifier<TransactionsState> {
       isLoadingMore: false,
       error: null,
     );
-    syncItemSubscriptions(mergedTransactions);
   }
 
   Future<void> setCustomDatePreset({DateTime? start, DateTime? end}) async {

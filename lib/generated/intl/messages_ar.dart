@@ -594,6 +594,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "userSettingsTitle": MessageLookupByLibrary.simpleMessage("الإعدادات"),
     "viaLabel": MessageLookupByLibrary.simpleMessage("عبر"),
     "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+    "viewAllTransactions": MessageLookupByLibrary.simpleMessage(
+      "عرض كل المعاملات",
+    ),
     "walletDetails": MessageLookupByLibrary.simpleMessage("تفاصيل المحفظة"),
     "walletLabel": MessageLookupByLibrary.simpleMessage("محفظتك"),
     "walletStatusActive": MessageLookupByLibrary.simpleMessage("نشط"),
@@ -755,6 +758,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "workspaceSkipWalletsAction": MessageLookupByLibrary.simpleMessage(
       "تخطي حالياً",
     ),
+    "workspaceTransactionsCtaDescription": MessageLookupByLibrary.simpleMessage(
+      "افتح كل معاملات مساحة العمل دي علشان تشوف كل معاملات المحافظ المرتبطة في مكان واحد.",
+    ),
+    "workspaceTransactionsCtaDescriptionWithActivity":
+        MessageLookupByLibrary.simpleMessage(
+          "افتح كل معاملات مساحة العمل دي علشان تشوف كل معاملات المحافظ المرتبطة في مكان واحد.",
+        ),
     "workspaceUnavailableAction": MessageLookupByLibrary.simpleMessage(
       "العودة للرئيسية",
     ),

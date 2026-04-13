@@ -89,13 +89,7 @@ class _WorkspaceTransactionsSkeleton extends StatelessWidget {
         AppSpacing.md.verticalSpace,
         AppSkeletonBox(
           width: double.infinity,
-          height: 118.responsiveHeight,
-          borderRadius: BorderRadius.circular(20.responsiveRadius),
-        ),
-        AppSpacing.sm.verticalSpace,
-        AppSkeletonBox(
-          width: double.infinity,
-          height: 118.responsiveHeight,
+          height: 148.responsiveHeight,
           borderRadius: BorderRadius.circular(20.responsiveRadius),
         ),
       ],

@@ -606,6 +606,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "userSettingsTitle": MessageLookupByLibrary.simpleMessage("Settings"),
     "viaLabel": MessageLookupByLibrary.simpleMessage("Via"),
     "viewAll": MessageLookupByLibrary.simpleMessage("View All"),
+    "viewAllTransactions": MessageLookupByLibrary.simpleMessage(
+      "View All Transactions",
+    ),
     "walletDetails": MessageLookupByLibrary.simpleMessage("Wallet Details"),
     "walletLabel": MessageLookupByLibrary.simpleMessage("Your wallet"),
     "walletStatusActive": MessageLookupByLibrary.simpleMessage("Active"),
@@ -775,6 +778,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "workspaceSkipWalletsAction": MessageLookupByLibrary.simpleMessage(
       "Skip for now",
     ),
+    "workspaceTransactionsCtaDescription": MessageLookupByLibrary.simpleMessage(
+      "Open the full transaction history for this workspace to see all transactions from linked wallets in one place.",
+    ),
+    "workspaceTransactionsCtaDescriptionWithActivity":
+        MessageLookupByLibrary.simpleMessage(
+          "Open the full transaction history for this workspace to see all transactions from linked wallets in one place.",
+        ),
     "workspaceUnavailableAction": MessageLookupByLibrary.simpleMessage(
       "Back to home",
     ),

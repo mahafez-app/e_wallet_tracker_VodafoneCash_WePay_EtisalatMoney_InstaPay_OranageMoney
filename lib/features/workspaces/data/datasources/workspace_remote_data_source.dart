@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../../../core/data/models/transaction_dto.dart';
 import '../../../../core/data/models/wallet_dto.dart';
 import '../../../../core/data/models/workspace_dto.dart';
 import '../models/workspace_member_dto.dart';
 import 'workspace_command_remote_service.dart';
 import 'workspace_query_remote_service.dart';
-import 'workspace_transactions_preview_remote_service.dart';
 
 abstract interface class WorkspaceRemoteDataSource {
   Future<WorkspaceDto> createWorkspace({required String name});
@@ -45,16 +43,6 @@ abstract interface class WorkspaceRemoteDataSource {
   Future<List<WalletDto>> getWorkspaceWallets(String workspaceId);
 
   Stream<List<WalletDto>> watchWorkspaceWallets(String workspaceId);
-
-  Future<List<TransactionDto>> getWorkspaceTransactionsPreview({
-    required List<WalletDto> wallets,
-    int limit = 5,
-  });
-
-  Stream<List<TransactionDto>> watchWorkspaceTransactionsPreview({
-    required List<WalletDto> wallets,
-    int limit = 5,
-  });
 }
 
 class WorkspaceRemoteDataSourceImpl implements WorkspaceRemoteDataSource {
@@ -70,23 +58,17 @@ class WorkspaceRemoteDataSourceImpl implements WorkspaceRemoteDataSource {
         queryService: queryService,
       ),
       queryService: queryService,
-      previewService: WorkspaceTransactionsPreviewRemoteService(
-        firestore: firestore,
-      ),
     );
   }
 
   const WorkspaceRemoteDataSourceImpl._({
     required WorkspaceCommandRemoteService commandService,
     required WorkspaceQueryRemoteService queryService,
-    required WorkspaceTransactionsPreviewRemoteService previewService,
   }) : _commandService = commandService,
-       _queryService = queryService,
-       _previewService = previewService;
+       _queryService = queryService;
 
   final WorkspaceCommandRemoteService _commandService;
   final WorkspaceQueryRemoteService _queryService;
-  final WorkspaceTransactionsPreviewRemoteService _previewService;
 
   @override
   Future<WorkspaceDto> createWorkspace({required String name}) {
@@ -170,27 +152,5 @@ class WorkspaceRemoteDataSourceImpl implements WorkspaceRemoteDataSource {
   @override
   Stream<List<WalletDto>> watchWorkspaceWallets(String workspaceId) {
     return _queryService.watchWorkspaceWallets(workspaceId);
-  }
-
-  @override
-  Future<List<TransactionDto>> getWorkspaceTransactionsPreview({
-    required List<WalletDto> wallets,
-    int limit = 5,
-  }) {
-    return _previewService.getWorkspaceTransactionsPreview(
-      wallets: wallets,
-      limit: limit,
-    );
-  }
-
-  @override
-  Stream<List<TransactionDto>> watchWorkspaceTransactionsPreview({
-    required List<WalletDto> wallets,
-    int limit = 5,
-  }) {
-    return _previewService.watchWorkspaceTransactionsPreview(
-      wallets: wallets,
-      limit: limit,
-    );
   }
 }

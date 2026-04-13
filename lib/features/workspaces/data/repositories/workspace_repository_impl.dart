@@ -98,18 +98,11 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
       final workspace = await workspaceFuture;
       final members = await membersFuture;
       final wallets = await walletsFuture;
-      final recentTransactions = await _remote.getWorkspaceTransactionsPreview(
-        wallets: wallets,
-        limit: transactionsPreviewLimit,
-      );
 
       return WorkspaceDetailsEntity(
         workspace: workspace.toEntity(),
         wallets: wallets.map((wallet) => wallet.toEntity()).toList(),
         members: members.map((member) => member.toEntity()).toList(),
-        recentTransactions: recentTransactions
-            .map((transaction) => transaction.toEntity())
-            .toList(),
       );
     }, tag: 'WorkspaceRepositoryImpl.getWorkspaceDetails');
   }
@@ -124,27 +117,12 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
         _remote.watchWorkspace(workspaceId),
         _remote.watchWorkspaceMembers(workspaceId),
         _remote.watchWorkspaceWallets(workspaceId),
-        (workspace, members, wallets) => (workspace, members, wallets),
-      ).switchMap((data) {
-        final workspace = data.$1;
-        final members = data.$2;
-        final wallets = data.$3;
-        return _remote
-            .watchWorkspaceTransactionsPreview(
-              wallets: wallets,
-              limit: transactionsPreviewLimit,
-            )
-            .map(
-              (recentTransactions) => WorkspaceDetailsEntity(
-                workspace: workspace.toEntity(),
-                wallets: wallets.map((wallet) => wallet.toEntity()).toList(),
-                members: members.map((member) => member.toEntity()).toList(),
-                recentTransactions: recentTransactions
-                    .map((transaction) => transaction.toEntity())
-                    .toList(),
-              ),
-            );
-      });
+        (workspace, members, wallets) => WorkspaceDetailsEntity(
+          workspace: workspace.toEntity(),
+          wallets: wallets.map((wallet) => wallet.toEntity()).toList(),
+          members: members.map((member) => member.toEntity()).toList(),
+        ),
+      );
     }, tag: 'WorkspaceRepositoryImpl.watchWorkspaceDetails');
   }
 }

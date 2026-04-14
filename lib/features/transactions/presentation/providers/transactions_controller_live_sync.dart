@@ -37,8 +37,17 @@ mixin _TransactionsControllerLiveSync on Notifier<TransactionsState> {
     if (index == -1) return;
 
     final updatedTransactions = List<TransactionEntity>.of(state.transactions);
-    updatedTransactions[index] = updatedTransaction;
-    state = state.copyWith(transactions: updatedTransactions);
+
+    if (state.matches(updatedTransaction)) {
+      updatedTransactions[index] = updatedTransaction;
+      state = state.copyWith(transactions: updatedTransactions);
+    } else {
+      updatedTransactions.removeAt(index);
+      state = state.copyWith(
+        transactions: updatedTransactions,
+        totalCount: state.totalCount > 0 ? state.totalCount - 1 : 0,
+      );
+    }
   }
 
   void handleDeletedTransaction({
@@ -46,13 +55,24 @@ mixin _TransactionsControllerLiveSync on Notifier<TransactionsState> {
     required String transactionId,
   }) {
     final isRelevantWallet = switch (arg) {
-      WalletTransactionsRouteData(:final walletId) => walletId == deletedWalletId,
+      WalletTransactionsRouteData(:final walletId) =>
+        walletId == deletedWalletId,
       WorkspaceTransactionsRouteData(:final wallets) => wallets.any(
         (wallet) => wallet.walletId == deletedWalletId,
       ),
     };
     if (!isRelevantWallet) return;
 
-    Future<void>(() => loadInitial(requestId: startRequest()));
+    final index = state.transactions.indexWhere(
+      (tx) => tx.id == transactionId && tx.walletId == deletedWalletId,
+    );
+    if (index == -1) return;
+
+    final updatedTransactions = List<TransactionEntity>.of(state.transactions);
+    updatedTransactions.removeAt(index);
+    state = state.copyWith(
+      transactions: updatedTransactions,
+      totalCount: state.totalCount > 0 ? state.totalCount - 1 : 0,
+    );
   }
 }

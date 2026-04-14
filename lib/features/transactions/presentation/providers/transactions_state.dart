@@ -170,6 +170,46 @@ final class TransactionsState extends Equatable {
     );
   }
 
+  bool matches(TransactionEntity transaction) {
+    final type = resolvedType;
+    if (type != null && transaction.type != type) return false;
+
+    if (paidStatusFilter != TransactionPaidStatusFilter.all) {
+      if (transaction.type != TransactionType.receive) return false;
+      final isPaid = transaction.isPaid ?? false;
+      if (paidStatusFilter == TransactionPaidStatusFilter.paid && !isPaid) {
+        return false;
+      }
+      if (paidStatusFilter == TransactionPaidStatusFilter.unpaid && isPaid) {
+        return false;
+      }
+    }
+
+    final range = resolvedDateRange;
+    if (range != null) {
+      if (transaction.createdAt.isBefore(range.start) ||
+          transaction.createdAt.isAfter(range.end)) {
+        return false;
+      }
+    }
+
+    if (counterpartySuffixQuery != null) {
+      final number = transaction.counterpartyNumber ?? '';
+      if (!number.endsWith(counterpartySuffixQuery!)) return false;
+    }
+
+    if (!useAllMembers &&
+        !selectedMemberUids.contains(transaction.walletOwnerUid)) {
+      return false;
+    }
+
+    if (!useAllWallets && !selectedWalletIds.contains(transaction.walletId)) {
+      return false;
+    }
+
+    return true;
+  }
+
   @override
   List<Object?> get props => [
     transactions,

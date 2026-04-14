@@ -69,6 +69,17 @@ mixin WorkspaceSettingsControllerLiveSyncMixin
         return;
       }
 
+      // If we are deleting or leaving the workspace, a 404 error is expected
+      // because the document is removed from Firestore. We ignore it here
+      // and let the mutation response handle the navigation.
+      final isDeletingOrLeaving = currentState.isDeletingWorkspace ||
+          currentState.isLeavingWorkspace;
+      final isNotFound = failure is ServerFailure && failure.code == '404';
+
+      if (isDeletingOrLeaving && isNotFound) {
+        return;
+      }
+
       setFailureState(failure);
       return;
     }

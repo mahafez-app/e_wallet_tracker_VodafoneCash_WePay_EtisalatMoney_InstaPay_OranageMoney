@@ -34,7 +34,7 @@ abstract interface class WorkspaceRemoteDataSource {
 
   Future<WorkspaceDto> getWorkspace(String workspaceId);
 
-  Stream<WorkspaceDto> watchWorkspace(String workspaceId);
+  Stream<WorkspaceDto?> watchWorkspace(String workspaceId);
 
   Future<List<WorkspaceMemberDto>> getWorkspaceMembers(String workspaceId);
 
@@ -130,7 +130,7 @@ class WorkspaceRemoteDataSourceImpl implements WorkspaceRemoteDataSource {
   }
 
   @override
-  Stream<WorkspaceDto> watchWorkspace(String workspaceId) {
+  Stream<WorkspaceDto?> watchWorkspace(String workspaceId) {
     return _queryService.watchWorkspace(workspaceId);
   }
 

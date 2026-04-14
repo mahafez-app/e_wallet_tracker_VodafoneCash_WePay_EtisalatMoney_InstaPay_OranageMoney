@@ -1,6 +1,9 @@
+import 'dart:developer';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../../core/domain/entities/workspace_entity.dart';
+import '../../../../core/error/failure_mapper.dart';
+import '../../../../core/error/failures.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/workspace_details_entity.dart';
@@ -110,17 +113,40 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
   Stream<Result<WorkspaceDetailsEntity>> watchWorkspaceDetails({
     required String workspaceId,
   }) {
-    return executeStreamAndHandleErrors(() {
-      return Rx.combineLatest3(
-        _remote.watchWorkspace(workspaceId),
-        _remote.watchWorkspaceMembers(workspaceId),
-        _remote.watchWorkspaceWallets(workspaceId),
-        (workspace, members, wallets) => WorkspaceDetailsEntity(
-          workspace: workspace.toEntity(),
-          wallets: wallets.map((wallet) => wallet.toEntity()).toList(),
-          members: members.map((member) => member.toEntity()).toList(),
+    final stream = Rx.combineLatest3(
+      _remote.watchWorkspace(workspaceId),
+      _remote.watchWorkspaceMembers(workspaceId),
+      _remote.watchWorkspaceWallets(workspaceId),
+      (workspace, members, wallets) => (workspace, members, wallets),
+    );
+
+    return stream.map<Result<WorkspaceDetailsEntity>>((data) {
+      final workspaceDto = data.$1;
+      final membersDtos = data.$2;
+      final walletDtos = data.$3;
+
+      if (workspaceDto == null) {
+        return const FailureResult(
+          ServerFailure(code: '404', technicalMessage: 'Workspace not found.'),
+        );
+      }
+
+      return Success(
+        WorkspaceDetailsEntity(
+          workspace: workspaceDto.toEntity(),
+          wallets: walletDtos.map((wallet) => wallet.toEntity()).toList(),
+          members: membersDtos.map((member) => member.toEntity()).toList(),
         ),
       );
-    }, tag: 'WorkspaceRepositoryImpl.watchWorkspaceDetails');
+    }).handleError((Object e, StackTrace st) {
+      log(
+        '[WorkspaceRepositoryImpl.watchWorkspaceDetails] Stream error ${e.runtimeType}: $e',
+        stackTrace: st,
+        name: 'Repository',
+      );
+      return FailureResult<WorkspaceDetailsEntity>(
+        const FailureMapper().map(e),
+      );
+    });
   }
 }

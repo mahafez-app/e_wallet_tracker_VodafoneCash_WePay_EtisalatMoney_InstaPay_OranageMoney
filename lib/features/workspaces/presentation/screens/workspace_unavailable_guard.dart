@@ -101,6 +101,9 @@ class _WorkspaceUnavailableGuardState<T>
 
   void _showDialogIfNeeded(BuildContext context) {
     if (_dialogShown) return;
+ 
+    final isCurrent = ModalRoute.of(context)?.isCurrent ?? true;
+    if (!isCurrent) return;
 
     _dialogShown = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {

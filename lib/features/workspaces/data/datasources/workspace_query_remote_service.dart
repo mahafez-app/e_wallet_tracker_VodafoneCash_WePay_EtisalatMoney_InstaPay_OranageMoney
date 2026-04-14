@@ -29,15 +29,12 @@ class WorkspaceQueryRemoteService {
     return WorkspaceDto.fromFirestore(document);
   }
 
-  Stream<WorkspaceDto> watchWorkspace(String workspaceId) {
+  Stream<WorkspaceDto?> watchWorkspace(String workspaceId) {
     return _workspacesCollection.doc(workspaceId).snapshots().map((document) {
       if (!document.exists) {
-        throw const ServerFailure(
-          code: '404',
-          technicalMessage: 'Workspace not found.',
-        );
+        return null;
       }
-
+ 
       return WorkspaceDto.fromFirestore(document);
     });
   }

@@ -1,0 +1,69 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../core/utils/extensions/failure_extension.dart';
+import '../../../../core/widgets/app_error_view.dart';
+import '../../../../core/widgets/app_snackbar.dart';
+import '../navigation/transactions_route_data.dart';
+import '../providers/transactions_controller.dart';
+import 'details/transaction_details_bottom_sheet.dart';
+import 'list/transactions_date_grouped_list.dart';
+import 'list/transactions_empty_view.dart';
+import 'list/transactions_load_more_footer.dart';
+import 'list/transactions_loading_view.dart';
+
+class TransactionsScreenBody extends ConsumerWidget {
+  const TransactionsScreenBody({super.key, required this.routeData});
+
+  final TransactionsRouteData routeData;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(transactionsControllerProvider(routeData), (previous, next) {
+      final nextError = next.error;
+      if (nextError == null || previous?.error == nextError) return;
+      AppSnackbar.show(
+        context,
+        message: nextError.toLocalizedString(context),
+        type: AppSnackbarType.error,
+      );
+    });
+
+    return _TransactionsContent(routeData: routeData);
+  }
+}
+
+class _TransactionsContent extends ConsumerWidget {
+  const _TransactionsContent({required this.routeData});
+
+  final TransactionsRouteData routeData;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(transactionsControllerProvider(routeData));
+
+    if (state.isLoadingInitial) {
+      return const TransactionsLoadingView();
+    }
+
+    if (state.error != null && state.transactions.isEmpty) {
+      return AppErrorView(error: state.error!);
+    }
+
+    if (state.transactions.isEmpty) {
+      return TransactionsEmptyView(
+        routeData: routeData,
+        hasActiveFilter: state.hasActiveFilter,
+      );
+    }
+
+    final showProviderInfo = routeData is WorkspaceTransactionsRouteData;
+
+    return TransactionsDateGroupedList(
+      groupedTransactions: state.groupedTransactions,
+      showProviderInfo: showProviderInfo,
+      onTap: (tx) => TransactionDetailsBottomSheet.show(context, tx),
+      footer: TransactionsLoadMoreFooter(routeData: routeData),
+    );
+  }
+}

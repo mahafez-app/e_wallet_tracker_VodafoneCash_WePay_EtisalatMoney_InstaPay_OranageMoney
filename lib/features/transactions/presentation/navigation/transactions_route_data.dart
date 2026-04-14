@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../../../core/domain/enums/wallet_provider.dart';
 
 /// Lightweight wallet metadata used to build workspace filter chips.
 final class WalletFilterOption extends Equatable {
@@ -26,14 +27,16 @@ sealed class TransactionsRouteData extends Equatable {
 final class WalletTransactionsRouteData extends TransactionsRouteData {
   const WalletTransactionsRouteData({
     required this.walletId,
-    required this.walletLabel,
+    required this.provider,
+    required this.phoneNumber,
   });
 
   final String walletId;
-  final String walletLabel;
+  final WalletProvider provider;
+  final String phoneNumber;
 
   @override
-  List<Object?> get props => [walletId, walletLabel];
+  List<Object?> get props => [walletId, provider, phoneNumber];
 }
 
 final class WorkspaceTransactionsRouteData extends TransactionsRouteData {

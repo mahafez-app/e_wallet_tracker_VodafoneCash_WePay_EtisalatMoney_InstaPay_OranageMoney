@@ -5,16 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wallet_tracker/core/widgets/wallets/wallet_provider_info.dart';
 
-import '../../../../core/widgets/app_error_view.dart';
-
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/utils/extensions/phone_number_extension.dart';
-import '../../../../core/utils/extensions/wallet_provider_ext.dart';
+import '../../../../core/widgets/app_error_view.dart';
 import '../../../../core/widgets/app_loader.dart';
 import '../../../../core/widgets/balance_card.dart';
 import '../../../../core/widgets/transactions/no_transactions_card.dart';
@@ -146,8 +143,8 @@ class _RecentTransactionsSection extends StatelessWidget {
                 onPressed: () {
                   final contextData = WalletTransactionsRouteData(
                     walletId: details.wallet.id,
-                    walletLabel:
-                        '${details.wallet.provider.displayName(context)} · ${details.wallet.phoneNumber.formattedEgyptianPhoneNumber}',
+                    provider: details.wallet.provider,
+                    phoneNumber: details.wallet.phoneNumber,
                   );
                   context.push(
                     AppRoutes.transactionsPath(),

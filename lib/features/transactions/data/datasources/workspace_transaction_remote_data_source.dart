@@ -86,7 +86,9 @@ final class WorkspaceTransactionRemoteDataSourceImpl
             walletCursors: {
               for (final state in states)
                 if (state.consumedCursor != null)
-                  state.walletId: state.consumedCursor!,
+                  state.walletId: state.consumedCursor!
+                else if (state.resumeCursor != null)
+                  state.walletId: state.resumeCursor!,
             },
           );
 

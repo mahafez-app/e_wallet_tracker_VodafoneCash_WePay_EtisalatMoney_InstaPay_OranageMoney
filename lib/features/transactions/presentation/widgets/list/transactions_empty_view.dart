@@ -39,30 +39,35 @@ class TransactionsEmptyView extends ConsumerWidget {
           )
         : null;
 
-    return Center(
-      child: Padding(
-        padding: AppSpacing.pagePadding,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            NoTransactionsCard(
-              title: hasActiveFilter
-                  ? context.l10n.transactions_emptyWithFilterTitle
-                  : context.l10n.transactions_emptyTitle,
-              description: hasActiveFilter
-                  ? context.l10n.transactions_emptyWithFilterDescription
-                  : _emptyDescription(context),
-              variant: NoTransactionsCardVariant.fullScreen,
-              footer: footer,
+    return CustomScrollView(
+      slivers: [
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Padding(
+            padding: AppSpacing.pagePadding,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                NoTransactionsCard(
+                  title: hasActiveFilter
+                      ? context.l10n.transactions_emptyWithFilterTitle
+                      : context.l10n.transactions_emptyTitle,
+                  description: hasActiveFilter
+                      ? context.l10n.transactions_emptyWithFilterDescription
+                      : _emptyDescription(context),
+                  variant: NoTransactionsCardVariant.fullScreen,
+                  footer: footer,
+                ),
+                if (!hasActiveFilter) ...[
+                  AppSpacing.xl.verticalSpace,
+                  const TransactionsEmptyHintCard(),
+                ],
+                AppSpacing.xxl.verticalSpace,
+              ],
             ),
-            if (!hasActiveFilter) ...[
-              AppSpacing.xl.verticalSpace,
-              const TransactionsEmptyHintCard(),
-            ],
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 

@@ -29,44 +29,66 @@ class TransactionsLoadMoreFooter extends ConsumerWidget {
     if (!state.hasMore) return AppSpacing.lg.verticalSpace;
 
     return Padding(
-      padding: AppResponsive.symmetricPadding(vertical: AppSpacing.lg),
+      padding: AppResponsive.symmetricPadding(
+        vertical: AppSpacing.xl,
+        horizontal: AppSpacing.lg,
+      ),
       child: Column(
         children: [
-          GestureDetector(
+          InkWell(
             onTap: () => controller.loadMore(),
+            borderRadius: BorderRadius.circular(20.responsiveRadius),
             child: Container(
-              width: 56.responsiveRadius,
-              height: 56.responsiveRadius,
+              padding: AppResponsive.symmetricPadding(
+                horizontal: AppSpacing.xl,
+                vertical: AppSpacing.md,
+              ),
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                color: Theme.of(context).colorScheme.primary.withAlpha(20),
+                borderRadius: BorderRadius.circular(20.responsiveRadius),
                 border: Border.all(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 2,
+                  color: Theme.of(context).colorScheme.primary.withAlpha(60),
                 ),
               ),
-              child: Icon(
-                Icons.expand_more_rounded,
-                color: Theme.of(context).colorScheme.primary,
-                size: 28.responsiveRadius,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.add_circle_outline_rounded,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 20.responsiveRadius,
+                  ),
+                  AppSpacing.sm.horizontalSpace,
+                  Text(
+                    context.l10n.transactions_loadMore,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          AppSpacing.sm.verticalSpace,
-          Text(
-            context.l10n.transactions_loadMore,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.w700,
+          AppSpacing.lg.verticalSpace,
+          Container(
+            padding: AppResponsive.symmetricPadding(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.xs,
             ),
-          ),
-          AppSpacing.xs.verticalSpace,
-          Text(
-            context.l10n.transactions_viewingCountOfTotal(
-              state.transactions.length,
-              state.totalCount,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(999.responsiveRadius),
             ),
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            child: Text(
+              context.l10n.transactions_viewingCountOfTotal(
+                state.transactions.length,
+                state.totalCount,
+              ),
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

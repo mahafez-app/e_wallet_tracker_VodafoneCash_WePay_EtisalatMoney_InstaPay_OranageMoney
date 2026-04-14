@@ -49,61 +49,55 @@ class _TransactionsCardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppSkeletonBox(
+    return Container(
       width: double.infinity,
-      height: 164.responsiveHeight,
-      borderRadius: BorderRadius.circular(20.responsiveRadius),
-      child: Padding(
-        padding: AppResponsive.allPadding(AppSpacing.lg),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppSkeletonBox(
-              width: 46.responsiveRadius,
-              height: 46.responsiveRadius,
-              borderRadius: BorderRadius.circular(14.responsiveRadius),
+      padding: AppResponsive.allPadding(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(24.responsiveRadius),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppSkeletonBox(
+            width: 48.responsiveRadius,
+            height: 48.responsiveRadius,
+            borderRadius: BorderRadius.circular(16.responsiveRadius),
+          ),
+          AppSpacing.md.horizontalSpace,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    AppSkeletonBox(
+                      width: 100.responsiveWidth,
+                      height: 16.responsiveHeight,
+                    ),
+                    const Spacer(),
+                    AppSkeletonBox(
+                      width: 80.responsiveWidth,
+                      height: 20.responsiveHeight,
+                    ),
+                  ],
+                ),
+                AppSpacing.sm.verticalSpace,
+                AppSkeletonBox(
+                  width: 160.responsiveWidth,
+                  height: 12.responsiveHeight,
+                  borderRadius: BorderRadius.circular(999.responsiveRadius),
+                ),
+                AppSpacing.lg.verticalSpace,
+                AppSkeletonBox(
+                  width: double.infinity,
+                  height: 36.responsiveHeight,
+                  borderRadius: BorderRadius.circular(16.responsiveRadius),
+                ),
+              ],
             ),
-            AppSpacing.md.horizontalSpace,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      AppSkeletonBox(
-                        width: 90.responsiveWidth,
-                        height: 14.responsiveHeight,
-                      ),
-                      const Spacer(),
-                      AppSkeletonBox(
-                        width: 82.responsiveWidth,
-                        height: 16.responsiveHeight,
-                      ),
-                    ],
-                  ),
-                  AppSpacing.sm.verticalSpace,
-                  AppSkeletonBox(
-                    width: 148.responsiveWidth,
-                    height: 10.responsiveHeight,
-                    borderRadius: BorderRadius.circular(999.responsiveRadius),
-                  ),
-                  AppSpacing.md.verticalSpace,
-                  AppSkeletonBox(
-                    width: double.infinity,
-                    height: 30.responsiveHeight,
-                    borderRadius: BorderRadius.circular(16.responsiveRadius),
-                  ),
-                  AppSpacing.xs.verticalSpace,
-                  AppSkeletonBox(
-                    width: 176.responsiveWidth,
-                    height: 30.responsiveHeight,
-                    borderRadius: BorderRadius.circular(16.responsiveRadius),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

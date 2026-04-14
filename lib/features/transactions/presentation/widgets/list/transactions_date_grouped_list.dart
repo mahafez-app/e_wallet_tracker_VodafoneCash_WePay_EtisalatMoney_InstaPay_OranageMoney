@@ -92,25 +92,44 @@ class _DayHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final label = day.toGroupedDateLabel(context);
-
-    return Container(
-      margin: AppResponsive.symmetricPadding(vertical: AppSpacing.xs),
-      padding: AppResponsive.symmetricPadding(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.xs,
-      ),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withAlpha(120),
-        borderRadius: BorderRadius.circular(20.responsiveRadius),
-      ),
-      child: Text(
-        label,
-        style: theme.textTheme.labelMedium?.copyWith(
-          color: theme.colorScheme.onSurfaceVariant,
-          fontWeight: FontWeight.w600,
+    return Row(
+      children: [
+        Container(
+          margin: AppResponsive.symmetricPadding(vertical: AppSpacing.sm),
+          padding: AppResponsive.symmetricPadding(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.xs,
+          ),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primary.withAlpha(20),
+            borderRadius: BorderRadius.circular(12.responsiveRadius),
+            border: Border.all(
+              color: theme.colorScheme.primary.withAlpha(40),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.calendar_today_rounded,
+                size: 12.responsiveRadius,
+                color: theme.colorScheme.primary,
+              ),
+              AppSpacing.xs.horizontalSpace,
+              Text(
+                label,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.2,
+                ),
+              ),
+            ],
+          ),
         ),
-        textAlign: TextAlign.center,
-      ),
+        const Expanded(child: Divider(indent: 12, endIndent: 0, thickness: 0.5)),
+      ],
     );
   }
 }

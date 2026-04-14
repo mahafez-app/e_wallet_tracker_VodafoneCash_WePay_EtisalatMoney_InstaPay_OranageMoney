@@ -39,19 +39,19 @@ class TransactionCard extends StatelessWidget {
     );
 
     return Container(
-      margin: AppResponsive.onlyPadding(bottom: AppSpacing.sm),
+      margin: AppResponsive.onlyPadding(bottom: AppSpacing.md),
       decoration: BoxDecoration(
         color: colors.cardBackground,
-        borderRadius: BorderRadius.circular(20.responsiveRadius),
+        borderRadius: BorderRadius.circular(24.responsiveRadius),
         border: Border.all(
-          color: theme.colorScheme.outlineVariant.withAlpha(40),
-          width: 0.5,
+          color: theme.colorScheme.outlineVariant.withAlpha(50),
+          width: 0.8,
         ),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.shadow.withAlpha(20),
-            blurRadius: 8,
-            offset: const Offset(0, 0),
+            color: theme.colorScheme.shadow.withAlpha(12),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -60,18 +60,22 @@ class TransactionCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 46.responsiveRadius,
-            height: 46.responsiveRadius,
+            width: 52.responsiveRadius,
+            height: 52.responsiveRadius,
             decoration: BoxDecoration(
-              color: typeColor.withAlpha(30),
-              borderRadius: BorderRadius.circular(14.responsiveRadius),
+              gradient: LinearGradient(
+                colors: [typeColor.withAlpha(40), typeColor.withAlpha(10)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(16.responsiveRadius),
             ),
             child: Icon(
               isReceive
                   ? Icons.arrow_downward_rounded
                   : Icons.arrow_upward_rounded,
               color: typeColor,
-              size: 20.responsiveRadius,
+              size: 24.responsiveRadius,
             ),
           ),
           AppSpacing.md.horizontalSpace,
@@ -82,25 +86,24 @@ class TransactionCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      isReceive
-                          ? l10n.transactionTypeReceive
-                          : l10n.transactionTypeSend,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontSize: 15.responsiveFont,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: -0.2,
+                    Expanded(
+                      child: Text(
+                        isReceive
+                            ? l10n.transactionTypeReceive
+                            : l10n.transactionTypeSend,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.2,
+                        ),
                       ),
                     ),
-                    Spacer(),
                     Text(
                       transaction.amount.toCurrencyText(
                         context,
                         sign: isReceive ? '+' : '-',
                       ),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontSize: 17.responsiveFont,
-                        fontWeight: FontWeight.w500,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w900,
                         color: typeColor,
                         letterSpacing: -0.5,
                       ),
@@ -111,28 +114,30 @@ class TransactionCard extends StatelessWidget {
                 Row(
                   children: [
                     Icon(
-                      Icons.access_time_rounded,
-                      size: 12.responsiveRadius,
-                      color: theme.colorScheme.onSurfaceVariant.withAlpha(200),
+                      Icons.schedule_rounded,
+                      size: 14.responsiveRadius,
+                      color: theme.colorScheme.onSurfaceVariant.withAlpha(150),
                     ),
-                    AppSpacing.sm.horizontalSpace,
+                    AppSpacing.xs.horizontalSpace,
                     Text(
                       formattedDateTime,
                       style: theme.textTheme.labelMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant.withAlpha(
-                          200,
+                          180,
                         ),
-                        letterSpacing: 0.1,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
                 ),
+                AppSpacing.md.verticalSpace,
+                const Divider(height: 1, thickness: 0.5),
+                AppSpacing.md.verticalSpace,
                 if (showProviderInfo) ...[
-                  AppSpacing.md.verticalSpace,
                   TransactionInfoChip(
                     leading: WalletProviderIcon(
                       provider: transaction.provider,
-                      size: AppSpacing.xl.responsiveRadius,
+                      size: 20.responsiveRadius,
                     ),
                     leadingBackgroundColor: theme.colorScheme.surface,
                     label: l10n.walletLabel,
@@ -144,11 +149,13 @@ class TransactionCard extends StatelessWidget {
                   AppSpacing.xs.verticalSpace,
                   TransactionInfoChip(
                     leading: Icon(
-                      Icons.person_outline_rounded,
-                      size: 13.responsiveRadius,
-                      color: typeColor,
+                      Icons.person_rounded,
+                      size: 14.responsiveRadius,
+                      color: theme.colorScheme.primary,
                     ),
-                    leadingBackgroundColor: typeColor.withAlpha(30),
+                    leadingBackgroundColor: theme.colorScheme.primary.withAlpha(
+                      20,
+                    ),
                     label: isReceive
                         ? l10n.transaction_receivedFrom
                         : l10n.transaction_sentTo,
@@ -159,19 +166,19 @@ class TransactionCard extends StatelessWidget {
                   AppSpacing.xs.verticalSpace,
                   TransactionInfoChip(
                     leading: Icon(
-                      transaction.isPaid!
+                      (transaction.isPaid ?? false)
                           ? Icons.check_circle_rounded
-                          : Icons.radio_button_unchecked_rounded,
-                      size: 13.responsiveRadius,
-                      color: transaction.isPaid!
+                          : Icons.hourglass_empty_rounded,
+                      size: 14.responsiveRadius,
+                      color: (transaction.isPaid ?? false)
                           ? colors.success
-                          : theme.colorScheme.onSurfaceVariant.withAlpha(150),
+                          : colors.warning,
                     ),
-                    leadingBackgroundColor: transaction.isPaid!
-                        ? colors.success.withAlpha(30)
-                        : theme.colorScheme.onSurface.withAlpha(18),
+                    leadingBackgroundColor: (transaction.isPaid ?? false)
+                        ? colors.success.withAlpha(20)
+                        : colors.warning.withAlpha(20),
                     label: l10n.paymentStatus,
-                    value: transaction.isPaid!
+                    value: (transaction.isPaid ?? false)
                         ? l10n.transactionStatusPaid
                         : l10n.transactionStatusUnpaid,
                   ),

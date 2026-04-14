@@ -14,21 +14,43 @@ class WorkspaceReportsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
         title: Text(
           l10n.workspaceReportsTitle,
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w900,
+            letterSpacing: -0.5,
+          ),
         ),
         centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
       ),
+      extendBodyBehindAppBar: false,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: AppResponsive.onlyPadding(top: AppSpacing.md),
-          child: WorkspaceTransactionsOverviewSection(routeData: routeData),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                theme.colorScheme.surface,
+                theme.colorScheme.surfaceContainerLow.withAlpha(100),
+              ],
+            ),
+          ),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: AppResponsive.onlyPadding(
+              top: AppSpacing.md,
+              bottom: AppSpacing.xxl,
+            ),
+            child: WorkspaceTransactionsOverviewSection(routeData: routeData),
+          ),
         ),
       ),
     );

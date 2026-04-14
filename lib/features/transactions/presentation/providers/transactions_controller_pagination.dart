@@ -118,7 +118,14 @@ mixin _TransactionsControllerPagination on Notifier<TransactionsState> {
   }) {
     final mergedTransactions = isFirstPage
         ? page.transactions
-        : [...state.transactions, ...page.transactions];
+        : [
+          ...state.transactions,
+          ...page.transactions.where(
+            (newTx) => !state.transactions.any(
+              (oldTx) => oldTx.id == newTx.id && oldTx.walletId == newTx.walletId,
+            ),
+          ),
+        ];
     state = state.copyWith(
       transactions: mergedTransactions,
       totalCount: page.totalCount,

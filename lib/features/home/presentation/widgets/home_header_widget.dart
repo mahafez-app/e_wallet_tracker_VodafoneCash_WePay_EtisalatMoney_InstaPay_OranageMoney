@@ -81,9 +81,25 @@ class _HeaderIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: onTap,
-      icon: Icon(icon, color: Theme.of(context).colorScheme.onSurface),
+    final theme = Theme.of(context);
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 44.responsiveRadius,
+        height: 44.responsiveRadius,
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainerHighest.withAlpha(100),
+          borderRadius: BorderRadius.circular(14.responsiveRadius),
+          border: Border.all(
+            color: theme.colorScheme.outlineVariant.withAlpha(60),
+          ),
+        ),
+        child: Icon(
+          icon,
+          color: theme.colorScheme.onSurface,
+          size: 22.responsiveRadius,
+        ),
+      ),
     );
   }
 }
@@ -108,18 +124,37 @@ class _UserAvatarAndName extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 48.responsiveRadius,
-          height: 48.responsiveRadius,
+          width: 52.responsiveRadius,
+          height: 52.responsiveRadius,
           decoration: BoxDecoration(
-            color: colorScheme.primaryContainer,
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                colorScheme.primary,
+                colorScheme.primary.withAlpha(180),
+              ],
+            ),
             shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: colorScheme.primary.withAlpha(40),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+            border: Border.all(
+              color: colorScheme.onPrimary.withAlpha(40),
+              width: 2,
+            ),
           ),
           alignment: Alignment.center,
           child: Text(
             avatarLabel,
             style: theme.textTheme.titleLarge?.copyWith(
-              color: colorScheme.primary,
-              fontWeight: FontWeight.bold,
+              color: colorScheme.onPrimary,
+              fontWeight: FontWeight.w900,
+              letterSpacing: -0.5,
             ),
           ),
         ),
@@ -130,16 +165,18 @@ class _UserAvatarAndName extends StatelessWidget {
           children: [
             Text(
               l10n.welcome,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: colorScheme.outline,
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant.withAlpha(160),
                 fontWeight: FontWeight.w700,
+                letterSpacing: 0.5,
               ),
             ),
             Text(
               displayName,
               style: theme.textTheme.titleLarge?.copyWith(
-                color: colorScheme.primary,
-                fontWeight: FontWeight.w800,
+                color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -0.7,
               ),
             ),
           ],
@@ -161,33 +198,43 @@ class _InvitationsIconBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        IconButton(
-          onPressed: onTap,
-          icon: Icon(Icons.mail_outline, color: colorScheme.onSurface),
-        ),
+        _HeaderIconButton(icon: Icons.mail_outline_rounded, onTap: onTap),
         if (count > 0)
           Positioned(
-            right: 4.responsiveWidth,
-            top: 0,
+            right: -2.responsiveWidth,
+            top: -2.responsiveHeight,
             child: Container(
-              padding: AppResponsive.symmetricPadding(
-                horizontal: 6,
-                vertical: 2,
-              ),
+              padding: AppResponsive.allPadding(4.responsiveRadius),
+              height: 20.responsiveRadius,
               decoration: BoxDecoration(
                 color: colorScheme.error,
                 shape: BoxShape.circle,
+                border: Border.all(
+                  color: theme.scaffoldBackgroundColor,
+                  width: 2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: colorScheme.error.withAlpha(80),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
-              child: Text(
-                count.toString(),
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: colorScheme.onError,
-                  fontWeight: FontWeight.bold,
+              child: Center(
+                child: Text(
+                  count.toString(),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: colorScheme.onError,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 10.responsiveFont,
+                  ),
                 ),
               ),
             ),

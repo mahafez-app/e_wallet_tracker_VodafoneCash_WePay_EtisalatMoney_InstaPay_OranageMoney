@@ -1,10 +1,9 @@
 // ignore_for_file: unused_element_parameter
 
 import 'package:flutter/material.dart';
-import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_responsive.dart';
@@ -57,34 +56,70 @@ class _LoginBody extends ConsumerWidget {
 
           // Logo & Header
           Center(
-            child: Container(
-              padding: AppResponsive.allPadding(AppSpacing.md),
-              decoration: BoxDecoration(
-                color: colorScheme.primaryContainer,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.account_balance_wallet,
-                color: colorScheme.primary,
-                size: 48.responsiveRadius,
-              ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: 120.responsiveRadius,
+                  height: 120.responsiveRadius,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        colorScheme.primary.withAlpha(30),
+                        colorScheme.primary.withAlpha(0),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: AppResponsive.allPadding(AppSpacing.lg),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        colorScheme.primary,
+                        colorScheme.primary.withAlpha(200),
+                      ],
+                    ),
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.primary.withAlpha(60),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.account_balance_wallet_rounded,
+                    color: colorScheme.onPrimary,
+                    size: 48.responsiveRadius,
+                  ),
+                ),
+              ],
             ),
           ),
-          AppSpacing.lg.verticalSpace,
+          AppSpacing.xl.verticalSpace,
           Text(
-            l10n.appName,
+            l10n.appName.toUpperCase(),
             textAlign: TextAlign.center,
             style: theme.textTheme.displaySmall?.copyWith(
-              color: colorScheme.primary,
-              fontWeight: FontWeight.w800,
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 2,
+              fontSize: 32.responsiveFont,
             ),
           ),
-          AppSpacing.sm.verticalSpace,
+          AppSpacing.xs.verticalSpace,
           Text(
             l10n.appTagline,
             textAlign: TextAlign.center,
             style: theme.textTheme.titleMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
+              color: colorScheme.onSurfaceVariant.withAlpha(180),
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.2,
             ),
           ),
 

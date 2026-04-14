@@ -21,7 +21,6 @@ class HomeWorkspaceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.appColors;
-    final colorScheme = theme.colorScheme;
     final l10n = context.l10n;
 
     return GestureDetector(
@@ -30,13 +29,16 @@ class HomeWorkspaceCard extends StatelessWidget {
         padding: AppResponsive.allPadding(AppSpacing.xl),
         decoration: BoxDecoration(
           color: colors.cardBackground,
-          border: Border.all(color: colors.cardBorder),
-          borderRadius: BorderRadius.circular(16.responsiveRadius),
+          borderRadius: BorderRadius.circular(28.responsiveRadius),
+          border: Border.all(
+            color: theme.colorScheme.outlineVariant.withAlpha(50),
+            width: 0.8,
+          ),
           boxShadow: [
             BoxShadow(
-              color: colors.cardShadow,
-              blurRadius: 2,
-              offset: const Offset(0, 1),
+              color: theme.colorScheme.shadow.withAlpha(8),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
             ),
           ],
         ),
@@ -45,17 +47,20 @@ class HomeWorkspaceCard extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _WorkspaceHeader(
-                  name: workspace.name,
-                  walletsCount: workspace.walletsCount,
+                Expanded(
+                  child: _WorkspaceHeader(
+                    name: workspace.name,
+                    walletsCount: workspace.walletsCount,
+                  ),
                 ),
                 _WorkspaceLastActivity(
                   latestActivityAt: workspace.latestActivityAt,
                 ),
               ],
             ),
-            AppSpacing.lg.verticalSpace,
+            AppSpacing.xl.verticalSpace,
             Row(
               children: [
                 Expanded(
@@ -65,7 +70,8 @@ class HomeWorkspaceCard extends StatelessWidget {
                       context,
                       decimalDigits: 0,
                     ),
-                    amountColor: colorScheme.secondary,
+                    icon: Icons.south_west_rounded,
+                    color: colors.success,
                   ),
                 ),
                 AppSpacing.md.horizontalSpace,
@@ -76,7 +82,8 @@ class HomeWorkspaceCard extends StatelessWidget {
                       context,
                       decimalDigits: 0,
                     ),
-                    amountColor: colorScheme.error,
+                    icon: Icons.north_east_rounded,
+                    color: colors.danger,
                   ),
                 ),
               ],
@@ -107,32 +114,57 @@ class _WorkspaceHeader extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 40.responsiveRadius,
-          height: 40.responsiveRadius,
+          width: 48.responsiveRadius,
+          height: 48.responsiveRadius,
           decoration: BoxDecoration(
-            color: colors.workspaceIconBackground,
-            borderRadius: BorderRadius.circular(12.responsiveRadius),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                colors.workspaceIconBackground,
+                colors.workspaceIconBackground.withAlpha(180),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(16.responsiveRadius),
+            boxShadow: [
+              BoxShadow(
+                color: colors.workspaceIconBackground.withAlpha(40),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-          child: Icon(Icons.storefront, color: colors.workspaceIconForeground),
+          child: Icon(
+            Icons.corporate_fare_rounded,
+            color: colors.workspaceIconForeground,
+            size: 24.responsiveRadius,
+          ),
         ),
         AppSpacing.md.horizontalSpace,
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              name,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w700,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -0.5,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
-            Text(
-              l10n.activeWalletsCount(walletsCount),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.outline,
+              AppSpacing.xxs.verticalSpace,
+              Text(
+                l10n.activeWalletsCount(walletsCount),
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant.withAlpha(180),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
@@ -154,16 +186,20 @@ class _WorkspaceLastActivity extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          l10n.lastActivity,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.outline,
+          l10n.lastActivity.toUpperCase(),
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant.withAlpha(120),
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.5,
+            fontSize: 9.responsiveFont,
           ),
         ),
+        AppSpacing.xxs.verticalSpace,
         Text(
           timeText,
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: theme.colorScheme.onSurface,
-            fontWeight: FontWeight.w700,
+          style: theme.textTheme.labelMedium?.copyWith(
+            color: theme.colorScheme.primary,
+            fontWeight: FontWeight.w900,
           ),
         ),
       ],
@@ -176,12 +212,14 @@ class _WorkspaceStat extends StatelessWidget {
     super.key,
     required this.title,
     required this.amount,
-    required this.amountColor,
+    required this.icon,
+    required this.color,
   });
 
   final String title;
   final String amount;
-  final Color amountColor;
+  final IconData icon;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -190,24 +228,44 @@ class _WorkspaceStat extends StatelessWidget {
     return Container(
       padding: AppResponsive.allPadding(AppSpacing.md),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withAlpha(127),
-        borderRadius: BorderRadius.circular(12.responsiveRadius),
+        color: theme.colorScheme.surfaceContainerHighest.withAlpha(60),
+        borderRadius: BorderRadius.circular(20.responsiveRadius),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withAlpha(40),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.outline,
-            ),
+          Row(
+            children: [
+              Container(
+                padding: AppResponsive.allPadding(2.responsiveRadius),
+                decoration: BoxDecoration(
+                  color: color.withAlpha(20),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, size: 12.responsiveRadius, color: color),
+              ),
+              AppSpacing.xs.horizontalSpace,
+              Text(
+                title,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant.withAlpha(180),
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
           ),
-          AppSpacing.xs.verticalSpace,
-          Text(
-            amount,
-            style: theme.textTheme.titleSmall?.copyWith(
-              color: amountColor,
-              fontWeight: FontWeight.w700,
+          AppSpacing.sm.verticalSpace,
+          FittedBox(
+            child: Text(
+              amount,
+              style: theme.textTheme.titleSmall?.copyWith(
+                color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -0.5,
+              ),
             ),
           ),
         ],

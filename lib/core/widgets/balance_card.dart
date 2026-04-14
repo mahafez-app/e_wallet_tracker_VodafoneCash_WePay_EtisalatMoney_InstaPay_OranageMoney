@@ -71,6 +71,8 @@ class BalanceCard extends StatelessWidget {
                   amount:
                       '- ${sentAmount.toLocalizedAmount(context, decimalDigits: 0)}',
                   amountColor: colors.statsSentColor,
+                  icon: Icons.arrow_outward,
+                  iconColor: colors.statsSentColor,
                 ),
               ),
               AppSpacing.lg.horizontalSpace,
@@ -80,6 +82,8 @@ class BalanceCard extends StatelessWidget {
                   amount:
                       '+ ${receivedAmount.toLocalizedAmount(context, decimalDigits: 0)}',
                   amountColor: colors.statsReceivedColor,
+                  icon: Icons.arrow_downward,
+                  iconColor: colors.statsReceivedColor,
                 ),
               ),
             ],
@@ -134,11 +138,15 @@ class _StatBox extends StatelessWidget {
     required this.title,
     required this.amount,
     required this.amountColor,
+    required this.icon,
+    required this.iconColor,
   });
 
   final String title;
   final String amount;
   final Color amountColor;
+  final IconData icon;
+  final Color iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -148,25 +156,42 @@ class _StatBox extends StatelessWidget {
     return Container(
       padding: AppResponsive.allPadding(AppSpacing.md),
       decoration: BoxDecoration(
-        color: colors.statsOnGradient.withAlpha(25), // 0.1
-        borderRadius: BorderRadius.circular(16.responsiveRadius),
+        color: Colors.white.withAlpha(20),
+        borderRadius: BorderRadius.circular(20.responsiveRadius),
+        border: Border.all(color: Colors.white.withAlpha(30), width: 0.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: colors.statsOnGradient,
-            ),
+          Row(
+            children: [
+              Container(
+                padding: AppResponsive.allPadding(2.responsiveRadius),
+                decoration: BoxDecoration(
+                  color: iconColor.withAlpha(40),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, size: 14.responsiveRadius, color: iconColor),
+              ),
+              AppSpacing.xs.horizontalSpace,
+              Text(
+                title,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: colors.statsOnGradient.withAlpha(180),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
-          AppSpacing.xs.verticalSpace,
-          Text(
-            amount,
-            style: theme.textTheme.titleSmall?.copyWith(
-              color: amountColor,
-              fontSize: 14.responsiveFont,
-              fontWeight: FontWeight.w700,
+          AppSpacing.sm.verticalSpace,
+          FittedBox(
+            child: Text(
+              amount,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: amountColor,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -0.5,
+              ),
             ),
           ),
         ],

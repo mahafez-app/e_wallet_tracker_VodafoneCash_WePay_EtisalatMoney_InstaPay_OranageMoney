@@ -81,17 +81,18 @@ class AppDialog extends StatelessWidget {
 
     return Dialog(
       backgroundColor: Colors.transparent,
+      elevation: 0,
       insetPadding: AppResponsive.allPadding(AppSpacing.xl),
       child: Container(
         padding: AppResponsive.allPadding(AppSpacing.xl),
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(28.responsiveRadius),
+          borderRadius: BorderRadius.circular(32.responsiveRadius),
           boxShadow: [
             BoxShadow(
-              color: colors.cardShadow,
-              blurRadius: 24.responsiveRadius,
-              offset: Offset(0, 12.responsiveHeight),
+              color: colors.cardShadow.withAlpha(120),
+              blurRadius: 30,
+              offset: Offset(0, 15.responsiveHeight),
             ),
           ],
         ),
@@ -101,20 +102,29 @@ class AppDialog extends StatelessWidget {
             Container(
               padding: AppResponsive.allPadding(AppSpacing.lg),
               decoration: BoxDecoration(
-                color: backgroundColor.withAlpha(50),
+                gradient: LinearGradient(
+                  colors: [backgroundColor.withAlpha(80), backgroundColor.withAlpha(30)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 shape: BoxShape.circle,
+                border: Border.all(
+                  color: backgroundColor.withAlpha(100),
+                  width: 1,
+                ),
               ),
               child: Icon(
                 icon,
                 color: foregroundColor,
-                size: 48.responsiveRadius,
+                size: 56.responsiveRadius,
               ),
             ),
             AppSpacing.xl.verticalSpace,
             Text(
               title,
               style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -0.5,
               ),
               textAlign: TextAlign.center,
             ),
@@ -123,6 +133,7 @@ class AppDialog extends StatelessWidget {
               message,
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
+                height: 1.5,
               ),
               textAlign: TextAlign.center,
             ),
@@ -131,24 +142,14 @@ class AppDialog extends StatelessWidget {
               children: [
                 if (cancelLabel != null)
                   Expanded(
-                    child: Padding(
-                      padding: AppResponsive.onlyPadding(start: AppSpacing.sm),
-                      child: OutlinedButton(
-                        onPressed: onCancel ?? () => Navigator.pop(context),
-                        style: OutlinedButton.styleFrom(
-                          padding: AppResponsive.verticalPadding(16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              16.responsiveRadius,
-                            ),
-                          ),
-                        ),
-                        child: Text(cancelLabel!),
-                      ),
+                    child: AppButton(
+                      label: cancelLabel!,
+                      type: AppButtonType.tertiary,
+                      onPressed: onCancel ?? () => Navigator.pop(context),
                     ),
                   ),
                 if (confirmLabel != null) ...[
-                  AppSpacing.md.horizontalSpace,
+                  if (cancelLabel != null) AppSpacing.md.horizontalSpace,
                   Expanded(
                     child: AppButton(
                       label: confirmLabel!,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../theme/app_color_extension.dart';
 import 'package:wallet_tracker/core/theme/app_responsive.dart';
 import 'package:wallet_tracker/core/theme/app_spacing.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
+
+import '../../theme/app_color_extension.dart';
 
 enum NoTransactionsCardVariant { preview, fullScreen }
 
@@ -33,16 +33,19 @@ class NoTransactionsCard extends StatelessWidget {
         : theme.textTheme.titleLarge;
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.xl),
+      padding: AppResponsive.allPadding(AppSpacing.xxl),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(AppSpacing.xxl.responsiveRadius),
-        border: Border.all(color: colors.cardBorder),
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(32.responsiveRadius),
+        border: Border.all(
+          color: colors.cardBorder.withAlpha(50),
+          width: 0.8,
+        ),
         boxShadow: [
           BoxShadow(
-            color: colors.cardShadow,
-            blurRadius: AppSpacing.lg.responsiveRadius,
-            offset: Offset(0, AppSpacing.xs.responsiveHeight),
+            color: colors.cardShadow.withAlpha(100),
+            blurRadius: 20,
+            offset: Offset(0, 10.responsiveHeight),
           ),
         ],
       ),
@@ -54,19 +57,21 @@ class NoTransactionsCard extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  theme.colorScheme.primaryContainer,
-                  theme.colorScheme.surface,
+                  theme.colorScheme.primary.withAlpha(40),
+                  theme.colorScheme.primary.withAlpha(5),
                 ],
-                begin: AlignmentDirectional.topStart,
-                end: AlignmentDirectional.bottomEnd,
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(
-                (AppSpacing.xxl + AppSpacing.xs).responsiveRadius,
+              borderRadius: BorderRadius.circular(24.responsiveRadius),
+              border: Border.all(
+                color: theme.colorScheme.primary.withAlpha(30),
+                width: 1,
               ),
             ),
             child: Icon(
               Icons.receipt_long_rounded,
-              size: iconSize.responsiveRadius,
+              size: (iconSize * 1.2).responsiveRadius,
               color: theme.colorScheme.primary,
             ),
           ),

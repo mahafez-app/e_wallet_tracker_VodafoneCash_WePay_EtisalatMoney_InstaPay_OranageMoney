@@ -42,16 +42,16 @@ class TransactionCard extends StatelessWidget {
       margin: AppResponsive.onlyPadding(bottom: AppSpacing.md),
       decoration: BoxDecoration(
         color: colors.cardBackground,
-        borderRadius: BorderRadius.circular(24.responsiveRadius),
+        borderRadius: BorderRadius.circular(28.responsiveRadius),
         border: Border.all(
           color: theme.colorScheme.outlineVariant.withAlpha(50),
           width: 0.8,
         ),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.shadow.withAlpha(12),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
+            color: theme.colorScheme.shadow.withAlpha(15),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),

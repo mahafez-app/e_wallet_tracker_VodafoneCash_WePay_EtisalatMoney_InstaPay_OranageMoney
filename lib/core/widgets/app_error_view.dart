@@ -25,26 +25,50 @@ class AppErrorView extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: AppSpacing.pagePadding,
+        padding: AppResponsive.allPadding(AppSpacing.xxl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.error_outline_rounded,
-              size: 48.responsiveRadius,
-              color: theme.colorScheme.error,
+            Container(
+              padding: AppResponsive.allPadding(AppSpacing.xl),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    theme.colorScheme.error.withAlpha(40),
+                    theme.colorScheme.error.withAlpha(10),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: theme.colorScheme.error.withAlpha(50),
+                  width: 1,
+                ),
+              ),
+              child: Icon(
+                Icons.error_outline_rounded,
+                size: 64.responsiveRadius,
+                color: theme.colorScheme.error,
+              ),
             ),
-            AppSpacing.md.verticalSpace,
+            AppSpacing.xl.verticalSpace,
             Text(
               message,
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.w900,
+                height: 1.5,
               ),
             ),
             if (onRetry != null) ...[
-              AppSpacing.lg.verticalSpace,
-              AppButton(label: 'Retry', onPressed: onRetry!),
+              AppSpacing.xxl.verticalSpace,
+              AppButton(
+                label: context.l10n.startupFallbackRetryAction,
+                icon: const Icon(Icons.refresh_rounded),
+                onPressed: onRetry!,
+              ),
             ],
           ],
         ),

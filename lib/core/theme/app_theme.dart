@@ -53,66 +53,53 @@ final class AppTheme {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        minimumSize: const Size(double.infinity, 52),
+        minimumSize: const Size(double.infinity, 56),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        minimumSize: const Size(double.infinity, 52),
+        minimumSize: const Size(double.infinity, 56),
+        side: const BorderSide(color: Color(0x7FC2C6D6)),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      border: const UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        borderSide: BorderSide(color: Color(0x7FC2C6D6), width: 1),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0x7FC2C6D6), width: 1),
       ),
-      enabledBorder: const UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        borderSide: BorderSide(color: Color(0x7FC2C6D6), width: 1),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0x7FC2C6D6), width: 1),
       ),
-      focusedBorder: const UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        borderSide: BorderSide(color: AppColors.primary, width: 2),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.primary, width: 2),
       ),
-      errorBorder: const UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        borderSide: BorderSide(color: AppColors.error, width: 1),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.error, width: 1),
       ),
-      focusedErrorBorder: const UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        borderSide: BorderSide(color: AppColors.error, width: 2),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.error, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
         vertical: AppSpacing.lg,
       ),
       filled: true,
-      fillColor: const Color(0xFFF0F3FF),
+      fillColor: const Color(0xFFF8F9FF),
       hintStyle: const TextStyle(
         color: Color(0x7F727785),
         fontSize: 16,
         fontWeight: FontWeight.w400,
+        fontFamily: 'Cairo',
       ),
     ),
     cardTheme: const CardThemeData(
@@ -174,66 +161,53 @@ final class AppTheme {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        minimumSize: const Size(double.infinity, 52),
+        minimumSize: const Size(double.infinity, 56),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        minimumSize: const Size(double.infinity, 52),
+        minimumSize: const Size(double.infinity, 56),
+        side: const BorderSide(color: Color(0x3FCBD5E1)),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      border: const UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        borderSide: BorderSide(color: Color(0x4FCBD5E1), width: 1),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0x3FCBD5E1), width: 1),
       ),
-      enabledBorder: const UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        borderSide: BorderSide(color: Color(0x4FCBD5E1), width: 1),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0x3FCBD5E1), width: 1),
       ),
-      focusedBorder: const UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        borderSide: BorderSide(color: AppColors.primaryFixedDim, width: 2),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.primaryFixedDim, width: 2),
       ),
-      errorBorder: const UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        borderSide: BorderSide(color: AppColors.errorContainer, width: 1),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0xFFFF5252), width: 1),
       ),
-      focusedErrorBorder: const UnderlineInputBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        borderSide: BorderSide(color: AppColors.errorContainer, width: 2),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0xFFFF5252), width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
         vertical: AppSpacing.lg,
       ),
       filled: true,
-      fillColor: const Color(0x1AF0F3FF),
+      fillColor: const Color(0x0DF0F3FF),
       hintStyle: const TextStyle(
         color: Color(0x7F94A3B8),
         fontSize: 16,
         fontWeight: FontWeight.w400,
+        fontFamily: 'Cairo',
       ),
     ),
     cardTheme: const CardThemeData(

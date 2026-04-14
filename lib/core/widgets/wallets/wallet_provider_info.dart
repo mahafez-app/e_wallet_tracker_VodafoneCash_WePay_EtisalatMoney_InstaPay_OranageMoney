@@ -27,28 +27,32 @@ class WalletProviderInfo extends StatelessWidget {
       children: [
         WalletProviderIcon(
           provider: provider,
-          size: AppSpacing.xl.responsiveRadius,
+          size: 40.responsiveRadius,
         ),
         AppSpacing.md.horizontalSpace,
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              provider.displayName(context),
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w700,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                provider.displayName(context).toUpperCase(),
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.5,
+                ),
               ),
-            ),
-            Text(
-              phoneNumber.formattedEgyptianPhoneNumber,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.outline,
+              AppSpacing.xs.verticalSpace,
+              Text(
+                phoneNumber.formattedEgyptianPhoneNumber,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        const Spacer(),
         _WalletStatusBadge(provider: provider),
       ],
     );
@@ -63,28 +67,40 @@ class _WalletStatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: AppResponsive.symmetricPadding(horizontal: 12, vertical: 4),
+      padding: AppResponsive.symmetricPadding(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: provider.brandColor.withAlpha(100),
-        borderRadius: BorderRadius.all(Radius.circular(100.responsiveRadius)),
+        color: provider.brandColor.withAlpha(30),
+        borderRadius: BorderRadius.all(Radius.circular(8.responsiveRadius)),
+        border: Border.all(
+          color: provider.brandColor.withAlpha(60),
+          width: 0.5,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 8.responsiveRadius,
-            height: 8.responsiveRadius,
+            width: 6.responsiveRadius,
+            height: 6.responsiveRadius,
             decoration: BoxDecoration(
               color: provider.brandColor,
               shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: provider.brandColor.withAlpha(150),
+                  blurRadius: 4,
+                ),
+              ],
             ),
           ),
           AppSpacing.xs.horizontalSpace,
           Text(
-            context.l10n.walletStatusActive,
+            context.l10n.walletStatusActive.toUpperCase(),
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
               color: provider.brandColor,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w900,
+              fontSize: 9.responsiveFont,
+              letterSpacing: 0.5,
             ),
           ),
         ],

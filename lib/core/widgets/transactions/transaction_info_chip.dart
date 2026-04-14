@@ -23,41 +23,39 @@ class TransactionInfoChip extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withAlpha(80),
-        borderRadius: BorderRadius.circular(10.responsiveRadius),
+        color: theme.colorScheme.onSurface.withAlpha(10),
+        borderRadius: BorderRadius.circular(12.responsiveRadius),
       ),
-      padding: EdgeInsets.symmetric(
-        horizontal: 10.responsiveWidth,
-        vertical: 7.responsiveHeight,
-      ),
+      padding: AppResponsive.symmetricPadding(horizontal: 10, vertical: 8),
       child: Row(
         children: [
           Container(
-            width: 26.responsiveRadius,
-            height: 26.responsiveRadius,
+            width: 30.responsiveRadius,
+            height: 30.responsiveRadius,
             decoration: BoxDecoration(
               color: leadingBackgroundColor,
-              borderRadius: BorderRadius.circular(8.responsiveRadius),
+              borderRadius: BorderRadius.circular(10.responsiveRadius),
             ),
             child: Center(child: leading),
           ),
-          AppSpacing.sm.horizontalSpace,
+          AppSpacing.md.horizontalSpace,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label.toUpperCase(),
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant.withAlpha(200),
-                    fontWeight: FontWeight.w500,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant.withAlpha(180),
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
                 Text(
                   value,
                   style: theme.textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                    color: theme.colorScheme.onSurface,
+                    fontSize: 12.responsiveFont,
                   ),
                 ),
               ],

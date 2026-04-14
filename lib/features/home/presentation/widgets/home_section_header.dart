@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_responsive.dart';
+import '../../../../core/theme/app_spacing.dart';
+
 class HomeSectionHeader extends StatelessWidget {
   const HomeSectionHeader({
     super.key,
@@ -23,15 +26,36 @@ class HomeSectionHeader extends StatelessWidget {
       children: [
         Text(
           title,
-          style: theme.textTheme.titleLarge?.copyWith(
+          style: theme.textTheme.titleMedium?.copyWith(
             color: theme.colorScheme.onSurface,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w900,
+            letterSpacing: -0.5,
           ),
         ),
-        TextButton.icon(
+        TextButton(
           onPressed: onPressed,
-          icon: Icon(icon),
-          label: Text(actionLabel),
+          style: TextButton.styleFrom(
+            backgroundColor: theme.colorScheme.primary.withAlpha(20),
+            foregroundColor: theme.colorScheme.primary,
+            padding: AppResponsive.symmetricPadding(horizontal: 16, vertical: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.responsiveRadius),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                actionLabel,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13.responsiveFont,
+                ),
+              ),
+              AppSpacing.xs.horizontalSpace,
+              Icon(icon, size: 16.responsiveRadius),
+            ],
+          ),
         ),
       ],
     );

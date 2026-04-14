@@ -72,32 +72,62 @@ class _AddWalletEmptyCard extends StatelessWidget {
         width: double.infinity,
         padding: AppResponsive.allPadding(AppSpacing.xl),
         decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceContainerHighest.withAlpha(76),
-          borderRadius: BorderRadius.circular(24.responsiveRadius),
-          border: Border.all(color: theme.colorScheme.outlineVariant),
+          color: theme.colorScheme.primary.withAlpha(15),
+          borderRadius: BorderRadius.circular(28.responsiveRadius),
+          border: Border.all(
+            color: theme.colorScheme.primary.withAlpha(40),
+            width: 1,
+          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
+            Container(
+              padding: AppResponsive.allPadding(AppSpacing.lg),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary.withAlpha(40),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withAlpha(50),
+                    blurRadius: 15,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Icon(
+                Icons.account_balance_wallet_rounded,
+                color: theme.colorScheme.primary,
+                size: 28.responsiveRadius,
+              ),
+            ),
+            AppSpacing.md.horizontalSpace,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.addWallet.toUpperCase(),
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
+                      fontSize: 10.responsiveFont,
+                    ),
+                  ),
+                  AppSpacing.xxs.verticalSpace,
+                  Text(
+                    l10n.createWalletEmptyTitle,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Icon(
-              Icons.account_balance_wallet_outlined,
-              color: theme.colorScheme.primary,
-              size: 28.responsiveRadius,
-            ),
-            AppSpacing.md.verticalSpace,
-            Text(
-              l10n.createWalletEmptyTitle,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            AppSpacing.xs.verticalSpace,
-            Text(
-              l10n.createWalletEmptyDescription,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
+              Icons.chevron_right_rounded,
+              color: theme.colorScheme.onSurfaceVariant.withAlpha(100),
             ),
           ],
         ),

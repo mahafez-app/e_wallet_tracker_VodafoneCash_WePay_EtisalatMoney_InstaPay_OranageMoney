@@ -19,6 +19,7 @@ class WalletProviderIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final assetPath = provider.iconAssetPath;
+    final isSvg = assetPath?.toLowerCase().endsWith('.svg') ?? false;
 
     return SizedBox(
       width: size,
@@ -30,13 +31,21 @@ class WalletProviderIcon extends StatelessWidget {
                 size: size,
                 color: fallbackColor,
               )
-            : SvgPicture.asset(
+            : isSvg
+            ? SvgPicture.asset(
                 assetPath,
                 width: size,
                 height: size,
                 colorFilter: fallbackColor != null
                     ? ColorFilter.mode(fallbackColor!, BlendMode.srcIn)
                     : null,
+              )
+            : Image.asset(
+                assetPath,
+                width: size,
+                height: size,
+                color: fallbackColor,
+                colorBlendMode: fallbackColor != null ? BlendMode.srcIn : null,
               ),
       ),
     );

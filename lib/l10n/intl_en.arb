@@ -159,7 +159,7 @@
   "workspaceSettingsEditNameDescription": "Update the visible name used across the workspace and shared views.",
   "workspaceSettingsEditNameAction": "Save changes",
   "workspaceSettingsRemoveMemberAction": "Remove",
-  "workspaceSettingsRemoveWalletAction": "Remove wallet",
+  "workspaceSettingsRemoveWalletAction": "Unlink wallet",
   "workspaceSettingsCancelInvitationAction": "Cancel",
   "workspaceSettingsLeaveWorkspaceAction": "Leave workspace",
   "workspaceSettingsLeaveWorkspaceDescription": "Your membership and your linked wallets will be removed from this workspace.",
@@ -167,7 +167,7 @@
   "workspaceSettingsDeleteWorkspaceDescription": "All linked data and access records will be removed permanently.",
   "workspaceSettingsNameUpdatedSuccess": "Workspace name updated successfully.",
   "workspaceSettingsMemberRemovedSuccess": "Member removed successfully.",
-  "workspaceSettingsWalletRemovedSuccess": "Wallet removed from the workspace successfully.",
+  "workspaceSettingsWalletRemovedSuccess": "Wallet unlinked from the workspace successfully.",
   "workspaceSettingsInvitationCancelledSuccess": "Invitation cancelled successfully.",
   "workspaceSettingsRemoveMemberConfirmTitle": "Remove member?",
   "workspaceSettingsRemoveMemberConfirmMessage": "You will remove {memberName} from this workspace, and any wallets they linked here will be removed too. They can be invited again later.",
@@ -176,8 +176,8 @@
       "memberName": {}
     }
   },
-  "workspaceSettingsRemoveWalletConfirmTitle": "Remove wallet?",
-  "workspaceSettingsRemoveWalletConfirmMessage": "The {providerName} wallet linked to {phoneNumber} will be removed from this workspace.",
+  "workspaceSettingsRemoveWalletConfirmTitle": "Unlink wallet?",
+  "workspaceSettingsRemoveWalletConfirmMessage": "The {providerName} wallet linked to {phoneNumber} will be unlinked from this workspace. The wallet itself and its transactions will NOT be deleted.",
   "@workspaceSettingsRemoveWalletConfirmMessage": {
     "placeholders": {
       "providerName": {},
@@ -230,6 +230,12 @@
   "userSettingsDeleteAccountUnavailableTitle": "Delete account is not available yet",
   "userSettingsDeleteAccountUnavailableMessage": "A partial delete would leave linked wallets, workspaces, and invitations behind. This action will be enabled after we add a safe full-data cleanup flow.",
   "userSettingsAppVersionLabel": "App version",
+  "userSettingsWalletsSection": "Your Wallets",
+  "userSettingsWalletsDescription": "Manage the wallets you've added to Mahafez. Deleting a wallet will remove it and all its transactions permanently from all workspaces.",
+  "userSettingsDeleteWalletAction": "Delete Wallet",
+  "userSettingsDeleteWalletConfirmTitle": "Delete Wallet?",
+  "userSettingsDeleteWalletConfirmMessage": "Are you sure you want to delete this {providerName} wallet ({phoneNumber})? This will permanently remove its transactions and notes, and unlink it from all workspaces. This action cannot be undone.",
+  "userSettingsWalletDeletedSuccess": "Wallet deleted successfully.",
   "commonDeleteAction": "Delete",
   "commonCancelAction": "Cancel",
   "workspaceAddWalletsTitle": "Add Wallets",

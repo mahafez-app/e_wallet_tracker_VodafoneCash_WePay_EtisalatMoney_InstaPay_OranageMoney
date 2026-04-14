@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/error/failures.dart';
 import '../../../../../core/router/app_routes.dart';
+import '../../../../../core/utils/extensions/routes_extension.dart';
 import '../../../../../core/widgets/app_error_view.dart';
 import '../../../../../core/widgets/app_loader.dart';
 import '../../../../../core/widgets/app_snackbar.dart';
@@ -58,30 +59,29 @@ class SelectWorkspaceWalletsBody extends ConsumerWidget {
     WorkspaceWalletSelectionState? previous,
     WorkspaceWalletSelectionState? next,
   ) {
-    if (next == null) {
-      return;
-    }
+    if (next == null) return;
 
     if (_hasNewFailure(previous, next)) {
       _showFailureSnackbar(context, next.submissionFailure!);
       return;
     }
 
-    if (!_hasSuccessfulSubmission(previous, next)) {
-      return;
-    }
+    if (!_hasSuccessfulSubmission(previous, next)) return;
 
     if (isCreateFlow) {
-      context.go(AppRoutes.workspaceDetailsPath(workspaceId));
+      // Pop all left the home -> workspace details flow and push the workspace details to refresh it with the newly linked wallets
+      context.popUntil((route) => route.settings.name == AppRoutes.home);
+      context.push(AppRoutes.workspaceDetailsPath(workspaceId));
       return;
     }
-
+    // When managing wallets for an existing workspace, just pop with the new linked count to update the previous screen
     if (Navigator.of(context).canPop()) {
       context.pop(next.linkedCount);
       return;
     }
-
-    context.go(AppRoutes.workspaceDetailsPath(workspaceId));
+    // If we can't pop, it means we came from an external deep link, so we just push the workspace details page
+    context.popUntil((route) => route.settings.name == AppRoutes.home);
+    context.push(AppRoutes.workspaceDetailsPath(workspaceId));
   }
 
   bool _hasNewFailure(

@@ -122,9 +122,12 @@ class WorkspaceWalletSelectionContent extends StatelessWidget {
                   type: AppButtonType.tertiary,
                   onPressed: state.isSubmitting
                       ? null
-                      : () => context.go(
-                          AppRoutes.workspaceDetailsPath(workspaceId),
-                        ),
+                      : () {
+                          context.pop();
+                          context.push(
+                            AppRoutes.workspaceDetailsPath(workspaceId),
+                          );
+                        },
                 ),
               ],
             ],

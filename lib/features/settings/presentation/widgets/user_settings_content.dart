@@ -14,6 +14,7 @@ import 'settings_profile_card.dart';
 import 'settings_section_title.dart';
 import 'user_settings_account_section.dart';
 import 'user_settings_app_section.dart';
+import 'user_settings_wallets_section.dart';
 
 class UserSettingsContent extends ConsumerWidget {
   const UserSettingsContent({super.key});
@@ -59,6 +60,8 @@ class UserSettingsContent extends ConsumerWidget {
                 isSigningOut:
                     authState.loadingMethod == AuthLoadingMethod.signOut,
               ),
+              AppSpacing.lg.verticalSpace,
+              const UserSettingsWalletsSection(),
               AppSpacing.lg.verticalSpace,
               SettingsSectionTitle(
                 label: context.l10n.userSettingsAboutSection,

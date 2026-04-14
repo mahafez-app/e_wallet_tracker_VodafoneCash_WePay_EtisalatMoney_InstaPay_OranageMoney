@@ -159,7 +159,7 @@
   "workspaceSettingsEditNameDescription": "غيّر الاسم الظاهر للمساحة في كل الشاشات المشتركة.",
   "workspaceSettingsEditNameAction": "حفظ التعديلات",
   "workspaceSettingsRemoveMemberAction": "حذف",
-  "workspaceSettingsRemoveWalletAction": "حذف المحفظة",
+  "workspaceSettingsRemoveWalletAction": "إلغاء ربط المحفظة",
   "workspaceSettingsCancelInvitationAction": "إلغاء",
   "workspaceSettingsLeaveWorkspaceAction": "مغادرة المساحة",
   "workspaceSettingsLeaveWorkspaceDescription": "سيتم حذف عضويتك والمحافظ التي ربطتها بهذه المساحة.",
@@ -167,7 +167,7 @@
   "workspaceSettingsDeleteWorkspaceDescription": "سيتم حذف كل البيانات المرتبطة بالمساحة نهائياً.",
   "workspaceSettingsNameUpdatedSuccess": "تم تغيير اسم مساحة العمل.",
   "workspaceSettingsMemberRemovedSuccess": "تم حذف العضو.",
-  "workspaceSettingsWalletRemovedSuccess": "تم حذف المحفظة من مساحة العمل.",
+  "workspaceSettingsWalletRemovedSuccess": "تم إلغاء ربط المحفظة من مساحة العمل بنجاح.",
   "workspaceSettingsInvitationCancelledSuccess": "تم إلغاء الدعوة.",
   "workspaceSettingsRemoveMemberConfirmTitle": "حذف العضو؟",
   "workspaceSettingsRemoveMemberConfirmMessage": "سيتم حذف {memberName} من مساحة العمل، وسيتم أيضاً حذف أي محافظ ربطها بهذه المساحة. تقدر تبعت له دعوة مرة تانية لاحقاً.",
@@ -176,8 +176,8 @@
       "memberName": {}
     }
   },
-  "workspaceSettingsRemoveWalletConfirmTitle": "حذف المحفظة؟",
-  "workspaceSettingsRemoveWalletConfirmMessage": "سيتم حذف محفظة {providerName} المرتبطة بالرقم {phoneNumber} من مساحة العمل.",
+  "workspaceSettingsRemoveWalletConfirmTitle": "إلغاء ربط المحفظة؟",
+  "workspaceSettingsRemoveWalletConfirmMessage": "سيتم إلغاء ربط محفظة {providerName} المرتبطة بالرقم {phoneNumber} من مساحة العمل دي. المحفظة وباقي بياناتها مش هيتم حذفهم.",
   "@workspaceSettingsRemoveWalletConfirmMessage": {
     "placeholders": {
       "providerName": {},
@@ -230,6 +230,12 @@
   "userSettingsDeleteAccountUnavailableTitle": "حذف الحساب غير متاح حالياً",
   "userSettingsDeleteAccountUnavailableMessage": "إخفاء الحساب فقط لا يكفي هنا، لأننا نحتاج أولاً إلى تنظيف المحافظ ومساحات العمل والدعوات المرتبطة به بشكل آمن. سنفعل هذا الإجراء بعد إضافة مسار حذف كامل للبيانات.",
   "userSettingsAppVersionLabel": "إصدار التطبيق",
+  "userSettingsWalletsSection": "محافظك",
+  "userSettingsWalletsDescription": "إدارة المحافظ اللي أضفتها لمحافظ. حذف المحفظة هيشيلها هي وكل معاملاتها نهائياً من كل مساحات العمل.",
+  "userSettingsDeleteWalletAction": "حذف المحفظة",
+  "userSettingsDeleteWalletConfirmTitle": "حذف المحفظة؟",
+  "userSettingsDeleteWalletConfirmMessage": "هل أنت متأكد أنك عايز تحذف محفظة {providerName} ({phoneNumber})؟ ده هيحذف كل معاملاتها وملاحظاتها نهائياً، وهيلغي ربطها من كل مساحات العمل. الإجراء ده لا يمكن التراجع عنه.",
+  "userSettingsWalletDeletedSuccess": "تم حذف المحفظة بنجاح.",
   "commonDeleteAction": "حذف",
   "commonCancelAction": "إلغاء",
   "workspaceAddWalletsTitle": "إضافة محافظ",

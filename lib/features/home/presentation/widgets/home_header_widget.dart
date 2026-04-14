@@ -202,23 +202,24 @@ class _InvitationsIconBadge extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         _HeaderIconButton(icon: Icons.mail_outline_rounded, onTap: onTap),
-        Badge(
-          isLabelVisible: count > 0,
-          label: Text('$count'),
-          child: GestureDetector(
-            onTap: onTap,
-            child: Center(
-              child: Text(
-                count.toString(),
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: colorScheme.onError,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 10.responsiveFont,
+        if (count > 0)
+          Badge(
+            isLabelVisible: count > 0,
+            label: Text('$count'),
+            child: GestureDetector(
+              onTap: onTap,
+              child: Center(
+                child: Text(
+                  count.toString(),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: colorScheme.onError,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 10.responsiveFont,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
       ],
     );
   }

@@ -13,4 +13,6 @@ abstract interface class WalletRepository {
   });
 
   Future<Result<WalletDetailsEntity>> getWalletDetails(String walletId);
+
+  Future<Result<void>> deleteWallet(String walletId);
 }

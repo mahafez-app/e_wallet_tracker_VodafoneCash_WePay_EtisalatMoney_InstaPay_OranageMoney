@@ -9,6 +9,8 @@ import '../../../auth/presentation/providers/auth_controller.dart';
 import '../providers/app_preferences_controller.dart';
 import '../providers/app_preferences_state.dart';
 import '../providers/sms_permission_controller.dart';
+import '../providers/user_settings_wallets_controller.dart';
+import '../providers/user_settings_wallets_state.dart';
 
 class UserSettingsFeedbackListeners extends StatelessWidget {
   const UserSettingsFeedbackListeners({super.key, required this.child});
@@ -19,7 +21,9 @@ class UserSettingsFeedbackListeners extends StatelessWidget {
   Widget build(BuildContext context) {
     return _AuthFeedbackListener(
       child: _SmsPermissionFeedbackListener(
-        child: _AppPreferencesFeedbackListener(child: child),
+        child: _AppPreferencesFeedbackListener(
+          child: _UserSettingsWalletsFeedbackListener(child: child),
+        ),
       ),
     );
   }
@@ -100,6 +104,39 @@ class _AppPreferencesFeedbackListener extends ConsumerWidget {
       if (next.failure == null) return;
       AppSnackbar.showFailure(context, failure: next.failure!);
       appPreferencesController.clearError();
+    });
+
+    return child;
+  }
+}
+
+class _UserSettingsWalletsFeedbackListener extends ConsumerWidget {
+  const _UserSettingsWalletsFeedbackListener({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.read(userSettingsWalletsControllerProvider.notifier);
+
+    ref.listen<UserSettingsWalletsState>(userSettingsWalletsControllerProvider, (
+      previous,
+      next,
+    ) {
+      if (next.error != null) {
+        AppSnackbar.showFailure(context, failure: next.error!);
+        controller.clearError();
+        return;
+      }
+
+      if (next.successMessage != null) {
+        AppSnackbar.show(
+          context,
+          message: context.l10n.userSettingsWalletDeletedSuccess,
+          type: AppSnackbarType.success,
+        );
+        controller.clearSuccessMessage();
+      }
     });
 
     return child;

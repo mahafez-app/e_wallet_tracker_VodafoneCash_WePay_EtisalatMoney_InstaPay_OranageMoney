@@ -64,8 +64,8 @@ class _CreateWorkspaceBody extends ConsumerWidget {
       context.go(AppRoutes.home);
       return;
     }
-
-    context.go(
+    context.pop();
+    context.push(
       AppRoutes.workspaceWalletSelectionPath(workspaceId, fromCreation: true),
     );
   }

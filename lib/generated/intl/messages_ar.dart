@@ -63,23 +63,26 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m17(count, total) => "عرض ${count} من أصل ${total} معاملة";
 
-  static String m18(count) =>
+  static String m18(providerName, phoneNumber) =>
+      "هل أنت متأكد أنك عايز تحذف محفظة ${providerName} (${phoneNumber})؟ ده هيحذف كل معاملاتها وملاحظاتها نهائياً، وهيلغي ربطها من كل مساحات العمل. الإجراء ده لا يمكن التراجع عنه.";
+
+  static String m19(count) =>
       "${Intl.plural(count, zero: 'لا يوجد أعضاء', one: 'عضو واحد', two: 'عضوان', few: '${count} أعضاء', many: '${count} عضوًا', other: '${count} عضو')}";
 
-  static String m19(email) => "سيتم إلغاء الدعوة المرسلة إلى ${email} فوراً.";
+  static String m20(email) => "سيتم إلغاء الدعوة المرسلة إلى ${email} فوراً.";
 
-  static String m20(memberName) =>
+  static String m21(memberName) =>
       "سيتم حذف ${memberName} من مساحة العمل، وسيتم أيضاً حذف أي محافظ ربطها بهذه المساحة. تقدر تبعت له دعوة مرة تانية لاحقاً.";
 
-  static String m21(providerName, phoneNumber) =>
-      "سيتم حذف محفظة ${providerName} المرتبطة بالرقم ${phoneNumber} من مساحة العمل.";
+  static String m22(providerName, phoneNumber) =>
+      "سيتم إلغاء ربط محفظة ${providerName} المرتبطة بالرقم ${phoneNumber} من مساحة العمل دي. المحفظة وباقي بياناتها مش هيتم حذفهم.";
 
-  static String m22(ownerName) => "المالك: ${ownerName}";
+  static String m23(ownerName) => "المالك: ${ownerName}";
 
-  static String m23(ownedCount, linkedCount) =>
+  static String m24(ownedCount, linkedCount) =>
       "عندك ${ownedCount} محافظ، و${linkedCount} منها مضافين بالفعل في مساحة العمل.";
 
-  static String m24(count) =>
+  static String m25(count) =>
       "${Intl.plural(count, zero: 'لا توجد محافظ', one: 'محفظة واحدة', two: 'محفظتان', few: '${count} محافظ', many: '${count} محفظة', other: '${count} محفظة')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -476,6 +479,11 @@ class MessageLookup extends MessageLookupByLibrary {
                 "إخفاء الحساب فقط لا يكفي هنا، لأننا نحتاج أولاً إلى تنظيف المحافظ ومساحات العمل والدعوات المرتبطة به بشكل آمن. سنفعل هذا الإجراء بعد إضافة مسار حذف كامل للبيانات."),
         "userSettingsDeleteAccountUnavailableTitle":
             MessageLookupByLibrary.simpleMessage("حذف الحساب غير متاح حالياً"),
+        "userSettingsDeleteWalletAction":
+            MessageLookupByLibrary.simpleMessage("حذف المحفظة"),
+        "userSettingsDeleteWalletConfirmMessage": m18,
+        "userSettingsDeleteWalletConfirmTitle":
+            MessageLookupByLibrary.simpleMessage("حذف المحفظة؟"),
         "userSettingsEditNameAction":
             MessageLookupByLibrary.simpleMessage("تعديل الاسم"),
         "userSettingsEditNameDescription": MessageLookupByLibrary.simpleMessage(
@@ -523,6 +531,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "userSettingsThemeTitle":
             MessageLookupByLibrary.simpleMessage("المظهر"),
         "userSettingsTitle": MessageLookupByLibrary.simpleMessage("الإعدادات"),
+        "userSettingsWalletDeletedSuccess":
+            MessageLookupByLibrary.simpleMessage("تم حذف المحفظة بنجاح."),
+        "userSettingsWalletsDescription": MessageLookupByLibrary.simpleMessage(
+            "إدارة المحافظ اللي أضفتها لمحافظ. حذف المحفظة هيشيلها هي وكل معاملاتها نهائياً من كل مساحات العمل."),
+        "userSettingsWalletsSection":
+            MessageLookupByLibrary.simpleMessage("محافظك"),
         "viaLabel": MessageLookupByLibrary.simpleMessage("عبر"),
         "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
         "viewAllTransactions":
@@ -556,7 +570,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "workspaceInviteMemberAction":
             MessageLookupByLibrary.simpleMessage("دعوة عضو"),
         "workspaceMembers": MessageLookupByLibrary.simpleMessage("الأعضاء"),
-        "workspaceMembersCount": m18,
+        "workspaceMembersCount": m19,
         "workspaceMembersEmpty": MessageLookupByLibrary.simpleMessage(
             "لا يوجد أعضاء في مساحة العمل حتى الآن."),
         "workspaceNameHint":
@@ -578,7 +592,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("وصولك للمساحة"),
         "workspaceSettingsCancelInvitationAction":
             MessageLookupByLibrary.simpleMessage("إلغاء"),
-        "workspaceSettingsCancelInvitationConfirmMessage": m19,
+        "workspaceSettingsCancelInvitationConfirmMessage": m20,
         "workspaceSettingsCancelInvitationConfirmTitle":
             MessageLookupByLibrary.simpleMessage("إلغاء الدعوة؟"),
         "workspaceSettingsDangerZone":
@@ -631,23 +645,23 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الدعوات المعلقة"),
         "workspaceSettingsRemoveMemberAction":
             MessageLookupByLibrary.simpleMessage("حذف"),
-        "workspaceSettingsRemoveMemberConfirmMessage": m20,
+        "workspaceSettingsRemoveMemberConfirmMessage": m21,
         "workspaceSettingsRemoveMemberConfirmTitle":
             MessageLookupByLibrary.simpleMessage("حذف العضو؟"),
         "workspaceSettingsRemoveWalletAction":
-            MessageLookupByLibrary.simpleMessage("حذف المحفظة"),
-        "workspaceSettingsRemoveWalletConfirmMessage": m21,
+            MessageLookupByLibrary.simpleMessage("إلغاء ربط المحفظة"),
+        "workspaceSettingsRemoveWalletConfirmMessage": m22,
         "workspaceSettingsRemoveWalletConfirmTitle":
-            MessageLookupByLibrary.simpleMessage("حذف المحفظة؟"),
+            MessageLookupByLibrary.simpleMessage("إلغاء ربط المحفظة؟"),
         "workspaceSettingsTitle":
             MessageLookupByLibrary.simpleMessage("إعدادات المساحة"),
-        "workspaceSettingsWalletOwner": m22,
+        "workspaceSettingsWalletOwner": m23,
         "workspaceSettingsWalletReadOnlyTooltip":
             MessageLookupByLibrary.simpleMessage(
                 "فقط مالك المحفظة يمكنه حذفها"),
         "workspaceSettingsWalletRemovedSuccess":
             MessageLookupByLibrary.simpleMessage(
-                "تم حذف المحفظة من مساحة العمل."),
+                "تم إلغاء ربط المحفظة من مساحة العمل بنجاح."),
         "workspaceSettingsWalletsEmptyMember":
             MessageLookupByLibrary.simpleMessage(
                 "لا توجد محافظ مرتبطة بهذه المساحة حتى الآن."),
@@ -692,9 +706,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("متاحة"),
         "workspaceWalletSelected":
             MessageLookupByLibrary.simpleMessage("محددة"),
-        "workspaceWalletSelectionSummary": m23,
+        "workspaceWalletSelectionSummary": m24,
         "workspaceWallets": MessageLookupByLibrary.simpleMessage("المحافظ"),
-        "workspaceWalletsCount": m24,
+        "workspaceWalletsCount": m25,
         "workspaceWalletsEmptyDescription":
             MessageLookupByLibrary.simpleMessage(
                 "المحافظ المشتركة هتظهر هنا بعد ربطها بمساحة العمل."),

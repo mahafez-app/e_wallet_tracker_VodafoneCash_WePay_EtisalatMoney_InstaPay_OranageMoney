@@ -1404,10 +1404,10 @@ class S {
     );
   }
 
-  /// `حذف المحفظة`
+  /// `إلغاء ربط المحفظة`
   String get workspaceSettingsRemoveWalletAction {
     return Intl.message(
-      'حذف المحفظة',
+      'إلغاء ربط المحفظة',
       name: 'workspaceSettingsRemoveWalletAction',
       desc: '',
       args: [],
@@ -1484,10 +1484,10 @@ class S {
     );
   }
 
-  /// `تم حذف المحفظة من مساحة العمل.`
+  /// `تم إلغاء ربط المحفظة من مساحة العمل بنجاح.`
   String get workspaceSettingsWalletRemovedSuccess {
     return Intl.message(
-      'تم حذف المحفظة من مساحة العمل.',
+      'تم إلغاء ربط المحفظة من مساحة العمل بنجاح.',
       name: 'workspaceSettingsWalletRemovedSuccess',
       desc: '',
       args: [],
@@ -1524,21 +1524,21 @@ class S {
     );
   }
 
-  /// `حذف المحفظة؟`
+  /// `إلغاء ربط المحفظة؟`
   String get workspaceSettingsRemoveWalletConfirmTitle {
     return Intl.message(
-      'حذف المحفظة؟',
+      'إلغاء ربط المحفظة؟',
       name: 'workspaceSettingsRemoveWalletConfirmTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `سيتم حذف محفظة {providerName} المرتبطة بالرقم {phoneNumber} من مساحة العمل.`
+  /// `سيتم إلغاء ربط محفظة {providerName} المرتبطة بالرقم {phoneNumber} من مساحة العمل دي. المحفظة وباقي بياناتها مش هيتم حذفهم.`
   String workspaceSettingsRemoveWalletConfirmMessage(
       Object providerName, Object phoneNumber) {
     return Intl.message(
-      'سيتم حذف محفظة $providerName المرتبطة بالرقم $phoneNumber من مساحة العمل.',
+      'سيتم إلغاء ربط محفظة $providerName المرتبطة بالرقم $phoneNumber من مساحة العمل دي. المحفظة وباقي بياناتها مش هيتم حذفهم.',
       name: 'workspaceSettingsRemoveWalletConfirmMessage',
       desc: '',
       args: [providerName, phoneNumber],
@@ -1950,6 +1950,67 @@ class S {
     return Intl.message(
       'إصدار التطبيق',
       name: 'userSettingsAppVersionLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `محافظك`
+  String get userSettingsWalletsSection {
+    return Intl.message(
+      'محافظك',
+      name: 'userSettingsWalletsSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إدارة المحافظ اللي أضفتها لمحافظ. حذف المحفظة هيشيلها هي وكل معاملاتها نهائياً من كل مساحات العمل.`
+  String get userSettingsWalletsDescription {
+    return Intl.message(
+      'إدارة المحافظ اللي أضفتها لمحافظ. حذف المحفظة هيشيلها هي وكل معاملاتها نهائياً من كل مساحات العمل.',
+      name: 'userSettingsWalletsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف المحفظة`
+  String get userSettingsDeleteWalletAction {
+    return Intl.message(
+      'حذف المحفظة',
+      name: 'userSettingsDeleteWalletAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف المحفظة؟`
+  String get userSettingsDeleteWalletConfirmTitle {
+    return Intl.message(
+      'حذف المحفظة؟',
+      name: 'userSettingsDeleteWalletConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هل أنت متأكد أنك عايز تحذف محفظة {providerName} ({phoneNumber})؟ ده هيحذف كل معاملاتها وملاحظاتها نهائياً، وهيلغي ربطها من كل مساحات العمل. الإجراء ده لا يمكن التراجع عنه.`
+  String userSettingsDeleteWalletConfirmMessage(
+      Object providerName, Object phoneNumber) {
+    return Intl.message(
+      'هل أنت متأكد أنك عايز تحذف محفظة $providerName ($phoneNumber)؟ ده هيحذف كل معاملاتها وملاحظاتها نهائياً، وهيلغي ربطها من كل مساحات العمل. الإجراء ده لا يمكن التراجع عنه.',
+      name: 'userSettingsDeleteWalletConfirmMessage',
+      desc: '',
+      args: [providerName, phoneNumber],
+    );
+  }
+
+  /// `تم حذف المحفظة بنجاح.`
+  String get userSettingsWalletDeletedSuccess {
+    return Intl.message(
+      'تم حذف المحفظة بنجاح.',
+      name: 'userSettingsWalletDeletedSuccess',
       desc: '',
       args: [],
     );

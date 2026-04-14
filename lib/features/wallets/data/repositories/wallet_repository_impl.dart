@@ -73,6 +73,14 @@ class WalletRepositoryImpl implements WalletRepository {
     }, tag: 'WalletRepositoryImpl.getWalletDetails');
   }
 
+  @override
+  Future<Result<void>> deleteWallet(String walletId) {
+    return executeAndHandleErrors(
+      () => _remoteDataSource.deleteWallet(walletId),
+      tag: 'WalletRepositoryImpl.deleteWallet',
+    );
+  }
+
   Future<String> _resolveDeviceId() async {
     final deviceId = await _deviceInfoService.getDeviceId();
     final deviceName = await _deviceInfoService.getDeviceName();

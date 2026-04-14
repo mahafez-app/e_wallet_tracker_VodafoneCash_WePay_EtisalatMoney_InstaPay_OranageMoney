@@ -9,6 +9,7 @@ import '../domain/repositories/wallet_repository.dart';
 import '../domain/usecases/add_wallets_usecase.dart';
 import '../domain/usecases/get_device_phone_numbers_usecase.dart';
 import '../domain/usecases/get_wallets_usecase.dart';
+import '../domain/usecases/delete_wallet_usecase.dart';
 import '../domain/usecases/wallet_details_usecases.dart';
 
 final walletRemoteDataSourceProvider = Provider<WalletRemoteDataSource>((ref) {
@@ -51,4 +52,8 @@ final getWalletDetailsUseCaseProvider = Provider<GetWalletDetailsUseCase>((
 
 final getWalletsUseCaseProvider = Provider<GetWalletsUseCase>((ref) {
   return GetWalletsUseCase(ref.watch(walletRepositoryProvider));
+});
+
+final deleteWalletUseCaseProvider = Provider<DeleteWalletUseCase>((ref) {
+  return DeleteWalletUseCase(ref.watch(walletRepositoryProvider));
 });

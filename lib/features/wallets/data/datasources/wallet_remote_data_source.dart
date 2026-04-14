@@ -14,6 +14,8 @@ abstract interface class WalletRemoteDataSource {
   });
 
   Future<List<WalletDto>> getWallets();
+
+  Future<void> deleteWallet(String walletId);
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -97,6 +99,120 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
     await batch.commit();
 
     return createdWallets;
+  }
+
+  @override
+  Future<void> deleteWallet(String walletId) async {
+    final currentUser = _auth.currentUser;
+    if (currentUser == null) {
+      throw const UnknownFailure(technicalMessage: 'User is not logged in');
+    }
+
+    final walletRef = _firestore.collection('wallets').doc(walletId);
+    final walletSnapshot = await walletRef.get();
+    if (!walletSnapshot.exists) return;
+
+    final wallet = WalletDto.fromFirestore(walletSnapshot);
+    if (wallet.ownerUid != currentUser.uid) {
+      throw const PermissionFailure(
+        technicalMessage: 'Only the wallet owner can delete it.',
+      );
+    }
+
+    // 1. Find all workspace links
+    final linksQuery = await _firestore
+        .collectionGroup('wallets')
+        .where('walletId', isEqualTo: walletId)
+        .get();
+
+    final workspaceIds = linksQuery.docs
+        .map((doc) => doc.reference.parent.parent?.id)
+        .whereType<String>()
+        .toList();
+
+    // 2. Collect all references to delete
+    final referencesToDelete = <DocumentReference>[];
+
+    // Wallet itself
+    referencesToDelete.add(walletRef);
+
+    // Workspace links
+    for (final doc in linksQuery.docs) {
+      referencesToDelete.add(doc.reference);
+    }
+
+    // Transactions and their sub-collections
+    final txCollection = walletRef.collection('transactions');
+    final transactions = await txCollection.get();
+
+    for (final txDoc in transactions.docs) {
+      referencesToDelete.add(txDoc.reference);
+
+      final history = await txDoc.reference.collection('history').get();
+      for (final h in history.docs) {
+        referencesToDelete.add(h.reference);
+      }
+
+      final notes = await txDoc.reference.collection('notes').get();
+      for (final n in notes.docs) {
+        referencesToDelete.add(n.reference);
+      }
+    }
+
+    // 3. Delete in batches
+    await _deleteInBatches(referencesToDelete);
+
+    // 4. Sync affected workspaces
+    for (final workspaceId in workspaceIds) {
+      await _syncWorkspaceMetadata(workspaceId);
+    }
+  }
+
+  Future<void> _deleteInBatches(List<DocumentReference> references) async {
+    for (var i = 0; i < references.length; i += 450) {
+      final batch = _firestore.batch();
+      final end = (i + 450 > references.length) ? references.length : i + 450;
+      for (final ref in references.sublist(i, end)) {
+        batch.delete(ref);
+      }
+      await batch.commit();
+    }
+  }
+
+  Future<void> _syncWorkspaceMetadata(String workspaceId) async {
+    final workspaceRef = _firestore.collection('workspaces').doc(workspaceId);
+    final walletsQuery = await workspaceRef.collection('wallets').get();
+    final walletIds = walletsQuery.docs.map((doc) => doc.id).toList();
+
+    if (walletIds.isEmpty) {
+      await workspaceRef.update({
+        'walletsCount': 0,
+        'latestActivityAt': null,
+      });
+      return;
+    }
+
+    final walletsSnapshots = await Future.wait(
+      walletIds.map((id) => _firestore.collection('wallets').doc(id).get()),
+    );
+
+    final wallets = walletsSnapshots
+        .where((s) => s.exists)
+        .map(WalletDto.fromFirestore)
+        .toList();
+
+    final latestActivityAt = wallets.isEmpty
+        ? null
+        : wallets
+              .map((w) => w.lastBalanceAt)
+              .reduce((a, b) => a.isAfter(b) ? a : b);
+
+    await workspaceRef.update({
+      'walletsCount': wallets.length,
+      'latestActivityAt': latestActivityAt == null
+          ? null
+          : Timestamp.fromDate(latestActivityAt),
+    });
   }
 
   Future<Set<String>> _findExistingProviders({

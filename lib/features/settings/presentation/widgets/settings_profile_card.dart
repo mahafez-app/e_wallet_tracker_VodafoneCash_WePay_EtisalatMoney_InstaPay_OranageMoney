@@ -150,18 +150,33 @@ class _ProfileAvatar extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Container(
-      width: 56.responsiveWidth,
-      height: 56.responsiveHeight,
+      width: 64.responsiveRadius,
+      height: 64.responsiveRadius,
       decoration: BoxDecoration(
-        color: colorScheme.primary,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            colorScheme.primary,
+            colorScheme.primary.withAlpha(200),
+          ],
+        ),
         shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.primary.withAlpha(60),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       alignment: Alignment.center,
       child: Text(
         _initials,
-        style: theme.textTheme.titleMedium?.copyWith(
+        style: theme.textTheme.headlineSmall?.copyWith(
           color: colorScheme.onPrimary,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w900,
+          letterSpacing: 1,
         ),
       ),
     );

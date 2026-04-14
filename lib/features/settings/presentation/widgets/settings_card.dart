@@ -16,13 +16,12 @@ class SettingsCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: colors.cardBackground,
-        borderRadius: BorderRadius.circular(20.responsiveRadius),
-        border: Border.all(color: colors.cardBorder),
+        borderRadius: BorderRadius.circular(28.responsiveRadius),
         boxShadow: [
           BoxShadow(
-            color: colors.cardShadow,
-            blurRadius: 16.responsiveRadius,
-            offset: Offset(0, 8.responsiveHeight),
+            color: colors.cardShadow.withAlpha(20),
+            blurRadius: 20,
+            offset: Offset(0, 5.responsiveHeight),
           ),
         ],
       ),

@@ -130,10 +130,7 @@ class _UserAvatarAndName extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                colorScheme.primary,
-                colorScheme.primary.withAlpha(180),
-              ],
+              colors: [colorScheme.primary, colorScheme.primary.withAlpha(180)],
             ),
             shape: BoxShape.circle,
             boxShadow: [
@@ -205,40 +202,23 @@ class _InvitationsIconBadge extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         _HeaderIconButton(icon: Icons.mail_outline_rounded, onTap: onTap),
-        if (count > 0)
-          Positioned(
-            right: -2.responsiveWidth,
-            top: -2.responsiveHeight,
-            child: Container(
-              padding: AppResponsive.allPadding(4.responsiveRadius),
-              height: 20.responsiveRadius,
-              decoration: BoxDecoration(
-                color: colorScheme.error,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: theme.scaffoldBackgroundColor,
-                  width: 2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.error.withAlpha(80),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Text(
-                  count.toString(),
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: colorScheme.onError,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 10.responsiveFont,
-                  ),
+        Badge(
+          isLabelVisible: count > 0,
+          label: Text('$count'),
+          child: GestureDetector(
+            onTap: onTap,
+            child: Center(
+              child: Text(
+                count.toString(),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: colorScheme.onError,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 10.responsiveFont,
                 ),
               ),
             ),
           ),
+        ),
       ],
     );
   }

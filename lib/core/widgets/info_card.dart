@@ -12,18 +12,18 @@ class InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.md),
+      padding: AppResponsive.allPadding(AppSpacing.lg),
       decoration: BoxDecoration(
         color: isDanger
-            ? theme.colorScheme.errorContainer.withAlpha(50)
-            : theme.colorScheme.primaryContainer.withAlpha(50),
-        borderRadius: BorderRadius.circular(12.responsiveRadius),
+            ? theme.colorScheme.errorContainer.withAlpha(80)
+            : theme.colorScheme.primary.withAlpha(20),
+        borderRadius: BorderRadius.circular(20.responsiveRadius),
         border: BorderDirectional(
           start: BorderSide(
             color: isDanger
                 ? theme.colorScheme.error
                 : theme.colorScheme.primary,
-            width: 4.responsiveWidth,
+            width: 5.responsiveWidth,
           ),
         ),
       ),

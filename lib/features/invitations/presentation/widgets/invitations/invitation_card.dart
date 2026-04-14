@@ -37,79 +37,90 @@ class InvitationCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: colors.cardBackground,
-        borderRadius: BorderRadius.circular(24.responsiveRadius),
-        border: Border.all(color: colors.cardBorder),
+        borderRadius: BorderRadius.circular(28.responsiveRadius),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withAlpha(50),
+          width: 0.8,
+        ),
         boxShadow: [
           BoxShadow(
-            color: colors.cardShadow,
-            blurRadius: 18.responsiveRadius,
-            offset: Offset(0, 8.responsiveHeight),
+            color: theme.colorScheme.shadow.withAlpha(8),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
-      child: Stack(
-        children: [
-          PositionedDirectional(
-            start: 0,
-            top: 0,
-            bottom: 0,
-            child: Container(
-              width: 4.responsiveWidth,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primary,
-                borderRadius: BorderRadiusDirectional.only(
-                  topStart: Radius.circular(24.responsiveRadius),
-                  bottomStart: Radius.circular(24.responsiveRadius),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(28.responsiveRadius),
+        child: Stack(
+          children: [
+            PositionedDirectional(
+              start: 0,
+              top: 0,
+              bottom: 0,
+              child: Container(
+                width: 6.responsiveWidth,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      theme.colorScheme.primary,
+                      theme.colorScheme.primary.withAlpha(150),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: AppResponsive.onlyPadding(
-              start: AppSpacing.xl,
-              top: AppSpacing.xl,
-              end: AppSpacing.xl,
-              bottom: AppSpacing.xl,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InvitationCardHeader(
-                  workspaceName: workspaceName,
-                  inviterName: inviterName,
-                ),
-                AppSpacing.lg.verticalSpace,
-                Row(
-                  children: [
-                    Icon(
-                      Icons.schedule_rounded,
-                      color: theme.colorScheme.onSurfaceVariant,
-                      size: 18.responsiveRadius,
-                    ),
-                    AppSpacing.sm.horizontalSpace,
-                    Expanded(
-                      child: Text(
-                        createdAt.toTimeAgo(context),
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w600,
+            Padding(
+              padding: AppResponsive.allPadding(AppSpacing.xl),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InvitationCardHeader(
+                    workspaceName: workspaceName,
+                    inviterName: inviterName,
+                  ),
+                  AppSpacing.lg.verticalSpace,
+                  Row(
+                    children: [
+                      Container(
+                        padding: AppResponsive.allPadding(4.responsiveRadius),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.onSurfaceVariant.withAlpha(15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.history_toggle_off_rounded,
+                          color: theme.colorScheme.onSurfaceVariant.withAlpha(180),
+                          size: 16.responsiveRadius,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                AppSpacing.xl.verticalSpace,
-                InvitationCardActions(
-                  isAccepting: isAccepting,
-                  isDeclining: isDeclining,
-                  isEnabled: isEnabled,
-                  onAccept: onAccept,
-                  onDecline: onDecline,
-                ),
-              ],
+                      AppSpacing.sm.horizontalSpace,
+                      Expanded(
+                        child: Text(
+                          createdAt.toTimeAgo(context),
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant.withAlpha(180),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  AppSpacing.xl.verticalSpace,
+                  InvitationCardActions(
+                    isAccepting: isAccepting,
+                    isDeclining: isDeclining,
+                    isEnabled: isEnabled,
+                    onAccept: onAccept,
+                    onDecline: onDecline,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

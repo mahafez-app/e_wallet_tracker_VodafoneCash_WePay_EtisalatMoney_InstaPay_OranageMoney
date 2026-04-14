@@ -30,12 +30,6 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.appColors;
-    final borderColor = isSelected
-        ? theme.colorScheme.primary
-        : theme.colorScheme.outlineVariant;
-    final backgroundColor = isSelected
-        ? theme.colorScheme.primaryContainer.withAlpha(76)
-        : colors.cardBackground;
     final statusLabel = isLinked
         ? context.l10n.workspaceWalletAlreadyAdded
         : isSelected
@@ -54,16 +48,44 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
 
     return InkWell(
       onTap: isLinked ? null : onTap,
-      borderRadius: BorderRadius.circular(24.responsiveRadius),
-      child: Container(
+      borderRadius: BorderRadius.circular(28.responsiveRadius),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
         padding: AppResponsive.allPadding(AppSpacing.lg),
         decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(24.responsiveRadius),
+          gradient: isSelected
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    theme.colorScheme.primary,
+                    theme.colorScheme.primary.withAlpha(200),
+                  ],
+                )
+              : null,
+          color: isSelected
+              ? null
+              : isLinked
+              ? theme.colorScheme.surfaceContainerHighest.withAlpha(60)
+              : colors.cardBackground,
+          borderRadius: BorderRadius.circular(28.responsiveRadius),
           border: Border.all(
-            color: borderColor,
-            width: isSelected ? 2.responsiveWidth : 1.responsiveWidth,
+            color: isSelected
+                ? theme.colorScheme.primary.withAlpha(100)
+                : isLinked
+                ? theme.colorScheme.outlineVariant.withAlpha(60)
+                : theme.colorScheme.outlineVariant,
+            width: isSelected ? 2 : 1,
           ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withAlpha(60),
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
+                  ),
+                ]
+              : null,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,25 +101,25 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
                   child: Text(
                     wallet.provider.displayName(context),
                     style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.onSurface,
+                      color: isSelected ? Colors.white : theme.colorScheme.onSurface,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
                 Container(
                   padding: AppResponsive.symmetricPadding(
-                    horizontal: 10,
-                    vertical: 6,
+                    horizontal: 10.responsiveRadius,
+                    vertical: 6.responsiveRadius,
                   ),
                   decoration: BoxDecoration(
-                    color: statusBackground,
-                    borderRadius: BorderRadius.circular(999.responsiveRadius),
+                    color: isSelected ? Colors.white.withAlpha(50) : statusBackground,
+                    borderRadius: BorderRadius.circular(10.responsiveRadius),
                   ),
                   child: Text(
                     statusLabel,
                     style: theme.textTheme.labelMedium?.copyWith(
-                      color: statusForeground,
-                      fontWeight: FontWeight.w700,
+                      color: isSelected ? Colors.white : statusForeground,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                 ),
@@ -107,22 +129,26 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
             Text(
               wallet.phoneNumber.formattedEgyptianPhoneNumber,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+                color: isSelected
+                    ? Colors.white.withAlpha(200)
+                    : theme.colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w500,
               ),
             ),
             AppSpacing.md.verticalSpace,
             Text(
               context.l10n.currentBalance,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.outline,
+                color: isSelected ? Colors.white.withAlpha(150) : theme.colorScheme.outline,
+                fontWeight: FontWeight.w600,
               ),
             ),
             AppSpacing.xs.verticalSpace,
             Text(
               wallet.currentBalance.toCurrencyText(context),
               style: theme.textTheme.titleMedium?.copyWith(
-                color: theme.colorScheme.primary,
-                fontWeight: FontWeight.w800,
+                color: isSelected ? Colors.white : theme.colorScheme.primary,
+                fontWeight: FontWeight.w900,
               ),
             ),
           ],

@@ -106,39 +106,68 @@ class _WorkspaceMemberAvatar extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               Container(
-                width: 56.responsiveRadius,
-                height: 56.responsiveRadius,
+                width: 60.responsiveRadius,
+                height: 60.responsiveRadius,
                 decoration: BoxDecoration(
-                  color: backgroundColor,
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      backgroundColor,
+                      backgroundColor.withAlpha(180),
+                    ],
+                  ),
                   shape: BoxShape.circle,
+                  border: Border.all(
+                    color: backgroundColor.withAlpha(100),
+                    width: 2,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: backgroundColor.withAlpha(40),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 alignment: Alignment.center,
                 child: Text(
                   initial,
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: foregroundColor,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
               ),
               if (member.isOwner)
                 PositionedDirectional(
-                  bottom: -4.responsiveHeight,
-                  start: -4.responsiveWidth,
+                  bottom: -2.responsiveHeight,
+                  end: -2.responsiveWidth,
                   child: Container(
                     padding: AppResponsive.symmetricPadding(
-                      horizontal: 6,
-                      vertical: 2,
+                      horizontal: 8.responsiveRadius,
+                      vertical: 3.responsiveRadius,
                     ),
                     decoration: BoxDecoration(
-                      color: colorScheme.tertiary,
+                      gradient: LinearGradient(
+                        colors: [colorScheme.tertiary, colorScheme.tertiary.withAlpha(200)],
+                      ),
                       borderRadius: BorderRadius.circular(999.responsiveRadius),
+                      boxShadow: [
+                        BoxShadow(
+                          color: colorScheme.tertiary.withAlpha(100),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: Text(
-                      context.l10n.workspaceOwnerBadge,
+                      context.l10n.workspaceOwnerBadge.toUpperCase(),
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: colorScheme.onTertiary,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 8.responsiveFont,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ),

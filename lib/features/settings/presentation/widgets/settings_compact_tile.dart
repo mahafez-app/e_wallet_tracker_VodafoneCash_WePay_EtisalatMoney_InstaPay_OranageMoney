@@ -142,14 +142,20 @@ class _SettingsCompactIconChip extends StatelessWidget {
       padding: AppResponsive.allPadding(AppSpacing.sm),
       decoration: BoxDecoration(
         color: isDanger
-            ? colorScheme.errorContainer
-            : colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(14.responsiveRadius),
+            ? colorScheme.errorContainer.withAlpha(80)
+            : colorScheme.primary.withAlpha(25),
+        borderRadius: BorderRadius.circular(16.responsiveRadius),
+        border: Border.all(
+          color: isDanger 
+            ? colorScheme.error.withAlpha(50) 
+            : colorScheme.primary.withAlpha(50),
+          width: 0.5,
+        ),
       ),
       child: Icon(
         icon,
         color: isDanger ? colorScheme.error : colorScheme.primary,
-        size: 18.responsiveRadius,
+        size: 20.responsiveRadius,
       ),
     );
   }

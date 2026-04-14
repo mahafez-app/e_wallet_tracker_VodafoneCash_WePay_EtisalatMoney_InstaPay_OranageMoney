@@ -51,5 +51,13 @@ abstract final class EgyptianPhoneNumber {
 
   static String formatForDisplay(String phoneNumber) {
     return normalize(phoneNumber);
+    // final normalizedPhoneNumber = normalize(phoneNumber);
+    // if (!isValidMobileNumber(normalizedPhoneNumber)) {
+    //   return normalizedPhoneNumber;
+    // }
+
+    // return '${normalizedPhoneNumber.substring(0, 3)} '
+    //     '${normalizedPhoneNumber.substring(3, 7)} '
+    //     '${normalizedPhoneNumber.substring(7)}';
   }
 }

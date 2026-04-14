@@ -8,6 +8,7 @@ import '../../domain/entities/transaction_history_entry_entity.dart';
 enum TransactionDetailsAction {
   none,
   markingPaid,
+  deletingTransaction,
   addingNote,
   editingNote,
   deletingNote,

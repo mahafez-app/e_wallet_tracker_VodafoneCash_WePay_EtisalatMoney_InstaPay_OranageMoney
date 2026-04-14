@@ -8,6 +8,7 @@ import '../../../../core/error/failures.dart';
 import '../../../../core/providers/transaction_events_provider.dart';
 import '../../../../features/auth/domain/entities/user_entity.dart';
 import '../../../../features/auth/providers/auth_providers.dart';
+import '../../domain/usecases/delete_transaction_usecase.dart';
 import '../../domain/usecases/mark_paid_usecases.dart';
 import '../../domain/usecases/note_usecases.dart';
 import '../../domain/usecases/watch_transaction_usecase.dart';
@@ -100,6 +101,33 @@ class TransactionDetailsController extends Notifier<TransactionDetailsState> {
 
   Future<void> markAsPaid() => _updatePaidStatus(isPaid: true);
   Future<void> markAsUnpaid() => _updatePaidStatus(isPaid: false);
+
+  Future<void> deleteTransaction() async {
+    _startAction(TransactionDetailsAction.deletingTransaction);
+
+    final user = _requireCurrentUser();
+    if (user == null) return;
+
+    final result = await ref.read(deleteTransactionUseCaseProvider)(
+      DeleteTransactionParams(
+        walletId: _walletId,
+        transactionId: _transactionId,
+        userId: user.uid,
+      ),
+    );
+
+    if (!ref.mounted) return;
+
+    result.fold((failure) {
+      log('deleteTransaction failed: $failure', name: 'Presentation');
+      _finishWithFailure(failure);
+    }, (_) {
+      _finishWithoutError();
+      ref
+          .read(transactionUpdatesProvider.notifier)
+          .notifyDeleted(walletId: _walletId, transactionId: _transactionId);
+    });
+  }
 
   Future<void> _updatePaidStatus({required bool isPaid}) async {
     _startAction(TransactionDetailsAction.markingPaid);

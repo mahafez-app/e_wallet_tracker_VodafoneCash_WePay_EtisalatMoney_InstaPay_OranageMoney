@@ -10,6 +10,7 @@ base class TransactionEntity extends Equatable {
     required this.amount,
     required this.createdAt,
     required this.walletId,
+    required this.walletOwnerUid,
     required this.provider,
     required this.phoneNumber,
     this.counterpartyNumber,
@@ -33,6 +34,9 @@ base class TransactionEntity extends Equatable {
 
   /// The ID of the wallet this transaction belongs to in your app.
   final String walletId;
+
+  /// The owner of the wallet this transaction belongs to.
+  final String walletOwnerUid;
 
   /// The wallet provider (VF-Cash, Bank Al-Ahly, etc).
   final WalletProvider provider;
@@ -63,6 +67,7 @@ base class TransactionEntity extends Equatable {
     double? amount,
     DateTime? createdAt,
     String? walletId,
+    String? walletOwnerUid,
     WalletProvider? provider,
     String? phoneNumber,
     String? counterpartyNumber,
@@ -75,6 +80,7 @@ base class TransactionEntity extends Equatable {
     amount: amount ?? this.amount,
     createdAt: createdAt ?? this.createdAt,
     walletId: walletId ?? this.walletId,
+    walletOwnerUid: walletOwnerUid ?? this.walletOwnerUid,
     provider: provider ?? this.provider,
     phoneNumber: phoneNumber ?? this.phoneNumber,
     counterpartyNumber: counterpartyNumber ?? this.counterpartyNumber,
@@ -90,6 +96,7 @@ base class TransactionEntity extends Equatable {
     amount,
     createdAt,
     walletId,
+    walletOwnerUid,
     provider,
     phoneNumber,
     counterpartyNumber,

@@ -5,6 +5,8 @@ import '../../../../core/domain/enums/transaction_type.dart';
 import '../entities/transaction_history_entry_entity.dart';
 import '../entities/note_entity.dart';
 import '../entities/transaction_page.dart';
+import '../entities/transaction_paid_status_filter.dart';
+import '../entities/workspace_transactions_overview_entity.dart';
 
 abstract interface class TransactionRepository {
   // ── Queries ─────────────────────────────────────────────────────────────
@@ -14,6 +16,9 @@ abstract interface class TransactionRepository {
   Future<Result<TransactionPage>> getWalletTransactions({
     required String walletId,
     TransactionType? type,
+    TransactionPaidStatusFilter paidStatusFilter =
+        TransactionPaidStatusFilter.all,
+    String? counterpartySuffixQuery,
     TransactionDateRange? dateRange,
     int limit = 20,
     WalletTransactionsPageCursor? cursor,
@@ -23,6 +28,9 @@ abstract interface class TransactionRepository {
   Future<Result<TransactionPage>> getWorkspaceTransactions({
     required List<String> walletIds,
     TransactionType? type,
+    TransactionPaidStatusFilter paidStatusFilter =
+        TransactionPaidStatusFilter.all,
+    String? counterpartySuffixQuery,
     TransactionDateRange? dateRange,
     int limit = 20,
     WorkspaceTransactionsPageCursor? cursor,
@@ -50,6 +58,15 @@ abstract interface class TransactionRepository {
   });
 
   Future<Result<void>> saveTransaction(TransactionEntity transaction);
+
+  Future<Result<WorkspaceTransactionsOverviewEntity>>
+  getWorkspaceTransactionsOverview({required List<String> walletIds});
+
+  Future<Result<void>> deleteTransaction({
+    required String walletId,
+    required String transactionId,
+    required String userId,
+  });
 
   // ── Notes ────────────────────────────────────────────────────────────────
 

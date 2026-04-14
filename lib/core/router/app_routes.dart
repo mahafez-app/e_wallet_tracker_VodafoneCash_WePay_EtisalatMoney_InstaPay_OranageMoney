@@ -22,6 +22,7 @@ abstract final class AppRoutes {
   static const String smsPermissions = '/sms-permissions';
   static const String walletDetails = '/wallet/:walletId';
   static const String transactions = '/transactions';
+  static const String workspaceReports = '/workspace/:workspaceId/reports';
 
   // Path builders — always use these for navigation, never interpolate inline
   static String profilePath(String userId) => '/profile/$userId';
@@ -37,4 +38,6 @@ abstract final class AppRoutes {
       : '/workspace/$workspaceId/wallets';
   static String walletDetailsPath(String walletId) => '/wallet/$walletId';
   static String transactionsPath() => '/transactions';
+  static String workspaceReportsPath(String workspaceId) =>
+      '/workspace/$workspaceId/reports';
 }

@@ -146,6 +146,7 @@ Future<void> _processAndSaveBackgroundTransaction({
     message: body,
     smsReceivedAt: smsReceivedAt,
     walletId: wallet.id,
+    walletOwnerUid: wallet.ownerUid,
     walletPhoneNumber: wallet.phoneNumber,
   );
 

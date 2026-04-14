@@ -34,6 +34,7 @@ final class TransactionWatchRemoteDataSourceImpl
             meta.provider,
             meta.phoneNumber,
             walletId,
+            meta.ownerUid,
           ),
         );
   }

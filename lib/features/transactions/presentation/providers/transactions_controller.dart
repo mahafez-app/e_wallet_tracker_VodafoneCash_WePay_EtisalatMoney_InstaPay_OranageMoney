@@ -7,7 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/providers/transaction_events_provider.dart';
+import 'draft_filters_controller.dart';
 import '../../domain/entities/transaction_page.dart';
+import '../../domain/entities/transaction_paid_status_filter.dart';
 import '../../domain/usecases/get_wallet_transactions_usecase.dart';
 import '../../domain/usecases/get_workspace_transactions_usecase.dart';
 import '../../providers/transactions_providers.dart';
@@ -81,9 +83,80 @@ class TransactionsController extends Notifier<TransactionsState>
   }
 
   Future<void> setTypeFilter(TransactionTypeFilter filter) async {
-    if (state.typeFilter == filter) return;
-    state = state.copyWith(typeFilter: filter);
+    final resolvedTypeFilter = state.typeFilter == filter ? TransactionTypeFilter.all : filter;
+    state = state.copyWith(
+      typeFilter: resolvedTypeFilter,
+      paidStatusFilter: resolvedTypeFilter == TransactionTypeFilter.send
+          ? TransactionPaidStatusFilter.all
+          : state.paidStatusFilter,
+    );
     await loadInitial(requestId: startRequest());
+  }
+
+  Future<void> setPaidStatusFilter(TransactionPaidStatusFilter filter) async {
+    final resolvedPaidStatusFilter = state.paidStatusFilter == filter ? TransactionPaidStatusFilter.all : filter;
+    state = state.copyWith(
+      paidStatusFilter: resolvedPaidStatusFilter,
+      typeFilter: resolvedPaidStatusFilter == TransactionPaidStatusFilter.all
+          ? state.typeFilter
+          : TransactionTypeFilter.receive,
+    );
+    await loadInitial(requestId: startRequest());
+  }
+
+  Future<void> setCounterpartySuffixQuery(String query) async {
+    final normalizedQuery = _normalizeDigits(query);
+    final resolvedQuery = normalizedQuery.isEmpty ? null : normalizedQuery;
+    if (state.counterpartySuffixQuery == resolvedQuery) {
+      return;
+    }
+
+    state = state.copyWith(counterpartySuffixQuery: resolvedQuery);
+    await loadInitial(requestId: startRequest());
+  }
+
+  Future<void> selectAllMembers() async {
+    if (state.useAllMembers && state.selectedMemberUids.isEmpty) return;
+    state = state.copyWith(
+      useAllMembers: true,
+      selectedMemberUids: const <String>[],
+      useAllWallets: true,
+      selectedWalletIds: const <String>[],
+    );
+    await loadInitial(requestId: startRequest());
+  }
+
+  Future<void> toggleMemberFilter(String memberUid) async {
+    if (arg is! WorkspaceTransactionsRouteData) return;
+
+    final currentSelection = state.useAllMembers
+        ? <String>{memberUid}
+        : state.selectedMemberUids.toSet();
+
+    if (!state.useAllMembers && !currentSelection.add(memberUid)) {
+      currentSelection.remove(memberUid);
+    }
+
+    state = _resolveMemberSelectionState(currentSelection);
+    await loadInitial(requestId: startRequest());
+  }
+
+  TransactionsState _resolveMemberSelectionState(Set<String> selectedMemberUids) {
+    if (selectedMemberUids.isEmpty) {
+      return state.copyWith(
+        useAllMembers: true,
+        selectedMemberUids: const <String>[],
+        useAllWallets: true,
+        selectedWalletIds: const <String>[],
+      );
+    }
+
+    return state.copyWith(
+      useAllMembers: false,
+      selectedMemberUids: selectedMemberUids.toList(),
+      useAllWallets: true, // Reset wallets when members change
+      selectedWalletIds: const <String>[],
+    );
   }
 
   Future<void> setDatePreset(
@@ -95,7 +168,7 @@ class TransactionsController extends Notifier<TransactionsState>
       await setCustomDatePreset(start: start, end: end);
       return;
     }
-    if (state.datePreset == preset) {
+    if (state.datePreset == preset && preset != DatePreset.custom) {
       await clearDatePreset();
       return;
     }
@@ -147,7 +220,7 @@ class TransactionsController extends Notifier<TransactionsState>
       );
     }
 
-    final orderedSelection = (arg as WorkspaceTransactionsRouteData).wallets
+    final orderedSelection = _visibleWorkspaceWallets
         .where((wallet) => selectedWalletIds.contains(wallet.walletId))
         .map((wallet) => wallet.walletId)
         .toList();
@@ -158,8 +231,49 @@ class TransactionsController extends Notifier<TransactionsState>
     );
   }
 
+  Future<void> applyDraftFilters(DraftFiltersState draft) async {
+    state = state.copyWith(
+      typeFilter: draft.typeFilter,
+      paidStatusFilter: draft.paidStatusFilter,
+      datePreset: draft.datePreset,
+      customDateRange: draft.customDateRange,
+      counterpartySuffixQuery: draft.counterpartySuffixQuery,
+      useAllMembers: draft.useAllMembers,
+      selectedMemberUids: draft.selectedMemberUids,
+      useAllWallets: draft.useAllWallets,
+      selectedWalletIds: draft.selectedWalletIds,
+    );
+    await loadInitial(requestId: startRequest());
+  }
+
   Future<void> clearAllFilters() async {
     state = const TransactionsState();
     await loadInitial(requestId: startRequest());
+  }
+
+  List<WalletFilterOption> get _visibleWorkspaceWallets {
+    if (arg is! WorkspaceTransactionsRouteData) {
+      return const <WalletFilterOption>[];
+    }
+
+    final routeData = arg as WorkspaceTransactionsRouteData;
+    if (state.useAllMembers) {
+      return routeData.wallets;
+    }
+
+    return routeData.wallets
+        .where((wallet) => state.selectedMemberUids.contains(wallet.ownerUid))
+        .toList();
+  }
+
+  String _normalizeDigits(String value) {
+    final buffer = StringBuffer();
+    for (final codeUnit in value.codeUnits) {
+      final isDigit = codeUnit >= 48 && codeUnit <= 57;
+      if (isDigit) {
+        buffer.writeCharCode(codeUnit);
+      }
+    }
+    return buffer.toString();
   }
 }

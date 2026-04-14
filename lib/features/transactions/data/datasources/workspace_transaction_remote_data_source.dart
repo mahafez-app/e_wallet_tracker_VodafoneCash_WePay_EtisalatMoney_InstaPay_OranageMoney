@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/data/models/transaction_dto.dart';
 import '../../../../core/domain/enums/transaction_type.dart';
 import '../../../../core/domain/enums/wallet_provider.dart';
+import '../../domain/entities/transaction_paid_status_filter.dart';
 import '../../domain/entities/transaction_date_range.dart';
 import '../../domain/entities/transaction_page.dart';
 import '../models/transaction_page_dto.dart';
@@ -12,6 +13,9 @@ abstract interface class WorkspaceTransactionRemoteDataSource {
   Future<TransactionPageDto> getWorkspaceTransactions({
     required List<String> walletIds,
     TransactionType? type,
+    TransactionPaidStatusFilter paidStatusFilter =
+        TransactionPaidStatusFilter.all,
+    String? counterpartySuffixQuery,
     TransactionDateRange? dateRange,
     int limit = 20,
     WorkspaceTransactionsPageCursor? cursor,
@@ -30,6 +34,9 @@ final class WorkspaceTransactionRemoteDataSourceImpl
   Future<TransactionPageDto> getWorkspaceTransactions({
     required List<String> walletIds,
     TransactionType? type,
+    TransactionPaidStatusFilter paidStatusFilter =
+        TransactionPaidStatusFilter.all,
+    String? counterpartySuffixQuery,
     TransactionDateRange? dateRange,
     int limit = 20,
     WorkspaceTransactionsPageCursor? cursor,
@@ -44,6 +51,8 @@ final class WorkspaceTransactionRemoteDataSourceImpl
     final totalCount = await _countWorkspaceTransactions(
       walletIds: walletIds,
       type: type,
+      paidStatusFilter: paidStatusFilter,
+      counterpartySuffixQuery: counterpartySuffixQuery,
       dateRange: dateRange,
     );
     final states = await Future.wait(
@@ -58,6 +67,8 @@ final class WorkspaceTransactionRemoteDataSourceImpl
     final transactions = await _collectLatestWorkspaceTransactions(
       states: states,
       type: type,
+      paidStatusFilter: paidStatusFilter,
+      counterpartySuffixQuery: counterpartySuffixQuery,
       dateRange: dateRange,
       limit: limit,
     );
@@ -65,6 +76,8 @@ final class WorkspaceTransactionRemoteDataSourceImpl
       states: states,
       batchSize: _resolveWorkspaceBatchSize(limit),
       type: type,
+      paidStatusFilter: paidStatusFilter,
+      counterpartySuffixQuery: counterpartySuffixQuery,
       dateRange: dateRange,
     );
     final nextCursor = nextCandidate == null
@@ -93,6 +106,7 @@ final class WorkspaceTransactionRemoteDataSourceImpl
       walletId: walletId,
       provider: meta.provider,
       phoneNumber: meta.phoneNumber,
+      ownerUid: meta.ownerUid,
       resumeCursor: resumeCursor,
     );
   }
@@ -101,6 +115,8 @@ final class WorkspaceTransactionRemoteDataSourceImpl
     required List<_WorkspaceWalletTransactionState> states,
     required int limit,
     required TransactionType? type,
+    required TransactionPaidStatusFilter paidStatusFilter,
+    required String? counterpartySuffixQuery,
     required TransactionDateRange? dateRange,
   }) async {
     final results = <TransactionDto>[];
@@ -111,6 +127,8 @@ final class WorkspaceTransactionRemoteDataSourceImpl
         states: states,
         batchSize: batchSize,
         type: type,
+        paidStatusFilter: paidStatusFilter,
+        counterpartySuffixQuery: counterpartySuffixQuery,
         dateRange: dateRange,
       );
       if (candidate == null) {
@@ -133,6 +151,8 @@ final class WorkspaceTransactionRemoteDataSourceImpl
     required List<_WorkspaceWalletTransactionState> states,
     required int batchSize,
     required TransactionType? type,
+    required TransactionPaidStatusFilter paidStatusFilter,
+    required String? counterpartySuffixQuery,
     required TransactionDateRange? dateRange,
   }) async {
     _WorkspaceWalletTransactionCandidate? selectedCandidate;
@@ -142,6 +162,8 @@ final class WorkspaceTransactionRemoteDataSourceImpl
         state: state,
         batchSize: batchSize,
         type: type,
+        paidStatusFilter: paidStatusFilter,
+        counterpartySuffixQuery: counterpartySuffixQuery,
         dateRange: dateRange,
       );
       if (transaction == null) {
@@ -164,6 +186,8 @@ final class WorkspaceTransactionRemoteDataSourceImpl
     required _WorkspaceWalletTransactionState state,
     required int batchSize,
     required TransactionType? type,
+    required TransactionPaidStatusFilter paidStatusFilter,
+    required String? counterpartySuffixQuery,
     required TransactionDateRange? dateRange,
   }) async {
     if (state.pendingTransactions.isNotEmpty) {
@@ -177,6 +201,8 @@ final class WorkspaceTransactionRemoteDataSourceImpl
       state: state,
       batchSize: batchSize,
       type: type,
+      paidStatusFilter: paidStatusFilter,
+      counterpartySuffixQuery: counterpartySuffixQuery,
       dateRange: dateRange,
     );
 
@@ -195,11 +221,15 @@ final class WorkspaceTransactionRemoteDataSourceImpl
     required _WorkspaceWalletTransactionState state,
     required int batchSize,
     required TransactionType? type,
+    required TransactionPaidStatusFilter paidStatusFilter,
+    required String? counterpartySuffixQuery,
     required TransactionDateRange? dateRange,
   }) async {
     var query = _support.applyFilters(
       _support.walletTransactionsQuery(state.walletId),
       type: type,
+      paidStatusFilter: paidStatusFilter,
+      counterpartySuffixQuery: counterpartySuffixQuery,
       dateRange: dateRange,
     );
     if (state.lastFetchedDocument != null) {
@@ -219,6 +249,7 @@ final class WorkspaceTransactionRemoteDataSourceImpl
             state.provider,
             state.phoneNumber,
             state.walletId,
+            state.ownerUid,
           ),
         )
         .toList();
@@ -232,6 +263,8 @@ final class WorkspaceTransactionRemoteDataSourceImpl
   Future<int> _countWorkspaceTransactions({
     required List<String> walletIds,
     required TransactionType? type,
+    required TransactionPaidStatusFilter paidStatusFilter,
+    required String? counterpartySuffixQuery,
     required TransactionDateRange? dateRange,
   }) async {
     final counts = await Future.wait(
@@ -239,6 +272,8 @@ final class WorkspaceTransactionRemoteDataSourceImpl
         final query = _support.applyFilters(
           _support.txCollection(walletId),
           type: type,
+          paidStatusFilter: paidStatusFilter,
+          counterpartySuffixQuery: counterpartySuffixQuery,
           dateRange: dateRange,
         );
         final snapshot = await query.count().get();
@@ -274,12 +309,14 @@ final class _WorkspaceWalletTransactionState {
     required this.walletId,
     required this.provider,
     required this.phoneNumber,
+    required this.ownerUid,
     this.resumeCursor,
   });
 
   final String walletId;
   final WalletProvider provider;
   final String phoneNumber;
+  final String ownerUid;
   final WalletTransactionsPageCursor? resumeCursor;
   final List<TransactionDto> pendingTransactions = <TransactionDto>[];
   QueryDocumentSnapshot<Map<String, dynamic>>? lastFetchedDocument;

@@ -31,12 +31,16 @@ class WalletDetailsController extends AsyncNotifier<WalletDetailsEntity> {
   }
 
   void _listenTransactionUpdates() {
-    ref.listen<TransactionEntity?>(transactionUpdatesProvider, (
-      _,
-      updatedTransaction,
-    ) {
-      if (updatedTransaction == null) return;
-      _applyUpdatedTransaction(updatedTransaction);
+    ref.listen<TransactionEvent?>(transactionUpdatesProvider, (_, event) {
+      if (event == null) return;
+      switch (event) {
+        case TransactionUpdatedEvent(:final transaction):
+          _applyUpdatedTransaction(transaction);
+        case TransactionDeletedEvent(:final walletId):
+          if (walletId == _walletId) {
+            ref.invalidateSelf();
+          }
+      }
     });
   }
 

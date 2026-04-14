@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/data/models/transaction_dto.dart';
+import '../../../../core/data/models/wallet_dto.dart';
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/domain/enums/transaction_type.dart';
+import '../../../../core/error/failures.dart';
+import '../../domain/entities/transaction_paid_status_filter.dart';
 import '../../domain/entities/transaction_date_range.dart';
 import '../../domain/entities/transaction_page.dart';
 import '../models/note_dto.dart';
@@ -14,6 +17,9 @@ abstract interface class WalletTransactionRemoteDataSource {
   Future<TransactionPageDto> getWalletTransactions({
     required String walletId,
     TransactionType? type,
+    TransactionPaidStatusFilter paidStatusFilter =
+        TransactionPaidStatusFilter.all,
+    String? counterpartySuffixQuery,
     TransactionDateRange? dateRange,
     int limit = 20,
     WalletTransactionsPageCursor? cursor,
@@ -34,6 +40,12 @@ abstract interface class WalletTransactionRemoteDataSource {
   });
 
   Future<void> saveTransaction(TransactionEntity transaction);
+
+  Future<void> deleteTransaction({
+    required String walletId,
+    required String transactionId,
+    required String userId,
+  });
 
   Future<void> addNote({
     required String walletId,
@@ -79,6 +91,9 @@ final class WalletTransactionRemoteDataSourceImpl
   Future<TransactionPageDto> getWalletTransactions({
     required String walletId,
     TransactionType? type,
+    TransactionPaidStatusFilter paidStatusFilter =
+        TransactionPaidStatusFilter.all,
+    String? counterpartySuffixQuery,
     TransactionDateRange? dateRange,
     int limit = 20,
     WalletTransactionsPageCursor? cursor,
@@ -87,6 +102,8 @@ final class WalletTransactionRemoteDataSourceImpl
     final countQuery = _support.applyFilters(
       _support.txCollection(walletId),
       type: type,
+      paidStatusFilter: paidStatusFilter,
+      counterpartySuffixQuery: counterpartySuffixQuery,
       dateRange: dateRange,
     );
     final countSnapshot = await countQuery.count().get();
@@ -96,6 +113,8 @@ final class WalletTransactionRemoteDataSourceImpl
         .applyFilters(
           _support.walletTransactionsQuery(walletId),
           type: type,
+          paidStatusFilter: paidStatusFilter,
+          counterpartySuffixQuery: counterpartySuffixQuery,
           dateRange: dateRange,
         )
         .limit(limit);
@@ -116,6 +135,7 @@ final class WalletTransactionRemoteDataSourceImpl
             meta.provider,
             meta.phoneNumber,
             walletId,
+            meta.ownerUid,
           ),
         )
         .toList();
@@ -201,6 +221,60 @@ final class WalletTransactionRemoteDataSourceImpl
   }
 
   @override
+  Future<void> deleteTransaction({
+    required String walletId,
+    required String transactionId,
+    required String userId,
+  }) async {
+    final meta = await _support.walletMeta(walletId);
+    if (meta.ownerUid != userId) {
+      throw const PermissionFailure(
+        technicalMessage: 'Only the wallet owner can delete transactions.',
+      );
+    }
+
+    final walletRef = _support.walletDocument(walletId);
+    final txRef = _support.txCollection(walletId).doc(transactionId);
+    final txSnapshot = await txRef.get();
+    if (!txSnapshot.exists) {
+      throw const ValidationFailure(
+        code: 'transaction-not-found',
+        technicalMessage: 'Transaction does not exist.',
+      );
+    }
+
+    final transaction = TransactionDto.fromFirestore(
+      txSnapshot,
+      meta.provider,
+      meta.phoneNumber,
+      walletId,
+      meta.ownerUid,
+    );
+    final notesSnapshot = await txRef.collection('notes').get();
+    final historySnapshot = await txRef.collection('history').get();
+
+    final batch = txRef.firestore.batch();
+    for (final noteDoc in notesSnapshot.docs) {
+      batch.delete(noteDoc.reference);
+    }
+    for (final historyDoc in historySnapshot.docs) {
+      batch.delete(historyDoc.reference);
+    }
+    batch.delete(txRef);
+
+    final amount = transaction.amount;
+    final isReceive = transaction.type == TransactionType.receive;
+    batch.update(walletRef, {
+      'currentBalance': FieldValue.increment(isReceive ? -amount : amount),
+      'totalReceived': FieldValue.increment(isReceive ? -amount : 0),
+      'totalSent': FieldValue.increment(isReceive ? 0 : -amount),
+    });
+    await batch.commit();
+
+    await _syncWalletLastBalanceAt(walletRef: walletRef, walletId: walletId);
+  }
+
+  @override
   Future<void> addNote({
     required String walletId,
     required String transactionId,
@@ -277,9 +351,28 @@ final class WalletTransactionRemoteDataSourceImpl
         .orderBy('occurredAt', descending: true)
         .snapshots()
         .map(
-          (snapshot) => snapshot.docs
-              .map(TransactionHistoryEntryDto.fromFirestore)
-              .toList(),
-        );
+              (snapshot) => snapshot.docs
+                  .map(TransactionHistoryEntryDto.fromFirestore)
+                  .toList(),
+            );
+  }
+
+  Future<void> _syncWalletLastBalanceAt({
+    required DocumentReference<Map<String, dynamic>> walletRef,
+    required String walletId,
+  }) async {
+    final latestTransactionSnapshot = await _support
+        .walletTransactionsQuery(walletId)
+        .limit(1)
+        .get();
+    final walletSnapshot = await walletRef.get();
+    final wallet = WalletDto.fromFirestore(walletSnapshot);
+    final latestCreatedAt = latestTransactionSnapshot.docs.isEmpty
+        ? wallet.createdAt
+        : _support.toWalletCursor(latestTransactionSnapshot.docs.first).createdAt;
+
+    await walletRef.update({
+      'lastBalanceAt': Timestamp.fromDate(latestCreatedAt),
+    });
   }
 }

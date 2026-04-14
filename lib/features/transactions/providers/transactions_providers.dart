@@ -4,9 +4,12 @@ import '../../../core/providers/firebase_providers.dart';
 import '../data/datasources/transaction_watch_remote_data_source.dart';
 import '../data/datasources/transaction_firestore_support.dart';
 import '../data/datasources/wallet_transaction_remote_data_source.dart';
+import '../data/datasources/workspace_transactions_overview_remote_data_source.dart';
 import '../data/datasources/workspace_transaction_remote_data_source.dart';
 import '../data/repositories/transaction_repository_impl.dart';
 import '../domain/repositories/transaction_repository.dart';
+import '../domain/usecases/delete_transaction_usecase.dart';
+import '../domain/usecases/get_workspace_transactions_overview_usecase.dart';
 import '../domain/usecases/get_wallet_transactions_usecase.dart';
 import '../domain/usecases/get_workspace_transactions_usecase.dart';
 import '../domain/usecases/mark_paid_usecases.dart';
@@ -43,6 +46,13 @@ final workspaceTransactionRemoteDataSourceProvider =
       );
     });
 
+final workspaceTransactionsOverviewRemoteDataSourceProvider =
+    Provider<WorkspaceTransactionsOverviewRemoteDataSource>((ref) {
+      return WorkspaceTransactionsOverviewRemoteDataSourceImpl(
+        support: ref.watch(transactionFirestoreSupportProvider),
+      );
+    });
+
 final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
   return TransactionRepositoryImpl(
     transactionWatchRemoteDataSource: ref.watch(
@@ -54,6 +64,9 @@ final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
     workspaceRemoteDataSource: ref.watch(
       workspaceTransactionRemoteDataSourceProvider,
     ),
+    workspaceOverviewRemoteDataSource: ref.watch(
+      workspaceTransactionsOverviewRemoteDataSourceProvider,
+    ),
   );
 });
 
@@ -61,6 +74,12 @@ final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
 
 final saveTransactionUseCaseProvider = Provider<SaveTransactionUseCase>((ref) {
   return SaveTransactionUseCase(ref.watch(transactionRepositoryProvider));
+});
+
+final deleteTransactionUseCaseProvider = Provider<DeleteTransactionUseCase>((
+  ref,
+) {
+  return DeleteTransactionUseCase(ref.watch(transactionRepositoryProvider));
 });
 
 final getWalletTransactionsUseCaseProvider =
@@ -73,6 +92,13 @@ final getWalletTransactionsUseCaseProvider =
 final getWorkspaceTransactionsUseCaseProvider =
     Provider<GetWorkspaceTransactionsUseCase>((ref) {
       return GetWorkspaceTransactionsUseCase(
+        ref.watch(transactionRepositoryProvider),
+      );
+    });
+
+final getWorkspaceTransactionsOverviewUseCaseProvider =
+    Provider<GetWorkspaceTransactionsOverviewUseCase>((ref) {
+      return GetWorkspaceTransactionsOverviewUseCase(
         ref.watch(transactionRepositoryProvider),
       );
     });

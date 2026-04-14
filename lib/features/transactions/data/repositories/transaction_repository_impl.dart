@@ -6,9 +6,12 @@ import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/note_entity.dart';
 import '../../domain/entities/transaction_history_entry_entity.dart';
 import '../../domain/entities/transaction_page.dart';
+import '../../domain/entities/transaction_paid_status_filter.dart';
+import '../../domain/entities/workspace_transactions_overview_entity.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../datasources/transaction_watch_remote_data_source.dart';
 import '../datasources/wallet_transaction_remote_data_source.dart';
+import '../datasources/workspace_transactions_overview_remote_data_source.dart';
 import '../datasources/workspace_transaction_remote_data_source.dart';
 
 final class TransactionRepositoryImpl implements TransactionRepository {
@@ -16,13 +19,18 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     required TransactionWatchRemoteDataSource transactionWatchRemoteDataSource,
     required WalletTransactionRemoteDataSource walletRemoteDataSource,
     required WorkspaceTransactionRemoteDataSource workspaceRemoteDataSource,
+    required WorkspaceTransactionsOverviewRemoteDataSource
+    workspaceOverviewRemoteDataSource,
   }) : _transactionWatchRemoteDataSource = transactionWatchRemoteDataSource,
        _walletRemoteDataSource = walletRemoteDataSource,
-       _workspaceRemoteDataSource = workspaceRemoteDataSource;
+       _workspaceRemoteDataSource = workspaceRemoteDataSource,
+       _workspaceOverviewRemoteDataSource = workspaceOverviewRemoteDataSource;
 
   final TransactionWatchRemoteDataSource _transactionWatchRemoteDataSource;
   final WalletTransactionRemoteDataSource _walletRemoteDataSource;
   final WorkspaceTransactionRemoteDataSource _workspaceRemoteDataSource;
+  final WorkspaceTransactionsOverviewRemoteDataSource
+  _workspaceOverviewRemoteDataSource;
 
   // ── Queries ──────────────────────────────────────────────────────────────
 
@@ -30,6 +38,9 @@ final class TransactionRepositoryImpl implements TransactionRepository {
   Future<Result<TransactionPage>> getWalletTransactions({
     required String walletId,
     TransactionType? type,
+    TransactionPaidStatusFilter paidStatusFilter =
+        TransactionPaidStatusFilter.all,
+    String? counterpartySuffixQuery,
     TransactionDateRange? dateRange,
     int limit = 20,
     WalletTransactionsPageCursor? cursor,
@@ -37,6 +48,8 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     final result = await _walletRemoteDataSource.getWalletTransactions(
       walletId: walletId,
       type: type,
+      paidStatusFilter: paidStatusFilter,
+      counterpartySuffixQuery: counterpartySuffixQuery,
       dateRange: dateRange,
       limit: limit,
       cursor: cursor,
@@ -52,6 +65,9 @@ final class TransactionRepositoryImpl implements TransactionRepository {
   Future<Result<TransactionPage>> getWorkspaceTransactions({
     required List<String> walletIds,
     TransactionType? type,
+    TransactionPaidStatusFilter paidStatusFilter =
+        TransactionPaidStatusFilter.all,
+    String? counterpartySuffixQuery,
     TransactionDateRange? dateRange,
     int limit = 20,
     WorkspaceTransactionsPageCursor? cursor,
@@ -59,6 +75,8 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     final result = await _workspaceRemoteDataSource.getWorkspaceTransactions(
       walletIds: walletIds,
       type: type,
+      paidStatusFilter: paidStatusFilter,
+      counterpartySuffixQuery: counterpartySuffixQuery,
       dateRange: dateRange,
       limit: limit,
       cursor: cursor,
@@ -69,6 +87,15 @@ final class TransactionRepositoryImpl implements TransactionRepository {
       nextCursor: result.nextCursor,
     );
   }, tag: 'TransactionRepository.getWorkspaceTransactions');
+
+  @override
+  Future<Result<WorkspaceTransactionsOverviewEntity>>
+  getWorkspaceTransactionsOverview({required List<String> walletIds}) =>
+      executeAndHandleErrors(() async {
+        final result = await _workspaceOverviewRemoteDataSource
+            .getWorkspaceTransactionsOverview(walletIds: walletIds);
+        return result.toEntity();
+      }, tag: 'TransactionRepository.getWorkspaceTransactionsOverview');
 
   @override
   Stream<Result<TransactionEntity>> watchTransaction({
@@ -121,6 +148,20 @@ final class TransactionRepositoryImpl implements TransactionRepository {
         () => _walletRemoteDataSource.saveTransaction(transaction),
         tag: 'TransactionRepository.saveTransaction',
       );
+
+  @override
+  Future<Result<void>> deleteTransaction({
+    required String walletId,
+    required String transactionId,
+    required String userId,
+  }) => executeAndHandleErrors(
+    () => _walletRemoteDataSource.deleteTransaction(
+      walletId: walletId,
+      transactionId: transactionId,
+      userId: userId,
+    ),
+    tag: 'TransactionRepository.deleteTransaction',
+  );
 
   // ── Notes ────────────────────────────────────────────────────────────────
 

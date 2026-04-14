@@ -43,6 +43,7 @@ final class WalletDetailsRemoteDataSourceImpl
             wallet.provider,
             wallet.phoneNumber,
             wallet.id,
+            wallet.ownerUid,
           ),
         )
         .toList();

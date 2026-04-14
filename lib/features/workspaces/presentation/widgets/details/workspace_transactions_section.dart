@@ -63,6 +63,9 @@ class WorkspaceTransactionsSection extends StatelessWidget {
   }
 
   void _openWorkspaceTransactions(BuildContext context) {
+    final memberNamesByUid = {
+      for (final member in details.members) member.uid: member.displayName,
+    };
     context.push(
       AppRoutes.transactionsPath(),
       extra: WorkspaceTransactionsRouteData(
@@ -74,6 +77,10 @@ class WorkspaceTransactionsSection extends StatelessWidget {
                 walletId: wallet.id,
                 walletLabel:
                     '${wallet.provider.displayName(context)} · ${wallet.phoneNumber.formattedEgyptianPhoneNumber}',
+                ownerUid: wallet.ownerUid,
+                ownerName:
+                    memberNamesByUid[wallet.ownerUid] ??
+                    context.l10n.workspaceUnknownMember,
               ),
             )
             .toList(),

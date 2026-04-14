@@ -15,6 +15,7 @@ import '../../features/transactions/presentation/navigation/transactions_route_d
 import '../../features/transactions/presentation/screens/transactions_screen.dart';
 import '../../features/wallets/presentation/screens/add_wallet_screen.dart';
 import '../../features/wallets/presentation/screens/wallet_details_screen.dart';
+import '../../features/transactions/presentation/screens/workspace_reports_screen.dart';
 import '../../features/workspaces/presentation/screens/create_workspace_screen.dart';
 import '../../features/workspaces/presentation/screens/select_workspace_wallets_screen.dart';
 import '../../features/workspaces/presentation/screens/workspace_details_screen.dart';
@@ -189,6 +190,16 @@ final routerProvider = Provider<GoRouter>((ref) {
             return const NotFoundScreen();
           }
           return TransactionsScreen(transactionsContext: transactionsContext);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.workspaceReports,
+        builder: (context, state) {
+          final extraContext = state.extra;
+          if (extraContext is! WorkspaceTransactionsRouteData) {
+            return const NotFoundScreen();
+          }
+          return WorkspaceReportsScreen(routeData: extraContext);
         },
       ),
     ],

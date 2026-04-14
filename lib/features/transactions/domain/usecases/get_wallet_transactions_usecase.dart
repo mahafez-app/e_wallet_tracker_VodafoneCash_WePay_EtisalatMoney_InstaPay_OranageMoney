@@ -3,6 +3,7 @@ import '../../../../core/domain/enums/transaction_type.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/usecase/usecase.dart';
 import '../entities/transaction_page.dart';
+import '../entities/transaction_paid_status_filter.dart';
 import '../repositories/transaction_repository.dart';
 
 final class GetWalletTransactionsUseCase
@@ -16,6 +17,8 @@ final class GetWalletTransactionsUseCase
       _repository.getWalletTransactions(
         walletId: params.walletId,
         type: params.type,
+        paidStatusFilter: params.paidStatusFilter,
+        counterpartySuffixQuery: params.counterpartySuffixQuery,
         dateRange: params.dateRange,
         limit: params.limit,
         cursor: params.cursor,
@@ -26,6 +29,8 @@ final class GetWalletTransactionsParams {
   const GetWalletTransactionsParams({
     required this.walletId,
     this.type,
+    this.paidStatusFilter = TransactionPaidStatusFilter.all,
+    this.counterpartySuffixQuery,
     this.dateRange,
     this.limit = 20,
     this.cursor,
@@ -33,6 +38,8 @@ final class GetWalletTransactionsParams {
 
   final String walletId;
   final TransactionType? type;
+  final TransactionPaidStatusFilter paidStatusFilter;
+  final String? counterpartySuffixQuery;
   final TransactionDateRange? dateRange;
   final int limit;
   final WalletTransactionsPageCursor? cursor;

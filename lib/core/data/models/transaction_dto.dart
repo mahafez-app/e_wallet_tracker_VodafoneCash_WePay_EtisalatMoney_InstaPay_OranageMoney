@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/transaction_entity.dart';
 import '../../domain/enums/transaction_type.dart';
 import '../../domain/enums/wallet_provider.dart';
+import '../../../features/transactions/data/mappers/transaction_search_terms.dart';
 
 final class TransactionDto extends TransactionEntity {
   const TransactionDto({
@@ -11,6 +12,7 @@ final class TransactionDto extends TransactionEntity {
     required super.amount,
     required super.createdAt,
     required super.walletId,
+    required super.walletOwnerUid,
     required super.provider,
     required super.phoneNumber,
     super.counterpartyNumber,
@@ -24,6 +26,7 @@ final class TransactionDto extends TransactionEntity {
     WalletProvider provider,
     String phoneNumber,
     String walletId,
+    String walletOwnerUid,
   ) {
     final data = doc.data() as Map<String, dynamic>;
 
@@ -33,6 +36,7 @@ final class TransactionDto extends TransactionEntity {
       amount: (data['amount'] as num? ?? 0.0).toDouble(),
       createdAt: (data['createdAt'] as Timestamp? ?? Timestamp.now()).toDate(),
       walletId: walletId,
+      walletOwnerUid: walletOwnerUid,
       provider: provider,
       phoneNumber: phoneNumber,
       counterpartyNumber: data['counterpartyNumber'] as String?,
@@ -47,8 +51,11 @@ final class TransactionDto extends TransactionEntity {
     'amount': amount,
     'createdAt': Timestamp.fromDate(createdAt),
     'counterpartyNumber': counterpartyNumber,
+    'counterpartySuffixes': TransactionSearchTerms.counterpartySuffixes(
+      counterpartyNumber,
+    ),
     'referenceNumber': referenceNumber,
-    'isPaid': isPaid,
+    'isPaid': type == TransactionType.receive ? (isPaid ?? false) : isPaid,
     'message': message,
   };
 
@@ -58,6 +65,7 @@ final class TransactionDto extends TransactionEntity {
     amount: amount,
     createdAt: createdAt,
     walletId: walletId,
+    walletOwnerUid: walletOwnerUid,
     provider: provider,
     phoneNumber: phoneNumber,
     counterpartyNumber: counterpartyNumber,
@@ -72,6 +80,7 @@ final class TransactionDto extends TransactionEntity {
     amount: entity.amount,
     createdAt: entity.createdAt,
     walletId: entity.walletId,
+    walletOwnerUid: entity.walletOwnerUid,
     provider: entity.provider,
     phoneNumber: entity.phoneNumber,
     counterpartyNumber: entity.counterpartyNumber,

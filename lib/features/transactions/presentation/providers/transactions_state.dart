@@ -6,6 +6,7 @@ import '../../../../core/domain/enums/transaction_type.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/transaction_date_range.dart';
 import '../../domain/entities/transaction_page.dart';
+import '../../domain/entities/transaction_paid_status_filter.dart';
 
 enum TransactionTypeFilter { all, receive, send }
 
@@ -15,8 +16,12 @@ final class TransactionsState extends Equatable {
   const TransactionsState({
     this.transactions = const <TransactionEntity>[],
     this.typeFilter = TransactionTypeFilter.all,
+    this.paidStatusFilter = TransactionPaidStatusFilter.all,
     this.datePreset = DatePreset.none,
     this.customDateRange,
+    this.counterpartySuffixQuery,
+    this.useAllMembers = true,
+    this.selectedMemberUids = const <String>[],
     this.useAllWallets = true,
     this.selectedWalletIds = const <String>[],
     this.totalCount = 0,
@@ -28,8 +33,12 @@ final class TransactionsState extends Equatable {
 
   final List<TransactionEntity> transactions;
   final TransactionTypeFilter typeFilter;
+  final TransactionPaidStatusFilter paidStatusFilter;
   final DatePreset datePreset;
   final DateTimeRange? customDateRange;
+  final String? counterpartySuffixQuery;
+  final bool useAllMembers;
+  final List<String> selectedMemberUids;
   final bool useAllWallets;
   final List<String> selectedWalletIds;
   final int totalCount;
@@ -41,8 +50,22 @@ final class TransactionsState extends Equatable {
   bool get hasMore => nextCursor != null;
   bool get hasActiveFilter =>
       typeFilter != TransactionTypeFilter.all ||
+      paidStatusFilter != TransactionPaidStatusFilter.all ||
       datePreset != DatePreset.none ||
+      (counterpartySuffixQuery?.isNotEmpty ?? false) ||
+      !useAllMembers ||
       !useAllWallets;
+
+  int get activeFilterCount {
+    var count = 0;
+    if (typeFilter != TransactionTypeFilter.all) count++;
+    if (paidStatusFilter != TransactionPaidStatusFilter.all) count++;
+    if (datePreset != DatePreset.none) count++;
+    if (counterpartySuffixQuery?.isNotEmpty ?? false) count++;
+    if (!useAllMembers) count++;
+    if (!useAllWallets) count++;
+    return count;
+  }
 
   TransactionType? get resolvedType => switch (typeFilter) {
     TransactionTypeFilter.all => null,
@@ -100,8 +123,12 @@ final class TransactionsState extends Equatable {
   TransactionsState copyWith({
     List<TransactionEntity>? transactions,
     TransactionTypeFilter? typeFilter,
+    TransactionPaidStatusFilter? paidStatusFilter,
     DatePreset? datePreset,
     Object? customDateRange = _sentinel,
+    Object? counterpartySuffixQuery = _sentinel,
+    bool? useAllMembers,
+    Object? selectedMemberUids = _sentinel,
     bool? useAllWallets,
     Object? selectedWalletIds = _sentinel,
     int? totalCount,
@@ -113,10 +140,20 @@ final class TransactionsState extends Equatable {
     return TransactionsState(
       transactions: transactions ?? this.transactions,
       typeFilter: typeFilter ?? this.typeFilter,
+      paidStatusFilter: paidStatusFilter ?? this.paidStatusFilter,
       datePreset: datePreset ?? this.datePreset,
       customDateRange: identical(customDateRange, _sentinel)
           ? this.customDateRange
           : customDateRange as DateTimeRange?,
+      counterpartySuffixQuery: identical(counterpartySuffixQuery, _sentinel)
+          ? this.counterpartySuffixQuery
+          : counterpartySuffixQuery as String?,
+      useAllMembers: useAllMembers ?? this.useAllMembers,
+      selectedMemberUids: identical(selectedMemberUids, _sentinel)
+          ? this.selectedMemberUids
+          : List<String>.of(
+              (selectedMemberUids as Iterable<Object?>).cast<String>(),
+            ),
       useAllWallets: useAllWallets ?? this.useAllWallets,
       selectedWalletIds: identical(selectedWalletIds, _sentinel)
           ? this.selectedWalletIds
@@ -137,8 +174,12 @@ final class TransactionsState extends Equatable {
   List<Object?> get props => [
     transactions,
     typeFilter,
+    paidStatusFilter,
     datePreset,
     customDateRange,
+    counterpartySuffixQuery,
+    useAllMembers,
+    selectedMemberUids,
     useAllWallets,
     selectedWalletIds,
     totalCount,

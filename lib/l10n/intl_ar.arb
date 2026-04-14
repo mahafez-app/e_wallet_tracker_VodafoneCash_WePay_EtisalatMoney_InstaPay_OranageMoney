@@ -369,6 +369,9 @@
   "paymentStatus": "حالة السداد",
   "transactions_filter_all": "الكل",
   "transactions_filter_allWallets": "كل المحافظ",
+  "transactions_filter_allMembers": "كل الأعضاء",
+  "transactions_paymentStatusAll": "كل الحالات",
+  "transactions_searchHint": "ابحث بآخر 2 أرقام أو أكثر",
   "transactions_date_today": "اليوم",
   "transactions_date_yesterday": "أمس",
   "transactions_date_week": "الأسبوع",
@@ -423,6 +426,9 @@
   "transaction_addNote": "إضافة ملاحظة",
   "transaction_noteHint": "اكتب ملاحظتك هنا",
   "transaction_deleteAction": "حذف",
+  "transaction_deleteTitle": "حذف المعاملة",
+  "transaction_deleteMessage": "هل أنت متأكد أنك تريد حذف هذه المعاملة؟ لا يمكن التراجع عن هذا الإجراء.",
+  "transaction_deletedSuccess": "تم حذف المعاملة",
   "transaction_deleteNoteTitle": "حذف الملاحظة",
   "transaction_deleteNoteMessage": "هل أنت متأكد أنك تريد حذف هذه الملاحظة؟ لا يمكن التراجع عن هذا الإجراء.",
   "transaction_noteDeleted": "تم حذف الملاحظة",
@@ -440,6 +446,11 @@
   "transactions_clearFilters": "مسح الفلاتر",
   "transactions_title_wallet": "معاملات {name}",
   "transactions_title_workspace": "معاملات {name}",
+  "workspaceTransactionsTodayCollected": "المحصّل اليوم",
+  "workspaceTransactionsTodaySent": "المرسَل اليوم",
+  "workspaceTransactionsUnpaidCount": "عدد غير المدفوع",
+  "workspaceTransactionsLatestWallets": "أحدث المحافظ نشاطاً",
+  "workspaceTransactionsLatestWalletsEmpty": "لا يوجد نشاط على المحافظ بعد.",
   "@transactions_title_wallet": {
     "placeholders": {
       "name": {
@@ -454,5 +465,24 @@
       }
     }
   },
-  "fullNameValidationEmpty": "يرجى إدخال اسمك"
+  "errorTransactionNotFound": "هذه المعاملة لم تعد متاحة.",
+  "fullNameValidationEmpty": "يرجى إدخال اسمك",
+  "transactions_filterTitle": "الفلاتر",
+  "transactions_filterApply": "تطبيق الفلاتر",
+  "transactions_filterReset": "إعادة ضبط",
+  "transactions_filterActiveCount": "{count} فلتر {count, plural, =1{نشط} other{نشط}}",
+  "@transactions_filterActiveCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workspaceReportsTitle": "تقارير مساحة العمل",
+  "workspaceReportsAction": "عرض التقارير",
+  "transactions_filterType": "النوع",
+  "transactions_filterPaidStatus": "الحالة",
+  "transactions_filterDate": "التاريخ",
+  "transactions_filterMember": "العضو",
+  "transactions_filterWallet": "المحفظة"
 }

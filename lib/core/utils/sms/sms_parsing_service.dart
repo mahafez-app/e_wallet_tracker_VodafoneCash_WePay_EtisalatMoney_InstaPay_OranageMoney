@@ -18,6 +18,7 @@ class SmsParsingService {
     required String message,
     required DateTime smsReceivedAt,
     required String walletId,
+    required String walletOwnerUid,
     required String walletPhoneNumber,
   }) {
     final parser = SmsParserRegistry.resolve(sender);
@@ -29,6 +30,7 @@ class SmsParsingService {
     return _toEntity(
       result: result,
       walletId: walletId,
+      walletOwnerUid: walletOwnerUid,
       walletPhoneNumber: walletPhoneNumber,
       rawMessage: message,
     );
@@ -37,6 +39,7 @@ class SmsParsingService {
   static TransactionEntity _toEntity({
     required SmsParseResult result,
     required String walletId,
+    required String walletOwnerUid,
     required String walletPhoneNumber,
     required String rawMessage,
   }) {
@@ -46,6 +49,7 @@ class SmsParsingService {
       amount: result.amount,
       createdAt: result.createdAt,
       walletId: walletId,
+      walletOwnerUid: walletOwnerUid,
       provider: result.provider,
       phoneNumber: walletPhoneNumber,
       counterpartyNumber: result.counterpartyNumber,

@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wallet_tracker/core/theme/app_responsive.dart';
-import 'package:wallet_tracker/core/theme/app_spacing.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/app_responsive.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_error_view.dart';
@@ -12,7 +14,7 @@ import '../../../../core/widgets/app_snackbar.dart';
 import '../navigation/transactions_route_data.dart';
 import '../providers/transactions_controller.dart';
 import '../widgets/details/transaction_details_bottom_sheet.dart';
-import '../widgets/filter_bar/transactions_filter_bar.dart';
+import '../widgets/filter_bar/transactions_filter_bottom_sheet.dart';
 import '../widgets/list/transactions_date_grouped_list.dart';
 import '../widgets/list/transactions_empty_view.dart';
 import '../widgets/list/transactions_load_more_footer.dart';
@@ -29,13 +31,21 @@ class TransactionsScreen extends StatelessWidget {
       appBar: AppBar(
         title: _TransactionsTitle(context_: transactionsContext),
         centerTitle: true,
+        actions: [
+          if (transactionsContext is WorkspaceTransactionsRouteData)
+            _ReportsIconButton(
+              routeData: transactionsContext as WorkspaceTransactionsRouteData,
+            ),
+          _FilterIconButton(routeData: transactionsContext),
+          AppSpacing.xs.horizontalSpace,
+        ],
       ),
       body: SafeArea(child: _TransactionsBody(context_: transactionsContext)),
     );
   }
 }
 
-// ── App bar title ─────────────────────────────────────────────────────────────
+// ── AppBar title ──────────────────────────────────────────────────────────────
 
 class _TransactionsTitle extends StatelessWidget {
   const _TransactionsTitle({super.key, required this.context_});
@@ -61,6 +71,63 @@ class _TransactionsTitle extends StatelessWidget {
   }
 }
 
+// ── Filter icon in AppBar ────────────────────────────────────────────────────
+
+class _FilterIconButton extends ConsumerWidget {
+  const _FilterIconButton({super.key, required this.routeData});
+
+  final TransactionsRouteData routeData;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activeCount = ref.watch(
+      transactionsControllerProvider(
+        routeData,
+      ).select((s) => s.activeFilterCount),
+    );
+
+    return Padding(
+      padding: AppResponsive.symmetricPadding(horizontal: 4),
+      child: Badge(
+        isLabelVisible: activeCount > 0,
+        label: Text('$activeCount'),
+        child: GestureDetector(
+          child: Padding(
+            padding: AppResponsive.symmetricPadding(horizontal: 4, vertical: 2),
+            child: Icon(
+              Icons.tune_rounded,
+              semanticLabel: context.l10n.transactions_filterTitle,
+            ),
+          ),
+          onTap: () => TransactionsFilterBottomSheet.show(context, routeData),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Reports icon in AppBar ───────────────────────────────────────────────────
+
+class _ReportsIconButton extends StatelessWidget {
+  const _ReportsIconButton({super.key, required this.routeData});
+
+  final WorkspaceTransactionsRouteData routeData;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.bar_chart_rounded),
+      tooltip: context.l10n.workspaceReportsAction,
+      onPressed: () {
+        context.push(
+          AppRoutes.workspaceReportsPath(routeData.workspaceId),
+          extra: routeData,
+        );
+      },
+    );
+  }
+}
+
 // ── Body ──────────────────────────────────────────────────────────────────────
 
 class _TransactionsBody extends ConsumerWidget {
@@ -80,13 +147,7 @@ class _TransactionsBody extends ConsumerWidget {
       );
     });
 
-    return Column(
-      children: [
-        TransactionsFilterBar(routeData: context_),
-        AppSpacing.sm.verticalSpace,
-        Expanded(child: _TransactionsContent(context_: context_)),
-      ],
-    );
+    return _TransactionsContent(context_: context_);
   }
 }
 

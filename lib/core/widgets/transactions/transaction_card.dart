@@ -139,19 +139,21 @@ class TransactionCard extends StatelessWidget {
                     value:
                         '${transaction.provider.displayName(context)} · ${transaction.phoneNumber.formattedEgyptianPhoneNumber}',
                   ),
-                  if (counterparty != null) ...[
-                    AppSpacing.xs.verticalSpace,
-                    TransactionInfoChip(
-                      leading: Icon(
-                        Icons.person_outline_rounded,
-                        size: 13.responsiveRadius,
-                        color: typeColor,
-                      ),
-                      leadingBackgroundColor: typeColor.withAlpha(30),
-                      label: isReceive ? l10n.fromLabel : l10n.toLabel,
-                      value: counterparty,
+                ],
+                if (counterparty != null) ...[
+                  AppSpacing.xs.verticalSpace,
+                  TransactionInfoChip(
+                    leading: Icon(
+                      Icons.person_outline_rounded,
+                      size: 13.responsiveRadius,
+                      color: typeColor,
                     ),
-                  ],
+                    leadingBackgroundColor: typeColor.withAlpha(30),
+                    label: isReceive
+                        ? l10n.transaction_receivedFrom
+                        : l10n.transaction_sentTo,
+                    value: counterparty,
+                  ),
                 ],
                 if (isReceive) ...[
                   AppSpacing.xs.verticalSpace,

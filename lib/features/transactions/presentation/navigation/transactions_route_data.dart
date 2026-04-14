@@ -2,13 +2,20 @@ import 'package:equatable/equatable.dart';
 
 /// Lightweight wallet metadata used to build workspace filter chips.
 final class WalletFilterOption extends Equatable {
-  const WalletFilterOption({required this.walletId, required this.walletLabel});
+  const WalletFilterOption({
+    required this.walletId,
+    required this.walletLabel,
+    required this.ownerUid,
+    required this.ownerName,
+  });
 
   final String walletId;
   final String walletLabel;
+  final String ownerUid;
+  final String ownerName;
 
   @override
-  List<Object?> get props => [walletId, walletLabel];
+  List<Object?> get props => [walletId, walletLabel, ownerUid, ownerName];
 }
 
 /// Route payload that drives the transactions screen source and available filters.

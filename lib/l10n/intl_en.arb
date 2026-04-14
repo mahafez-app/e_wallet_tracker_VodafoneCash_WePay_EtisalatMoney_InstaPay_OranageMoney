@@ -369,6 +369,9 @@
   "paymentStatus": "Payment Status",
   "transactions_filter_all": "All",
   "transactions_filter_allWallets": "All Wallets",
+  "transactions_filter_allMembers": "All Members",
+  "transactions_paymentStatusAll": "All Statuses",
+  "transactions_searchHint": "Search by last 2+ digits",
   "transactions_date_today": "Today",
   "transactions_date_yesterday": "Yesterday",
   "transactions_date_week": "This Week",
@@ -423,6 +426,9 @@
   "transaction_addNote": "Add Note",
   "transaction_noteHint": "Write your note here…",
   "transaction_deleteAction": "Delete",
+  "transaction_deleteTitle": "Delete Transaction",
+  "transaction_deleteMessage": "Are you sure you want to delete this transaction? This action cannot be undone.",
+  "transaction_deletedSuccess": "Transaction deleted",
   "transaction_deleteNoteTitle": "Delete Note",
   "transaction_deleteNoteMessage": "Are you sure you want to delete this note? This action cannot be undone.",
   "transaction_noteDeleted": "Note deleted",
@@ -440,6 +446,11 @@
   "transactions_clearFilters": "Clear Filters",
   "transactions_title_wallet": "Transactions: {name}",
   "transactions_title_workspace": "Workspace: {name}",
+  "workspaceTransactionsTodayCollected": "Collected Today",
+  "workspaceTransactionsTodaySent": "Sent Today",
+  "workspaceTransactionsUnpaidCount": "Unpaid Count",
+  "workspaceTransactionsLatestWallets": "Latest Active Wallets",
+  "workspaceTransactionsLatestWalletsEmpty": "No wallet activity yet.",
   "@transactions_title_wallet": {
     "placeholders": {
       "name": {
@@ -454,5 +465,24 @@
       }
     }
   },
-  "fullNameValidationEmpty": "Please enter your name"
+  "errorTransactionNotFound": "This transaction is no longer available.",
+  "fullNameValidationEmpty": "Please enter your name",
+  "transactions_filterTitle": "Filters",
+  "transactions_filterApply": "Apply Filters",
+  "transactions_filterReset": "Reset",
+  "transactions_filterActiveCount": "{count} active {count, plural, =1{filter} other{filters}}",
+  "@transactions_filterActiveCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workspaceReportsTitle": "Workspace Reports",
+  "workspaceReportsAction": "View Reports",
+  "transactions_filterType": "Type",
+  "transactions_filterPaidStatus": "Status",
+  "transactions_filterDate": "Date",
+  "transactions_filterMember": "Member",
+  "transactions_filterWallet": "Wallet"
 }

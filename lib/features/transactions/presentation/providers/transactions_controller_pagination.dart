@@ -44,6 +44,8 @@ mixin _TransactionsControllerPagination on Notifier<TransactionsState> {
       GetWalletTransactionsParams(
         walletId: context.walletId,
         type: state.resolvedType,
+        paidStatusFilter: state.paidStatusFilter,
+        counterpartySuffixQuery: state.counterpartySuffixQuery,
         dateRange: state.resolvedDateRange,
         limit: resolvePageSize(context),
         cursor: isFirstPage
@@ -67,6 +69,8 @@ mixin _TransactionsControllerPagination on Notifier<TransactionsState> {
       GetWorkspaceTransactionsParams(
         walletIds: resolveWorkspaceWalletIds(context),
         type: state.resolvedType,
+        paidStatusFilter: state.paidStatusFilter,
+        counterpartySuffixQuery: state.counterpartySuffixQuery,
         dateRange: state.resolvedDateRange,
         limit: resolvePageSize(context),
         cursor: isFirstPage
@@ -84,11 +88,16 @@ mixin _TransactionsControllerPagination on Notifier<TransactionsState> {
   List<String> resolveWorkspaceWalletIds(
     WorkspaceTransactionsRouteData context,
   ) {
+    final visibleWallets = state.useAllMembers
+        ? context.wallets
+        : context.wallets
+              .where((wallet) => state.selectedMemberUids.contains(wallet.ownerUid))
+              .toList();
     if (state.useAllWallets) {
-      return context.wallets.map((wallet) => wallet.walletId).toList();
+      return visibleWallets.map((wallet) => wallet.walletId).toList();
     }
 
-    return context.wallets
+    return visibleWallets
         .where((wallet) => state.selectedWalletIds.contains(wallet.walletId))
         .map((wallet) => wallet.walletId)
         .toList();

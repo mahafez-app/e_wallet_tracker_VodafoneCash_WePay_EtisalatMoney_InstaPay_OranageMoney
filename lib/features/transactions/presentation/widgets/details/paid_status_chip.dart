@@ -24,25 +24,44 @@ class PaidStatusChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
         padding: AppResponsive.symmetricPadding(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.xs,
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.sm,
         ),
         decoration: BoxDecoration(
-          color: isActive ? activeColor : Colors.transparent,
+          gradient: isActive
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [activeColor, activeColor.withAlpha(200)],
+                )
+              : null,
+          color: isActive ? null : theme.colorScheme.surface,
           border: Border.all(
             color: isActive
-                ? activeColor
-                : theme.colorScheme.outlineVariant.withAlpha(150),
+                ? activeColor.withAlpha(100)
+                : theme.colorScheme.outlineVariant.withAlpha(100),
+            width: 1.2,
           ),
-          borderRadius: BorderRadius.circular(20.responsiveRadius),
+          borderRadius: BorderRadius.circular(24.responsiveRadius),
+          boxShadow: isActive
+              ? [
+                  BoxShadow(
+                    color: activeColor.withAlpha(60),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
         ),
         child: Text(
           label,
-          style: theme.textTheme.labelSmall?.copyWith(
+          style: theme.textTheme.labelMedium?.copyWith(
             color: isActive ? Colors.white : theme.colorScheme.onSurfaceVariant,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.2,
           ),
         ),
       ),

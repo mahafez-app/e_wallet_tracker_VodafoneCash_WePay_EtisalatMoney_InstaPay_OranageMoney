@@ -104,15 +104,26 @@ class _NoteCardState extends ConsumerState<NoteCard> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final colors = context.appColors;
 
     return Container(
-      margin: AppResponsive.onlyPadding(bottom: AppSpacing.sm),
-      padding: AppResponsive.allPadding(AppSpacing.md),
+      margin: AppResponsive.onlyPadding(bottom: AppSpacing.md),
+      padding: AppResponsive.allPadding(AppSpacing.lg),
       decoration: BoxDecoration(
         color: colors.cardBackground,
-        borderRadius: BorderRadius.circular(14.responsiveRadius),
-        border: Border.all(color: colors.cardBorder),
+        borderRadius: BorderRadius.circular(20.responsiveRadius),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withAlpha(50),
+          width: 0.8,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.shadow.withAlpha(5),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child:
           ref

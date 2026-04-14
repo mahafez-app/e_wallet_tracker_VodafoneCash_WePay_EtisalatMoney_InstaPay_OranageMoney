@@ -139,7 +139,7 @@ class TransactionCard extends StatelessWidget {
                       provider: transaction.provider,
                       size: 20.responsiveRadius,
                     ),
-                    leadingBackgroundColor: theme.colorScheme.surface,
+                    leadingBackgroundColor: Colors.transparent,
                     label: l10n.walletLabel,
                     value:
                         '${transaction.provider.displayName(context)} · ${transaction.phoneNumber.formattedEgyptianPhoneNumber}',

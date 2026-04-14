@@ -29,48 +29,99 @@ class TransactionHeaderSection extends StatelessWidget {
 
     return Column(
       children: [
-        Container(
-          width: 72.responsiveRadius,
-          height: 72.responsiveRadius,
-          decoration: BoxDecoration(
-            color: typeColor.withAlpha(30),
-            borderRadius: BorderRadius.circular(22.responsiveRadius),
-          ),
-          child: Icon(
-            isReceive
-                ? Icons.arrow_downward_rounded
-                : Icons.arrow_upward_rounded,
-            color: typeColor,
-            size: 32.responsiveRadius,
-          ),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: 100.responsiveRadius,
+              height: 100.responsiveRadius,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    typeColor.withAlpha(25),
+                    typeColor.withAlpha(0),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              width: 72.responsiveRadius,
+              height: 72.responsiveRadius,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    typeColor.withAlpha(40),
+                    typeColor.withAlpha(15),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(22.responsiveRadius),
+                border: Border.all(
+                  color: typeColor.withAlpha(30),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: typeColor.withAlpha(20),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Icon(
+                isReceive
+                    ? Icons.arrow_downward_rounded
+                    : Icons.arrow_upward_rounded,
+                color: typeColor,
+                size: 32.responsiveRadius,
+              ),
+            ),
+          ],
         ),
         AppSpacing.lg.verticalSpace,
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: '$amountText ',
-                style: theme.textTheme.headlineLarge?.copyWith(
-                  color: typeColor,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: -1,
-                ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Text(
+              amountText,
+              style: theme.textTheme.displaySmall?.copyWith(
+                color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -1.5,
+                fontSize: 40.responsiveFont,
               ),
-              TextSpan(
-                text: l10n.currency,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: typeColor.withAlpha(200),
-                  fontWeight: FontWeight.w600,
-                ),
+            ),
+            AppSpacing.xs.horizontalSpace,
+            Text(
+              l10n.currency,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant.withAlpha(180),
+                fontWeight: FontWeight.w700,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         AppSpacing.xs.verticalSpace,
-        Text(
-          label,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
+        Container(
+          padding: AppResponsive.symmetricPadding(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.xs,
+          ),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest.withAlpha(120),
+            borderRadius: BorderRadius.circular(99.responsiveRadius),
+          ),
+          child: Text(
+            label.toUpperCase(),
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1.2,
+            ),
           ),
         ),
       ],

@@ -17,21 +17,48 @@ class NotesSectionHeader extends StatelessWidget {
 
     return Row(
       children: [
+        Icon(
+          Icons.sticky_note_2_rounded,
+          size: 16.responsiveRadius,
+          color: theme.colorScheme.primary,
+        ),
+        AppSpacing.sm.horizontalSpace,
         Text(
           l10n.transaction_notes,
           style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.2,
           ),
         ),
         const Spacer(),
-        TextButton.icon(
-          onPressed: onAddTap,
-          icon: Icon(Icons.add_rounded, size: 16.responsiveRadius),
-          label: Text(l10n.transaction_addNote),
-          style: TextButton.styleFrom(
+        GestureDetector(
+          onTap: onAddTap,
+          child: Container(
             padding: AppResponsive.symmetricPadding(
               horizontal: AppSpacing.md,
               vertical: AppSpacing.xs,
+            ),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withAlpha(20),
+              borderRadius: BorderRadius.circular(12.responsiveRadius),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.add_rounded,
+                  size: 14.responsiveRadius,
+                  color: theme.colorScheme.primary,
+                ),
+                AppSpacing.xs.horizontalSpace,
+                Text(
+                  l10n.transaction_addNote,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

@@ -20,8 +20,11 @@ class TransactionHistorySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _SectionTitle(title: context.l10n.transaction_history),
-        AppSpacing.md.verticalSpace,
+        _SectionTitle(
+          title: context.l10n.transaction_history,
+          icon: Icons.history_rounded,
+        ),
+        AppSpacing.lg.verticalSpace,
         ...entries.asMap().entries.map(
           (entry) => _HistoryEntryTile(
             entry: entry.value,
@@ -35,17 +38,32 @@ class TransactionHistorySection extends StatelessWidget {
 }
 
 class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({super.key, required this.title});
+  const _SectionTitle({super.key, required this.title, required this.icon});
 
   final String title;
+  final IconData icon;
 
   @override
-  Widget build(BuildContext context) => Text(
-    title,
-    style: Theme.of(
-      context,
-    ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-  );
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 16.responsiveRadius,
+          color: theme.colorScheme.primary,
+        ),
+        AppSpacing.sm.horizontalSpace,
+        Text(
+          title,
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.2,
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class _HistoryEntryTile extends StatelessWidget {
@@ -67,7 +85,6 @@ class _HistoryEntryTile extends StatelessWidget {
     final dateText = entry.occurredAt.toMonthDayLabel(context);
     final timeText = entry.occurredAt.toTimeLabel(context);
 
-    // Active entry (most recent) has primary color, older ones are muted.
     final color = isFirst
         ? theme.colorScheme.primary
         : theme.colorScheme.outlineVariant.withAlpha(150);
@@ -76,48 +93,27 @@ class _HistoryEntryTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            child: Padding(
-              padding: AppResponsive.onlyPadding(bottom: AppSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    l10n.transaction_markedAs(
-                      entry.isPaid
-                          ? l10n.transactionStatusPaid
-                          : l10n.transactionStatusUnpaid,
-                    ),
-                    style: theme.textTheme.labelMedium?.copyWith(
-                      color: theme.colorScheme.onSurface,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  AppSpacing.xs.verticalSpace,
-                  Text(
-                    '${l10n.transaction_by(entry.actorName)} · $dateText · $timeText',
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
           SizedBox(
             width: 32.responsiveWidth,
             child: Stack(
               alignment: Alignment.center,
               children: [
-                // Only show line if it's not the LAST item in the list
                 if (!isLast)
                   Positioned(
-                    top: 14.responsiveHeight,
-                    bottom: -14.responsiveHeight,
+                    top: 24.responsiveHeight,
+                    bottom: 0,
                     child: Container(
-                      width: 1,
-                      color: theme.colorScheme.outlineVariant.withAlpha(80),
+                      width: 1.5,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            theme.colorScheme.outlineVariant.withAlpha(100),
+                            theme.colorScheme.outlineVariant.withAlpha(20),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 Positioned(
@@ -126,16 +122,65 @@ class _HistoryEntryTile extends StatelessWidget {
                     width: 12.responsiveRadius,
                     height: 12.responsiveRadius,
                     decoration: BoxDecoration(
-                      color: color,
+                      gradient: isFirst
+                          ? LinearGradient(
+                              colors: [color, color.withAlpha(150)],
+                            )
+                          : null,
+                      color: isFirst ? null : color,
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: theme.scaffoldBackgroundColor,
                         width: 2,
                       ),
+                      boxShadow: isFirst
+                          ? [
+                              BoxShadow(
+                                color: color.withAlpha(60),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ]
+                          : null,
                     ),
                   ),
                 ),
               ],
+            ),
+          ),
+          AppSpacing.sm.horizontalSpace,
+          Expanded(
+            child: Padding(
+              padding: AppResponsive.onlyPadding(bottom: AppSpacing.xl),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.transaction_markedAs(
+                      entry.isPaid
+                          ? l10n.transactionStatusPaid
+                          : l10n.transactionStatusUnpaid,
+                    ).toUpperCase(),
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: isFirst
+                          ? theme.colorScheme.onSurface
+                          : theme.colorScheme.onSurfaceVariant,
+                      fontWeight: isFirst ? FontWeight.w900 : FontWeight.w700,
+                      letterSpacing: 0.5,
+                      fontSize: 11.responsiveFont,
+                    ),
+                  ),
+                  AppSpacing.xs.verticalSpace,
+                  Text(
+                    '${l10n.transaction_by(entry.actorName)} · $dateText · $timeText',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant.withAlpha(180),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

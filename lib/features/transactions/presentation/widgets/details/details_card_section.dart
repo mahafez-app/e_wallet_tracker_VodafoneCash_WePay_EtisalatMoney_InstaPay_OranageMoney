@@ -40,8 +40,18 @@ class DetailsCardSection extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         color: colors.cardBackground,
-        borderRadius: BorderRadius.circular(20.responsiveRadius),
-        border: Border.all(color: colors.cardBorder),
+        borderRadius: BorderRadius.circular(28.responsiveRadius),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withAlpha(50),
+          width: 0.8,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.shadow.withAlpha(10),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Column(
         children: [

@@ -23,7 +23,8 @@ ios/Flutter/Flutter.podspec
 /android/app/release/
 *.apk
 *.aab
-
+android/key.properties
+*.jks
 # macOS
 /macos/Flutter/GeneratedPluginRegistrant.swift
 /macos/Flutter/Flutter-Release.xcconfig

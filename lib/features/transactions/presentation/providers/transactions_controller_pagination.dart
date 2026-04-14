@@ -19,6 +19,7 @@ mixin _TransactionsControllerPagination on Notifier<TransactionsState> {
       nextCursor: null,
     );
 
+    // Step 1 — Always attempt to fetch from Firestore first.
     switch (arg) {
       case WalletTransactionsRouteData():
         await loadWalletPage(
@@ -32,6 +33,36 @@ mixin _TransactionsControllerPagination on Notifier<TransactionsState> {
           isFirstPage: true,
           requestId: requestId,
         );
+    }
+
+    if (isStaleRequest(requestId)) return;
+
+    // Step 2 — Fallback to Hive cache ONLY if the remote fetch completely failed (e.g., no internet).
+    // The cache is only populated for wallet context with no active filters.
+    if (state.error != null) {
+      final isWalletContext = arg is WalletTransactionsRouteData;
+      final shouldTryCache = isWalletContext && !state.hasActiveFilter;
+
+      if (shouldTryCache) {
+        final walletId = (arg as WalletTransactionsRouteData).walletId;
+        final cached = await ref.read(
+          transactionFirstPageCacheProvider(walletId).future,
+        );
+
+        if (isStaleRequest(requestId)) return;
+
+        if (cached != null) {
+          // Rescue the view with the offline cached data.
+          // Note: we intentionally keep the `error` state active so the UI can still
+          // show a SnackBar or an offline indicator if desired, while not showing an empty list.
+          state = state.copyWith(
+            isLoadingInitial: false,
+            transactions: cached.transactions,
+            totalCount: cached.totalCount,
+            nextCursor: null,
+          );
+        }
+      }
     }
   }
 

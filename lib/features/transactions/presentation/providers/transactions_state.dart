@@ -45,6 +45,7 @@ final class TransactionsState extends Equatable {
   final TransactionsPageCursor? nextCursor;
   final bool isLoadingInitial;
   final bool isLoadingMore;
+
   final Failure? error;
 
   bool get hasMore => nextCursor != null;

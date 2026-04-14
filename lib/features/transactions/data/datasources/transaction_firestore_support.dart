@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../../core/cache/wallet_meta_cache.dart';
 import '../../../../core/data/models/wallet_dto.dart';
 import '../../../../core/domain/enums/transaction_type.dart';
 import '../../../../core/domain/enums/wallet_provider.dart';
@@ -9,10 +10,14 @@ import '../../domain/entities/transaction_page.dart';
 import '../mappers/transaction_search_terms.dart';
 
 class TransactionFirestoreSupport {
-  const TransactionFirestoreSupport({required FirebaseFirestore firestore})
-    : _firestore = firestore;
+  const TransactionFirestoreSupport({
+    required FirebaseFirestore firestore,
+    required WalletMetaCache metaCache,
+  })  : _firestore = firestore,
+        _metaCache = metaCache;
 
   final FirebaseFirestore _firestore;
+  final WalletMetaCache _metaCache;
 
   DocumentReference<Map<String, dynamic>> walletDocument(String walletId) =>
       _firestore.collection('wallets').doc(walletId);
@@ -20,12 +25,34 @@ class TransactionFirestoreSupport {
   CollectionReference<Map<String, dynamic>> txCollection(String walletId) =>
       walletDocument(walletId).collection('transactions');
 
+  /// Returns wallet provider/phone/ownerUid, hitting the in-memory TTL cache
+  /// before falling back to a Firestore document read.
+  ///
+  /// For a workspace with 3 wallets loading one page, this reduces 3 redundant
+  /// Firestore reads to at most 1 per wallet per TTL window.
   Future<({WalletProvider provider, String phoneNumber, String ownerUid})>
-  walletMeta(
-    String walletId,
-  ) async {
+  walletMeta(String walletId) async {
+    final cached = _metaCache.get(walletId);
+    if (cached != null) {
+      return (
+        provider: WalletProvider.fromString(cached.provider),
+        phoneNumber: cached.phoneNumber,
+        ownerUid: cached.ownerUid,
+      );
+    }
+
     final doc = await walletDocument(walletId).get();
     final wallet = WalletDto.fromFirestore(doc);
+
+    _metaCache.put(
+      walletId,
+      WalletMeta(
+        provider: wallet.provider.toValue,
+        phoneNumber: wallet.phoneNumber,
+        ownerUid: wallet.ownerUid,
+      ),
+    );
+
     return (
       provider: wallet.provider,
       phoneNumber: wallet.phoneNumber,

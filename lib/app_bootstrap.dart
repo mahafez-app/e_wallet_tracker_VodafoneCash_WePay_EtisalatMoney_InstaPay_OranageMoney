@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'app.dart';
 import 'core/di/app_initializer.dart';
 import 'core/error/result.dart';
+import 'core/providers/cache_providers.dart';
 import 'core/theme/app_theme.dart';
 import 'features/settings/providers/settings_providers.dart';
 import 'features/splash/presentation/screens/startup_fallback_screen.dart';
@@ -50,6 +51,9 @@ class _AppBootstrapState extends State<AppBootstrap> {
       Success<AppBootstrapDependencies>(:final data) => ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(data.sharedPreferences),
+          txFirstPageCacheBoxProvider.overrideWithValue(
+            data.txFirstPageCacheBox,
+          ),
         ],
         child: const App(),
       ),

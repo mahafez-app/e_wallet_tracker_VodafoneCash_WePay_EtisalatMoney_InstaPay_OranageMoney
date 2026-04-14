@@ -1,3 +1,4 @@
+import '../../../../core/cache/wallet_meta_cache.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/domain/entities/wallet_entity.dart';
 import '../../../../core/error/result.dart';
@@ -15,15 +16,18 @@ class WalletRepositoryImpl implements WalletRepository {
     required WalletDetailsRemoteDataSource detailsDataSource,
     required PhoneNumberService phoneNumberService,
     required DeviceInfoService deviceInfoService,
+    required WalletMetaCache walletMetaCache,
   }) : _remoteDataSource = remoteDataSource,
        _detailsDataSource = detailsDataSource,
        _phoneNumberService = phoneNumberService,
-       _deviceInfoService = deviceInfoService;
+       _deviceInfoService = deviceInfoService,
+       _walletMetaCache = walletMetaCache;
 
   final WalletRemoteDataSource _remoteDataSource;
   final WalletDetailsRemoteDataSource _detailsDataSource;
   final PhoneNumberService _phoneNumberService;
   final DeviceInfoService _deviceInfoService;
+  final WalletMetaCache _walletMetaCache;
 
   @override
   Future<Result<List<String>>> getDevicePhoneNumbers() {
@@ -75,10 +79,12 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<Result<void>> deleteWallet(String walletId) {
-    return executeAndHandleErrors(
-      () => _remoteDataSource.deleteWallet(walletId),
-      tag: 'WalletRepositoryImpl.deleteWallet',
-    );
+    return executeAndHandleErrors(() async {
+      await _remoteDataSource.deleteWallet(walletId);
+      // Invalidate the meta cache so the next walletMeta() call fetches fresh
+      // data instead of serving a stale entry for a wallet that no longer exists.
+      _walletMetaCache.invalidate(walletId);
+    }, tag: 'WalletRepositoryImpl.deleteWallet');
   }
 
   Future<String> _resolveDeviceId() async {

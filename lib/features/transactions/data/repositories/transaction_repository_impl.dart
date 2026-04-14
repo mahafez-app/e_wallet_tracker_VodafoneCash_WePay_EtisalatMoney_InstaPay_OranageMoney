@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../domain/entities/transaction_date_range.dart';
 import '../../../../core/domain/enums/transaction_type.dart';
@@ -9,6 +11,7 @@ import '../../domain/entities/transaction_page.dart';
 import '../../domain/entities/transaction_paid_status_filter.dart';
 import '../../domain/entities/workspace_transactions_overview_entity.dart';
 import '../../domain/repositories/transaction_repository.dart';
+import '../datasources/transaction_cache_local_data_source.dart';
 import '../datasources/transaction_watch_remote_data_source.dart';
 import '../datasources/wallet_transaction_remote_data_source.dart';
 import '../datasources/workspace_transactions_overview_remote_data_source.dart';
@@ -21,16 +24,19 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     required WorkspaceTransactionRemoteDataSource workspaceRemoteDataSource,
     required WorkspaceTransactionsOverviewRemoteDataSource
     workspaceOverviewRemoteDataSource,
+    required TransactionCacheLocalDataSource cacheDataSource,
   }) : _transactionWatchRemoteDataSource = transactionWatchRemoteDataSource,
        _walletRemoteDataSource = walletRemoteDataSource,
        _workspaceRemoteDataSource = workspaceRemoteDataSource,
-       _workspaceOverviewRemoteDataSource = workspaceOverviewRemoteDataSource;
+       _workspaceOverviewRemoteDataSource = workspaceOverviewRemoteDataSource,
+       _cacheDataSource = cacheDataSource;
 
   final TransactionWatchRemoteDataSource _transactionWatchRemoteDataSource;
   final WalletTransactionRemoteDataSource _walletRemoteDataSource;
   final WorkspaceTransactionRemoteDataSource _workspaceRemoteDataSource;
   final WorkspaceTransactionsOverviewRemoteDataSource
   _workspaceOverviewRemoteDataSource;
+  final TransactionCacheLocalDataSource _cacheDataSource;
 
   // ── Queries ──────────────────────────────────────────────────────────────
 
@@ -54,6 +60,19 @@ final class TransactionRepositoryImpl implements TransactionRepository {
       limit: limit,
       cursor: cursor,
     );
+
+    // Persist first page only when no filters and no cursor (first page).
+    // Fire-and-forget — never block the return on a cache write.
+    final isFirstPage = cursor == null;
+    final hasNoFilters = type == null &&
+        paidStatusFilter == TransactionPaidStatusFilter.all &&
+        counterpartySuffixQuery == null &&
+        dateRange == null;
+
+    if (isFirstPage && hasNoFilters) {
+      unawaited(_cacheDataSource.saveFirstPage(walletId, result));
+    }
+
     return TransactionPage(
       transactions: result.transactions.map((e) => e.toEntity()).toList(),
       totalCount: result.totalCount,
@@ -144,24 +163,26 @@ final class TransactionRepositoryImpl implements TransactionRepository {
 
   @override
   Future<Result<void>> saveTransaction(TransactionEntity transaction) =>
-      executeAndHandleErrors(
-        () => _walletRemoteDataSource.saveTransaction(transaction),
-        tag: 'TransactionRepository.saveTransaction',
-      );
+      executeAndHandleErrors(() async {
+        await _walletRemoteDataSource.saveTransaction(transaction);
+        // Invalidate so the next cold open reflects the new transaction.
+        unawaited(_cacheDataSource.clear(transaction.walletId));
+      }, tag: 'TransactionRepository.saveTransaction');
 
   @override
   Future<Result<void>> deleteTransaction({
     required String walletId,
     required String transactionId,
     required String userId,
-  }) => executeAndHandleErrors(
-    () => _walletRemoteDataSource.deleteTransaction(
+  }) => executeAndHandleErrors(() async {
+    await _walletRemoteDataSource.deleteTransaction(
       walletId: walletId,
       transactionId: transactionId,
       userId: userId,
-    ),
-    tag: 'TransactionRepository.deleteTransaction',
-  );
+    );
+    // Invalidate so the deleted transaction is not shown on next cold open.
+    unawaited(_cacheDataSource.clear(walletId));
+  }, tag: 'TransactionRepository.deleteTransaction');
 
   // ── Notes ────────────────────────────────────────────────────────────────
 

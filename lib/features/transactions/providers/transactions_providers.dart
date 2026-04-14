@@ -1,12 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/providers/cache_providers.dart';
 import '../../../core/providers/firebase_providers.dart';
+import '../data/datasources/transaction_cache_local_data_source.dart';
 import '../data/datasources/transaction_watch_remote_data_source.dart';
 import '../data/datasources/transaction_firestore_support.dart';
 import '../data/datasources/wallet_transaction_remote_data_source.dart';
 import '../data/datasources/workspace_transactions_overview_remote_data_source.dart';
 import '../data/datasources/workspace_transaction_remote_data_source.dart';
 import '../data/repositories/transaction_repository_impl.dart';
+import '../domain/entities/transaction_page.dart';
 import '../domain/repositories/transaction_repository.dart';
 import '../domain/usecases/delete_transaction_usecase.dart';
 import '../domain/usecases/get_workspace_transactions_overview_usecase.dart';
@@ -19,10 +22,14 @@ import '../domain/usecases/watch_transaction_usecase.dart';
 
 // ── Infrastructure ───────────────────────────────────────────────────────────
 
+/// Single session-scoped support class wired with the shared WalletMeta cache.
+/// Not autoDispose — the cache must outlive individual screen navigations.
 final transactionFirestoreSupportProvider =
     Provider<TransactionFirestoreSupport>(
-      (ref) =>
-          TransactionFirestoreSupport(firestore: ref.watch(firestoreProvider)),
+      (ref) => TransactionFirestoreSupport(
+        firestore: ref.watch(firestoreProvider),
+        metaCache: ref.watch(walletMetaCacheProvider),
+      ),
     );
 
 final transactionWatchRemoteDataSourceProvider =
@@ -53,6 +60,35 @@ final workspaceTransactionsOverviewRemoteDataSourceProvider =
       );
     });
 
+// ── Phase 4 — Hive local cache data source ───────────────────────────────────
+
+final transactionCacheLocalDataSourceProvider =
+    Provider<TransactionCacheLocalDataSource>(
+      (ref) => TransactionCacheLocalDataSourceImpl(
+        box: ref.watch(txFirstPageCacheBoxProvider),
+      ),
+    );
+
+/// Reads the cached first page for [walletId] without triggering any network
+/// fetch. Used by [_TransactionsControllerPagination.loadInitial] to
+/// pre-populate the screen on cold open before the Firestore response arrives.
+final transactionFirstPageCacheProvider =
+    FutureProvider.autoDispose.family<TransactionPage?, String>(
+      (ref, walletId) async {
+        final cached = await ref
+            .read(transactionCacheLocalDataSourceProvider)
+            .getFirstPage(walletId);
+        if (cached == null) return null;
+        return TransactionPage(
+          transactions: cached.transactions.map((e) => e.toEntity()).toList(),
+          totalCount: cached.totalCount,
+          nextCursor: null,
+        );
+      },
+    );
+
+// ── Repository ────────────────────────────────────────────────────────────────
+
 final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
   return TransactionRepositoryImpl(
     transactionWatchRemoteDataSource: ref.watch(
@@ -67,6 +103,7 @@ final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
     workspaceOverviewRemoteDataSource: ref.watch(
       workspaceTransactionsOverviewRemoteDataSourceProvider,
     ),
+    cacheDataSource: ref.watch(transactionCacheLocalDataSourceProvider),
   );
 });
 

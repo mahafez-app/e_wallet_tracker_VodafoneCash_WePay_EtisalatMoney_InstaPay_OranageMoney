@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'failures.dart';
 
@@ -27,7 +28,12 @@ class FailureMapper {
       code: e.code,
       technicalMessage: e.message,
     ),
-    // — OS-level connectivity ——————————————————————————————
+    // — OS-level / Platform leaks ——————————————————————————
+    PlatformException e
+        when e.code == 'firebase_firestore' &&
+            (e.message?.contains('UNAVAILABLE') ?? false) =>
+      NetworkFailure(technicalMessage: 'Firestore unavailable — ${e.message}'),
+    PlatformException e => UnknownFailure(technicalMessage: e.message),
     SocketException e => NetworkFailure(technicalMessage: e.message),
     // — Catch-all ——————————————————————————————————————————
     _ => UnknownFailure(technicalMessage: error.toString()),

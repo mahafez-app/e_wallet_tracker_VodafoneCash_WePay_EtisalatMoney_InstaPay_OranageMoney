@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/providers/cache_providers.dart';
 import '../../../core/providers/firebase_providers.dart';
 import '../../../core/providers/service_providers.dart';
 import '../data/datasources/wallet_details_remote_data_source.dart';
@@ -32,6 +33,9 @@ final walletRepositoryProvider = Provider<WalletRepository>((ref) {
     detailsDataSource: ref.watch(walletDetailsRemoteDataSourceProvider),
     phoneNumberService: ref.watch(phoneNumberServiceProvider),
     deviceInfoService: ref.watch(deviceInfoServiceProvider),
+    // Phase 2 — shared cache: deleting a wallet immediately invalidates its
+    // meta entry so TransactionFirestoreSupport never serves stale data.
+    walletMetaCache: ref.watch(walletMetaCacheProvider),
   );
 });
 

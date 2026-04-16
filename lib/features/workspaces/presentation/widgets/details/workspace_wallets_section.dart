@@ -49,25 +49,19 @@ class WorkspaceWalletsSection extends StatelessWidget {
         if (wallets.isEmpty)
           _WorkspaceWalletsEmptyState(onAddWallets: onAddWallets)
         else
-          SizedBox(
-            height: 160.responsiveHeight,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: wallets.length,
-              separatorBuilder: (_, _) => AppSpacing.md.horizontalSpace,
-              itemBuilder: (context, index) {
-                final wallet = wallets[index];
-                return GestureDetector(
-                  onTap: () =>
-                      context.push(AppRoutes.walletDetailsPath(wallet.id)),
-                  child: WalletCard(
-                    provider: wallet.provider,
-                    phoneNumber: wallet.phoneNumber,
-                    balance: wallet.currentBalance,
-                  ),
-                );
-              },
-            ),
+          Row(
+            spacing: AppSpacing.md,
+            children: wallets.map((wallet) {
+              return GestureDetector(
+                onTap: () =>
+                    context.push(AppRoutes.walletDetailsPath(wallet.id)),
+                child: WalletCard(
+                  provider: wallet.provider,
+                  phoneNumber: wallet.phoneNumber,
+                  balance: wallet.currentBalance,
+                ),
+              );
+            }).toList(),
           ),
       ],
     );

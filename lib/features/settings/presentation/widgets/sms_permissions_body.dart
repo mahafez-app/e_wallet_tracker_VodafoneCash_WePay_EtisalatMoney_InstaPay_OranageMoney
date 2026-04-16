@@ -95,7 +95,7 @@ class SmsPermissionsBody extends ConsumerWidget {
             children: [
               AppButton(
                 label: l10n.allowAndContinue,
-                isLoading: state.isRequesting,
+                isLoading: state.isRequesting || state.isOpeningSettings,
                 onPressed: smsPermissionController.requestPermission,
               ),
               AppSpacing.md.verticalSpace,

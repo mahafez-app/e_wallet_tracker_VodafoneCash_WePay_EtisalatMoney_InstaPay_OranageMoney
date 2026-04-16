@@ -20,6 +20,7 @@ class TransactionsScreenTitle extends StatelessWidget {
     return switch (routeData) {
       WalletTransactionsRouteData(:final provider, :final phoneNumber) => Row(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           WalletProviderIcon(provider: provider, size: 32.responsiveRadius),
           AppSpacing.md.horizontalSpace,
@@ -52,7 +53,7 @@ class _DoubleLineTitleText extends StatelessWidget {
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           title,

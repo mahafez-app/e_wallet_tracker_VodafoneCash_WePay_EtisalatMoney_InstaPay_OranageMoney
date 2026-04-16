@@ -8,6 +8,7 @@ import '../../../../core/widgets/app_loader.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../providers/sms_permission_controller.dart';
+import 'background_reliability_section.dart';
 import 'edit_display_name_bottom_sheet.dart';
 import 'settings_app_version_card.dart';
 import 'settings_profile_card.dart';
@@ -55,6 +56,8 @@ class UserSettingsContent extends ConsumerWidget {
                 smsPermissionState: smsPermissionState,
                 onOpenSmsSettings: smsPermissionController.openSettings,
               ),
+              AppSpacing.lg.verticalSpace,
+              const BackgroundReliabilitySection(),
               AppSpacing.lg.verticalSpace,
               UserSettingsAccountSection(
                 isSigningOut:

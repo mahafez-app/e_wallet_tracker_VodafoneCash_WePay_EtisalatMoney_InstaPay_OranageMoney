@@ -6,7 +6,6 @@ import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../navigation/transactions_route_data.dart';
 import '../widgets/transactions_filter_icon_button.dart';
-
 import '../widgets/transactions_screen_body.dart';
 import '../widgets/transactions_screen_title.dart';
 
@@ -22,9 +21,8 @@ class TransactionsScreen extends StatelessWidget {
         title: TransactionsScreenTitle(routeData: transactionsContext),
         centerTitle: true,
         actions: [
-
           TransactionsFilterIconButton(routeData: transactionsContext),
-          AppSpacing.xs.horizontalSpace,
+          AppSpacing.lg.horizontalSpace,
         ],
       ),
       body: SafeArea(

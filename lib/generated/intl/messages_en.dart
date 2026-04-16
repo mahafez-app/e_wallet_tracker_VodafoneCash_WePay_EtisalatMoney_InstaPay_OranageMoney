@@ -351,6 +351,13 @@ class MessageLookup extends MessageLookupByLibrary {
             "Track payments and expenses as soon as the SMS arrives."),
         "smsPermissionAutoUpdateTitle":
             MessageLookupByLibrary.simpleMessage("Automatic Update"),
+        "smsPermissionBatteryOptimizationAction":
+            MessageLookupByLibrary.simpleMessage("Allow Background Activity"),
+        "smsPermissionBatteryOptimizationDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Android may kill the app in the background to save power. To ensure accuracy, please allow the app to run without battery restrictions."),
+        "smsPermissionBatteryOptimizationTitle":
+            MessageLookupByLibrary.simpleMessage("Battery Optimization Active"),
         "smsPermissionDescription": MessageLookupByLibrary.simpleMessage(
             "The app needs access to messages and phone information to find wallet numbers on this device and sync transactions automatically."),
         "smsPermissionPrivacyDesc": MessageLookupByLibrary.simpleMessage(
@@ -359,6 +366,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Your privacy matters"),
         "smsPermissionTitle": MessageLookupByLibrary.simpleMessage(
             "Allow Message and Phone Access"),
+        "smsPermissionXiaomiAction":
+            MessageLookupByLibrary.simpleMessage("Fix in Settings"),
+        "smsPermissionXiaomiDescription": MessageLookupByLibrary.simpleMessage(
+            "To receive transactions when the app is closed, you must enable \'Autostart\' and set Battery Saver to \'No Restrictions\' in app settings."),
+        "smsPermissionXiaomiTitle":
+            MessageLookupByLibrary.simpleMessage("Xiaomi/Redmi Detected"),
         "startupFallbackMessage": MessageLookupByLibrary.simpleMessage(
             "Please try opening Mahafez again."),
         "startupFallbackRetryAction":
@@ -493,6 +506,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "userSettingsAppSection": MessageLookupByLibrary.simpleMessage("App"),
         "userSettingsAppVersionLabel":
             MessageLookupByLibrary.simpleMessage("App version"),
+        "userSettingsBackgroundSection":
+            MessageLookupByLibrary.simpleMessage("Background Reliability"),
         "userSettingsDeleteAccountAction":
             MessageLookupByLibrary.simpleMessage("Delete account"),
         "userSettingsDeleteAccountConfirmMessage":

@@ -92,8 +92,22 @@ final class SmsPermissionController extends Notifier<SmsPermissionState> {
       return;
     }
 
-    result.fold(
-      (failure) => state = state.copyWith(isRequesting: false, error: failure),
+    await result.fold(
+      (failure) async {
+        // If the direct request failed (e.g. permanently denied),
+        // try opening settings.
+        state = state.copyWith(isRequesting: false, isOpeningSettings: true);
+        final settingsResult = await ref.read(openSmsPermissionSettingsUseCaseProvider)();
+        if (ref.mounted) {
+          settingsResult.fold(
+            (settingsFailure) => state = state.copyWith(
+              isOpeningSettings: false,
+              error: settingsFailure,
+            ),
+            (_) => state = state.copyWith(isOpeningSettings: false),
+          );
+        }
+      },
       (hasPermission) {
         state = state.copyWith(
           hasPermission: hasPermission,

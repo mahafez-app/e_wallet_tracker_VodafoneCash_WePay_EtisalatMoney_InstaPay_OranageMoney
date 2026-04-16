@@ -340,6 +340,13 @@ class MessageLookup extends MessageLookupByLibrary {
             "أي حركة جديدة بتتسجل أول ما رسالة العملية توصل."),
         "smsPermissionAutoUpdateTitle":
             MessageLookupByLibrary.simpleMessage("تحديث تلقائي"),
+        "smsPermissionBatteryOptimizationAction":
+            MessageLookupByLibrary.simpleMessage("السماح بالعمل في الخلفية"),
+        "smsPermissionBatteryOptimizationDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "نظام أندرويد ممكن يقفل التطبيق في الخلفية لتوفير الطاقة. عشان نضمن دقة التسجيل، يفضل تسمح للتطبيق بالشغل بدون قيود البطارية."),
+        "smsPermissionBatteryOptimizationTitle":
+            MessageLookupByLibrary.simpleMessage("تحسين البطارية نشط"),
         "smsPermissionDescription": MessageLookupByLibrary.simpleMessage(
             "التطبيق محتاج صلاحية الرسائل والموبايل عشان يتعرف على أرقام المحافظ الموجودة على الجهاز ويضيف الحركات الجديدة تلقائياً."),
         "smsPermissionPrivacyDesc": MessageLookupByLibrary.simpleMessage(
@@ -348,6 +355,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("خصوصيتك محفوظة"),
         "smsPermissionTitle": MessageLookupByLibrary.simpleMessage(
             "اسمح بالوصول للرسائل والموبايل"),
+        "smsPermissionXiaomiAction":
+            MessageLookupByLibrary.simpleMessage("ضبط الإعدادات"),
+        "smsPermissionXiaomiDescription": MessageLookupByLibrary.simpleMessage(
+            "عشان المعاملات توصلك والتطبيق مقفول، لازم تفعل خاصية \'التشغيل التلقائي\' وتخلي موفر البطارية \'بدون قيود\' في إعدادات النظام."),
+        "smsPermissionXiaomiTitle":
+            MessageLookupByLibrary.simpleMessage("تم اكتشاف جهاز Xiaomi/Redmi"),
         "startupFallbackMessage":
             MessageLookupByLibrary.simpleMessage("حاول فتح محافظ مرة أخرى."),
         "startupFallbackRetryAction":
@@ -489,6 +502,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("التطبيق"),
         "userSettingsAppVersionLabel":
             MessageLookupByLibrary.simpleMessage("إصدار التطبيق"),
+        "userSettingsBackgroundSection":
+            MessageLookupByLibrary.simpleMessage("استقرار العمل في الخلفية"),
         "userSettingsDeleteAccountAction":
             MessageLookupByLibrary.simpleMessage("حذف الحساب"),
         "userSettingsDeleteAccountConfirmMessage":

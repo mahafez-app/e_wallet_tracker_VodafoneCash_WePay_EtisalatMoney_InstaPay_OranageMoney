@@ -98,95 +98,92 @@ class _WorkspaceMemberAvatar extends StatelessWidget {
         : member.displayName.trim();
     final initial = fallbackSource.substring(0, 1).toUpperCase();
 
-    return SizedBox(
-      width: 72.responsiveWidth,
-      child: Column(
-        children: [
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                width: 60.responsiveRadius,
-                height: 60.responsiveRadius,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      backgroundColor,
-                      backgroundColor.withAlpha(180),
-                    ],
-                  ),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: backgroundColor.withAlpha(100),
-                    width: 2,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: backgroundColor.withAlpha(40),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
+    return Column(
+      children: [
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              width: 60.responsiveRadius,
+              height: 60.responsiveRadius,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    backgroundColor,
+                    backgroundColor.withAlpha(180),
                   ],
                 ),
-                alignment: Alignment.center,
-                child: Text(
-                  initial,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: foregroundColor,
-                    fontWeight: FontWeight.w900,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: backgroundColor.withAlpha(100),
+                  width: 2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: backgroundColor.withAlpha(40),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                initial,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: foregroundColor,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
+            if (member.isOwner)
+              PositionedDirectional(
+                bottom: -2.responsiveHeight,
+                end: -2.responsiveWidth,
+                child: Container(
+                  padding: AppResponsive.symmetricPadding(
+                    horizontal: 8.responsiveRadius,
+                    vertical: 3.responsiveRadius,
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [colorScheme.tertiary, colorScheme.tertiary.withAlpha(200)],
+                    ),
+                    borderRadius: BorderRadius.circular(999.responsiveRadius),
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.tertiary.withAlpha(100),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    context.l10n.workspaceOwnerBadge.toUpperCase(),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: colorScheme.onTertiary,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 8.responsiveFont,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
               ),
-              if (member.isOwner)
-                PositionedDirectional(
-                  bottom: -2.responsiveHeight,
-                  end: -2.responsiveWidth,
-                  child: Container(
-                    padding: AppResponsive.symmetricPadding(
-                      horizontal: 8.responsiveRadius,
-                      vertical: 3.responsiveRadius,
-                    ),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [colorScheme.tertiary, colorScheme.tertiary.withAlpha(200)],
-                      ),
-                      borderRadius: BorderRadius.circular(999.responsiveRadius),
-                      boxShadow: [
-                        BoxShadow(
-                          color: colorScheme.tertiary.withAlpha(100),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      context.l10n.workspaceOwnerBadge.toUpperCase(),
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: colorScheme.onTertiary,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 8.responsiveFont,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ),
-                ),
-            ],
+          ],
+        ),
+        AppSpacing.sm.verticalSpace,
+        Text(
+          member.displayName,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.labelMedium?.copyWith(
+            color: theme.colorScheme.onSurface,
+            fontWeight: FontWeight.w700,
           ),
-          AppSpacing.sm.verticalSpace,
-          Text(
-            member.displayName,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.labelMedium?.copyWith(
-              color: theme.colorScheme.onSurface,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

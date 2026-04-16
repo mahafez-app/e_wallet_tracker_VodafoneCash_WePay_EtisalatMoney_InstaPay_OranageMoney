@@ -992,6 +992,66 @@ class S {
     );
   }
 
+  /// `تم اكتشاف جهاز Xiaomi/Redmi`
+  String get smsPermissionXiaomiTitle {
+    return Intl.message(
+      'تم اكتشاف جهاز Xiaomi/Redmi',
+      name: 'smsPermissionXiaomiTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عشان المعاملات توصلك والتطبيق مقفول، لازم تفعل خاصية 'التشغيل التلقائي' وتخلي موفر البطارية 'بدون قيود' في إعدادات النظام.`
+  String get smsPermissionXiaomiDescription {
+    return Intl.message(
+      'عشان المعاملات توصلك والتطبيق مقفول، لازم تفعل خاصية \'التشغيل التلقائي\' وتخلي موفر البطارية \'بدون قيود\' في إعدادات النظام.',
+      name: 'smsPermissionXiaomiDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ضبط الإعدادات`
+  String get smsPermissionXiaomiAction {
+    return Intl.message(
+      'ضبط الإعدادات',
+      name: 'smsPermissionXiaomiAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تحسين البطارية نشط`
+  String get smsPermissionBatteryOptimizationTitle {
+    return Intl.message(
+      'تحسين البطارية نشط',
+      name: 'smsPermissionBatteryOptimizationTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `نظام أندرويد ممكن يقفل التطبيق في الخلفية لتوفير الطاقة. عشان نضمن دقة التسجيل، يفضل تسمح للتطبيق بالشغل بدون قيود البطارية.`
+  String get smsPermissionBatteryOptimizationDescription {
+    return Intl.message(
+      'نظام أندرويد ممكن يقفل التطبيق في الخلفية لتوفير الطاقة. عشان نضمن دقة التسجيل، يفضل تسمح للتطبيق بالشغل بدون قيود البطارية.',
+      name: 'smsPermissionBatteryOptimizationDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `السماح بالعمل في الخلفية`
+  String get smsPermissionBatteryOptimizationAction {
+    return Intl.message(
+      'السماح بالعمل في الخلفية',
+      name: 'smsPermissionBatteryOptimizationAction',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `أضف المحفظة`
   String get addWalletAction {
     return Intl.message(
@@ -1650,6 +1710,16 @@ class S {
     return Intl.message(
       'التطبيق',
       name: 'userSettingsAppSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `استقرار العمل في الخلفية`
+  String get userSettingsBackgroundSection {
+    return Intl.message(
+      'استقرار العمل في الخلفية',
+      name: 'userSettingsBackgroundSection',
       desc: '',
       args: [],
     );

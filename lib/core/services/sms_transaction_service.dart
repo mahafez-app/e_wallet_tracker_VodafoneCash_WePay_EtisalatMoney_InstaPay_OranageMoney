@@ -7,6 +7,7 @@ import '../../features/wallets/domain/usecases/link_subscription_id_usecase.dart
 import '../data/models/pending_sms_retry_item.dart';
 import '../domain/entities/transaction_entity.dart';
 import '../domain/entities/wallet_entity.dart';
+import '../domain/enums/transaction_type.dart';
 import '../utils/sms/registry/sms_parser_registry.dart';
 import '../utils/sms/sms_message_extension.dart';
 import '../utils/sms/sms_parsing_service.dart';
@@ -105,7 +106,13 @@ final class SmsTransactionService {
     );
   }
 
-  /// Core pipeline: wallet resolution → parsing → saving.
+  /// Core pipeline: parse first → wallet resolution with signals → save.
+  ///
+  /// Two-phase approach:
+  ///   Phase 1 — parse the SMS body to extract amount, type, and balance
+  ///             (without committing to a wallet).
+  ///   Phase 2 — resolve the wallet using subscription ID + balance-delta
+  ///             correlation, then finalize the entity.
   ///
   /// Returns `true` if the SMS was handled (saved or intentionally ignored),
   /// `false` if a recoverable failure occurred and the item was enqueued.
@@ -115,37 +122,50 @@ final class SmsTransactionService {
     required DateTime smsReceivedAt,
     required int? subscriptionId,
   }) async {
-    final wallet = _resolveWallet(sender, subscriptionId);
-
-    if (wallet == null) {
-      // Recognized provider but no matching wallet yet — enqueue for retry.
-      if (SmsParserRegistry.resolve(sender) != null) {
-        log('Wallet not found for recognized provider. Enqueuing.', name: _tag);
-        _enqueueFailure(
-          sender: sender,
-          body: body,
-          smsReceivedAt: smsReceivedAt,
-          subscriptionId: subscriptionId,
-          error: 'Wallet not found',
-        );
-        return false;
-      }
-      return true; // Unknown provider — ignore silently.
-    }
-
-    final transaction = SmsParsingService.parse(
+    // Phase 1: parse without wallet commitment.
+    final parseResult = SmsParsingService.parseRaw(
       sender: sender,
       message: body,
       smsReceivedAt: smsReceivedAt,
+    );
+
+    if (parseResult == null) {
+      // Unknown provider — check if any provider matched the sender at all.
+      if (SmsParserRegistry.resolve(sender) != null) {
+        // Recognized provider but pattern didn't match — ignore silently.
+        return true;
+      }
+      return true; // Completely unknown sender — ignore silently.
+    }
+
+    // Phase 2: resolve wallet using all available signals.
+    final wallet = _resolveWallet(
+      sender: sender,
+      subscriptionId: subscriptionId,
+      amount: parseResult.amount,
+      transactionType: parseResult.type,
+      parsedBalance: parseResult.balance,
+    );
+
+    if (wallet == null) {
+      log('Wallet not found for recognized provider. Enqueuing.', name: _tag);
+      _enqueueFailure(
+        sender: sender,
+        body: body,
+        smsReceivedAt: smsReceivedAt,
+        subscriptionId: subscriptionId,
+        error: 'Wallet not found',
+      );
+      return false;
+    }
+
+    final transaction = SmsParsingService.buildEntity(
+      result: parseResult,
       walletId: wallet.id,
       walletOwnerUid: wallet.ownerUid,
       walletPhoneNumber: wallet.phoneNumber,
+      rawMessage: body,
     );
-
-    if (transaction == null) {
-      log('SMS from $sender did not match any transaction pattern.', name: _tag);
-      return true; // Pattern miss — ignore silently.
-    }
 
     return _save(
       transaction,
@@ -155,7 +175,13 @@ final class SmsTransactionService {
     );
   }
 
-  WalletEntity? _resolveWallet(String sender, int? subscriptionId) {
+  WalletEntity? _resolveWallet({
+    required String sender,
+    required int? subscriptionId,
+    double? amount,
+    TransactionType? transactionType,
+    double? parsedBalance,
+  }) {
     final parser = SmsParserRegistry.resolve(sender);
     if (parser == null) return null;
 
@@ -166,9 +192,16 @@ final class SmsTransactionService {
       return null;
     }
 
+    final input = SmsWalletMatchInput(
+      subscriptionId: subscriptionId,
+      amount: amount,
+      transactionType: transactionType,
+      parsedBalance: parsedBalance,
+    );
+
     final matchResult = SmsWalletMatcher.resolve(
       wallets: candidates,
-      subscriptionId: subscriptionId,
+      input: input,
     );
 
     if (matchResult.needsSubscriptionMapping && subscriptionId != null) {

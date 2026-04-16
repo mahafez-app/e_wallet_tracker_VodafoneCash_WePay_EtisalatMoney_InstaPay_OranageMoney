@@ -16,6 +16,7 @@ import '../cache/wallet_meta_cache.dart';
 import '../data/models/pending_sms_retry_item.dart';
 import '../data/models/wallet_dto.dart';
 import '../domain/entities/wallet_entity.dart';
+import '../domain/enums/transaction_type.dart';
 import '../utils/sms/registry/sms_parser_registry.dart';
 import '../utils/sms/sms_message_extension.dart';
 import '../utils/sms/sms_parsing_service.dart';
@@ -61,8 +62,8 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
   final body = message.body;
   if (sender == null || body == null) return;
 
-  final parser = SmsParserRegistry.resolve(sender);
-  if (parser == null) {
+  // Quick guard: reject entirely unknown senders before Firestore access.
+  if (SmsParserRegistry.resolve(sender) == null) {
     log('Ignoring: unknown sender "$sender".', name: 'BackgroundSms');
     return;
   }
@@ -74,7 +75,6 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
     sender: sender,
     body: body,
     smsReceivedAt: message.receivedAt,
-    providerName: parser.provider.toValue,
     subscriptionId: message.subscriptionId,
   );
 }
@@ -93,14 +93,11 @@ final class _BackgroundSmsProcessor {
 
   static const _tag = 'BackgroundSms';
 
-  /// Full pipeline: wallet resolution → parsing → saving → retry sweep.
-  ///
-  /// Returns `true` if the item was handled (saved or intentionally ignored).
+  /// Full pipeline: parse → wallet resolution with signals → saving → retry sweep.
   Future<void> process({
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
-    required String providerName,
     required int? subscriptionId,
   }) async {
     try {
@@ -108,7 +105,6 @@ final class _BackgroundSmsProcessor {
         sender: sender,
         body: body,
         smsReceivedAt: smsReceivedAt,
-        providerName: providerName,
         subscriptionId: subscriptionId,
       );
 
@@ -121,7 +117,6 @@ final class _BackgroundSmsProcessor {
         body: body,
         smsReceivedAt: smsReceivedAt,
         subscriptionId: subscriptionId,
-        providerName: providerName,
         error: e.toString(),
       );
     }
@@ -129,14 +124,28 @@ final class _BackgroundSmsProcessor {
 
   // ── Pipeline steps ──────────────────────────────────────────────────────
 
+  /// Two-phase pipeline:
+  ///   Phase 1 — parse the SMS body to extract amount, type, and balance.
+  ///   Phase 2 — resolve wallet using subscription ID + balance-delta signals.
   Future<bool> _runPipeline({
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
-    required String providerName,
     required int? subscriptionId,
   }) async {
-    // Background isolates often need a moment to load the Firebase user session
+    // Phase 1: parse without wallet commitment.
+    final parseResult = SmsParsingService.parseRaw(
+      sender: sender,
+      message: body,
+      smsReceivedAt: smsReceivedAt,
+    );
+
+    if (parseResult == null) {
+      log('SMS did not match any transaction pattern.', name: _tag);
+      return true; // Pattern miss — ignore silently.
+    }
+
+    // Authenticate user.
     var currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
       await Future.delayed(const Duration(milliseconds: 500));
@@ -154,39 +163,37 @@ final class _BackgroundSmsProcessor {
       return true; // Unrecoverable without a user context.
     }
 
+    // Phase 2: resolve wallet using all available signals.
     final wallet = await _resolveWallet(
       uid: uid,
-      providerName: providerName,
+      providerName: parseResult.provider.toValue,
       subscriptionId: subscriptionId,
+      amount: parseResult.amount,
+      transactionType: parseResult.type,
+      parsedBalance: parseResult.balance,
     );
 
     if (wallet == null) {
-      log('No matching wallet for provider $providerName. Enqueuing.',
+      log('No matching wallet for provider ${parseResult.provider}. Enqueuing.',
           name: _tag);
       _enqueue(
         sender: sender,
         body: body,
         smsReceivedAt: smsReceivedAt,
         subscriptionId: subscriptionId,
-        providerName: providerName,
+        providerName: parseResult.provider.toValue,
         error: 'Wallet not found',
       );
       return false;
     }
 
-    final transaction = SmsParsingService.parse(
-      sender: sender,
-      message: body,
-      smsReceivedAt: smsReceivedAt,
+    final transaction = SmsParsingService.buildEntity(
+      result: parseResult,
       walletId: wallet.id,
       walletOwnerUid: wallet.ownerUid,
       walletPhoneNumber: wallet.phoneNumber,
+      rawMessage: body,
     );
-
-    if (transaction == null) {
-      log('SMS did not match any transaction pattern.', name: _tag);
-      return true; // Pattern miss — ignore silently.
-    }
 
     try {
       await _buildDataSource().saveTransaction(transaction);
@@ -210,6 +217,9 @@ final class _BackgroundSmsProcessor {
     required String uid,
     required String providerName,
     required int? subscriptionId,
+    double? amount,
+    TransactionType? transactionType,
+    double? parsedBalance,
   }) async {
     final firestore = FirebaseFirestore.instance;
 
@@ -224,9 +234,16 @@ final class _BackgroundSmsProcessor {
     final candidates =
         snapshot.docs.map((d) => WalletDto.fromFirestore(d).toEntity()).toList();
 
+    final input = SmsWalletMatchInput(
+      subscriptionId: subscriptionId,
+      amount: amount,
+      transactionType: transactionType,
+      parsedBalance: parsedBalance,
+    );
+
     final matchResult = SmsWalletMatcher.resolve(
       wallets: candidates,
-      subscriptionId: subscriptionId,
+      input: input,
     );
 
     if (matchResult.needsSubscriptionMapping && subscriptionId != null) {
@@ -256,14 +273,13 @@ final class _BackgroundSmsProcessor {
     await retryService.retryPending(
       processItem: (item) async {
         try {
-          final providerName = _resolveProviderName(item);
-          if (providerName == null) return true; // Unrecognised — discard.
+          // Guard: skip items whose sender is no longer in the registry.
+          if (SmsParserRegistry.resolve(item.sender) == null) return true;
 
           return _runPipeline(
             sender: item.sender,
             body: item.body,
             smsReceivedAt: item.smsReceivedAt,
-            providerName: providerName,
             subscriptionId: item.subscriptionId,
           );
         } catch (e) {
@@ -274,12 +290,6 @@ final class _BackgroundSmsProcessor {
     );
   }
 
-  String? _resolveProviderName(PendingSmsRetryItem item) {
-    if (item.providerName != null && item.providerName!.isNotEmpty) {
-      return item.providerName;
-    }
-    return SmsParserRegistry.resolve(item.sender)?.provider.toValue;
-  }
 
   // ── Enqueue ─────────────────────────────────────────────────────────────
 

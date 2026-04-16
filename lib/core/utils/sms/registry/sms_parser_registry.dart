@@ -1,3 +1,4 @@
+import '../../../domain/enums/wallet_provider.dart';
 import '../parsers/etisalat_cash_sms_parser.dart';
 import '../parsers/insta_pay_sms_parser.dart';
 import '../parsers/orange_money_sms_parser.dart';
@@ -30,6 +31,14 @@ final class SmsParserRegistry {
       for (final id in parser.senderIds) {
         if (normalized.contains(_normalizeSender(id))) return parser;
       }
+    }
+    return null;
+  }
+
+  /// Returns the parser for [provider], or `null` if the provider has no parser.
+  static SmsParser? resolveByProvider(WalletProvider provider) {
+    for (final parser in [..._builtIn, ..._extras]) {
+      if (parser.provider == provider) return parser;
     }
     return null;
   }

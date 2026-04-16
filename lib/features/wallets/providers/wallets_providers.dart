@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/cache_providers.dart';
 import '../../../core/providers/firebase_providers.dart';
 import '../../../core/providers/service_providers.dart';
+import '../../../core/providers/sms_providers.dart';
 import '../data/datasources/wallet_details_remote_data_source.dart';
 import '../data/datasources/wallet_remote_data_source.dart';
 import '../data/repositories/wallet_repository_impl.dart';
@@ -33,6 +34,7 @@ final walletRepositoryProvider = Provider<WalletRepository>((ref) {
     detailsDataSource: ref.watch(walletDetailsRemoteDataSourceProvider),
     deviceInfoService: ref.watch(deviceInfoServiceProvider),
     walletMetaCache: ref.watch(walletMetaCacheProvider),
+    inboxSmsService: ref.watch(inboxSmsServiceProvider),
   );
 });
 

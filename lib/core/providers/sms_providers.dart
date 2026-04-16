@@ -4,6 +4,7 @@ import '../../features/settings/providers/settings_providers.dart';
 import '../../features/transactions/providers/transactions_providers.dart';
 import '../../features/wallets/providers/wallets_providers.dart';
 import '../domain/entities/wallet_entity.dart';
+import '../services/inbox_sms_service.dart';
 import '../services/pending_sms_retry_service.dart';
 import '../services/sms_transaction_service.dart';
 import 'cache_providers.dart';
@@ -44,6 +45,10 @@ final smsTransactionServiceProvider = Provider<SmsTransactionService>(
 
 final pendingSmsRetryServiceProvider = Provider<PendingSmsRetryService>(
   (ref) => PendingSmsRetryService(box: ref.watch(pendingSmsRetryBoxProvider)),
+);
+
+final inboxSmsServiceProvider = Provider<InboxSmsService>(
+  (ref) => const InboxSmsServiceImpl(),
 );
 
 final smsTransactionListenerProvider = Provider<void>((ref) {

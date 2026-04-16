@@ -10,6 +10,7 @@ abstract interface class WalletRemoteDataSource {
   Future<List<WalletDto>> addWallets({
     required String phoneNumber,
     required List<String> providers,
+    required Map<String, double> initialBalances,
     required String deviceId,
   });
 
@@ -54,6 +55,7 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   Future<List<WalletDto>> addWallets({
     required String phoneNumber,
     required List<String> providers,
+    required Map<String, double> initialBalances,
     required String deviceId,
   }) async {
     final currentUser = _auth.currentUser;
@@ -85,13 +87,14 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
 
     for (final providerStr in providersToCreate) {
       final docRef = _firestore.collection('wallets').doc();
+      final initialBalance = initialBalances[providerStr] ?? 0.0;
       final walletDto = WalletDto(
         id: docRef.id,
         phoneNumber: normalizedPhoneNumber,
         provider: WalletProvider.fromString(providerStr),
         deviceId: deviceId,
         ownerUid: currentUser.uid,
-        currentBalance: 0.0,
+        currentBalance: initialBalance,
         totalReceived: 0.0,
         totalSent: 0.0,
         lastBalanceAt: now,

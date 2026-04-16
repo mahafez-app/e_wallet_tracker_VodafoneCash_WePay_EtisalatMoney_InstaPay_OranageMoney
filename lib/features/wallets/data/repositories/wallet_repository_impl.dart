@@ -1,8 +1,10 @@
 import '../../../../core/cache/wallet_meta_cache.dart';
 import '../../../../core/domain/entities/wallet_entity.dart';
+import '../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/services/device_info_service.dart';
+import '../../../../core/services/inbox_sms_service.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 import '../../domain/repositories/wallet_repository.dart';
@@ -16,17 +18,18 @@ class WalletRepositoryImpl implements WalletRepository {
     // removed PhoneNumberService phoneNumberService,
     required DeviceInfoService deviceInfoService,
     required WalletMetaCache walletMetaCache,
+    required InboxSmsService inboxSmsService,
   })  : _remoteDataSource = remoteDataSource,
         _detailsDataSource = detailsDataSource,
-        // _phoneNumberService = phoneNumberService,
         _deviceInfoService = deviceInfoService,
-        _walletMetaCache = walletMetaCache;
+        _walletMetaCache = walletMetaCache,
+        _inboxSmsService = inboxSmsService;
 
   final WalletRemoteDataSource _remoteDataSource;
   final WalletDetailsRemoteDataSource _detailsDataSource;
-  // final PhoneNumberService _phoneNumberService;
   final DeviceInfoService _deviceInfoService;
   final WalletMetaCache _walletMetaCache;
+  final InboxSmsService _inboxSmsService;
 
 
 
@@ -45,9 +48,20 @@ class WalletRepositoryImpl implements WalletRepository {
   }) {
     return executeAndHandleErrors(() async {
       final deviceId = await _resolveDeviceId();
+
+      final initialBalances = <String, double>{};
+      for (final providerStr in providers) {
+        final provider = WalletProvider.fromString(providerStr);
+        final balance = await _inboxSmsService.getLatestBalance(provider);
+        if (balance != null) {
+          initialBalances[providerStr] = balance;
+        }
+      }
+
       await _remoteDataSource.addWallets(
         phoneNumber: phoneNumber,
         providers: providers,
+        initialBalances: initialBalances,
         deviceId: deviceId,
       );
     }, tag: 'WalletRepositoryImpl.addWallets');

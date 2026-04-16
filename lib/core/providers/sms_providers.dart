@@ -59,16 +59,7 @@ final smsTransactionListenerProvider = Provider<void>((ref) {
   service.startListening();
 
   // Trigger retry on app open / startup
-  ref.read(pendingSmsRetryServiceProvider).retryPending(
-    processItem: (item) async {
-      return await service.processSms(
-        sender: item.sender,
-        body: item.body,
-        smsReceivedAt: item.smsReceivedAt,
-        subscriptionId: item.subscriptionId,
-      );
-    },
-  );
+  service.sweepRetryQueue();
 });
 
 

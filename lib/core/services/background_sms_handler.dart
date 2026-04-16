@@ -58,13 +58,17 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
   await _initializeDependenciesIfNeeded();
 
   try {
-    await _handleBackgroundSmsForUser(
+    final success = await _processCore(
       sender: sender,
       body: body,
       smsReceivedAt: message.receivedAt,
       providerName: parser.provider.toValue,
       subscriptionId: message.subscriptionId,
     );
+
+    if (success) {
+      await _sweepRetryQueue();
+    }
   } catch (e, st) {
     log('Background error: $e. Enqueuing for retry.',
         stackTrace: st, name: 'BackgroundSms');
@@ -79,7 +83,9 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
   }
 }
 
-Future<void> _handleBackgroundSmsForUser({
+/// Internal core logic for background processing.
+/// Returns true if successfully handled (saved or ignored), false on failure.
+Future<bool> _processCore({
   required String sender,
   required String body,
   required DateTime smsReceivedAt,
@@ -89,7 +95,7 @@ Future<void> _handleBackgroundSmsForUser({
   final currentUser = FirebaseAuth.instance.currentUser;
   if (currentUser == null) {
     log('Ignoring: User not logged in.', name: 'BackgroundSms');
-    return;
+    return true; // "Handled" (nothing we can do)
   }
 
   final wallet = await _fetchWalletForProvider(
@@ -109,10 +115,10 @@ Future<void> _handleBackgroundSmsForUser({
       providerName: providerName,
       error: 'Wallet not found',
     );
-    return;
+    return false;
   }
 
-  await _processAndSaveBackgroundTransaction(
+  return await _processAndSaveBackgroundTransaction(
     sender: sender,
     body: body,
     smsReceivedAt: smsReceivedAt,
@@ -170,7 +176,7 @@ Future<WalletEntity?> _fetchWalletForProvider({
   return matchResult.wallet;
 }
 
-Future<void> _processAndSaveBackgroundTransaction({
+Future<bool> _processAndSaveBackgroundTransaction({
   required String sender,
   required String body,
   required DateTime smsReceivedAt,
@@ -188,11 +194,12 @@ Future<void> _processAndSaveBackgroundTransaction({
 
   if (transaction == null) {
     log('Ignoring: failed to parse.', name: 'BackgroundSms');
-    return;
+    return true; // Success (ignored)
   }
 
   try {
     await _saveBackgroundTransaction(transaction);
+    return true;
   } catch (e) {
     await _enqueueBackgroundFailure(
       sender: sender,
@@ -203,7 +210,7 @@ Future<void> _processAndSaveBackgroundTransaction({
       providerName: wallet.provider.toValue,
       error: e.toString(),
     );
-    rethrow;
+    return false;
   }
 }
 
@@ -216,6 +223,37 @@ Future<void> _saveBackgroundTransaction(TransactionEntity transaction) async {
   );
   await remoteDataSource.saveTransaction(transaction);
   log('Background successful: ${transaction.id}', name: 'BackgroundSms');
+}
+
+Future<void> _sweepRetryQueue() async {
+  final box = Hive.box<String>('pending_sms_retry_queue');
+  if (box.isEmpty) return;
+
+  final retryService = PendingSmsRetryService(box: box);
+  await retryService.retryPending(
+    processItem: (item) async {
+      try {
+        String? providerName = item.providerName;
+        if (providerName == null || providerName.isEmpty) {
+          final parser = SmsParserRegistry.resolve(item.sender);
+          providerName = parser?.provider.toValue;
+        }
+
+        if (providerName == null) return true; // Can't process, but ignore (unrecognized)
+
+        return await _processCore(
+          sender: item.sender,
+          body: item.body,
+          smsReceivedAt: item.smsReceivedAt,
+          providerName: providerName,
+          subscriptionId: item.subscriptionId,
+        );
+      } catch (e) {
+        log('Background retry failed for ${item.id}: $e', name: 'BackgroundSms');
+        return false;
+      }
+    },
+  );
 }
 
 Future<void> _enqueueBackgroundFailure({

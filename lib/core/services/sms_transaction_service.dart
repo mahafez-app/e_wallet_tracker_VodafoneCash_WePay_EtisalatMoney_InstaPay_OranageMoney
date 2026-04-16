@@ -62,7 +62,7 @@ class SmsTransactionService {
 
     if (sender == null || body == null) return;
 
-    processSms(
+    handleIncomingSms(
       sender: sender,
       body: body,
       smsReceivedAt: message.receivedAt,
@@ -70,9 +70,29 @@ class SmsTransactionService {
     );
   }
 
-  /// Processes an SMS message. Returns true if successfully saved or ignored as non-transaction.
-  /// Returns false if enqueued for retry.
-  Future<bool> processSms({
+  /// Entry point for SMS processing. Handles the message and triggers a
+  /// passive sweep of the retry queue on success.
+  Future<void> handleIncomingSms({
+    required String sender,
+    required String body,
+    required DateTime smsReceivedAt,
+    required int? subscriptionId,
+  }) async {
+    final success = await _processCore(
+      sender: sender,
+      body: body,
+      smsReceivedAt: smsReceivedAt,
+      subscriptionId: subscriptionId,
+    );
+
+    if (success) {
+      sweepRetryQueue();
+    }
+  }
+
+  /// Internal core logic for processing an SMS: wallet matching, parsing, and saving.
+  /// Returns true if successfully handled (saved or ignored), false on failure.
+  Future<bool> _processCore({
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
@@ -111,7 +131,7 @@ class SmsTransactionService {
     );
 
     if (transaction != null) {
-      return _saveTransactionAsync(
+      return await _saveTransactionAsync(
         transaction,
         sender: sender,
         body: body,
@@ -164,6 +184,22 @@ class SmsTransactionService {
         .catchError((e) {
           log('Failed to learn subscriptionId: $e', name: _tag);
         });
+  }
+
+  /// Triggers an asynchronous sweep of the pending SMS retry queue.
+  /// This is a passive mechanism to ensure even "stuck" transactions
+  /// eventually get processed when a new one succeeds.
+  Future<void> sweepRetryQueue() async {
+    await _pendingSmsRetryService.retryPending(
+      processItem: (item) async {
+        return await _processCore(
+          sender: item.sender,
+          body: item.body,
+          smsReceivedAt: item.smsReceivedAt,
+          subscriptionId: item.subscriptionId,
+        );
+      },
+    );
   }
 
   Future<bool> _saveTransactionAsync(

@@ -21,7 +21,7 @@ abstract final class TransactionSearchTerms {
     }
 
     final suffixes = <String>[];
-    for (var start = normalizedDigits.length - 3; start >= 0; start--) {
+    for (var start = normalizedDigits.length - 2; start >= 0; start--) {
       suffixes.add(normalizedDigits.substring(start));
     }
     return suffixes;

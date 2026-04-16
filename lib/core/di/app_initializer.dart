@@ -15,6 +15,7 @@ final class AppBootstrapDependencies {
   const AppBootstrapDependencies({
     required this.sharedPreferences,
     required this.txFirstPageCacheBox,
+    required this.pendingSmsRetryBox,
   });
 
   final SharedPreferences sharedPreferences;
@@ -22,6 +23,10 @@ final class AppBootstrapDependencies {
   /// Opened Hive box used by [TransactionCacheLocalDataSourceImpl].
   /// Typed as [Box<String>] — raw JSON strings, no code generation required.
   final Box<String> txFirstPageCacheBox;
+
+  /// Opened Hive box for pending SMS retry items.
+  /// Typed as [Box<String>] — raw JSON strings of [PendingSmsRetryItem].
+  final Box<String> pendingSmsRetryBox;
 }
 
 Future<Result<AppBootstrapDependencies>> initializeApp() {
@@ -50,11 +55,16 @@ Future<Result<AppBootstrapDependencies>> initializeApp() {
         'tx_first_page_cache',
       );
 
+      final pendingSmsRetryBox = await Hive.openBox<String>(
+        'pending_sms_retry_queue',
+      );
+
       final sharedPreferences = await SharedPreferences.getInstance();
 
       return AppBootstrapDependencies(
         sharedPreferences: sharedPreferences,
         txFirstPageCacheBox: txFirstPageCacheBox,
+        pendingSmsRetryBox: pendingSmsRetryBox,
       );
     },
     tag: 'initializeApp',

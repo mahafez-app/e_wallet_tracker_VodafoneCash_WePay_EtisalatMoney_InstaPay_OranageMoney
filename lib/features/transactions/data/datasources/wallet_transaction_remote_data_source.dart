@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/data/models/transaction_dto.dart';
@@ -5,9 +7,9 @@ import '../../../../core/data/models/wallet_dto.dart';
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/domain/enums/transaction_type.dart';
 import '../../../../core/error/failures.dart';
-import '../../domain/entities/transaction_paid_status_filter.dart';
 import '../../domain/entities/transaction_date_range.dart';
 import '../../domain/entities/transaction_page.dart';
+import '../../domain/entities/transaction_paid_status_filter.dart';
 import '../models/note_dto.dart';
 import '../models/transaction_history_entry_dto.dart';
 import '../models/transaction_page_dto.dart';
@@ -201,10 +203,19 @@ final class WalletTransactionRemoteDataSourceImpl
 
   @override
   Future<void> saveTransaction(TransactionEntity transaction) async {
+    final txRef = _support.txCollection(transaction.walletId).doc(transaction.id);
+
+    // Short-circuit if transaction already exists to avoid duplicate balance increments
+    final txSnapshot = await txRef.get();
+    if (txSnapshot.exists) {
+      log(
+        'Transaction ${transaction.id} already exists. Skipping save.',
+        name: 'WalletTransactionRemoteDataSource',
+      );
+      return;
+    }
+
     final walletRef = _support.walletDocument(transaction.walletId);
-    final txRef = _support
-        .txCollection(transaction.walletId)
-        .doc(transaction.id);
     final dto = TransactionDto.fromEntity(transaction);
     final isReceive = transaction.type == TransactionType.receive;
     final amount = transaction.amount;
@@ -219,6 +230,7 @@ final class WalletTransactionRemoteDataSourceImpl
     });
     await batch.commit();
   }
+
 
   @override
   Future<void> deleteTransaction({

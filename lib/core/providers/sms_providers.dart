@@ -4,10 +4,14 @@ import '../../features/settings/providers/settings_providers.dart';
 import '../../features/transactions/providers/transactions_providers.dart';
 import '../../features/wallets/providers/wallets_providers.dart';
 import '../domain/entities/wallet_entity.dart';
+import '../services/pending_sms_retry_service.dart';
 import '../services/sms_transaction_service.dart';
+import 'cache_providers.dart';
+import 'connectivity_providers.dart';
 
 /// Internal representation of SMS readiness state.
 typedef SmsReadiness = ({bool isPermitted, List<WalletEntity> wallets});
+
 
 /// Evaluates wallet-sync permissions and fetches wallets once per session.
 /// Invalidate this provider after permission is granted to re-evaluate.
@@ -31,10 +35,20 @@ final smsReadinessProvider = FutureProvider<SmsReadiness>((ref) async {
 final smsTransactionServiceProvider = Provider<SmsTransactionService>(
   (ref) => SmsTransactionService(
     saveTransactionUseCase: ref.watch(saveTransactionUseCaseProvider),
+    pendingSmsRetryService: ref.watch(pendingSmsRetryServiceProvider),
+  ),
+);
+
+final pendingSmsRetryServiceProvider = Provider<PendingSmsRetryService>(
+  (ref) => PendingSmsRetryService(
+    box: ref.watch(pendingSmsRetryBoxProvider),
   ),
 );
 
 final smsTransactionListenerProvider = Provider<void>((ref) {
+  // Activate connectivity-based retries
+  ref.watch(connectivityRetryProvider);
+
   final readiness = ref.watch(smsReadinessProvider).value;
   if (readiness == null || !readiness.isPermitted) {
     return;
@@ -43,4 +57,19 @@ final smsTransactionListenerProvider = Provider<void>((ref) {
   final service = ref.watch(smsTransactionServiceProvider);
   service.updateWallets(readiness.wallets);
   service.startListening();
+
+  // Trigger retry on app open / startup
+  ref.read(pendingSmsRetryServiceProvider).retryPending(
+    processItem: (item) async {
+      return await service.processSms(
+        sender: item.sender,
+        body: item.body,
+        smsReceivedAt: item.smsReceivedAt,
+        subscriptionId: item.subscriptionId,
+      );
+    },
+  );
 });
+
+
+

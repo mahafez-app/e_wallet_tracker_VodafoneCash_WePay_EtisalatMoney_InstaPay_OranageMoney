@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
 
@@ -6,11 +7,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../features/transactions/data/datasources/transaction_firestore_support.dart';
 import '../../features/transactions/data/datasources/wallet_transaction_remote_data_source.dart';
 import '../cache/wallet_meta_cache.dart';
 import '../../firebase_options.dart';
+import '../data/models/pending_sms_retry_item.dart';
 import '../data/models/wallet_dto.dart';
 import '../domain/entities/transaction_entity.dart';
 import '../domain/entities/wallet_entity.dart';
@@ -18,6 +21,8 @@ import '../utils/sms/registry/sms_parser_registry.dart';
 import '../utils/sms/sms_message_extension.dart';
 import '../utils/sms/sms_parsing_service.dart';
 import '../utils/sms/sms_wallet_matcher.dart';
+import 'pending_sms_retry_service.dart';
+
 
 /// Logs all relevant fields of an SMS message.
 void logSmsDetails(SmsMessage message, {required bool isBackground}) {
@@ -50,15 +55,28 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
     return;
   }
 
-  await _initializeFirebaseIfNeeded();
+  await _initializeDependenciesIfNeeded();
 
-  await _handleBackgroundSmsForUser(
-    sender: sender,
-    body: body,
-    smsReceivedAt: message.receivedAt,
-    providerName: parser.provider.toValue,
-    subscriptionId: message.subscriptionId,
-  );
+  try {
+    await _handleBackgroundSmsForUser(
+      sender: sender,
+      body: body,
+      smsReceivedAt: message.receivedAt,
+      providerName: parser.provider.toValue,
+      subscriptionId: message.subscriptionId,
+    );
+  } catch (e, st) {
+    log('Background error: $e. Enqueuing for retry.',
+        stackTrace: st, name: 'BackgroundSms');
+    await _enqueueBackgroundFailure(
+      sender: sender,
+      body: body,
+      smsReceivedAt: message.receivedAt,
+      subscriptionId: message.subscriptionId,
+      providerName: parser.provider.toValue,
+      error: e.toString(),
+    );
+  }
 }
 
 Future<void> _handleBackgroundSmsForUser({
@@ -81,7 +99,16 @@ Future<void> _handleBackgroundSmsForUser({
   );
 
   if (wallet == null) {
-    log('Ignoring: No matching wallet for provider.', name: 'BackgroundSms');
+    log('Ignoring: No matching wallet for provider. Enqueuing.',
+        name: 'BackgroundSms');
+    await _enqueueBackgroundFailure(
+      sender: sender,
+      body: body,
+      smsReceivedAt: smsReceivedAt,
+      subscriptionId: subscriptionId,
+      providerName: providerName,
+      error: 'Wallet not found',
+    );
     return;
   }
 
@@ -90,10 +117,11 @@ Future<void> _handleBackgroundSmsForUser({
     body: body,
     smsReceivedAt: smsReceivedAt,
     wallet: wallet,
+    subscriptionId: subscriptionId,
   );
 }
 
-Future<void> _initializeFirebaseIfNeeded() async {
+Future<void> _initializeDependenciesIfNeeded() async {
   WidgetsFlutterBinding.ensureInitialized();
   DartPluginRegistrant.ensureInitialized();
 
@@ -101,6 +129,12 @@ Future<void> _initializeFirebaseIfNeeded() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+  }
+
+  // Initialize Hive and open retry box in background isolate
+  await Hive.initFlutter();
+  if (!Hive.isBoxOpen('pending_sms_retry_queue')) {
+    await Hive.openBox<String>('pending_sms_retry_queue');
   }
 }
 
@@ -141,6 +175,7 @@ Future<void> _processAndSaveBackgroundTransaction({
   required String body,
   required DateTime smsReceivedAt,
   required WalletEntity wallet,
+  required int? subscriptionId,
 }) async {
   final transaction = SmsParsingService.parse(
     sender: sender,
@@ -156,7 +191,20 @@ Future<void> _processAndSaveBackgroundTransaction({
     return;
   }
 
-  await _saveBackgroundTransaction(transaction);
+  try {
+    await _saveBackgroundTransaction(transaction);
+  } catch (e) {
+    await _enqueueBackgroundFailure(
+      sender: sender,
+      body: body,
+      smsReceivedAt: smsReceivedAt,
+      subscriptionId: subscriptionId,
+      walletId: wallet.id,
+      providerName: wallet.provider.toValue,
+      error: e.toString(),
+    );
+    rethrow;
+  }
 }
 
 Future<void> _saveBackgroundTransaction(TransactionEntity transaction) async {
@@ -166,10 +214,62 @@ Future<void> _saveBackgroundTransaction(TransactionEntity transaction) async {
       metaCache: WalletMetaCache(),
     ),
   );
-  try {
-    await remoteDataSource.saveTransaction(transaction);
-    log('Background successful: ${transaction.id}', name: 'BackgroundSms');
-  } catch (e, st) {
-    log('Background failure: $e', stackTrace: st, name: 'BackgroundSms');
+  await remoteDataSource.saveTransaction(transaction);
+  log('Background successful: ${transaction.id}', name: 'BackgroundSms');
+}
+
+Future<void> _enqueueBackgroundFailure({
+  required String sender,
+  required String body,
+  required DateTime smsReceivedAt,
+  required int? subscriptionId,
+  String? walletId,
+  String? providerName,
+  required String error,
+}) async {
+  final currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser == null) return;
+
+  final box = Hive.box<String>('pending_sms_retry_queue');
+
+  final id = PendingSmsRetryService.generateQueueKey(
+    sender: sender,
+    body: body,
+    receivedAt: smsReceivedAt,
+  );
+
+  final item = PendingSmsRetryItem(
+    id: id,
+    sender: sender,
+    body: body,
+    smsReceivedAt: smsReceivedAt,
+    userUid: currentUser.uid,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    subscriptionId: subscriptionId,
+    walletId: walletId,
+    providerName: providerName,
+    lastError: error,
+  );
+
+  // Manual implementation of enqueue logic since we are in background isolate
+  // and might not want to instantiate the whole service if not needed,
+  // although we could.
+  final existingJson = box.get(id);
+  if (existingJson != null) {
+    try {
+      final existingItem = PendingSmsRetryItem.fromJson(
+        jsonDecode(existingJson) as Map<String, dynamic>,
+      );
+      final updatedItem = existingItem.copyWith(
+        lastError: error,
+        retryCount: existingItem.retryCount + 1,
+        updatedAt: DateTime.now(),
+      );
+      await box.put(id, jsonEncode(updatedItem.toJson()));
+      return;
+    } catch (_) {}
   }
+
+  await box.put(id, jsonEncode(item.toJson()));
 }

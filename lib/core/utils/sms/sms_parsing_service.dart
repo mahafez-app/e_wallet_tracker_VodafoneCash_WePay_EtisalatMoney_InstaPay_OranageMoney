@@ -43,8 +43,14 @@ class SmsParsingService {
     required String walletPhoneNumber,
     required String rawMessage,
   }) {
+    // Generate deterministic ID so retries don't create duplicates
+    final deterministicId = _uuid.v5(
+      Namespace.url.value,
+      '${result.provider}_${rawMessage.trim()}_${result.createdAt.millisecondsSinceEpoch}_$walletId',
+    );
+
     return TransactionEntity(
-      id: _uuid.v4(),
+      id: deterministicId,
       type: result.type,
       amount: result.amount,
       createdAt: result.createdAt,
@@ -59,3 +65,4 @@ class SmsParsingService {
     );
   }
 }
+

@@ -305,6 +305,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "providerWePay": MessageLookupByLibrary.simpleMessage("وي باي"),
         "recentTransactions":
             MessageLookupByLibrary.simpleMessage("آخر المعاملات"),
+        "reportSummaryReceivedTransactionsDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "عدد المعاملات التي تم استلامها خلال هذه الفترة."),
+        "reportSummaryReceivedTransactionsTitle":
+            MessageLookupByLibrary.simpleMessage("المعاملات المستلمة"),
+        "reportSummarySentTransactionsDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "عدد المعاملات التي تم إرسالها خلال هذه الفترة."),
+        "reportSummarySentTransactionsTitle":
+            MessageLookupByLibrary.simpleMessage("المعاملات المرسلة"),
         "reports_all_wallets":
             MessageLookupByLibrary.simpleMessage("كافة المحافظ"),
         "reports_balance_label":

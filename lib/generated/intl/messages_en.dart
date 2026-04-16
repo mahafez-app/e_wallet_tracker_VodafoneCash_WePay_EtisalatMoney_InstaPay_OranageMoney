@@ -315,6 +315,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "providerWePay": MessageLookupByLibrary.simpleMessage("WE Pay"),
         "recentTransactions":
             MessageLookupByLibrary.simpleMessage("Recent Transactions"),
+        "reportSummaryReceivedTransactionsDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Number of transactions received during this period."),
+        "reportSummaryReceivedTransactionsTitle":
+            MessageLookupByLibrary.simpleMessage("Received transactions"),
+        "reportSummarySentTransactionsDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Number of transactions sent during this period."),
+        "reportSummarySentTransactionsTitle":
+            MessageLookupByLibrary.simpleMessage("Sent transactions"),
         "reports_all_wallets":
             MessageLookupByLibrary.simpleMessage("All Wallets"),
         "reports_balance_label":

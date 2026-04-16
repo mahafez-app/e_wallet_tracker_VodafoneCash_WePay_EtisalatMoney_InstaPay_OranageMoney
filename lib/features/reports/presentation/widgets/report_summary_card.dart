@@ -67,6 +67,18 @@ class ReportSummaryCard extends StatelessWidget {
               icon: Icons.calculate_outlined,
               color: theme.colorScheme.tertiary,
             ),
+            _MetricCard(
+              title: l10n.reportSummaryReceivedTransactionsTitle,
+              amount: report.receivedTransactionCount.toString(),
+              icon: Icons.call_received_rounded,
+              color: theme.colorScheme.secondary,
+            ),
+            _MetricCard(
+              title: l10n.reportSummarySentTransactionsTitle,
+              amount: report.sentTransactionCount.toString(),
+              icon: Icons.call_made_rounded,
+              color: theme.colorScheme.error,
+            ),
           ],
         ),
       ],

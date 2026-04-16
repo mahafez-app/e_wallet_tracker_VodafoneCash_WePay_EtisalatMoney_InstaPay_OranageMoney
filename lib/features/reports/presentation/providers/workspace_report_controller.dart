@@ -1,11 +1,12 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../core/domain/enums/report_period.dart';
+import '../../../workspaces/presentation/providers/workspace_details_controller.dart';
 import '../../domain/entities/report_entity.dart';
 import '../../domain/entities/report_filter_entity.dart';
 import '../../domain/usecases/get_workspace_report_usecase.dart';
 import '../../providers/reports_providers.dart';
-import '../../../workspaces/presentation/providers/workspace_details_controller.dart';
 
 class WorkspaceReportFilterController extends Notifier<ReportFilterEntity> {
   WorkspaceReportFilterController(this.workspaceId);
@@ -60,6 +61,8 @@ class WorkspaceReportController extends AsyncNotifier<ReportEntity> {
         balanceChange: 0,
         transactionCount: 0,
         transactionsByDay: {},
+        receivedTransactionCount: 0,
+        sentTransactionCount: 0,
       );
     }
 

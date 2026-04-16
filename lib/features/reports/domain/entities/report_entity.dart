@@ -1,12 +1,14 @@
 import 'package:equatable/equatable.dart';
 
-class ReportEntity extends Equatable {
+final class ReportEntity extends Equatable {
   const ReportEntity({
     required this.totalIncome,
     required this.totalOutcome,
     required this.balanceChange,
     required this.transactionCount,
     required this.transactionsByDay,
+    required this.receivedTransactionCount,
+    required this.sentTransactionCount,
   });
 
   final double totalIncome;
@@ -14,6 +16,8 @@ class ReportEntity extends Equatable {
   final double balanceChange;
   final int transactionCount;
   final Map<DateTime, double> transactionsByDay;
+  final int receivedTransactionCount;
+  final int sentTransactionCount;
 
   @override
   List<Object?> get props => [
@@ -22,5 +26,7 @@ class ReportEntity extends Equatable {
         balanceChange,
         transactionCount,
         transactionsByDay,
+        receivedTransactionCount,
+        sentTransactionCount,
       ];
 }

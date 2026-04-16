@@ -2722,6 +2722,46 @@ class S {
     );
   }
 
+  /// `المعاملات المستلمة`
+  String get reportSummaryReceivedTransactionsTitle {
+    return Intl.message(
+      'المعاملات المستلمة',
+      name: 'reportSummaryReceivedTransactionsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عدد المعاملات التي تم استلامها خلال هذه الفترة.`
+  String get reportSummaryReceivedTransactionsDescription {
+    return Intl.message(
+      'عدد المعاملات التي تم استلامها خلال هذه الفترة.',
+      name: 'reportSummaryReceivedTransactionsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المعاملات المرسلة`
+  String get reportSummarySentTransactionsTitle {
+    return Intl.message(
+      'المعاملات المرسلة',
+      name: 'reportSummarySentTransactionsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عدد المعاملات التي تم إرسالها خلال هذه الفترة.`
+  String get reportSummarySentTransactionsDescription {
+    return Intl.message(
+      'عدد المعاملات التي تم إرسالها خلال هذه الفترة.',
+      name: 'reportSummarySentTransactionsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `مدفوع`
   String get transactionStatusPaid {
     return Intl.message(

@@ -15,4 +15,11 @@ abstract interface class WalletRepository {
   Future<Result<WalletDetailsEntity>> getWalletDetails(String walletId);
 
   Future<Result<void>> deleteWallet(String walletId);
+
+  /// Persists a SIM subscription ID to a wallet document so that future
+  /// incoming messages from that SIM slot are matched directly.
+  Future<Result<void>> linkSubscriptionId({
+    required String walletId,
+    required int subscriptionId,
+  });
 }

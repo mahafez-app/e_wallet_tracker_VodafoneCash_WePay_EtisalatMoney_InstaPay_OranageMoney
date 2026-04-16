@@ -1,10 +1,10 @@
-// parsers/we_pay_sms_parser.dart
-
 import '../../../domain/enums/wallet_provider.dart';
 import '../sms_parser.dart';
 import '../sms_patterns.dart';
 
-class WePaySmsParser extends SmsParser {
+final class WePaySmsParser extends SmsParser {
+  const WePaySmsParser();
+
   @override
   WalletProvider get provider => WalletProvider.wePay;
 
@@ -13,21 +13,21 @@ class WePaySmsParser extends SmsParser {
 
   @override
   List<RegExp> get receivePatterns => [
-    SmsPatterns.arReceiveFromNumber,
-    SmsPatterns.enReceiveFromNumber,
-    SmsPatterns.enTransferReceivedFromNumber,
-  ];
+        SmsPatterns.arReceiveFromNumber,
+        SmsPatterns.enReceiveFromNumber,
+        SmsPatterns.enTransferReceivedFromNumber,
+      ];
 
   @override
   List<RegExp> get sendPatterns => [
-    SmsPatterns.arSendToNumber,
-    SmsPatterns.enSendToNumber,
-    SmsPatterns.enTransferSentToNumber,
-  ];
+        SmsPatterns.arSendToNumber,
+        SmsPatterns.enSendToNumber,
+        SmsPatterns.enTransferSentToNumber,
+      ];
 
   @override
   List<RegExp> get refPatterns => [
-    SmsPatterns.refOperationAr,
-    SmsPatterns.refEn,
-  ];
+        SmsPatterns.refOperationAr,
+        SmsPatterns.refEn,
+      ];
 }

@@ -1,10 +1,9 @@
 import 'dart:developer';
 
 import 'package:another_telephony/telephony.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../features/transactions/domain/usecases/save_transaction_usecase.dart';
+import '../../features/wallets/domain/usecases/link_subscription_id_usecase.dart';
 import '../data/models/pending_sms_retry_item.dart';
 import '../domain/entities/transaction_entity.dart';
 import '../domain/entities/wallet_entity.dart';
@@ -15,24 +14,26 @@ import '../utils/sms/sms_wallet_matcher.dart';
 import 'background_sms_handler.dart';
 import 'pending_sms_retry_service.dart';
 
-
 /// Wraps [Telephony.instance.listenIncomingSms] and routes every incoming
-/// SMS through the parser pipeline. If a transaction is recognized it is
+/// SMS through the parser pipeline. If a transaction is recognised it is
 /// persisted via [SaveTransactionUseCase].
 ///
-/// Call [startListening] once per session (typically when wallets load on the
-/// home screen). Call [stopListening] (or rely on Riverpod [ref.onDispose])
-/// when the provider is disposed.
-class SmsTransactionService {
+/// Call [startListening] once per session (typically when wallets load).
+/// Riverpod's [ref.onDispose] handles teardown automatically.
+final class SmsTransactionService {
   SmsTransactionService({
     required SaveTransactionUseCase saveTransactionUseCase,
     required PendingSmsRetryService pendingSmsRetryService,
+    required LinkSubscriptionIdUseCase linkSubscriptionIdUseCase,
   })  : _saveTransactionUseCase = saveTransactionUseCase,
-        _pendingSmsRetryService = pendingSmsRetryService;
+        _pendingSmsRetryService = pendingSmsRetryService,
+        _linkSubscriptionIdUseCase = linkSubscriptionIdUseCase;
 
-  List<WalletEntity> _wallets = const [];
   final SaveTransactionUseCase _saveTransactionUseCase;
   final PendingSmsRetryService _pendingSmsRetryService;
+  final LinkSubscriptionIdUseCase _linkSubscriptionIdUseCase;
+
+  List<WalletEntity> _wallets = const [];
   bool _isListening = false;
 
   static const _tag = 'SmsTransactionService';
@@ -42,9 +43,7 @@ class SmsTransactionService {
   }
 
   void startListening() {
-    if (_isListening) {
-      return;
-    }
+    if (_isListening) return;
 
     Telephony.instance.listenIncomingSms(
       onNewMessage: _handleForegroundMessage,
@@ -52,26 +51,12 @@ class SmsTransactionService {
       listenInBackground: true,
     );
     _isListening = true;
-    log('SMS listener active (Wallets: ${_wallets.length})', name: _tag);
+    log('SMS listener active (wallets: ${_wallets.length})', name: _tag);
   }
 
-  void _handleForegroundMessage(SmsMessage message) {
-    logSmsDetails(message, isBackground: false);
-    final sender = message.address;
-    final body = message.body;
+  // ── Entry points ─────────────────────────────────────────────────────────
 
-    if (sender == null || body == null) return;
-
-    handleIncomingSms(
-      sender: sender,
-      body: body,
-      smsReceivedAt: message.receivedAt,
-      subscriptionId: message.subscriptionId,
-    );
-  }
-
-  /// Entry point for SMS processing. Handles the message and triggers a
-  /// passive sweep of the retry queue on success.
+  /// Processes a foreground SMS and triggers a passive retry sweep on success.
   Future<void> handleIncomingSms({
     required String sender,
     required String body,
@@ -85,30 +70,57 @@ class SmsTransactionService {
       subscriptionId: subscriptionId,
     );
 
-    if (success) {
-      sweepRetryQueue();
-    }
+    if (success) await sweepRetryQueue();
   }
 
-  /// Internal core logic for processing an SMS: wallet matching, parsing, and saving.
-  /// Returns true if successfully handled (saved or ignored), false on failure.
+  /// Triggers a passive sweep of the pending-retry queue.
+  ///
+  /// Called after every successful transaction and on app start so that
+  /// "stuck" items eventually clear themselves.
+  Future<void> sweepRetryQueue() async {
+    await _pendingSmsRetryService.retryPending(
+      processItem: (item) => _processCore(
+        sender: item.sender,
+        body: item.body,
+        smsReceivedAt: item.smsReceivedAt,
+        subscriptionId: item.subscriptionId,
+      ),
+    );
+  }
+
+  // ── Internal pipeline ────────────────────────────────────────────────────
+
+  void _handleForegroundMessage(SmsMessage message) {
+    logSmsDetails(message, isBackground: false);
+
+    final sender = message.address;
+    final body = message.body;
+    if (sender == null || body == null) return;
+
+    handleIncomingSms(
+      sender: sender,
+      body: body,
+      smsReceivedAt: message.receivedAt,
+      subscriptionId: message.subscriptionId,
+    );
+  }
+
+  /// Core pipeline: wallet resolution → parsing → saving.
+  ///
+  /// Returns `true` if the SMS was handled (saved or intentionally ignored),
+  /// `false` if a recoverable failure occurred and the item was enqueued.
   Future<bool> _processCore({
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
     required int? subscriptionId,
   }) async {
-    final wallet = _getWalletForSender(sender, subscriptionId);
+    final wallet = _resolveWallet(sender, subscriptionId);
 
-    // If we can't find a wallet but it's a recognized provider, enqueue for later.
-    // Maybe the wallets haven't synced yet.
     if (wallet == null) {
-      final parser = SmsParserRegistry.resolve(sender);
-      if (parser != null) {
-        log(
-          'Wallet not found for recognized provider ${parser.provider}. Enqueuing.',
-          name: _tag,
-        );
+      // Recognized provider but no matching wallet yet — enqueue for retry.
+      if (SmsParserRegistry.resolve(sender) != null) {
+        log('Wallet not found for recognized provider. Enqueuing.', name: _tag);
         _enqueueFailure(
           sender: sender,
           body: body,
@@ -118,7 +130,7 @@ class SmsTransactionService {
         );
         return false;
       }
-      return true; // Ignored (unrecognized provider)
+      return true; // Unknown provider — ignore silently.
     }
 
     final transaction = SmsParsingService.parse(
@@ -130,79 +142,63 @@ class SmsTransactionService {
       walletPhoneNumber: wallet.phoneNumber,
     );
 
-    if (transaction != null) {
-      return await _saveTransactionAsync(
-        transaction,
-        sender: sender,
-        body: body,
-        subscriptionId: subscriptionId,
-      );
-    } else {
-      log(
-        'SMS from $sender did not match any transaction pattern.',
-        name: _tag,
-      );
-      return true; // Success (ignored by pattern)
+    if (transaction == null) {
+      log('SMS from $sender did not match any transaction pattern.', name: _tag);
+      return true; // Pattern miss — ignore silently.
     }
+
+    return _save(
+      transaction,
+      sender: sender,
+      body: body,
+      subscriptionId: subscriptionId,
+    );
   }
 
-  WalletEntity? _getWalletForSender(String sender, int? subscriptionId) {
+  WalletEntity? _resolveWallet(String sender, int? subscriptionId) {
     final parser = SmsParserRegistry.resolve(sender);
     if (parser == null) return null;
 
-    final matchingWallets = _wallets
-        .where((w) => w.provider == parser.provider)
-        .toList();
-    if (matchingWallets.isEmpty) {
+    final candidates =
+        _wallets.where((w) => w.provider == parser.provider).toList();
+    if (candidates.isEmpty) {
       log('No wallet registered for provider ${parser.provider}.', name: _tag);
       return null;
     }
 
     final matchResult = SmsWalletMatcher.resolve(
-      wallets: matchingWallets,
+      wallets: candidates,
       subscriptionId: subscriptionId,
     );
 
     if (matchResult.needsSubscriptionMapping && subscriptionId != null) {
-      _linkSubscriptionId(matchResult.wallet.id, subscriptionId);
+      _persistSubscriptionLink(matchResult.wallet.id, subscriptionId);
     }
 
     return matchResult.wallet;
   }
 
-  void _linkSubscriptionId(String walletId, int subscriptionId) {
-    FirebaseFirestore.instance
-        .collection('wallets')
-        .doc(walletId)
-        .update({'subscriptionId': subscriptionId})
-        .then((_) {
-          log(
-            'Learned subscriptionId $subscriptionId for wallet $walletId',
-            name: _tag,
-          );
-        })
-        .catchError((e) {
-          log('Failed to learn subscriptionId: $e', name: _tag);
-        });
+  void _persistSubscriptionLink(String walletId, int subscriptionId) {
+    _linkSubscriptionIdUseCase(
+      LinkSubscriptionIdParams(
+        walletId: walletId,
+        subscriptionId: subscriptionId,
+      ),
+    ).then((result) {
+      result.fold(
+        (failure) => log(
+          'Failed to link subscriptionId $subscriptionId: $failure',
+          name: _tag,
+        ),
+        (_) => log(
+          'Learned subscriptionId $subscriptionId for wallet $walletId',
+          name: _tag,
+        ),
+      );
+    });
   }
 
-  /// Triggers an asynchronous sweep of the pending SMS retry queue.
-  /// This is a passive mechanism to ensure even "stuck" transactions
-  /// eventually get processed when a new one succeeds.
-  Future<void> sweepRetryQueue() async {
-    await _pendingSmsRetryService.retryPending(
-      processItem: (item) async {
-        return await _processCore(
-          sender: item.sender,
-          body: item.body,
-          smsReceivedAt: item.smsReceivedAt,
-          subscriptionId: item.subscriptionId,
-        );
-      },
-    );
-  }
-
-  Future<bool> _saveTransactionAsync(
+  Future<bool> _save(
     TransactionEntity transaction, {
     required String sender,
     required String body,
@@ -211,7 +207,7 @@ class SmsTransactionService {
     final result = await _saveTransactionUseCase(transaction);
     return result.fold(
       (failure) {
-        log('Failed to save: ${failure.runtimeType}', name: _tag);
+        log('Failed to save transaction: ${failure.runtimeType}', name: _tag);
         _enqueueFailure(
           sender: sender,
           body: body,
@@ -239,29 +235,15 @@ class SmsTransactionService {
     String? providerName,
     required String error,
   }) {
-    final userUid = FirebaseAuth.instance.currentUser?.uid;
-    if (userUid == null) return;
-
-    final id = PendingSmsRetryService.generateQueueKey(
-      sender: sender,
-      body: body,
-      receivedAt: smsReceivedAt,
-    );
-
-    final item = PendingSmsRetryItem(
-      id: id,
+    final item = PendingSmsRetryItem.create(
       sender: sender,
       body: body,
       smsReceivedAt: smsReceivedAt,
-      userUid: userUid,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
       subscriptionId: subscriptionId,
       walletId: walletId,
       providerName: providerName,
-      lastError: error,
+      error: error,
     );
-
-    _pendingSmsRetryService.enqueue(item);
+    if (item != null) _pendingSmsRetryService.enqueue(item);
   }
 }

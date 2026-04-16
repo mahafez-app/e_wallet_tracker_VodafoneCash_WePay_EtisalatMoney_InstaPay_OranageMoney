@@ -8,9 +8,10 @@ import '../data/datasources/wallet_remote_data_source.dart';
 import '../data/repositories/wallet_repository_impl.dart';
 import '../domain/repositories/wallet_repository.dart';
 import '../domain/usecases/add_wallets_usecase.dart';
+import '../domain/usecases/delete_wallet_usecase.dart';
 import '../domain/usecases/get_device_phone_numbers_usecase.dart';
 import '../domain/usecases/get_wallets_usecase.dart';
-import '../domain/usecases/delete_wallet_usecase.dart';
+import '../domain/usecases/link_subscription_id_usecase.dart';
 import '../domain/usecases/wallet_details_usecases.dart';
 
 final walletRemoteDataSourceProvider = Provider<WalletRemoteDataSource>((ref) {
@@ -22,10 +23,10 @@ final walletRemoteDataSourceProvider = Provider<WalletRemoteDataSource>((ref) {
 
 final walletDetailsRemoteDataSourceProvider =
     Provider<WalletDetailsRemoteDataSource>((ref) {
-      return WalletDetailsRemoteDataSourceImpl(
-        firestore: ref.watch(firestoreProvider),
-      );
-    });
+  return WalletDetailsRemoteDataSourceImpl(
+    firestore: ref.watch(firestoreProvider),
+  );
+});
 
 final walletRepositoryProvider = Provider<WalletRepository>((ref) {
   return WalletRepositoryImpl(
@@ -33,26 +34,22 @@ final walletRepositoryProvider = Provider<WalletRepository>((ref) {
     detailsDataSource: ref.watch(walletDetailsRemoteDataSourceProvider),
     phoneNumberService: ref.watch(phoneNumberServiceProvider),
     deviceInfoService: ref.watch(deviceInfoServiceProvider),
-    // Phase 2 — shared cache: deleting a wallet immediately invalidates its
-    // meta entry so TransactionFirestoreSupport never serves stale data.
     walletMetaCache: ref.watch(walletMetaCacheProvider),
   );
 });
 
 final getDevicePhoneNumbersUseCaseProvider =
     Provider<GetDevicePhoneNumbersUseCase>((ref) {
-      return GetDevicePhoneNumbersUseCase(ref.watch(walletRepositoryProvider));
-    });
+  return GetDevicePhoneNumbersUseCase(ref.watch(walletRepositoryProvider));
+});
 
 final addWalletsUseCaseProvider = Provider<AddWalletsUseCase>((ref) {
   return AddWalletsUseCase(ref.watch(walletRepositoryProvider));
 });
 
-final getWalletDetailsUseCaseProvider = Provider<GetWalletDetailsUseCase>((
-  ref,
-) {
-  return GetWalletDetailsUseCase(ref.watch(walletRepositoryProvider));
-});
+final getWalletDetailsUseCaseProvider = Provider<GetWalletDetailsUseCase>(
+  (ref) => GetWalletDetailsUseCase(ref.watch(walletRepositoryProvider)),
+);
 
 final getWalletsUseCaseProvider = Provider<GetWalletsUseCase>((ref) {
   return GetWalletsUseCase(ref.watch(walletRepositoryProvider));
@@ -60,4 +57,9 @@ final getWalletsUseCaseProvider = Provider<GetWalletsUseCase>((ref) {
 
 final deleteWalletUseCaseProvider = Provider<DeleteWalletUseCase>((ref) {
   return DeleteWalletUseCase(ref.watch(walletRepositoryProvider));
+});
+
+final linkSubscriptionIdUseCaseProvider =
+    Provider<LinkSubscriptionIdUseCase>((ref) {
+  return LinkSubscriptionIdUseCase(ref.watch(walletRepositoryProvider));
 });

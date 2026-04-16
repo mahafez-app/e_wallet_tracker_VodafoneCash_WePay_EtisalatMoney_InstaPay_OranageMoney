@@ -1,9 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../services/pending_sms_retry_service.dart';
 
 /// Represents a failed SMS processing attempt that needs to be retried.
-/// 
-/// We store the raw SMS data because failures can happen before parsing
-/// or wallet resolution.
+///
+/// We store raw SMS data because failures can occur before parsing or
+/// wallet resolution — the retry pipeline re-runs the full pipeline.
 final class PendingSmsRetryItem extends Equatable {
   const PendingSmsRetryItem({
     required this.id,
@@ -32,6 +35,45 @@ final class PendingSmsRetryItem extends Equatable {
   final String? providerName;
   final int retryCount;
   final String? lastError;
+
+  /// Convenience factory that resolves the current user's UID and generates
+  /// the deterministic queue key automatically.
+  ///
+  /// Returns `null` if no user is logged in (nothing to persist against).
+  static PendingSmsRetryItem? create({
+    required String sender,
+    required String body,
+    required DateTime smsReceivedAt,
+    required int? subscriptionId,
+    String? walletId,
+    String? providerName,
+    String? error,
+    String? userUid,
+  }) {
+    final uid = userUid ?? FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return null;
+
+    final id = PendingSmsRetryService.generateQueueKey(
+      sender: sender,
+      body: body,
+      receivedAt: smsReceivedAt,
+    );
+
+    final now = DateTime.now();
+    return PendingSmsRetryItem(
+      id: id,
+      sender: sender,
+      body: body,
+      smsReceivedAt: smsReceivedAt,
+      userUid: uid,
+      createdAt: now,
+      updatedAt: now,
+      subscriptionId: subscriptionId,
+      walletId: walletId,
+      providerName: providerName,
+      lastError: error,
+    );
+  }
 
   @override
   List<Object?> get props => [
@@ -78,22 +120,20 @@ final class PendingSmsRetryItem extends Equatable {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'sender': sender,
-      'body': body,
-      'smsReceivedAt': smsReceivedAt.toIso8601String(),
-      'userUid': userUid,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-      'subscriptionId': subscriptionId,
-      'walletId': walletId,
-      'providerName': providerName,
-      'retryCount': retryCount,
-      'lastError': lastError,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'sender': sender,
+        'body': body,
+        'smsReceivedAt': smsReceivedAt.toIso8601String(),
+        'userUid': userUid,
+        'createdAt': createdAt.toIso8601String(),
+        'updatedAt': updatedAt.toIso8601String(),
+        'subscriptionId': subscriptionId,
+        'walletId': walletId,
+        'providerName': providerName,
+        'retryCount': retryCount,
+        'lastError': lastError,
+      };
 
   factory PendingSmsRetryItem.fromJson(Map<String, dynamic> json) {
     return PendingSmsRetryItem(

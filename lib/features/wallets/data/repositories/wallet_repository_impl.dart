@@ -17,11 +17,11 @@ class WalletRepositoryImpl implements WalletRepository {
     required PhoneNumberService phoneNumberService,
     required DeviceInfoService deviceInfoService,
     required WalletMetaCache walletMetaCache,
-  }) : _remoteDataSource = remoteDataSource,
-       _detailsDataSource = detailsDataSource,
-       _phoneNumberService = phoneNumberService,
-       _deviceInfoService = deviceInfoService,
-       _walletMetaCache = walletMetaCache;
+  })  : _remoteDataSource = remoteDataSource,
+        _detailsDataSource = detailsDataSource,
+        _phoneNumberService = phoneNumberService,
+        _deviceInfoService = deviceInfoService,
+        _walletMetaCache = walletMetaCache;
 
   final WalletRemoteDataSource _remoteDataSource;
   final WalletDetailsRemoteDataSource _detailsDataSource;
@@ -65,14 +65,12 @@ class WalletRepositoryImpl implements WalletRepository {
     return executeAndHandleErrors(() async {
       final walletDto = await _detailsDataSource.getWallet(walletId);
       final wallet = walletDto.toEntity();
-      final transactionsDto = await _detailsDataSource.getRecentTransactions(
-        wallet,
-      );
+      final transactionsDto =
+          await _detailsDataSource.getRecentTransactions(wallet);
       return WalletDetailsEntity(
         wallet: wallet,
-        recentTransactions: transactionsDto
-            .map((dto) => dto.toEntity())
-            .toList(),
+        recentTransactions:
+            transactionsDto.map((dto) => dto.toEntity()).toList(),
       );
     }, tag: 'WalletRepositoryImpl.getWalletDetails');
   }
@@ -81,11 +79,25 @@ class WalletRepositoryImpl implements WalletRepository {
   Future<Result<void>> deleteWallet(String walletId) {
     return executeAndHandleErrors(() async {
       await _remoteDataSource.deleteWallet(walletId);
-      // Invalidate the meta cache so the next walletMeta() call fetches fresh
-      // data instead of serving a stale entry for a wallet that no longer exists.
       _walletMetaCache.invalidate(walletId);
     }, tag: 'WalletRepositoryImpl.deleteWallet');
   }
+
+  @override
+  Future<Result<void>> linkSubscriptionId({
+    required String walletId,
+    required int subscriptionId,
+  }) {
+    return executeAndHandleErrors(
+      () => _remoteDataSource.linkSubscriptionId(
+        walletId: walletId,
+        subscriptionId: subscriptionId,
+      ),
+      tag: 'WalletRepositoryImpl.linkSubscriptionId',
+    );
+  }
+
+  // ── Private helpers ──────────────────────────────────────────────────────
 
   Future<String> _resolveDeviceId() async {
     final deviceId = await _deviceInfoService.getDeviceId();
@@ -99,7 +111,6 @@ class WalletRepositoryImpl implements WalletRepository {
 
     if (deviceName.isEmpty) return deviceId;
     if (deviceId.isEmpty) return deviceName;
-
     return '$deviceName ($deviceId)';
   }
 }

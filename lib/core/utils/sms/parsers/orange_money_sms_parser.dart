@@ -1,15 +1,16 @@
-// parsers/orange_money_sms_parser.dart
-
 import '../../../domain/enums/wallet_provider.dart';
 import '../sms_parser.dart';
 import '../sms_patterns.dart';
 
-class OrangeMoneySmsParser extends SmsParser {
+final class OrangeMoneySmsParser extends SmsParser {
+  const OrangeMoneySmsParser();
+
   @override
   WalletProvider get provider => WalletProvider.orangeMoney;
 
   @override
-  List<String> get senderIds => ['Orange-Cash', 'OrangeCash', 'Orange-Money', 'OrangeMoney'];
+  List<String> get senderIds =>
+      ['Orange-Cash', 'OrangeCash', 'Orange-Money', 'OrangeMoney'];
 
   @override
   List<RegExp> get receivePatterns => [

@@ -1,5 +1,3 @@
-// registry/sms_parser_registry.dart
-
 import '../parsers/etisalat_cash_sms_parser.dart';
 import '../parsers/insta_pay_sms_parser.dart';
 import '../parsers/orange_money_sms_parser.dart';
@@ -7,10 +5,14 @@ import '../parsers/vodafone_cash_sms_parser.dart';
 import '../parsers/we_pay_sms_parser.dart';
 import '../sms_parser.dart';
 
-class SmsParserRegistry {
+/// Maps incoming SMS sender IDs to their [SmsParser] implementations.
+///
+/// The built-in parser list is treated as immutable at compile time.
+/// Use [register] to extend it at runtime (e.g. from remote config).
+final class SmsParserRegistry {
   SmsParserRegistry._();
 
-  static final _parsers = <SmsParser>[
+  static const List<SmsParser> _builtIn = [
     VodafoneCashSmsParser(),
     OrangeMoneySmsParser(),
     EtisalatCashSmsParser(),
@@ -18,21 +20,30 @@ class SmsParserRegistry {
     InstaPaySmsParser(),
   ];
 
-  /// Returns the correct parser for the given SMS sender, or null if unknown.
+  /// Extra parsers added at runtime via [register].
+  static final List<SmsParser> _extras = [];
+
+  /// Returns the parser for [sender], or `null` if the sender is unknown.
   static SmsParser? resolve(String sender) {
-    final normalized = sender.toLowerCase().replaceAll(RegExp(r'[\s\-_]'), '');
-    for (final parser in _parsers) {
+    final normalized = _normalizeSender(sender);
+    for (final parser in [..._builtIn, ..._extras]) {
       for (final id in parser.senderIds) {
-        if (normalized.contains(
-          id.toLowerCase().replaceAll(RegExp(r'[\s\-_]'), ''),
-        )) {
-          return parser;
-        }
+        if (normalized.contains(_normalizeSender(id))) return parser;
       }
     }
     return null;
   }
 
-  /// Register a new parser at runtime (e.g. from remote config).
-  static void register(SmsParser parser) => _parsers.add(parser);
+  /// Registers an additional parser at runtime.
+  ///
+  /// Idempotent: registering the same parser type twice has no effect.
+  static void register(SmsParser parser) {
+    final alreadyRegistered = _extras.any(
+      (p) => p.runtimeType == parser.runtimeType,
+    );
+    if (!alreadyRegistered) _extras.add(parser);
+  }
+
+  static String _normalizeSender(String raw) =>
+      raw.toLowerCase().replaceAll(RegExp(r'[\s\-_]'), '');
 }

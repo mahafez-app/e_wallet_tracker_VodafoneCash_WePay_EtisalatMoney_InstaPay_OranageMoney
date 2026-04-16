@@ -6,6 +6,8 @@ import 'sms_pattern_matcher.dart';
 import 'sms_patterns.dart';
 
 abstract class SmsParser {
+  const SmsParser();
+
   WalletProvider get provider;
   List<String> get senderIds;
 
@@ -20,6 +22,7 @@ abstract class SmsParser {
       sendPatterns: sendPatterns,
     );
     if (match == null) return null;
+
     final extractedDate = extractDateTime(message);
 
     return SmsParseResult(
@@ -44,7 +47,6 @@ abstract class SmsParser {
     for (final pattern in refPatterns) {
       final m = pattern.firstMatch(message);
       if (m != null) {
-        // Return the last non-null group (the number)
         for (int i = m.groupCount; i >= 1; i--) {
           if (m.group(i) != null) return m.group(i);
         }
@@ -60,28 +62,45 @@ abstract class SmsParser {
     return double.tryParse(m.group(1)!.replaceAll(',', '').trim());
   }
 
-  // ─── Shared date parsers ──────────────────────────────────────────────────
+  // ── Shared date parsers ──────────────────────────────────────────────────
 
   DateTime? parseDateShort(String msg) {
     final m = SmsPatterns.dateShort.firstMatch(msg);
     if (m == null) return null;
 
-    int g1 = int.parse(m.group(1)!);
-    int g2 = int.parse(m.group(2)!);
-    int g3 = int.parse(m.group(3)!);
-    int hh = int.parse(m.group(4)!);
-    int mm = int.parse(m.group(5)!);
+    final g1 = int.parse(m.group(1)!);
+    final g2 = int.parse(m.group(2)!);
+    final g3 = int.parse(m.group(3)!);
+    final hh = int.parse(m.group(4)!);
+    final mm = int.parse(m.group(5)!);
 
-    // Heuristic: If first group is 4 digits or looks like a recent year (e.g. 26 for 2026)
-    // while the third group is < 31, assume YY-MM-DD.
-    // Otherwise assume DD-MM-YY (Egyptian standard).
-    int year, month, day;
-    if (g1 > 31 || (g1 == 26 && g3 != 26)) {
-      year = g1 < 100 ? 2000 + g1 : g1;
+    // Determine order: YY-MM-DD vs DD-MM-YY.
+    // A value > 31 must be a year. For two-digit values, the one that
+    // cannot be a valid day (> 31) or month (> 12) identifies the year.
+    final int year, month, day;
+    if (g1 > 31) {
+      // e.g. 2026-04-14 or 26-04-14 where 26 > 12 (can't be month) and > ... actually check g3
+      year = _expandYear(g1);
       month = g2;
       day = g3;
+    } else if (g3 > 31) {
+      // e.g. 14-04-2026
+      year = _expandYear(g3);
+      month = g2;
+      day = g1;
+    } else if (g1 > 12) {
+      // g1 can't be a month, so it's DD-MM-YY
+      year = _expandYear(g3);
+      month = g2;
+      day = g1;
+    } else if (g3 <= 31 && g1 <= 12 && g3 < g1) {
+      // Heuristic: if g3 < g1 and both are plausible days, g3 is likely year (YY)
+      year = _expandYear(g3);
+      month = g2;
+      day = g1;
     } else {
-      year = g3 < 100 ? 2000 + g3 : g3;
+      // Default to DD-MM-YY (Egyptian convention)
+      year = _expandYear(g3);
       month = g2;
       day = g1;
     }
@@ -93,19 +112,27 @@ abstract class SmsParser {
     final m = SmsPatterns.dateShortReverse.firstMatch(msg);
     if (m == null) return null;
 
-    int hh = int.parse(m.group(1)!);
-    int mm = int.parse(m.group(2)!);
-    int g1 = int.parse(m.group(3)!);
-    int g2 = int.parse(m.group(4)!);
-    int g3 = int.parse(m.group(5)!);
+    final hh = int.parse(m.group(1)!);
+    final mm = int.parse(m.group(2)!);
+    final g1 = int.parse(m.group(3)!);
+    final g2 = int.parse(m.group(4)!);
+    final g3 = int.parse(m.group(5)!);
 
-    int year, month, day;
-    if (g1 > 31 || (g1 == 26 && g3 != 26)) {
-      year = g1 < 100 ? 2000 + g1 : g1;
+    final int year, month, day;
+    if (g1 > 31) {
+      year = _expandYear(g1);
       month = g2;
       day = g3;
+    } else if (g3 > 31) {
+      year = _expandYear(g3);
+      month = g2;
+      day = g1;
+    } else if (g1 > 12) {
+      year = _expandYear(g3);
+      month = g2;
+      day = g1;
     } else {
-      year = g3 < 100 ? 2000 + g3 : g3;
+      year = _expandYear(g3);
       month = g2;
       day = g1;
     }
@@ -142,36 +169,28 @@ abstract class SmsParser {
     final m = SmsPatterns.dateArabicBank.firstMatch(msg);
     if (m == null) return null;
 
-    // Groups: 1=Ref(optional), 2=Day, 3=Month, 4=Year(optional), 5=Hour, 6=Minute
     final day = int.parse(m.group(2)!);
     final month = int.parse(m.group(3)!);
     final yearStr = m.group(4);
-    int year = yearStr != null ? int.parse(yearStr) : DateTime.now().year;
-    if (year < 100) year += 2000;
-
-    return DateTime(
-      year,
-      month,
-      day,
-      int.parse(m.group(5)!),
-      int.parse(m.group(6)!),
+    final year = _expandYear(
+      yearStr != null ? int.parse(yearStr) : DateTime.now().year,
     );
+
+    return DateTime(year, month, day, int.parse(m.group(5)!),
+        int.parse(m.group(6)!));
   }
 
-  int _monthFromAbbr(String abbr) {
+  // ── Private helpers ──────────────────────────────────────────────────────
+
+  /// Expands a two-digit year to four digits (e.g. 26 → 2026).
+  /// Four-digit years are returned unchanged.
+  static int _expandYear(int year) => year < 100 ? 2000 + year : year;
+
+  static int _monthFromAbbr(String abbr) {
     const map = {
-      'jan': 1,
-      'feb': 2,
-      'mar': 3,
-      'apr': 4,
-      'may': 5,
-      'jun': 6,
-      'jul': 7,
-      'aug': 8,
-      'sep': 9,
-      'oct': 10,
-      'nov': 11,
-      'dec': 12,
+      'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4,
+      'may': 5, 'jun': 6, 'jul': 7, 'aug': 8,
+      'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12,
     };
     return map[abbr.toLowerCase()] ?? 1;
   }

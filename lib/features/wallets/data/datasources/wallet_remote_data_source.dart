@@ -16,6 +16,13 @@ abstract interface class WalletRemoteDataSource {
   Future<List<WalletDto>> getWallets();
 
   Future<void> deleteWallet(String walletId);
+
+  /// Associates a SIM subscription ID with a wallet so that future messages
+  /// from that SIM are routed directly without ambiguity.
+  Future<void> linkSubscriptionId({
+    required String walletId,
+    required int subscriptionId,
+  });
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -25,8 +32,8 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   const WalletRemoteDataSourceImpl({
     required FirebaseFirestore firestore,
     required FirebaseAuth auth,
-  }) : _firestore = firestore,
-       _auth = auth;
+  })  : _firestore = firestore,
+        _auth = auth;
 
   @override
   Future<List<WalletDto>> getWallets() async {
@@ -61,9 +68,8 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       providers: providers,
     );
 
-    final providersToCreate = providers
-        .where((p) => !existingProvidersSet.contains(p))
-        .toList();
+    final providersToCreate =
+        providers.where((p) => !existingProvidersSet.contains(p)).toList();
 
     if (providersToCreate.isEmpty) {
       throw const ValidationFailure(
@@ -91,13 +97,11 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
         lastBalanceAt: now,
         createdAt: now,
       );
-
       batch.set(docRef, walletDto.toFirestore());
       createdWallets.add(walletDto);
     }
 
     await batch.commit();
-
     return createdWallets;
   }
 
@@ -119,7 +123,6 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       );
     }
 
-    // 1. Find all workspace links
     final linksQuery = await _firestore
         .collectionGroup('wallets')
         .where('walletId', isEqualTo: walletId)
@@ -130,43 +133,46 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
         .whereType<String>()
         .toList();
 
-    // 2. Collect all references to delete
-    final referencesToDelete = <DocumentReference>[];
+    final referencesToDelete = <DocumentReference>[walletRef];
 
-    // Wallet itself
-    referencesToDelete.add(walletRef);
-
-    // Workspace links
     for (final doc in linksQuery.docs) {
       referencesToDelete.add(doc.reference);
     }
 
-    // Transactions and their sub-collections
     final txCollection = walletRef.collection('transactions');
     final transactions = await txCollection.get();
 
     for (final txDoc in transactions.docs) {
       referencesToDelete.add(txDoc.reference);
-
       final history = await txDoc.reference.collection('history').get();
       for (final h in history.docs) {
         referencesToDelete.add(h.reference);
       }
-
       final notes = await txDoc.reference.collection('notes').get();
       for (final n in notes.docs) {
         referencesToDelete.add(n.reference);
       }
     }
 
-    // 3. Delete in batches
     await _deleteInBatches(referencesToDelete);
 
-    // 4. Sync affected workspaces
     for (final workspaceId in workspaceIds) {
       await _syncWorkspaceMetadata(workspaceId);
     }
   }
+
+  @override
+  Future<void> linkSubscriptionId({
+    required String walletId,
+    required int subscriptionId,
+  }) async {
+    await _firestore
+        .collection('wallets')
+        .doc(walletId)
+        .update({'subscriptionId': subscriptionId});
+  }
+
+  // ── Private helpers ──────────────────────────────────────────────────────
 
   Future<void> _deleteInBatches(List<DocumentReference> references) async {
     for (var i = 0; i < references.length; i += 450) {
@@ -185,18 +191,15 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
     final walletIds = walletsQuery.docs.map((doc) => doc.id).toList();
 
     if (walletIds.isEmpty) {
-      await workspaceRef.update({
-        'walletsCount': 0,
-        'latestActivityAt': null,
-      });
+      await workspaceRef.update({'walletsCount': 0, 'latestActivityAt': null});
       return;
     }
 
-    final walletsSnapshots = await Future.wait(
+    final snapshots = await Future.wait(
       walletIds.map((id) => _firestore.collection('wallets').doc(id).get()),
     );
 
-    final wallets = walletsSnapshots
+    final wallets = snapshots
         .where((s) => s.exists)
         .map(WalletDto.fromFirestore)
         .toList();
@@ -204,8 +207,8 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
     final latestActivityAt = wallets.isEmpty
         ? null
         : wallets
-              .map((w) => w.lastBalanceAt)
-              .reduce((a, b) => a.isAfter(b) ? a : b);
+            .map((w) => w.lastBalanceAt)
+            .reduce((a, b) => a.isAfter(b) ? a : b);
 
     await workspaceRef.update({
       'walletsCount': wallets.length,

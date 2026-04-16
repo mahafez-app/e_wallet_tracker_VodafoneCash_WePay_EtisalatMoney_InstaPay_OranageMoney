@@ -9,15 +9,15 @@ import '../services/sms_transaction_service.dart';
 import 'cache_providers.dart';
 import 'connectivity_providers.dart';
 
-/// Internal representation of SMS readiness state.
+/// Internal record type for SMS readiness state.
 typedef SmsReadiness = ({bool isPermitted, List<WalletEntity> wallets});
 
-
-/// Evaluates wallet-sync permissions and fetches wallets once per session.
-/// Invalidate this provider after permission is granted to re-evaluate.
+/// Evaluates SMS permission and fetches wallets once per session.
+/// Invalidate after permission is granted to re-evaluate.
 final smsReadinessProvider = FutureProvider<SmsReadiness>((ref) async {
   final permissionResult = await ref.read(checkSmsPermissionUseCaseProvider)();
-  final isPermitted = permissionResult.fold((_) => false, (granted) => granted);
+  final isPermitted =
+      permissionResult.fold((_) => false, (granted) => granted);
 
   if (!isPermitted) {
     return (isPermitted: false, wallets: const <WalletEntity>[]);
@@ -30,37 +30,33 @@ final smsReadinessProvider = FutureProvider<SmsReadiness>((ref) async {
 });
 
 /// Manages the [SmsTransactionService] lifecycle.
-/// Activating this provider registers the SMS listener with the native side
-/// as soon as permissions are granted — even if the wallet list is empty.
+///
+/// Activating this provider registers the native SMS listener as soon as
+/// permissions are confirmed — even if the wallet list is empty, so we never
+/// miss an SMS that arrives before wallets sync.
 final smsTransactionServiceProvider = Provider<SmsTransactionService>(
   (ref) => SmsTransactionService(
     saveTransactionUseCase: ref.watch(saveTransactionUseCaseProvider),
     pendingSmsRetryService: ref.watch(pendingSmsRetryServiceProvider),
+    linkSubscriptionIdUseCase: ref.watch(linkSubscriptionIdUseCaseProvider),
   ),
 );
 
 final pendingSmsRetryServiceProvider = Provider<PendingSmsRetryService>(
-  (ref) => PendingSmsRetryService(
-    box: ref.watch(pendingSmsRetryBoxProvider),
-  ),
+  (ref) => PendingSmsRetryService(box: ref.watch(pendingSmsRetryBoxProvider)),
 );
 
 final smsTransactionListenerProvider = Provider<void>((ref) {
-  // Activate connectivity-based retries
+  // Activate connectivity-based retries.
   ref.watch(connectivityRetryProvider);
 
   final readiness = ref.watch(smsReadinessProvider).value;
-  if (readiness == null || !readiness.isPermitted) {
-    return;
-  }
+  if (readiness == null || !readiness.isPermitted) return;
 
   final service = ref.watch(smsTransactionServiceProvider);
   service.updateWallets(readiness.wallets);
   service.startListening();
 
-  // Trigger retry on app open / startup
+  // Sweep any leftover items from a previous session.
   service.sweepRetryQueue();
 });
-
-
-

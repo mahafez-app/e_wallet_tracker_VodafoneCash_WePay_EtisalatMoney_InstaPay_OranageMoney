@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
 
@@ -11,11 +10,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../features/transactions/data/datasources/transaction_firestore_support.dart';
 import '../../features/transactions/data/datasources/wallet_transaction_remote_data_source.dart';
-import '../cache/wallet_meta_cache.dart';
 import '../../firebase_options.dart';
+import '../cache/wallet_meta_cache.dart';
 import '../data/models/pending_sms_retry_item.dart';
 import '../data/models/wallet_dto.dart';
-import '../domain/entities/transaction_entity.dart';
 import '../domain/entities/wallet_entity.dart';
 import '../utils/sms/registry/sms_parser_registry.dart';
 import '../utils/sms/sms_message_extension.dart';
@@ -23,24 +21,28 @@ import '../utils/sms/sms_parsing_service.dart';
 import '../utils/sms/sms_wallet_matcher.dart';
 import 'pending_sms_retry_service.dart';
 
+// ── Public helpers ────────────────────────────────────────────────────────────
 
-/// Logs all relevant fields of an SMS message.
+/// Logs all relevant fields of an incoming SMS for diagnostics.
 void logSmsDetails(SmsMessage message, {required bool isBackground}) {
-  final prefix = isBackground ? 'BackgroundSms' : 'ForegroundSms';
-  log("-------", name: prefix);
-  log("Address: ${message.address}", name: prefix);
-  log("Body: ${message.body}", name: prefix);
-  log("Date: ${message.date}", name: prefix);
-  log("SubscriptionId: ${message.subscriptionId}", name: prefix);
-  log("-------", name: prefix);
+  final tag = isBackground ? 'BackgroundSms' : 'ForegroundSms';
+  log('-------', name: tag);
+  log('Address: ${message.address}', name: tag);
+  log('Body: ${message.body}', name: tag);
+  log('Date: ${message.date}', name: tag);
+  log('SubscriptionId: ${message.subscriptionId}', name: tag);
+  log('-------', name: tag);
 }
 
-/// Top-level background handler — must be a top-level or static function.
-/// Required by [Telephony.listenIncomingSms] for background processing.
-/// Annotated with [pragma] so the AOT compiler keeps it in release builds.
+// ── Background entry point ────────────────────────────────────────────────────
+
+/// Top-level background handler required by [Telephony.listenIncomingSms].
 ///
-/// In background mode (app killed), Riverpod is unavailable. We manually
-/// initialize Firebase, fetch wallets for the current user, parse, and save.
+/// Must be a top-level function. The [pragma] annotation prevents the AOT
+/// compiler from tree-shaking it in release builds.
+///
+/// In background mode (app killed), Riverpod is unavailable. We bootstrap
+/// only what we need: Firebase, Hive, and the Firestore data source.
 @pragma('vm:entry-point')
 Future<void> backgroundSmsHandler(SmsMessage message) async {
   logSmsDetails(message, isBackground: true);
@@ -55,259 +57,267 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
     return;
   }
 
-  await _initializeDependenciesIfNeeded();
+  await _BackgroundDependencies.init();
 
-  try {
-    final success = await _processCore(
-      sender: sender,
-      body: body,
-      smsReceivedAt: message.receivedAt,
-      providerName: parser.provider.toValue,
-      subscriptionId: message.subscriptionId,
-    );
+  final retryBox = Hive.box<String>(_BackgroundDependencies.retryBoxName);
+  final processor = _BackgroundSmsProcessor(retryBox: retryBox);
 
-    if (success) {
-      await _sweepRetryQueue();
-    }
-  } catch (e, st) {
-    log('Background error: $e. Enqueuing for retry.',
-        stackTrace: st, name: 'BackgroundSms');
-    await _enqueueBackgroundFailure(
-      sender: sender,
-      body: body,
-      smsReceivedAt: message.receivedAt,
-      subscriptionId: message.subscriptionId,
-      providerName: parser.provider.toValue,
-      error: e.toString(),
-    );
-  }
-}
-
-/// Internal core logic for background processing.
-/// Returns true if successfully handled (saved or ignored), false on failure.
-Future<bool> _processCore({
-  required String sender,
-  required String body,
-  required DateTime smsReceivedAt,
-  required String providerName,
-  required int? subscriptionId,
-}) async {
-  final currentUser = FirebaseAuth.instance.currentUser;
-  if (currentUser == null) {
-    log('Ignoring: User not logged in.', name: 'BackgroundSms');
-    return true; // "Handled" (nothing we can do)
-  }
-
-  final wallet = await _fetchWalletForProvider(
-    uid: currentUser.uid,
-    providerName: providerName,
-    subscriptionId: subscriptionId,
-  );
-
-  if (wallet == null) {
-    log('Ignoring: No matching wallet for provider. Enqueuing.',
-        name: 'BackgroundSms');
-    await _enqueueBackgroundFailure(
-      sender: sender,
-      body: body,
-      smsReceivedAt: smsReceivedAt,
-      subscriptionId: subscriptionId,
-      providerName: providerName,
-      error: 'Wallet not found',
-    );
-    return false;
-  }
-
-  return await _processAndSaveBackgroundTransaction(
+  await processor.process(
     sender: sender,
     body: body,
-    smsReceivedAt: smsReceivedAt,
-    wallet: wallet,
-    subscriptionId: subscriptionId,
+    smsReceivedAt: message.receivedAt,
+    providerName: parser.provider.toValue,
+    subscriptionId: message.subscriptionId,
   );
 }
 
-Future<void> _initializeDependenciesIfNeeded() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  DartPluginRegistrant.ensureInitialized();
+// ── Background processor ──────────────────────────────────────────────────────
 
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
+/// Encapsulates background-mode SMS processing.
+///
+/// Separated from the top-level handler so it can be instantiated with its
+/// dependencies explicitly, making it testable without a live Firebase session.
+final class _BackgroundSmsProcessor {
+  const _BackgroundSmsProcessor({required Box<String> retryBox})
+      : _retryBox = retryBox;
 
-  // Initialize Hive and open retry box in background isolate
-  await Hive.initFlutter();
-  if (!Hive.isBoxOpen('pending_sms_retry_queue')) {
-    await Hive.openBox<String>('pending_sms_retry_queue');
-  }
-}
+  final Box<String> _retryBox;
 
-Future<WalletEntity?> _fetchWalletForProvider({
-  required String uid,
-  required String providerName,
-  required int? subscriptionId,
-}) async {
-  final firestore = FirebaseFirestore.instance;
-  final walletsQuery = await firestore
-      .collection('wallets')
-      .where('ownerUid', isEqualTo: uid)
-      .where('provider', isEqualTo: providerName)
-      .get();
+  static const _tag = 'BackgroundSms';
 
-  if (walletsQuery.docs.isEmpty) return null;
-
-  final matchingWallets = walletsQuery.docs
-      .map((doc) => WalletDto.fromFirestore(doc).toEntity())
-      .toList();
-
-  final matchResult = SmsWalletMatcher.resolve(
-    wallets: matchingWallets,
-    subscriptionId: subscriptionId,
-  );
-
-  if (matchResult.needsSubscriptionMapping && subscriptionId != null) {
-    await firestore.collection('wallets').doc(matchResult.wallet.id).update({
-      'subscriptionId': subscriptionId,
-    });
-  }
-
-  return matchResult.wallet;
-}
-
-Future<bool> _processAndSaveBackgroundTransaction({
-  required String sender,
-  required String body,
-  required DateTime smsReceivedAt,
-  required WalletEntity wallet,
-  required int? subscriptionId,
-}) async {
-  final transaction = SmsParsingService.parse(
-    sender: sender,
-    message: body,
-    smsReceivedAt: smsReceivedAt,
-    walletId: wallet.id,
-    walletOwnerUid: wallet.ownerUid,
-    walletPhoneNumber: wallet.phoneNumber,
-  );
-
-  if (transaction == null) {
-    log('Ignoring: failed to parse.', name: 'BackgroundSms');
-    return true; // Success (ignored)
-  }
-
-  try {
-    await _saveBackgroundTransaction(transaction);
-    return true;
-  } catch (e) {
-    await _enqueueBackgroundFailure(
-      sender: sender,
-      body: body,
-      smsReceivedAt: smsReceivedAt,
-      subscriptionId: subscriptionId,
-      walletId: wallet.id,
-      providerName: wallet.provider.toValue,
-      error: e.toString(),
-    );
-    return false;
-  }
-}
-
-Future<void> _saveBackgroundTransaction(TransactionEntity transaction) async {
-  final remoteDataSource = WalletTransactionRemoteDataSourceImpl(
-    support: TransactionFirestoreSupport(
-      firestore: FirebaseFirestore.instance,
-      metaCache: WalletMetaCache(),
-    ),
-  );
-  await remoteDataSource.saveTransaction(transaction);
-  log('Background successful: ${transaction.id}', name: 'BackgroundSms');
-}
-
-Future<void> _sweepRetryQueue() async {
-  final box = Hive.box<String>('pending_sms_retry_queue');
-  if (box.isEmpty) return;
-
-  final retryService = PendingSmsRetryService(box: box);
-  await retryService.retryPending(
-    processItem: (item) async {
-      try {
-        String? providerName = item.providerName;
-        if (providerName == null || providerName.isEmpty) {
-          final parser = SmsParserRegistry.resolve(item.sender);
-          providerName = parser?.provider.toValue;
-        }
-
-        if (providerName == null) return true; // Can't process, but ignore (unrecognized)
-
-        return await _processCore(
-          sender: item.sender,
-          body: item.body,
-          smsReceivedAt: item.smsReceivedAt,
-          providerName: providerName,
-          subscriptionId: item.subscriptionId,
-        );
-      } catch (e) {
-        log('Background retry failed for ${item.id}: $e', name: 'BackgroundSms');
-        return false;
-      }
-    },
-  );
-}
-
-Future<void> _enqueueBackgroundFailure({
-  required String sender,
-  required String body,
-  required DateTime smsReceivedAt,
-  required int? subscriptionId,
-  String? walletId,
-  String? providerName,
-  required String error,
-}) async {
-  final currentUser = FirebaseAuth.instance.currentUser;
-  if (currentUser == null) return;
-
-  final box = Hive.box<String>('pending_sms_retry_queue');
-
-  final id = PendingSmsRetryService.generateQueueKey(
-    sender: sender,
-    body: body,
-    receivedAt: smsReceivedAt,
-  );
-
-  final item = PendingSmsRetryItem(
-    id: id,
-    sender: sender,
-    body: body,
-    smsReceivedAt: smsReceivedAt,
-    userUid: currentUser.uid,
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-    subscriptionId: subscriptionId,
-    walletId: walletId,
-    providerName: providerName,
-    lastError: error,
-  );
-
-  // Manual implementation of enqueue logic since we are in background isolate
-  // and might not want to instantiate the whole service if not needed,
-  // although we could.
-  final existingJson = box.get(id);
-  if (existingJson != null) {
+  /// Full pipeline: wallet resolution → parsing → saving → retry sweep.
+  ///
+  /// Returns `true` if the item was handled (saved or intentionally ignored).
+  Future<void> process({
+    required String sender,
+    required String body,
+    required DateTime smsReceivedAt,
+    required String providerName,
+    required int? subscriptionId,
+  }) async {
     try {
-      final existingItem = PendingSmsRetryItem.fromJson(
-        jsonDecode(existingJson) as Map<String, dynamic>,
+      final success = await _runPipeline(
+        sender: sender,
+        body: body,
+        smsReceivedAt: smsReceivedAt,
+        providerName: providerName,
+        subscriptionId: subscriptionId,
       );
-      final updatedItem = existingItem.copyWith(
-        lastError: error,
-        retryCount: existingItem.retryCount + 1,
-        updatedAt: DateTime.now(),
+
+      if (success) await _sweepRetryQueue();
+    } catch (e, st) {
+      log('Unhandled background error: $e. Enqueuing for retry.',
+          stackTrace: st, name: _tag);
+      _enqueue(
+        sender: sender,
+        body: body,
+        smsReceivedAt: smsReceivedAt,
+        subscriptionId: subscriptionId,
+        providerName: providerName,
+        error: e.toString(),
       );
-      await box.put(id, jsonEncode(updatedItem.toJson()));
-      return;
-    } catch (_) {}
+    }
   }
 
-  await box.put(id, jsonEncode(item.toJson()));
+  // ── Pipeline steps ──────────────────────────────────────────────────────
+
+  Future<bool> _runPipeline({
+    required String sender,
+    required String body,
+    required DateTime smsReceivedAt,
+    required String providerName,
+    required int? subscriptionId,
+  }) async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      log('Ignoring: user not logged in.', name: _tag);
+      return true; // Nothing we can do — treat as handled.
+    }
+
+    final wallet = await _resolveWallet(
+      uid: currentUser.uid,
+      providerName: providerName,
+      subscriptionId: subscriptionId,
+    );
+
+    if (wallet == null) {
+      log('No matching wallet for provider $providerName. Enqueuing.',
+          name: _tag);
+      _enqueue(
+        sender: sender,
+        body: body,
+        smsReceivedAt: smsReceivedAt,
+        subscriptionId: subscriptionId,
+        providerName: providerName,
+        error: 'Wallet not found',
+      );
+      return false;
+    }
+
+    final transaction = SmsParsingService.parse(
+      sender: sender,
+      message: body,
+      smsReceivedAt: smsReceivedAt,
+      walletId: wallet.id,
+      walletOwnerUid: wallet.ownerUid,
+      walletPhoneNumber: wallet.phoneNumber,
+    );
+
+    if (transaction == null) {
+      log('SMS did not match any transaction pattern.', name: _tag);
+      return true; // Pattern miss — ignore silently.
+    }
+
+    try {
+      await _buildDataSource().saveTransaction(transaction);
+      log('Transaction saved: ${transaction.id}', name: _tag);
+      return true;
+    } catch (e) {
+      _enqueue(
+        sender: sender,
+        body: body,
+        smsReceivedAt: smsReceivedAt,
+        subscriptionId: subscriptionId,
+        walletId: wallet.id,
+        providerName: wallet.provider.toValue,
+        error: e.toString(),
+      );
+      return false;
+    }
+  }
+
+  Future<WalletEntity?> _resolveWallet({
+    required String uid,
+    required String providerName,
+    required int? subscriptionId,
+  }) async {
+    final firestore = FirebaseFirestore.instance;
+
+    final snapshot = await firestore
+        .collection('wallets')
+        .where('ownerUid', isEqualTo: uid)
+        .where('provider', isEqualTo: providerName)
+        .get();
+
+    if (snapshot.docs.isEmpty) return null;
+
+    final candidates =
+        snapshot.docs.map((d) => WalletDto.fromFirestore(d).toEntity()).toList();
+
+    final matchResult = SmsWalletMatcher.resolve(
+      wallets: candidates,
+      subscriptionId: subscriptionId,
+    );
+
+    if (matchResult.needsSubscriptionMapping && subscriptionId != null) {
+      // Best-effort: don't let a Firestore write block the main pipeline.
+      firestore
+          .collection('wallets')
+          .doc(matchResult.wallet.id)
+          .update({'subscriptionId': subscriptionId})
+          .then((_) => log(
+                'Learned subscriptionId $subscriptionId for wallet ${matchResult.wallet.id}',
+                name: _tag,
+              ))
+          .catchError(
+            (Object e) => log('Failed to link subscriptionId: $e', name: _tag),
+          );
+    }
+
+    return matchResult.wallet;
+  }
+
+  // ── Retry queue ─────────────────────────────────────────────────────────
+
+  Future<void> _sweepRetryQueue() async {
+    if (_retryBox.isEmpty) return;
+
+    final retryService = PendingSmsRetryService(box: _retryBox);
+    await retryService.retryPending(
+      processItem: (item) async {
+        try {
+          final providerName = _resolveProviderName(item);
+          if (providerName == null) return true; // Unrecognised — discard.
+
+          return _runPipeline(
+            sender: item.sender,
+            body: item.body,
+            smsReceivedAt: item.smsReceivedAt,
+            providerName: providerName,
+            subscriptionId: item.subscriptionId,
+          );
+        } catch (e) {
+          log('Retry failed for ${item.id}: $e', name: _tag);
+          return false;
+        }
+      },
+    );
+  }
+
+  String? _resolveProviderName(PendingSmsRetryItem item) {
+    if (item.providerName != null && item.providerName!.isNotEmpty) {
+      return item.providerName;
+    }
+    return SmsParserRegistry.resolve(item.sender)?.provider.toValue;
+  }
+
+  // ── Enqueue ─────────────────────────────────────────────────────────────
+
+  void _enqueue({
+    required String sender,
+    required String body,
+    required DateTime smsReceivedAt,
+    required int? subscriptionId,
+    String? walletId,
+    String? providerName,
+    required String error,
+  }) {
+    final item = PendingSmsRetryItem.create(
+      sender: sender,
+      body: body,
+      smsReceivedAt: smsReceivedAt,
+      subscriptionId: subscriptionId,
+      walletId: walletId,
+      providerName: providerName,
+      error: error,
+    );
+    if (item == null) return; // No logged-in user — nothing to persist against.
+
+    PendingSmsRetryService(box: _retryBox).enqueue(item);
+  }
+
+  // ── Data source factory ─────────────────────────────────────────────────
+
+  WalletTransactionRemoteDataSource _buildDataSource() {
+    return WalletTransactionRemoteDataSourceImpl(
+      support: TransactionFirestoreSupport(
+        firestore: FirebaseFirestore.instance,
+        metaCache: WalletMetaCache(),
+      ),
+    );
+  }
+}
+
+// ── Bootstrap ─────────────────────────────────────────────────────────────────
+
+final class _BackgroundDependencies {
+  _BackgroundDependencies._();
+
+  static const retryBoxName = 'pending_sms_retry_queue';
+
+  static Future<void> init() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    DartPluginRegistrant.ensureInitialized();
+
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
+
+    await Hive.initFlutter();
+    if (!Hive.isBoxOpen(retryBoxName)) {
+      await Hive.openBox<String>(retryBoxName);
+    }
+  }
 }

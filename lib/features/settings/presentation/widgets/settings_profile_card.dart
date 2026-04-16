@@ -49,7 +49,7 @@ class SettingsProfileCard extends StatelessWidget {
                   emailLabel: _resolveEmailLabel(context),
                 ),
               ),
-              AppSpacing.sm.horizontalSpace,
+              AppSpacing.lg.horizontalSpace,
               _EditNameButton(
                 tooltip: context.l10n.userSettingsEditNameAction,
                 onPressed: onEditName,
@@ -89,22 +89,22 @@ class _ProfileDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          name,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.titleLarge?.copyWith(
-            color: colorScheme.onSurface,
-            fontWeight: FontWeight.w800,
+        FittedBox(
+          child: Text(
+            name,
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ),
         AppSpacing.xs.verticalSpace,
-        Text(
-          emailLabel,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: colorScheme.onSurfaceVariant,
+        FittedBox(
+          child: Text(
+            emailLabel,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
       ],
@@ -150,8 +150,8 @@ class _ProfileAvatar extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Container(
-      width: 64.responsiveRadius,
-      height: 64.responsiveRadius,
+      width: 50.responsiveRadius,
+      height: 50.responsiveRadius,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -173,7 +173,7 @@ class _ProfileAvatar extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         _initials,
-        style: theme.textTheme.headlineSmall?.copyWith(
+        style: theme.textTheme.titleMedium?.copyWith(
           color: colorScheme.onPrimary,
           fontWeight: FontWeight.w900,
           letterSpacing: 1,

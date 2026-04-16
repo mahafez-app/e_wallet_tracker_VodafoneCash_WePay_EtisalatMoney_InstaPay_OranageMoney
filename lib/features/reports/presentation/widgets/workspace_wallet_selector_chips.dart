@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/utils/extensions/phone_number_extension.dart';
+import '../../../../core/utils/extensions/wallet_provider_ext.dart';
+import '../../../../generated/l10n.dart';
 import '../../../workspaces/presentation/providers/workspace_details_controller.dart';
 import '../providers/workspace_report_controller.dart';
-import '../../../../generated/l10n.dart';
 
 class WorkspaceWalletSelectorChips extends ConsumerWidget {
   const WorkspaceWalletSelectorChips({super.key, required this.workspaceId});
@@ -49,7 +52,9 @@ class WorkspaceWalletSelectorChips extends ConsumerWidget {
               return Padding(
                 padding: EdgeInsets.only(right: AppSpacing.sm.responsiveWidth),
                 child: FilterChip(
-                  label: Text(wallet.phoneNumber),
+                  label: Text(
+                    '${wallet.provider.displayName(context)} ${wallet.phoneNumber.formattedEgyptianPhoneNumber}',
+                  ),
                   selected: isSelected && !allSelected,
                   onSelected: (selected) {
                     final newSelected = List<String>.from(filter.selectedWalletIds);

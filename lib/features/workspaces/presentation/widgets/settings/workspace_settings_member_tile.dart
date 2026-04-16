@@ -86,7 +86,7 @@ class WorkspaceSettingsMemberTile extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               _initials,
-              style: theme.textTheme.labelLarge?.copyWith(
+              style: theme.textTheme.labelMedium?.copyWith(
                 color: avatarForeground,
                 fontWeight: FontWeight.w800,
               ),
@@ -103,15 +103,18 @@ class WorkspaceSettingsMemberTile extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Text(
-                  _fallbackEmail,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+                FittedBox(
+                  child: Text(
+                    _fallbackEmail,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
+          AppSpacing.lg.horizontalSpace,
           if (member.isOwner)
             Container(
               padding: AppResponsive.symmetricPadding(
@@ -147,7 +150,7 @@ class WorkspaceSettingsMemberTile extends StatelessWidget {
                     )
                   : Text(
                       context.l10n.workspaceSettingsRemoveMemberAction,
-                      style: theme.textTheme.labelLarge?.copyWith(
+                      style: theme.textTheme.labelSmall?.copyWith(
                         color: theme.colorScheme.error,
                       ),
                     ),

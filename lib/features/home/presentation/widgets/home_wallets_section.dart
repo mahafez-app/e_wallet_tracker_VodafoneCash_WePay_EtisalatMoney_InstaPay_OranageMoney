@@ -36,10 +36,13 @@ class HomeWalletsSection extends StatelessWidget {
           Row(
             spacing: AppSpacing.md,
             children: wallets.map((wallet) {
-              return WalletCard(
-                provider: wallet.provider,
-                phoneNumber: wallet.phoneNumber,
-                balance: wallet.currentBalance,
+              return GestureDetector(
+                onTap: () => context.push(AppRoutes.walletDetailsPath(wallet.id)),
+                child: WalletCard(
+                  provider: wallet.provider,
+                  phoneNumber: wallet.phoneNumber,
+                  balance: wallet.currentBalance,
+                ),
               );
             }).toList(),
           ),

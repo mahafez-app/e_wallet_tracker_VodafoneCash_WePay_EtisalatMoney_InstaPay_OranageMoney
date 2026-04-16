@@ -10,43 +10,36 @@ final class InstaPaySmsParser extends SmsParser {
 
   @override
   List<String> get senderIds => [
-        'InstaPay',
-        'Insta-Pay',
-        'BanK-AlAhly',
-        'BankAlAhly',
-        'NBE',
-        'CIB',
-        'Banque-Misr',
-        'BanqueMisr',
-        'QNB',
-        'AAIB',
-        'HSBC',
-        'Fawry',
-      ];
+    'InstaPay',
+    'Insta-Pay',
+    'BanK-AlAhly',
+    'BankAlAhly',
+    'NBE',
+    'CIB',
+    'Banque-Misr',
+    'BanqueMisr',
+    'QNB',
+    'AAIB',
+    'HSBC',
+    'Fawry',
+  ];
 
   @override
   List<RegExp> get receivePatterns => [
-        SmsPatterns.arBankReceive,
-        SmsPatterns.enTransferReceivedFromNumber,
-      ];
+    SmsPatterns.arBankReceive,
+    SmsPatterns.enTransferReceivedFromNumber,
+  ];
 
   @override
   List<RegExp> get sendPatterns => [
-        SmsPatterns.arBankSend,
-        SmsPatterns.enTransferSentToNumber,
-      ];
+    SmsPatterns.arBankSend,
+    SmsPatterns.enTransferSentToNumber,
+  ];
 
   @override
   List<RegExp> get refPatterns => [
-        SmsPatterns.refBankAr,
-        SmsPatterns.refBeforeDateAr,
-        SmsPatterns.refEn,
-      ];
-
-  /// InstaPay messages predominantly use the Arabic bank date format.
-  @override
-  DateTime? extractDateTime(String message) =>
-      parseDateArabicBank(message) ??
-      parseDateShort(message) ??
-      parseDateLongEn(message);
+    SmsPatterns.refBankAr,
+    SmsPatterns.refBeforeDateAr,
+    SmsPatterns.refEn,
+  ];
 }

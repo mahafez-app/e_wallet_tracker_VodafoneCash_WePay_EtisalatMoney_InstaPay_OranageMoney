@@ -102,10 +102,12 @@ class _WorkspacePendingInvitationTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  invitation.email,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                FittedBox(
+                  child: Text(
+                    invitation.email,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
                 Row(
@@ -132,6 +134,7 @@ class _WorkspacePendingInvitationTile extends StatelessWidget {
               ],
             ),
           ),
+          AppSpacing.md.horizontalSpace,
           TextButton(
             onPressed: isCancelling ? null : onCancel,
             child: isCancelling
@@ -146,7 +149,7 @@ class _WorkspacePendingInvitationTile extends StatelessWidget {
                   )
                 : Text(
                     context.l10n.workspaceSettingsCancelInvitationAction,
-                    style: theme.textTheme.labelLarge?.copyWith(
+                    style: theme.textTheme.labelMedium?.copyWith(
                       color: theme.colorScheme.error,
                     ),
                   ),

@@ -23,7 +23,8 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Stream<Result<HomeDashboardEntity>> watchHomeDashboard() {
     return executeStreamAndHandleErrors(
-      () => Rx.combineLatest3(
+      () => Rx.combineLatest3<List<WalletDto>, List<WorkspaceEntity>, int,
+          HomeDashboardEntity>(
         _remote.watchUserWallets(),
         _watchWorkspaceSummaries(),
         _remote.watchPendingInvitationsCount(),

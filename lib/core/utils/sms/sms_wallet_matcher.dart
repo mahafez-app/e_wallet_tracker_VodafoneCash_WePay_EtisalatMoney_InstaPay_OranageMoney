@@ -58,7 +58,7 @@ class SmsWalletMatcher {
   static const _tag = 'SmsWalletMatcher';
 
   /// Maximum Egyptian provider transfer tax in EGP.
-  static const double _maxTaxEgp = 10.0;
+  static const double _maxTaxEgp = 50.0;
 
   static SmsWalletMatchResult resolve({
     required List<WalletEntity> wallets,

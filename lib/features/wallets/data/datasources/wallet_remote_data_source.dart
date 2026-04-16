@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../../core/data/models/transaction_dto.dart';
 import '../../../../core/data/models/wallet_dto.dart';
+import '../../../../core/domain/enums/transaction_type.dart';
 import '../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/utils/egyptian_phone_number.dart';
@@ -12,6 +14,7 @@ abstract interface class WalletRemoteDataSource {
     required List<String> providers,
     required Map<String, double> initialBalances,
     required String deviceId,
+    Map<String, List<TransactionDto>>? historicalTransactions,
   });
 
   Future<List<WalletDto>> getWallets();
@@ -57,6 +60,7 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
     required List<String> providers,
     required Map<String, double> initialBalances,
     required String deviceId,
+    Map<String, List<TransactionDto>>? historicalTransactions,
   }) async {
     final currentUser = _auth.currentUser;
     if (currentUser == null) {
@@ -88,20 +92,45 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
     for (final providerStr in providersToCreate) {
       final docRef = _firestore.collection('wallets').doc();
       final initialBalance = initialBalances[providerStr] ?? 0.0;
+      final provider = WalletProvider.fromString(providerStr);
+
+      final transactions = historicalTransactions?[providerStr] ?? [];
+      final totalReceived = transactions
+          .where((t) => t.type == TransactionType.receive)
+          .fold<double>(0.0, (s, t) => s + t.amount);
+      final totalSent = transactions
+          .where((t) => t.type == TransactionType.send)
+          .fold<double>(0.0, (s, t) => s + t.amount);
+
       final walletDto = WalletDto(
         id: docRef.id,
         phoneNumber: normalizedPhoneNumber,
-        provider: WalletProvider.fromString(providerStr),
+        provider: provider,
         deviceId: deviceId,
         ownerUid: currentUser.uid,
         currentBalance: initialBalance,
-        totalReceived: 0.0,
-        totalSent: 0.0,
+        totalReceived: totalReceived,
+        totalSent: totalSent,
         lastBalanceAt: now,
         createdAt: now,
       );
       batch.set(docRef, walletDto.toFirestore());
       createdWallets.add(walletDto);
+
+      // Add historical transactions as sub-elements
+      for (final tx in transactions) {
+        final txDocRef = docRef.collection('transactions').doc();
+        batch.set(
+          txDocRef,
+          tx
+              .copyWith(
+                id: txDocRef.id,
+                walletId: docRef.id,
+                walletOwnerUid: currentUser.uid,
+              )
+              .toFirestore(),
+        );
+      }
     }
 
     await batch.commit();

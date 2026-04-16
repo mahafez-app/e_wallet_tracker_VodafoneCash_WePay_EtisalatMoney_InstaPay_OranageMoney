@@ -79,18 +79,50 @@ final class TransactionDto extends TransactionEntity {
   );
 
   factory TransactionDto.fromEntity(TransactionEntity entity) => TransactionDto(
-    id: entity.id,
-    type: entity.type,
-    amount: entity.amount,
-    createdAt: entity.createdAt,
-    walletId: entity.walletId,
-    walletOwnerUid: entity.walletOwnerUid,
-    provider: entity.provider,
-    phoneNumber: entity.phoneNumber,
-    counterpartyNumber: entity.counterpartyNumber,
-    referenceNumber: entity.referenceNumber,
-    isPaid: entity.isPaid,
-    message: entity.message,
-    statusBalance: entity.statusBalance,
-  );
+        id: entity.id,
+        type: entity.type,
+        amount: entity.amount,
+        createdAt: entity.createdAt,
+        walletId: entity.walletId,
+        walletOwnerUid: entity.walletOwnerUid,
+        provider: entity.provider,
+        phoneNumber: entity.phoneNumber,
+        counterpartyNumber: entity.counterpartyNumber,
+        referenceNumber: entity.referenceNumber,
+        isPaid: entity.isPaid,
+        message: entity.message,
+        statusBalance: entity.statusBalance,
+      );
+
+  TransactionDto copyWith({
+    String? id,
+    TransactionType? type,
+    double? amount,
+    DateTime? createdAt,
+    String? walletId,
+    String? walletOwnerUid,
+    WalletProvider? provider,
+    String? phoneNumber,
+    String? counterpartyNumber,
+    String? referenceNumber,
+    bool? isPaid,
+    String? message,
+    double? statusBalance,
+  }) {
+    return TransactionDto(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      amount: amount ?? this.amount,
+      createdAt: createdAt ?? this.createdAt,
+      walletId: walletId ?? this.walletId,
+      walletOwnerUid: walletOwnerUid ?? this.walletOwnerUid,
+      provider: provider ?? this.provider,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      counterpartyNumber: counterpartyNumber ?? this.counterpartyNumber,
+      referenceNumber: referenceNumber ?? this.referenceNumber,
+      isPaid: isPaid ?? this.isPaid,
+      message: message ?? this.message,
+      statusBalance: statusBalance ?? this.statusBalance,
+    );
+  }
 }

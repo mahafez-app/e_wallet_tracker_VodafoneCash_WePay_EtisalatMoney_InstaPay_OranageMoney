@@ -1,4 +1,5 @@
 import '../../../../core/cache/wallet_meta_cache.dart';
+import '../../../../core/data/models/transaction_dto.dart';
 import '../../../../core/domain/entities/wallet_entity.dart';
 import '../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../core/error/failures.dart';
@@ -50,12 +51,23 @@ class WalletRepositoryImpl implements WalletRepository {
       final deviceId = await _resolveDeviceId();
 
       final initialBalances = <String, double>{};
+      final historicalTransactions = <String, List<TransactionDto>>{};
+
       for (final providerStr in providers) {
         final provider = WalletProvider.fromString(providerStr);
         final balance = await _inboxSmsService.getLatestBalance(provider);
         if (balance != null) {
           initialBalances[providerStr] = balance;
         }
+
+        // Fetch historical transactions
+        final transactions = await _inboxSmsService.getHistoricalTransactions(
+          provider: provider,
+          walletId: '', // To be filled by data source
+          walletOwnerUid: '', // To be filled by data source
+          phoneNumber: phoneNumber,
+        );
+        historicalTransactions[providerStr] = transactions;
       }
 
       await _remoteDataSource.addWallets(
@@ -63,6 +75,7 @@ class WalletRepositoryImpl implements WalletRepository {
         providers: providers,
         initialBalances: initialBalances,
         deviceId: deviceId,
+        historicalTransactions: historicalTransactions,
       );
     }, tag: 'WalletRepositoryImpl.addWallets');
   }

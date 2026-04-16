@@ -9,6 +9,7 @@ class SmsParseResult {
     required this.provider,
     this.counterpartyNumber,
     this.referenceNumber,
+    this.balance,
   });
 
   final double amount;
@@ -17,4 +18,5 @@ class SmsParseResult {
   final WalletProvider provider;
   final String? counterpartyNumber;
   final String? referenceNumber;
+  final double? balance;
 }

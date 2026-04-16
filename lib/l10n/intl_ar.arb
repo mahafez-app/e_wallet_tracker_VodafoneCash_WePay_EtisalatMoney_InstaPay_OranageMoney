@@ -484,11 +484,21 @@
       }
     }
   },
-  "workspaceReportsTitle": "تقارير مساحة العمل",
-  "workspaceReportsAction": "عرض التقارير",
   "transactions_filterType": "النوع",
   "transactions_filterPaidStatus": "الحالة",
   "transactions_filterDate": "التاريخ",
   "transactions_filterMember": "العضو",
-  "transactions_filterWallet": "المحفظة"
+  "transactions_filterWallet": "المحفظة",
+  "reports_total_transactions": "عدد المعاملات",
+  "reports_all_wallets": "كافة المحافظ",
+  "reports_period_today": "اليوم",
+  "reports_period_yesterday": "أمس",
+  "reports_period_lastWeek": "الأسبوع الماضي",
+  "reports_period_lastMonth": "الشهر الماضي",
+  "reports_period_custom": "نطاق مخصص",
+  "reports_stat_average": "المتوسط اليومي",
+  "reports_balance_label": "صافي التدفق النقدي",
+  "reports_performance_label": "الأداء المالي",
+  "reports_wallet_title": "تقارير الـمحفظة",
+  "reports_workspace_title": "تقارير مـساحة العمل"
 }

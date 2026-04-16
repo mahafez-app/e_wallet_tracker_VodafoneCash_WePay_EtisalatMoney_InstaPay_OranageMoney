@@ -101,6 +101,7 @@ class TransactionCard extends StatelessWidget {
                       transaction.amount.toCurrencyText(
                         context,
                         sign: isReceive ? '+' : '-',
+                        decimalDigits: 0
                       ),
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w900,

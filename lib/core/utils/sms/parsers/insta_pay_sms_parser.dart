@@ -37,7 +37,11 @@ class InstaPaySmsParser extends SmsParser {
   ];
 
   @override
-  List<RegExp> get refPatterns => [SmsPatterns.refBankAr, SmsPatterns.refEn];
+  List<RegExp> get refPatterns => [
+    SmsPatterns.refBankAr,
+    SmsPatterns.refBeforeDateAr,
+    SmsPatterns.refEn,
+  ];
 
   // InstaPay uses Arabic bank date format primarily
   @override

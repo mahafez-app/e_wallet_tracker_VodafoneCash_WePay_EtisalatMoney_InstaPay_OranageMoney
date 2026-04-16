@@ -19,6 +19,7 @@ final class TransactionDto extends TransactionEntity {
     super.referenceNumber,
     super.isPaid,
     super.message,
+    super.statusBalance,
   });
 
   factory TransactionDto.fromFirestore(
@@ -43,6 +44,7 @@ final class TransactionDto extends TransactionEntity {
       referenceNumber: data['referenceNumber'] as String?,
       isPaid: data['isPaid'] as bool? ?? false,
       message: data['message'] as String?,
+      statusBalance: (data['statusBalance'] as num?)?.toDouble(),
     );
   }
 
@@ -57,6 +59,7 @@ final class TransactionDto extends TransactionEntity {
     'referenceNumber': referenceNumber,
     'isPaid': type == TransactionType.receive ? (isPaid ?? false) : isPaid,
     'message': message,
+    'statusBalance': statusBalance,
   };
 
   TransactionEntity toEntity() => TransactionEntity(
@@ -72,6 +75,7 @@ final class TransactionDto extends TransactionEntity {
     referenceNumber: referenceNumber,
     isPaid: isPaid,
     message: message,
+    statusBalance: statusBalance,
   );
 
   factory TransactionDto.fromEntity(TransactionEntity entity) => TransactionDto(
@@ -87,5 +91,6 @@ final class TransactionDto extends TransactionEntity {
     referenceNumber: entity.referenceNumber,
     isPaid: entity.isPaid,
     message: entity.message,
+    statusBalance: entity.statusBalance,
   );
 }

@@ -5,83 +5,115 @@ class SmsPatterns {
 
   // ─── Arabic ───────────────────────────────────────────────────────────────
 
-  /// تم استلام مبلغ 545 جنيه من رقم 01015698339
-  /// تم استلام مبلغ 545.00 جنيه من رقم 01015698339
+  /// تم استلام مبلغ 3000 جنيه من رقم ...
+  /// Flexible: handles multi-line, inverted names, and optional "تم" prefix.
   static final arReceiveFromNumber = RegExp(
-    r'(?:تم استلام|تم إيداع|استلمت)\s*(?:مبلغ)?\s*([\d,\.]+)\s*(?:جنيه|ج\.م|جم).*?(?:من رقم|من)\s*(\+?[\d]{8,13})',
+    r'(?:تم\s+)?(?:[اأإ]ستلام|[اأإ]يداع|[اأإ]ستلمت)\s*(?:مبلغ)?\s*([\d,\.]+)\s*(?:جنيه|ج\.م|جم|جم\s+من)?.*?(?:من\s+رقم|من|ب[اإ]سم).*?(\+?[\d]{8,15})',
+    dotAll: true,
   );
 
-  /// تم تحويل 500 جنيه لرقم 01120892874
+  /// تم تحويل 4500 جنيه لرقم 01120892874
   static final arSendToNumber = RegExp(
-    r'(?:تم تحويل|تم إرسال|حولت)\s*([\d,\.]+)\s*(?:جنيه|ج\.م|جم).*?(?:لرقم|إلى رقم|الى رقم)\s*(\+?[\d]{8,13})',
+    r'(?:تم\s+)?(?:تحويل|[اأإ]رسال|حولت)\s*([\d,\.]+)\s*(?:جنيه|ج\.م|جم|جم\s+[اأإ]لى)?.*?(?:لرقم|[اأإ]لى\s+رقم|[اأإ]لى|رقم).*?(\+?[\d]{8,15})',
+    dotAll: true,
   );
 
-  /// InstaPay / bank receive — no counterparty number
-  /// تم إضافة تحويل لحظي لحسابكم رقم 0130 بمبلغ 1000.00 جم من NAME
   static final arBankReceive = RegExp(
-    r'(?:تم إضافة تحويل|تم إيداع مبلغ).*?بمبلغ\s*([\d,\.]+)\s*(?:جم|جنيه|ج\.م)',
+    r'لحسابكم.*?بمبلغ.*?([\d,\.]+)',
+    dotAll: true,
   );
-
-  /// InstaPay / bank send — no counterparty number
-  /// تم تنفيذ تحويل لحظي من حسابكم رقم 0130 بمبلغ 600.00 جم إلى NAME
   static final arBankSend = RegExp(
-    r'(?:تم تنفيذ تحويل|تم تحويل مبلغ).*?بمبلغ\s*([\d,\.]+)\s*(?:جم|جنيه|ج\.م)',
+    r'من\s+حسابكم.*?بمبلغ.*?([\d,\.]+)',
+    dotAll: true,
   );
 
   // ─── English ──────────────────────────────────────────────────────────────
 
-  /// Received EGP150 from 00201140932674 to Mobile Account Number 2111
-  /// Mar 22, 2026 11:37:20 AM: Received EGP150 from 00201140932674
+  /// Received EGP1,000 from 00201140932674 ...
+  /// Max 15 digits to cover 14-digit international numbers (002xxxxxxxxxx).
   static final enReceiveFromNumber = RegExp(
-    r'[Rr]eceived\s+EGP\s*([\d,\.]+)\s+from\s+(\+?[\d]{8,13})',
+    r'[Rr]eceived\s+EGP\s*([\d,\.]+)\s+from\s+(\+?[\d]{8,15})',
+    dotAll: true,
   );
 
   /// Sent EGP500 to 01012345678
-  /// You sent EGP 1,000.00 to 01094347803
   static final enSendToNumber = RegExp(
-    r'(?:[Yy]ou\s+)?[Ss]ent\s+EGP\s*([\d,\.]+)\s+to\s+(\+?[\d]{8,13})',
+    r'(?:[Yy]ou\s+)?[Ss]ent\s+EGP\s*([\d,\.]+)\s+to\s+(\+?[\d]{8,15})',
+    dotAll: true,
   );
 
   /// Transfer of EGP 500.00 sent to 01012345678
   static final enTransferSentToNumber = RegExp(
-    r'[Tt]ransfer\s+of\s+EGP\s*([\d,\.]+)\s+sent\s+to\s+(\+?[\d]{8,13})',
+    r'[Tt]ransfer\s+of\s+EGP\s*([\d,\.]+)\s+sent\s+to\s+(\+?[\d]{8,15})',
+    dotAll: true,
   );
 
   /// Transfer of EGP 500.00 received from 01012345678
   static final enTransferReceivedFromNumber = RegExp(
-    r'[Tt]ransfer\s+of\s+EGP\s*([\d,\.]+)\s+received\s+from\s+(\+?[\d]{8,13})',
+    r'[Tt]ransfer\s+of\s+EGP\s*([\d,\.]+)\s+received\s+from\s+(\+?[\d]{8,15})',
+    dotAll: true,
   );
 
   // ─── Reference numbers ────────────────────────────────────────────────────
 
-  /// رقم العملية 018959810019   (VF-Cash, WePay)
-  static final refOperationAr = RegExp(r'رقم العملية\s*([\d]+)');
+  /// رقم العملية: 018959810019
+  static final refOperationAr = RegExp(
+    r'رقم\s+العملية\s*[:\-]?\s*[\.]?(\d+)',
+  );
 
-  /// كود العملية 018959810019   (Orange)
-  static final refCodeAr = RegExp(r'كود العملية\s*([\d]+)');
+  /// كود العملية 018959810019
+  static final refCodeAr = RegExp(r'كود\s+العملية\s*[:\-]?\s*[\.]?(\d+)');
 
-  /// رقم المرجع 018959810019    (Etisalat)
-  static final refNumberAr = RegExp(r'رقم المرجع\s*([\d]+)');
+  /// رقم المرجع 018959810019
+  static final refNumberAr = RegExp(
+    r'رقم\s+المرجع\s*[:\-]?\s*[\.]?(\d+)',
+  );
 
-  /// رقم مرجعي 643111494336     (InstaPay / banks)
-  static final refBankAr = RegExp(r'رقم مرجعي\s*([\d]+)');
+  /// رقم مرجعي 643111494336 — strict prefix required, no optional match.
+  static final refBankAr = RegExp(r'رقم\s+مرجعي\s*[:\-]?\s*(\d{8,16})');
 
-  /// Ref: 018959810019  /  Ref No. 018959810019
-  static final refEn = RegExp(r'[Rr]ef(?:\s*[Nn]o\.?)?\s*[:\-]?\s*([\d]+)');
+  /// Ref: 018959810019 — simplified: grab digits directly after Ref label.
+  static final refEn = RegExp(r'Ref(?:\s*No\.?)?\s*[:\-]?\s*(\d{8,16})');
+
+  /// 643111494336 يوم 08-04 — captures reference number appearing before "يوم"
+  static final refBeforeDateAr = RegExp(r'(\d{8,16})\s+يوم');
+
+  // ─── Balance ─────────────────────────────────────────────────────────────
+
+  /// Available Balance: 10409.72
+  static final balanceEn = RegExp(
+    r'[Aa]vailable\s+[Bb]alance\s*[:\-]?\s*\.?([\d,\.]+)',
+  );
+
+  /// رصيدك الحالي: 9409.72 جنيه
+  /// رصيد حسابك فى فودافون كاش الحالي 2126.69
+  /// Uses [\d,]+(?:\.\d+)? to greedily capture integer-or-decimal without
+  /// swallowing a trailing sentence period.
+  static final balanceAr = RegExp(
+    r'(?:رصيد\s+حسابك.*?الحالي|رصيدك\s+الحالي)\s*[:\-]?\s*\.?([\d,]+(?:\.\d+)?)',
+    dotAll: true,
+  );
 
   // ─── Date / time ──────────────────────────────────────────────────────────
 
-  /// 08-04-26 17:50   →   DD-MM-YY HH:mm
-  static final dateShort = RegExp(r'(\d{2})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})');
+  /// 26-04-14 15:57 or 14-04-26 15:57
+  static final dateShort = RegExp(
+    r'(\d{1,2})[-\/\.](\d{1,2})[-\/\.](\d{2,4})\s*[:\-]?\s*(\d{1,2}):(\d{2})',
+  );
+
+  /// 17:50 26-04-14 or 17:50: 08-04-26
+  static final dateShortReverse = RegExp(
+    r'(\d{1,2}):(\d{2})\s*[:\-]?\s*(\d{1,2})[-\/\.](\d{1,2})[-\/\.](\d{2,4})',
+  );
 
   /// Mar 22, 2026 11:37:20 AM
   static final dateLongEn = RegExp(
-    r'(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s+(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})\s+(AM|PM)',
+    r'(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?',
     caseSensitive: false,
   );
 
-  /// يوم 08-04-26 الساعة 17:50
+  /// يوم 08-04 الساعة 14:03
   static final dateArabicBank = RegExp(
-    r'يوم\s+(\d{2})-(\d{2})-(\d{2}).*?الساعة\s+(\d{2}):(\d{2})',
+    r'(?:(\d{8,16})\s+)?يوم\s+(\d{1,2})[-\/\.](\d{1,2})(?:[-\/\.](\d{2,4}))?.*?الساعة\s+(\d{1,2}):(\d{2})',
   );
 }

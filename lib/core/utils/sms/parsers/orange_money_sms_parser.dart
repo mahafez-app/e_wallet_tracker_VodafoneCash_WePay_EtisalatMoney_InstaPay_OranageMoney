@@ -13,18 +13,25 @@ class OrangeMoneySmsParser extends SmsParser {
 
   @override
   List<RegExp> get receivePatterns => [
-    SmsPatterns.arReceiveFromNumber,
-    SmsPatterns.enReceiveFromNumber,
-    SmsPatterns.enTransferReceivedFromNumber,
-  ];
+        SmsPatterns.arReceiveFromNumber,
+        SmsPatterns.arBankReceive,
+        SmsPatterns.enReceiveFromNumber,
+        SmsPatterns.enTransferReceivedFromNumber,
+      ];
 
   @override
   List<RegExp> get sendPatterns => [
-    SmsPatterns.arSendToNumber,
-    SmsPatterns.enSendToNumber,
-    SmsPatterns.enTransferSentToNumber,
-  ];
+        SmsPatterns.arSendToNumber,
+        SmsPatterns.arBankSend,
+        SmsPatterns.enSendToNumber,
+        SmsPatterns.enTransferSentToNumber,
+      ];
 
   @override
-  List<RegExp> get refPatterns => [SmsPatterns.refCodeAr, SmsPatterns.refEn];
+  List<RegExp> get refPatterns => [
+        SmsPatterns.refCodeAr,
+        SmsPatterns.refOperationAr,
+        SmsPatterns.refNumberAr,
+        SmsPatterns.refEn,
+      ];
 }

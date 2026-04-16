@@ -222,12 +222,21 @@ final class WalletTransactionRemoteDataSourceImpl
 
     final batch = txRef.firestore.batch();
     batch.set(txRef, dto.toFirestore());
-    batch.update(walletRef, {
-      'currentBalance': FieldValue.increment(isReceive ? amount : -amount),
+
+    final walletUpdate = <String, dynamic>{
       'totalReceived': FieldValue.increment(isReceive ? amount : 0),
       'totalSent': FieldValue.increment(isReceive ? 0 : amount),
       'lastBalanceAt': Timestamp.fromDate(transaction.createdAt),
-    });
+    };
+
+    if (transaction.statusBalance != null) {
+      walletUpdate['currentBalance'] = transaction.statusBalance;
+    } else {
+      walletUpdate['currentBalance'] =
+          FieldValue.increment(isReceive ? amount : -amount);
+    }
+
+    batch.update(walletRef, walletUpdate);
     await batch.commit();
   }
 

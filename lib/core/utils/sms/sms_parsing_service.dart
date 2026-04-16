@@ -62,6 +62,7 @@ class SmsParsingService {
       referenceNumber: result.referenceNumber,
       isPaid: null,
       message: rawMessage,
+      statusBalance: result.balance,
     );
   }
 }

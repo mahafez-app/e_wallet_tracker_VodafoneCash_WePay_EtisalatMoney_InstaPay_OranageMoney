@@ -68,7 +68,6 @@ class HomeWorkspaceCard extends StatelessWidget {
                     title: l10n.totalIn,
                     amount: workspace.totalReceived.toCurrencyText(
                       context,
-                      decimalDigits: 0,
                     ),
                     icon: Icons.south_west_rounded,
                     color: colors.success,
@@ -80,7 +79,6 @@ class HomeWorkspaceCard extends StatelessWidget {
                     title: l10n.totalOut,
                     amount: workspace.totalSent.toCurrencyText(
                       context,
-                      decimalDigits: 0,
                     ),
                     icon: Icons.north_east_rounded,
                     color: colors.danger,

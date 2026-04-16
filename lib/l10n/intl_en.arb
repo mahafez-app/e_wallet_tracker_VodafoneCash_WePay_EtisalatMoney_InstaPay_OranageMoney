@@ -484,11 +484,21 @@
       }
     }
   },
-  "workspaceReportsTitle": "Workspace Reports",
-  "workspaceReportsAction": "View Reports",
   "transactions_filterType": "Type",
   "transactions_filterPaidStatus": "Status",
   "transactions_filterDate": "Date",
   "transactions_filterMember": "Member",
-  "transactions_filterWallet": "Wallet"
+  "transactions_filterWallet": "Wallet",
+  "reports_total_transactions": "Transactions Count",
+  "reports_all_wallets": "All Wallets",
+  "reports_period_today": "Today",
+  "reports_period_yesterday": "Yesterday",
+  "reports_period_lastWeek": "Last Week",
+  "reports_period_lastMonth": "Last Month",
+  "reports_period_custom": "Custom Range",
+  "reports_stat_average": "Daily Average",
+  "reports_balance_label": "Net Cash Flow",
+  "reports_performance_label": "Financial Performance",
+  "reports_wallet_title": "Wallet Reports",
+  "reports_workspace_title": "Workspace Reports"
 }

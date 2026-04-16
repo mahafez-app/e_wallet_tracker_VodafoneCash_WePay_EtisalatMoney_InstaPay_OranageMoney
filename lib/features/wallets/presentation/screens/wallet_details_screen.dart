@@ -30,7 +30,16 @@ class WalletDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.walletDetails), centerTitle: true),
+      appBar: AppBar(
+        title: Text(l10n.walletDetails),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () => context.push(AppRoutes.walletReportsPath(walletId)),
+            icon: const Icon(Icons.bar_chart_rounded),
+          ),
+        ],
+      ),
       body: SafeArea(child: _WalletDetailsBody(walletId: walletId)),
     );
   }

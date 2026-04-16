@@ -25,7 +25,7 @@ class TransactionHeaderSection extends StatelessWidget {
     final label = isReceive
         ? l10n.transaction_typeReceiveLabel
         : l10n.transaction_typeSendLabel;
-    final amountText = '$sign${transaction.amount.toLocalizedAmount(context)}';
+    final amountText = '$sign${transaction.amount.toLocalizedAmount(context, decimalDigits: 0)}';
 
     return Column(
       children: [

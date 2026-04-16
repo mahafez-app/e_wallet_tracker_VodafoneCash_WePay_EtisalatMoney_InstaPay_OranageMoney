@@ -17,6 +17,7 @@ base class TransactionEntity extends Equatable {
     this.referenceNumber,
     this.isPaid,
     this.message,
+    this.statusBalance,
   });
 
   /// Unique ID for this transaction record (UUID generated locally).
@@ -61,6 +62,9 @@ base class TransactionEntity extends Equatable {
   /// The raw SMS body. Stored for debugging and re-parsing if formats change.
   final String? message;
 
+  /// The wallet balance snapshot immediately after this transaction, if available.
+  final double? statusBalance;
+
   TransactionEntity copyWith({
     String? id,
     TransactionType? type,
@@ -74,6 +78,7 @@ base class TransactionEntity extends Equatable {
     String? referenceNumber,
     bool? isPaid,
     String? message,
+    double? statusBalance,
   }) => TransactionEntity(
     id: id ?? this.id,
     type: type ?? this.type,
@@ -87,6 +92,7 @@ base class TransactionEntity extends Equatable {
     referenceNumber: referenceNumber ?? this.referenceNumber,
     isPaid: isPaid ?? this.isPaid,
     message: message ?? this.message,
+    statusBalance: statusBalance ?? this.statusBalance,
   );
 
   @override
@@ -103,5 +109,6 @@ base class TransactionEntity extends Equatable {
     referenceNumber,
     isPaid,
     message,
+    statusBalance,
   ];
 }

@@ -46,10 +46,18 @@ class _WorkspaceDetailsActions extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    return IconButton(
-      onPressed: () =>
-          context.push(AppRoutes.workspaceSettingsPath(workspaceId)),
-      icon: const Icon(Icons.settings_outlined),
+    return Row(
+      children: [
+        IconButton(
+          onPressed: () => context.push(AppRoutes.workspaceReportsPath(workspaceId)),
+          icon: const Icon(Icons.bar_chart_rounded),
+        ),
+        IconButton(
+          onPressed: () =>
+              context.push(AppRoutes.workspaceSettingsPath(workspaceId)),
+          icon: const Icon(Icons.settings_outlined),
+        ),
+      ],
     );
   }
 }

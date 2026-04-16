@@ -49,11 +49,17 @@ class SmsPatternMatcher {
   static double? _parseAmount(String raw) =>
       double.tryParse(raw.replaceAll(',', '').trim());
 
+  /// Normalises Egyptian mobile numbers to local 01xxxxxxxxx (11-digit) format.
+  ///
+  /// Handles:
+  ///   002xxxxxxxxxx  →  xxxxxxxxxx  (strip "002", local number already starts with 01)
+  ///   +2xxxxxxxxxx   →  xxxxxxxxxx  (strip "+2",  local number already starts with 01)
+  ///   01xxxxxxxxx    →  unchanged   (already local)
   static String? _normalizeNumber(String? raw) {
     if (raw == null) return null;
     final digits = raw.replaceAll(RegExp(r'\s+'), '');
-    if (digits.startsWith('002')) return '0${digits.substring(3)}';
-    if (digits.startsWith('+2')) return '0${digits.substring(2)}';
+    if (digits.startsWith('002')) return digits.substring(3);   // 002|01xxxxxxxx
+    if (digits.startsWith('+2')) return digits.substring(2);    // +2|01xxxxxxxx
     if (digits.startsWith('01') && digits.length == 11) return digits;
     return null;
   }

@@ -68,8 +68,7 @@ class BalanceCard extends StatelessWidget {
               Expanded(
                 child: _StatBox(
                   title: l10n.totalOut,
-                  amount:
-                      '- ${sentAmount.toLocalizedAmount(context, decimalDigits: 0)}',
+                  amount: '- ${sentAmount.toLocalizedAmount(context)}',
                   amountColor: colors.statsSentColor,
                   icon: Icons.arrow_outward,
                   iconColor: colors.statsSentColor,
@@ -79,8 +78,7 @@ class BalanceCard extends StatelessWidget {
               Expanded(
                 child: _StatBox(
                   title: l10n.totalIn,
-                  amount:
-                      '+ ${receivedAmount.toLocalizedAmount(context, decimalDigits: 0)}',
+                  amount: '+ ${receivedAmount.toLocalizedAmount(context)}',
                   amountColor: colors.statsReceivedColor,
                   icon: Icons.arrow_downward,
                   iconColor: colors.statsReceivedColor,

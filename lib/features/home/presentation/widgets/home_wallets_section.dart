@@ -33,25 +33,15 @@ class HomeWalletsSection extends StatelessWidget {
         if (wallets.isEmpty)
           const _AddWalletEmptyCard()
         else
-          SizedBox(
-            height: 151.responsiveHeight,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: wallets.length,
-              separatorBuilder: (_, _) => AppSpacing.md.horizontalSpace,
-              itemBuilder: (context, index) {
-                final wallet = wallets[index];
-                return GestureDetector(
-                  onTap: () =>
-                      context.push(AppRoutes.walletDetailsPath(wallet.id)),
-                  child: WalletCard(
-                    provider: wallet.provider,
-                    phoneNumber: wallet.phoneNumber,
-                    balance: wallet.currentBalance,
-                  ),
-                );
-              },
-            ),
+          Row(
+            spacing: AppSpacing.md,
+            children: wallets.map((wallet) {
+              return WalletCard(
+                provider: wallet.provider,
+                phoneNumber: wallet.phoneNumber,
+                balance: wallet.currentBalance,
+              );
+            }).toList(),
           ),
       ],
     );

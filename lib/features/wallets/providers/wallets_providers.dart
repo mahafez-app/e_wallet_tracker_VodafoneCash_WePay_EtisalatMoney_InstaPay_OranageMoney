@@ -9,7 +9,6 @@ import '../data/repositories/wallet_repository_impl.dart';
 import '../domain/repositories/wallet_repository.dart';
 import '../domain/usecases/add_wallets_usecase.dart';
 import '../domain/usecases/delete_wallet_usecase.dart';
-import '../domain/usecases/get_device_phone_numbers_usecase.dart';
 import '../domain/usecases/get_wallets_usecase.dart';
 import '../domain/usecases/link_subscription_id_usecase.dart';
 import '../domain/usecases/wallet_details_usecases.dart';
@@ -32,16 +31,12 @@ final walletRepositoryProvider = Provider<WalletRepository>((ref) {
   return WalletRepositoryImpl(
     remoteDataSource: ref.watch(walletRemoteDataSourceProvider),
     detailsDataSource: ref.watch(walletDetailsRemoteDataSourceProvider),
-    phoneNumberService: ref.watch(phoneNumberServiceProvider),
     deviceInfoService: ref.watch(deviceInfoServiceProvider),
     walletMetaCache: ref.watch(walletMetaCacheProvider),
   );
 });
 
-final getDevicePhoneNumbersUseCaseProvider =
-    Provider<GetDevicePhoneNumbersUseCase>((ref) {
-  return GetDevicePhoneNumbersUseCase(ref.watch(walletRepositoryProvider));
-});
+
 
 final addWalletsUseCaseProvider = Provider<AddWalletsUseCase>((ref) {
   return AddWalletsUseCase(ref.watch(walletRepositoryProvider));

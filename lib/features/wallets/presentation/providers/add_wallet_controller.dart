@@ -17,7 +17,6 @@ final addWalletControllerProvider =
 class AddWalletController extends Notifier<AddWalletState> {
   @override
   AddWalletState build() {
-    unawaited(_loadDevicePhoneNumbers());
     return const AddWalletState.initial();
   }
 
@@ -66,44 +65,7 @@ class AddWalletController extends Notifier<AddWalletState> {
     unawaited(_submitValidated(currentState));
   }
 
-  Future<void> _loadDevicePhoneNumbers() async {
-    final result = await ref.read(getDevicePhoneNumbersUseCaseProvider)();
-    if (!ref.mounted) return;
 
-    result.fold(_setLoadFailure, _applyLoadedPhoneNumbers);
-  }
-
-  void _setLoadFailure(Failure failure) {
-    state = state.copyWith(
-      isLoadingDevicePhoneNumbers: false,
-      loadFailure: failure,
-    );
-  }
-
-  void _applyLoadedPhoneNumbers(List<String> phoneNumbers) {
-    final initialPhoneNumber = _resolveInitialPhoneNumber(phoneNumbers);
-
-    state = state.copyWith(
-      devicePhoneNumbers: phoneNumbers,
-      phoneNumber: initialPhoneNumber,
-      selectedProviders: _resolveSelectedProviders(
-        phoneNumber: initialPhoneNumber,
-        currentProviders: state.selectedProviders,
-      ),
-      isLoadingDevicePhoneNumbers: false,
-      loadFailure: null,
-    );
-  }
-
-  String _resolveInitialPhoneNumber(List<String> phoneNumbers) {
-    if (state.phoneNumber.isNotEmpty) {
-      return EgyptianPhoneNumber.normalize(state.phoneNumber);
-    }
-
-    if (phoneNumbers.isEmpty) return '';
-
-    return EgyptianPhoneNumber.normalize(phoneNumbers.first);
-  }
 
   Failure? _validate(AddWalletState currentState) {
     if (currentState.phoneNumber.isEmpty) {
@@ -150,16 +112,9 @@ class AddWalletController extends Notifier<AddWalletState> {
   }
 
   void _setSubmissionSuccess() {
-    final initialPhoneNumber = _resolveInitialPhoneNumber(
-      state.devicePhoneNumbers,
-    );
-
     state = state.copyWith(
-      phoneNumber: initialPhoneNumber,
-      selectedProviders: _resolveSelectedProviders(
-        phoneNumber: initialPhoneNumber,
-        currentProviders: const <WalletProvider>{},
-      ),
+      phoneNumber: '',
+      selectedProviders: const <WalletProvider>{},
       submissionStatus: AddWalletSubmissionStatus.success,
       submissionFailure: null,
     );

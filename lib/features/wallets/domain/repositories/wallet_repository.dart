@@ -1,9 +1,9 @@
-import '../../../../core/error/result.dart';
 import '../../../../core/domain/entities/wallet_entity.dart';
+import '../../../../core/error/result.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 
 abstract interface class WalletRepository {
-  Future<Result<List<String>>> getDevicePhoneNumbers();
+
 
   Future<Result<List<WalletEntity>>> getWallets();
 

@@ -40,14 +40,14 @@ class AddWalletContent extends StatelessWidget {
                 InfoCard(text: s.addWalletDescription),
                 AppSpacing.lg.verticalSpace,
                 AddWalletPhoneNumberSection(
-                  state: state,
                   onPhoneNumberChanged: onPhoneNumberChanged,
                 ),
                 AppSpacing.lg.verticalSpace,
                 Text(s.chooseProvider, style: theme.textTheme.titleMedium),
                 AppSpacing.md.verticalSpace,
                 AddWalletProviderGrid(
-                  state: state,
+                  selectedProviders: state.selectedProviders,
+                  allowedProviders: state.allowedProviders,
                   onProviderToggled: onProviderToggled,
                 ),
               ],

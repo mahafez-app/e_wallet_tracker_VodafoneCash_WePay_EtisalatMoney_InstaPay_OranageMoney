@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/providers/sms_providers.dart';
 import '../../../../core/error/failures.dart';
+import '../../../../core/providers/sms_providers.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_snackbar.dart';
@@ -62,11 +62,6 @@ class _AddWalletBody extends ConsumerWidget {
     WidgetRef ref,
     BuildContext context,
   ) async {
-    if (_hasNewLoadFailure(previous, next)) {
-      _showFailureSnackbar(context, next.loadFailure!);
-      return;
-    }
-
     if (_hasNewSubmissionFailure(previous, next)) {
       _showFailureSnackbar(context, next.submissionFailure!);
       return;
@@ -91,10 +86,7 @@ class _AddWalletBody extends ConsumerWidget {
         );
   }
 
-  bool _hasNewLoadFailure(AddWalletState? previous, AddWalletState next) {
-    return next.loadFailure != null &&
-        previous?.loadFailure != next.loadFailure;
-  }
+
 
   bool _hasNewSubmissionFailure(AddWalletState? previous, AddWalletState next) {
     return next.submissionStatus == AddWalletSubmissionStatus.failure &&

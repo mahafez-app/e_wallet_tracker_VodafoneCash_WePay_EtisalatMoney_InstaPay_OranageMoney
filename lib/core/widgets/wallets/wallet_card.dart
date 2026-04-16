@@ -52,21 +52,18 @@ class WalletCard extends StatelessWidget {
         padding: AppResponsive.allPadding(AppSpacing.xl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
           children: [
             WalletProviderInfo(provider: provider, phoneNumber: phoneNumber),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.currentBalance,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.outline,
-                  ),
-                ),
-                _WalletBalance(balance: balance),
-              ],
+            AppSpacing.lg.verticalSpace,
+            Text(
+              l10n.currentBalance,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.outline,
+              ),
             ),
+            AppSpacing.xs.verticalSpace,
+            _WalletBalance(balance: balance),
           ],
         ),
       ),
@@ -98,12 +95,14 @@ class _WalletBalance extends StatelessWidget {
         AppSpacing.xs.horizontalSpace,
         Padding(
           padding: AppResponsive.onlyPadding(bottom: 4),
-          child: Text(
-            l10n.currency,
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: primary,
-              fontSize: 12.responsiveFont,
-              fontWeight: FontWeight.w700,
+          child: FittedBox(
+            child: Text(
+              l10n.currency,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: primary,
+                fontSize: 12.responsiveFont,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ),

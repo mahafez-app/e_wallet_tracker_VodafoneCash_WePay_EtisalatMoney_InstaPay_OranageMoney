@@ -5,16 +5,18 @@ import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
 import '../../../../../core/widgets/wallets/wallet_provider_icon.dart';
-import '../../providers/add_wallet_state.dart';
+
 
 class AddWalletProviderGrid extends StatelessWidget {
   const AddWalletProviderGrid({
     super.key,
-    required this.state,
+    required this.selectedProviders,
+    required this.allowedProviders,
     required this.onProviderToggled,
   });
 
-  final AddWalletState state;
+  final Set<WalletProvider> selectedProviders;
+  final Set<WalletProvider> allowedProviders;
   final ValueChanged<WalletProvider> onProviderToggled;
 
   @override
@@ -38,8 +40,8 @@ class AddWalletProviderGrid extends StatelessWidget {
         return _ProviderCard(
           key: ValueKey('_ProviderCard_${provider.name}'),
           provider: provider,
-          isEnabled: state.allowedProviders.contains(provider),
-          isSelected: state.selectedProviders.contains(provider),
+          isEnabled: allowedProviders.contains(provider),
+          isSelected: selectedProviders.contains(provider),
           onTap: () => onProviderToggled(provider),
         );
       },

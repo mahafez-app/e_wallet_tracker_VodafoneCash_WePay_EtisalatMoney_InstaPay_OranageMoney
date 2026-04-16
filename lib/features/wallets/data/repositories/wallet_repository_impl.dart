@@ -1,9 +1,8 @@
 import '../../../../core/cache/wallet_meta_cache.dart';
-import '../../../../core/error/failures.dart';
 import '../../../../core/domain/entities/wallet_entity.dart';
+import '../../../../core/error/failures.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/services/device_info_service.dart';
-import '../../../../core/services/phone_number_service.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 import '../../domain/repositories/wallet_repository.dart';
@@ -14,28 +13,22 @@ class WalletRepositoryImpl implements WalletRepository {
   const WalletRepositoryImpl({
     required WalletRemoteDataSource remoteDataSource,
     required WalletDetailsRemoteDataSource detailsDataSource,
-    required PhoneNumberService phoneNumberService,
+    // removed PhoneNumberService phoneNumberService,
     required DeviceInfoService deviceInfoService,
     required WalletMetaCache walletMetaCache,
   })  : _remoteDataSource = remoteDataSource,
         _detailsDataSource = detailsDataSource,
-        _phoneNumberService = phoneNumberService,
+        // _phoneNumberService = phoneNumberService,
         _deviceInfoService = deviceInfoService,
         _walletMetaCache = walletMetaCache;
 
   final WalletRemoteDataSource _remoteDataSource;
   final WalletDetailsRemoteDataSource _detailsDataSource;
-  final PhoneNumberService _phoneNumberService;
+  // final PhoneNumberService _phoneNumberService;
   final DeviceInfoService _deviceInfoService;
   final WalletMetaCache _walletMetaCache;
 
-  @override
-  Future<Result<List<String>>> getDevicePhoneNumbers() {
-    return executeAndHandleErrors(
-      () => _phoneNumberService.getDevicePhoneNumbers(),
-      tag: 'WalletRepositoryImpl.getDevicePhoneNumbers',
-    );
-  }
+
 
   @override
   Future<Result<List<WalletEntity>>> getWallets() {

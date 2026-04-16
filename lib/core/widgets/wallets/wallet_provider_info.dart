@@ -25,34 +25,37 @@ class WalletProviderInfo extends StatelessWidget {
     final theme = Theme.of(context);
     return Row(
       children: [
-        WalletProviderIcon(
-          provider: provider,
-          size: 40.responsiveRadius,
-        ),
+        WalletProviderIcon(provider: provider, size: 40.responsiveRadius),
         AppSpacing.md.horizontalSpace,
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                provider.displayName(context).toUpperCase(),
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: theme.colorScheme.onSurface,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 0.5,
+              FittedBox(
+                child: Text(
+                  provider.displayName(context).toUpperCase(),
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.5,
+                  ),
                 ),
               ),
               AppSpacing.xs.verticalSpace,
-              Text(
-                phoneNumber.formattedEgyptianPhoneNumber,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.primary,
-                  fontWeight: FontWeight.w800,
+              FittedBox(
+                child: Text(
+                  phoneNumber.formattedEgyptianPhoneNumber,
+                  maxLines: 1,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ],
           ),
         ),
+        AppSpacing.md.horizontalSpace,
         _WalletStatusBadge(provider: provider),
       ],
     );

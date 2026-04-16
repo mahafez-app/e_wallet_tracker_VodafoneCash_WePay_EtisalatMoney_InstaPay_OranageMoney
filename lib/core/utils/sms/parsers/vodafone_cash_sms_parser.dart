@@ -9,26 +9,30 @@ final class VodafoneCashSmsParser extends SmsParser {
   WalletProvider get provider => WalletProvider.vodafoneCash;
 
   @override
-  List<String> get senderIds =>
-      ['VF-Cash', 'VFCash', 'Vodafone-Cash', 'VodafoneCash'];
+  List<String> get senderIds => [
+    'VF-Cash',
+    'VFCash',
+    'Vodafone-Cash',
+    'VodafoneCash',
+  ];
 
   @override
   List<RegExp> get receivePatterns => [
-        SmsPatterns.arReceiveFromNumber,
-        SmsPatterns.enReceiveFromNumber,
-        SmsPatterns.enTransferReceivedFromNumber,
-      ];
+    SmsPatterns.arReceiveFromNumber,
+    SmsPatterns.enReceiveFromNumber,
+    SmsPatterns.enTransferReceivedFromNumber,
+  ];
 
   @override
   List<RegExp> get sendPatterns => [
-        SmsPatterns.arSendToNumber,
-        SmsPatterns.enSendToNumber,
-        SmsPatterns.enTransferSentToNumber,
-      ];
+    SmsPatterns.arSendToNumber,
+    SmsPatterns.enSendToNumber,
+    SmsPatterns.enTransferSentToNumber,
+  ];
 
   @override
   List<RegExp> get refPatterns => [
-        SmsPatterns.refOperationAr,
-        SmsPatterns.refEn,
-      ];
+    SmsPatterns.refOperationAr,
+    SmsPatterns.refEn,
+  ];
 }

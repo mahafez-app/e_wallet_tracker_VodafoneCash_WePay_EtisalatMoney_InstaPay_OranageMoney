@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -60,6 +61,11 @@ Future<Result<AppBootstrapDependencies>> initializeApp() {
       );
 
       final sharedPreferences = await SharedPreferences.getInstance();
+
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        await sharedPreferences.setString('last_known_user_uid', currentUser.uid);
+      }
 
       return AppBootstrapDependencies(
         sharedPreferences: sharedPreferences,

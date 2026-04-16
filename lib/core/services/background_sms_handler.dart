@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/transactions/data/datasources/transaction_firestore_support.dart';
 import '../../features/transactions/data/datasources/wallet_transaction_remote_data_source.dart';
@@ -45,6 +46,8 @@ void logSmsDetails(SmsMessage message, {required bool isBackground}) {
 /// only what we need: Firebase, Hive, and the Firestore data source.
 @pragma('vm:entry-point')
 Future<void> backgroundSmsHandler(SmsMessage message) async {
+  await _BackgroundDependencies.init();
+
   logSmsDetails(message, isBackground: true);
 
   final sender = message.address;
@@ -53,11 +56,9 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
 
   final parser = SmsParserRegistry.resolve(sender);
   if (parser == null) {
-    log('Ignoring: unknown sender.', name: 'BackgroundSms');
+    log('Ignoring: unknown sender "$sender".', name: 'BackgroundSms');
     return;
   }
-
-  await _BackgroundDependencies.init();
 
   final retryBox = Hive.box<String>(_BackgroundDependencies.retryBoxName);
   final processor = _BackgroundSmsProcessor(retryBox: retryBox);
@@ -128,14 +129,26 @@ final class _BackgroundSmsProcessor {
     required String providerName,
     required int? subscriptionId,
   }) async {
-    final currentUser = FirebaseAuth.instance.currentUser;
+    // Background isolates often need a moment to load the Firebase user session
+    var currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
-      log('Ignoring: user not logged in.', name: _tag);
-      return true; // Nothing we can do — treat as handled.
+      await Future.delayed(const Duration(milliseconds: 500));
+      currentUser = FirebaseAuth.instance.currentUser;
+    }
+
+    String? uid = currentUser?.uid;
+    if (uid == null) {
+      final prefs = await SharedPreferences.getInstance();
+      uid = prefs.getString('last_known_user_uid');
+    }
+
+    if (uid == null) {
+      log('Aborting: user not authenticated and no fallback UID.', name: _tag);
+      return true; // Unrecoverable without a user context.
     }
 
     final wallet = await _resolveWallet(
-      uid: currentUser.uid,
+      uid: uid,
       providerName: providerName,
       subscriptionId: subscriptionId,
     );

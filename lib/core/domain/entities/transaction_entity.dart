@@ -29,8 +29,9 @@ base class TransactionEntity extends Equatable {
   /// The amount transferred in EGP.
   final double amount;
 
-  /// The date and time of the transaction, parsed from the SMS body.
-  /// Falls back to SMS received time if not found.
+  /// The date and time of the transaction.
+  /// Always uses the system SMS delivered time to ensure accuracy and
+  /// avoid errors from inconsistent or bidirectional body text formats.
   final DateTime createdAt;
 
   /// The ID of the wallet this transaction belongs to in your app.

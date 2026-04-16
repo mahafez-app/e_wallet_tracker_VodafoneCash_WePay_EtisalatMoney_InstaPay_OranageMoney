@@ -93,27 +93,4 @@ class SmsPatterns {
     r'(?:رصيد\s+حسابك.*?الحالي|رصيدك\s+الحالي)\s*[:\-]?\s*\.?([\d,]+(?:\.\d+)?)',
     dotAll: true,
   );
-
-  // ─── Date / time ──────────────────────────────────────────────────────────
-
-  /// 26-04-14 15:57 or 14-04-26 15:57
-  static final dateShort = RegExp(
-    r'(\d{1,2})[-\/\.](\d{1,2})[-\/\.](\d{2,4})\s*[:\-]?\s*(\d{1,2}):(\d{2})',
-  );
-
-  /// 17:50 26-04-14 or 17:50: 08-04-26
-  static final dateShortReverse = RegExp(
-    r'(\d{1,2}):(\d{2})\s*[:\-]?\s*(\d{1,2})[-\/\.](\d{1,2})[-\/\.](\d{2,4})',
-  );
-
-  /// Mar 22, 2026 11:37:20 AM
-  static final dateLongEn = RegExp(
-    r'(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s*(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?',
-    caseSensitive: false,
-  );
-
-  /// يوم 08-04 الساعة 14:03
-  static final dateArabicBank = RegExp(
-    r'(?:(\d{8,16})\s+)?يوم\s+(\d{1,2})[-\/\.](\d{1,2})(?:[-\/\.](\d{2,4}))?.*?الساعة\s+(\d{1,2}):(\d{2})',
-  );
 }

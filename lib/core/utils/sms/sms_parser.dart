@@ -1,5 +1,7 @@
 // lib/core/utils/sms/sms_parser.dart
 
+import 'dart:developer';
+
 import '../../domain/enums/wallet_provider.dart';
 import 'sms_parse_result.dart';
 import 'sms_pattern_matcher.dart';
@@ -22,6 +24,11 @@ abstract class SmsParser {
       sendPatterns: sendPatterns,
     );
     if (match == null) return null;
+
+    log(
+      'Parsing SMS from ${senderIds.first} with system date: $smsReceivedAt',
+      name: 'SmsParser',
+    );
 
     return SmsParseResult(
       amount: match.amount,

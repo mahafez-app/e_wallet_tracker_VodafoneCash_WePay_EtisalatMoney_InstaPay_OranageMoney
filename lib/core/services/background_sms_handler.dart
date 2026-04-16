@@ -27,12 +27,19 @@ import 'pending_sms_retry_service.dart';
 /// Logs all relevant fields of an incoming SMS for diagnostics.
 void logSmsDetails(SmsMessage message, {required bool isBackground}) {
   final tag = isBackground ? 'BackgroundSms' : 'ForegroundSms';
-  log('-------', name: tag);
-  log('Address: ${message.address}', name: tag);
-  log('Body: ${message.body}', name: tag);
-  log('Date: ${message.date}', name: tag);
-  log('SubscriptionId: ${message.subscriptionId}', name: tag);
-  log('-------', name: tag);
+  if (isBackground) {
+    print('[$tag] Address: ${message.address}');
+    print('[$tag] Body: ${message.body}');
+    print('[$tag] Date: ${message.date}');
+    print('[$tag] SubscriptionId: ${message.subscriptionId}');
+  } else {
+    log('-------', name: tag);
+    log('Address: ${message.address}', name: tag);
+    log('Body: ${message.body}', name: tag);
+    log('Date: ${message.date}', name: tag);
+    log('SubscriptionId: ${message.subscriptionId}', name: tag);
+    log('-------', name: tag);
+  }
 }
 
 // ── Background entry point ────────────────────────────────────────────────────

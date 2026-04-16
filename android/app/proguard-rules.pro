@@ -25,5 +25,9 @@
 # Telephony Plugin (Background SMS)
 -keep class com.shounakmulay.telephony.** { *; }
 
+# Plugin Method Channels
+-keep class io.flutter.plugins.sharedpreferences.** { *; }
+-keep class io.flutter.plugins.firebase.** { *; }
+
 # Google Play Core (Fixes R8 build failure for missing deferred components sub-dependency)
 -dontwarn com.google.android.play.core.**

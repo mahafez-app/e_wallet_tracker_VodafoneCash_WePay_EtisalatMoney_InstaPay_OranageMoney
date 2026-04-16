@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../features/transactions/data/mappers/transaction_search_terms.dart';
 import '../../domain/entities/transaction_entity.dart';
 import '../../domain/enums/transaction_type.dart';
 import '../../domain/enums/wallet_provider.dart';
-import '../../../features/transactions/data/mappers/transaction_search_terms.dart';
 
 final class TransactionDto extends TransactionEntity {
   const TransactionDto({
@@ -94,6 +94,7 @@ final class TransactionDto extends TransactionEntity {
         statusBalance: entity.statusBalance,
       );
 
+  @override
   TransactionDto copyWith({
     String? id,
     TransactionType? type,

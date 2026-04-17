@@ -65,4 +65,12 @@ class WalletDetailsController extends AsyncNotifier<WalletDetailsEntity> {
       ),
     );
   }
+
+  Future<void> resetStats() async {
+    final result = await ref.read(resetWalletStatsUseCaseProvider)(_walletId);
+    result.fold(
+      (failure) => state = AsyncValue.error(failure, StackTrace.current),
+      (_) => ref.invalidateSelf(),
+    );
+  }
 }

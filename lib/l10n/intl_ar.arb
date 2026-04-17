@@ -511,5 +511,14 @@
   "reports_balance_label": "صافي التدفق النقدي",
   "reports_performance_label": "الأداء المالي",
   "reports_wallet_title": "تقارير الـمحفظة",
-  "reports_workspace_title": "تقارير مـساحة العمل"
+  "reports_workspace_title": "تقارير مـساحة العمل",
+  "wallet_statsFrom": "الإحصائيات من {date}",
+  "@wallet_statsFrom": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "wallet_resetStats": "تصفير المؤشرات",
+  "wallet_resetStatsDescription": "متأكد إنك عايز تصفر مؤشرات الوارد والصادر للمحفظة دي؟ ده هيخلي إجمالي المبالغ صفر من بداية النهاردة، لكن رصيدك الحالي مش هيتأثر.",
+  "wallet_resetStatsAction": "تصفير"
 }

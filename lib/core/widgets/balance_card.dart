@@ -1,6 +1,7 @@
 // ignore_for_file: unused_element_parameter
 
 import 'package:flutter/material.dart';
+import 'package:wallet_tracker/core/utils/extensions/date_extensions.dart';
 
 import '../theme/app_color_extension.dart';
 import '../theme/app_responsive.dart';
@@ -17,6 +18,8 @@ class BalanceCard extends StatelessWidget {
     required this.label,
     this.subtitle,
     this.icon,
+    this.statsResetDate,
+    this.onReset,
   });
 
   final double balance;
@@ -25,6 +28,8 @@ class BalanceCard extends StatelessWidget {
   final String label;
   final Widget? subtitle;
   final IconData? icon;
+  final DateTime? statsResetDate;
+  final VoidCallback? onReset;
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +61,48 @@ class BalanceCard extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              if (icon != null) Icon(icon, color: colors.statsOnGradient),
+              if (onReset != null)
+                Material(
+                  color: Colors.white.withAlpha(30),
+                  borderRadius: BorderRadius.circular(12.responsiveRadius),
+                  child: InkWell(
+                    onTap: onReset,
+                    borderRadius: BorderRadius.circular(12.responsiveRadius),
+                    child: Padding(
+                      padding: AppResponsive.symmetricPadding(horizontal: 10, vertical: 6),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.restart_alt_rounded,
+                            size: 16.responsiveRadius,
+                            color: colors.statsOnGradient,
+                          ),
+                          AppSpacing.xs.horizontalSpace,
+                          Text(
+                            l10n.wallet_resetStatsAction,
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: colors.statsOnGradient,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 12.responsiveFont,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              else if (icon != null)
+                Icon(icon, color: colors.statsOnGradient),
             ],
           ),
           AppSpacing.sm.verticalSpace,
           _BalanceDisplay(amount: balance),
           if (subtitle != null) ...[AppSpacing.xs.verticalSpace, subtitle!],
+          if (statsResetDate != null) ...[
+            AppSpacing.md.verticalSpace,
+            _StatsPeriodLabel(date: statsResetDate!),
+          ],
           AppSpacing.lg.verticalSpace,
           Row(
             children: [
@@ -190,6 +231,46 @@ class _StatBox extends StatelessWidget {
                 fontWeight: FontWeight.w900,
                 letterSpacing: -0.5,
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatsPeriodLabel extends StatelessWidget {
+  const _StatsPeriodLabel({required this.date});
+
+  final DateTime date;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final colors = context.appColors;
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: AppResponsive.symmetricPadding(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withAlpha(25),
+        borderRadius: BorderRadius.circular(10.responsiveRadius),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.history_rounded,
+            size: 12.responsiveRadius,
+            color: colors.statsOnGradient.withAlpha(180),
+          ),
+          AppSpacing.xs.horizontalSpace,
+          Text(
+            l10n.wallet_statsFrom(date.toFormattedDate(context)),
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: colors.statsOnGradient.withAlpha(200),
+              fontWeight: FontWeight.w600,
+              fontSize: 10.responsiveFont,
             ),
           ),
         ],

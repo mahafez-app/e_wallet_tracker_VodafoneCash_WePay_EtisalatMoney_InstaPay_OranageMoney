@@ -16,6 +16,7 @@ final class WalletDto extends WalletEntity {
     super.totalReceived = 0.0,
     super.totalSent = 0.0,
     super.subscriptionId,
+    super.statsResetAt,
   });
 
   factory WalletDto.fromFirestore(DocumentSnapshot doc) {
@@ -35,6 +36,7 @@ final class WalletDto extends WalletEntity {
           (data['lastBalanceAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       subscriptionId: data['subscriptionId'] as int?,
+      statsResetAt: (data['statsResetAt'] as Timestamp?)?.toDate(),
     );
   }
 
@@ -50,6 +52,8 @@ final class WalletDto extends WalletEntity {
       'lastBalanceAt': Timestamp.fromDate(lastBalanceAt),
       'createdAt': Timestamp.fromDate(createdAt),
       'subscriptionId': subscriptionId,
+      'statsResetAt':
+          statsResetAt != null ? Timestamp.fromDate(statsResetAt!) : null,
     };
   }
 
@@ -66,6 +70,7 @@ final class WalletDto extends WalletEntity {
       lastBalanceAt: lastBalanceAt,
       createdAt: createdAt,
       subscriptionId: subscriptionId,
+      statsResetAt: statsResetAt,
     );
   }
 }

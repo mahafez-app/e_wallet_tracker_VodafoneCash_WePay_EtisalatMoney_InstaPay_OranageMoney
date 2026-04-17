@@ -43,8 +43,9 @@ class InboxSmsServiceImpl implements InboxSmsService {
         sortOrder: [OrderBy(SmsColumn.DATE, sort: Sort.DESC)],
       );
 
-      print(
+      log(
         'Queried ${messages.length} messages from inbox for provider ${provider.toValue}',
+        name: 'InboxSmsService',
       );
 
       final filteredMessages = messages.where((message) {

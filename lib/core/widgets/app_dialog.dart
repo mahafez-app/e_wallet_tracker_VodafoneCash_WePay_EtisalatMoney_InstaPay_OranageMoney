@@ -153,6 +153,8 @@ class AppDialog extends StatelessWidget {
                   Expanded(
                     child: AppButton(
                       label: confirmLabel!,
+                      backgroundColor: (type == AppDialogType.error || type == AppDialogType.warning) ? foregroundColor : null,
+                      foregroundColor: (type == AppDialogType.error || type == AppDialogType.warning) ? Colors.white : null,
                       onPressed: onConfirm ?? () => Navigator.pop(context),
                     ),
                   ),

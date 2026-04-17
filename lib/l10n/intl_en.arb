@@ -511,5 +511,14 @@
   "reports_balance_label": "Net Cash Flow",
   "reports_performance_label": "Financial Performance",
   "reports_wallet_title": "Wallet Reports",
-  "reports_workspace_title": "Workspace Reports"
+  "reports_workspace_title": "Workspace Reports",
+  "wallet_statsFrom": "Stats from {date}",
+  "@wallet_statsFrom": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "wallet_resetStats": "Reset Tracked Metrics",
+  "wallet_resetStatsDescription": "Are you sure you want to reset the tracked metrics for this wallet? This will zero out your total incoming and outgoing amounts since the last reset. Your current balance will be preserved.",
+  "wallet_resetStatsAction": "Reset Stats"
 }

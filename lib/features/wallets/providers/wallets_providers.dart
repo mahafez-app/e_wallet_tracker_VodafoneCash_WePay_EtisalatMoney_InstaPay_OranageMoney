@@ -13,6 +13,7 @@ import '../domain/usecases/delete_wallet_usecase.dart';
 import '../domain/usecases/get_wallets_usecase.dart';
 import '../domain/usecases/link_subscription_id_usecase.dart';
 import '../domain/usecases/wallet_details_usecases.dart';
+import '../domain/usecases/reset_wallet_stats_usecase.dart';
 
 final walletRemoteDataSourceProvider = Provider<WalletRemoteDataSource>((ref) {
   return WalletRemoteDataSourceImpl(
@@ -59,4 +60,8 @@ final deleteWalletUseCaseProvider = Provider<DeleteWalletUseCase>((ref) {
 final linkSubscriptionIdUseCaseProvider =
     Provider<LinkSubscriptionIdUseCase>((ref) {
   return LinkSubscriptionIdUseCase(ref.watch(walletRepositoryProvider));
+});
+
+final resetWalletStatsUseCaseProvider = Provider<ResetWalletStatsUseCase>((ref) {
+  return ResetWalletStatsUseCase(ref.watch(walletRepositoryProvider));
 });

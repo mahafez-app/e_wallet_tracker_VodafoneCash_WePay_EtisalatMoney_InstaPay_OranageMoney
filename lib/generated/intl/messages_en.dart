@@ -67,24 +67,26 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m18(providerName, phoneNumber) =>
       "Are you sure you want to delete this ${providerName} wallet (${phoneNumber})? This will permanently remove its transactions and notes, and unlink it from all workspaces. This action cannot be undone.";
 
-  static String m19(count) =>
+  static String m19(date) => "Stats from ${date}";
+
+  static String m20(count) =>
       "${Intl.plural(count, zero: 'No members', one: '1 member', other: '${count} members')}";
 
-  static String m20(email) =>
+  static String m21(email) =>
       "The invitation sent to ${email} will be removed immediately.";
 
-  static String m21(memberName) =>
+  static String m22(memberName) =>
       "You will remove ${memberName} from this workspace, and any wallets they linked here will be removed too. They can be invited again later.";
 
-  static String m22(providerName, phoneNumber) =>
+  static String m23(providerName, phoneNumber) =>
       "The ${providerName} wallet linked to ${phoneNumber} will be unlinked from this workspace. The wallet itself and its transactions will NOT be deleted.";
 
-  static String m23(ownerName) => "Owner: ${ownerName}";
+  static String m24(ownerName) => "Owner: ${ownerName}";
 
-  static String m24(ownedCount, linkedCount) =>
+  static String m25(ownedCount, linkedCount) =>
       "You own ${ownedCount} wallets, and ${linkedCount} are already linked to this workspace.";
 
-  static String m25(count) =>
+  static String m26(count) =>
       "${Intl.plural(count, zero: 'No wallets', one: '1 wallet', other: '${count} wallets')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -598,6 +600,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "walletStatusActive": MessageLookupByLibrary.simpleMessage("Active"),
         "walletTransactions":
             MessageLookupByLibrary.simpleMessage("Wallet Transactions"),
+        "wallet_resetStats":
+            MessageLookupByLibrary.simpleMessage("Reset Tracked Metrics"),
+        "wallet_resetStatsAction":
+            MessageLookupByLibrary.simpleMessage("Reset Stats"),
+        "wallet_resetStatsDescription": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to reset the tracked metrics for this wallet? This will zero out your total incoming and outgoing amounts since the last reset. Your current balance will be preserved."),
+        "wallet_statsFrom": m19,
         "welcome": MessageLookupByLibrary.simpleMessage("Welcome"),
         "whatIsYourName":
             MessageLookupByLibrary.simpleMessage("What is your name?"),
@@ -624,7 +633,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "workspaceInviteMemberAction":
             MessageLookupByLibrary.simpleMessage("Invite member"),
         "workspaceMembers": MessageLookupByLibrary.simpleMessage("Members"),
-        "workspaceMembersCount": m19,
+        "workspaceMembersCount": m20,
         "workspaceMembersEmpty": MessageLookupByLibrary.simpleMessage(
             "No members have joined this workspace yet."),
         "workspaceNameHint":
@@ -642,7 +651,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Your access"),
         "workspaceSettingsCancelInvitationAction":
             MessageLookupByLibrary.simpleMessage("Cancel"),
-        "workspaceSettingsCancelInvitationConfirmMessage": m20,
+        "workspaceSettingsCancelInvitationConfirmMessage": m21,
         "workspaceSettingsCancelInvitationConfirmTitle":
             MessageLookupByLibrary.simpleMessage("Cancel invitation?"),
         "workspaceSettingsDangerZone":
@@ -698,17 +707,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Pending Invitations"),
         "workspaceSettingsRemoveMemberAction":
             MessageLookupByLibrary.simpleMessage("Remove"),
-        "workspaceSettingsRemoveMemberConfirmMessage": m21,
+        "workspaceSettingsRemoveMemberConfirmMessage": m22,
         "workspaceSettingsRemoveMemberConfirmTitle":
             MessageLookupByLibrary.simpleMessage("Remove member?"),
         "workspaceSettingsRemoveWalletAction":
             MessageLookupByLibrary.simpleMessage("Unlink wallet"),
-        "workspaceSettingsRemoveWalletConfirmMessage": m22,
+        "workspaceSettingsRemoveWalletConfirmMessage": m23,
         "workspaceSettingsRemoveWalletConfirmTitle":
             MessageLookupByLibrary.simpleMessage("Unlink wallet?"),
         "workspaceSettingsTitle":
             MessageLookupByLibrary.simpleMessage("Workspace Settings"),
-        "workspaceSettingsWalletOwner": m23,
+        "workspaceSettingsWalletOwner": m24,
         "workspaceSettingsWalletReadOnlyTooltip":
             MessageLookupByLibrary.simpleMessage(
                 "Only the wallet owner can remove this wallet"),
@@ -758,9 +767,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Available"),
         "workspaceWalletSelected":
             MessageLookupByLibrary.simpleMessage("Selected"),
-        "workspaceWalletSelectionSummary": m24,
+        "workspaceWalletSelectionSummary": m25,
         "workspaceWallets": MessageLookupByLibrary.simpleMessage("Wallets"),
-        "workspaceWalletsCount": m25,
+        "workspaceWalletsCount": m26,
         "workspaceWalletsEmptyDescription": MessageLookupByLibrary.simpleMessage(
             "This workspace will show shared wallets here once they are linked."),
         "workspaceWalletsEmptyTitle":

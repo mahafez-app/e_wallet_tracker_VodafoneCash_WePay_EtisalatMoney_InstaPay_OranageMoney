@@ -3791,6 +3791,46 @@ class S {
       args: [],
     );
   }
+
+  /// `الإحصائيات من {date}`
+  String wallet_statsFrom(Object date) {
+    return Intl.message(
+      'الإحصائيات من $date',
+      name: 'wallet_statsFrom',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `تصفير المؤشرات`
+  String get wallet_resetStats {
+    return Intl.message(
+      'تصفير المؤشرات',
+      name: 'wallet_resetStats',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `متأكد إنك عايز تصفر مؤشرات الوارد والصادر للمحفظة دي؟ ده هيخلي إجمالي المبالغ صفر من بداية النهاردة، لكن رصيدك الحالي مش هيتأثر.`
+  String get wallet_resetStatsDescription {
+    return Intl.message(
+      'متأكد إنك عايز تصفر مؤشرات الوارد والصادر للمحفظة دي؟ ده هيخلي إجمالي المبالغ صفر من بداية النهاردة، لكن رصيدك الحالي مش هيتأثر.',
+      name: 'wallet_resetStatsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تصفير`
+  String get wallet_resetStatsAction {
+    return Intl.message(
+      'تصفير',
+      name: 'wallet_resetStatsAction',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

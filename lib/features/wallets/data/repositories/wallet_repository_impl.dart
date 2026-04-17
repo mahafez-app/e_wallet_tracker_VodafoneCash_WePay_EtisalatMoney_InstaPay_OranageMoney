@@ -117,6 +117,14 @@ class WalletRepositoryImpl implements WalletRepository {
     );
   }
 
+  @override
+  Future<Result<void>> resetWalletStats(String walletId) {
+    return executeAndHandleErrors(
+      () => _remoteDataSource.resetWalletStats(walletId),
+      tag: 'WalletRepositoryImpl.resetWalletStats',
+    );
+  }
+
   // ── Private helpers ──────────────────────────────────────────────────────
 
   Future<String> _resolveDeviceId() async {

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wallet_tracker/core/widgets/app_dialog.dart';
 import 'package:wallet_tracker/core/widgets/wallets/wallet_provider_info.dart';
 
 import '../../../../core/router/app_routes.dart';
@@ -45,6 +46,7 @@ class WalletDetailsScreen extends StatelessWidget {
   }
 }
 
+
 class _WalletDetailsBody extends ConsumerWidget {
   const _WalletDetailsBody({super.key, required this.walletId});
 
@@ -73,21 +75,23 @@ class _WalletDetailsBody extends ConsumerWidget {
   }
 }
 
-class _BalanceSection extends StatelessWidget {
+class _BalanceSection extends ConsumerWidget {
   const _BalanceSection({super.key, required this.details});
 
   final WalletDetailsEntity details;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final wallet = details.wallet;
     final localizedLastUpdate = wallet.lastBalanceAt.toFormattedDate(context);
+
     return BalanceCard(
       balance: wallet.currentBalance,
       sentAmount: wallet.totalSent,
       receivedAmount: wallet.totalReceived,
+      statsResetDate: wallet.statsResetAt,
       label: l10n.currentBalance,
       subtitle: Text(
         '${l10n.lastActivity}: $localizedLastUpdate',
@@ -95,7 +99,27 @@ class _BalanceSection extends StatelessWidget {
           color: context.appColors.statsOnGradient.withAlpha(204),
         ),
       ),
+      onReset: () => _handleReset(context, ref),
     );
+  }
+
+  Future<void> _handleReset(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
+    final confirmed = await AppDialog.show<bool>(
+      context,
+      title: l10n.wallet_resetStats,
+      message: l10n.wallet_resetStatsDescription,
+      confirmLabel: l10n.wallet_resetStatsAction,
+      cancelLabel: l10n.commonCancelAction,
+      type: AppDialogType.warning,
+      onConfirm: () => Navigator.pop(context, true),
+    );
+
+    if (confirmed == true) {
+      await ref
+          .read(walletDetailsControllerProvider(details.wallet.id).notifier)
+          .resetStats();
+    }
   }
 }
 

@@ -20,19 +20,17 @@ class WalletRepositoryImpl implements WalletRepository {
     required DeviceInfoService deviceInfoService,
     required WalletMetaCache walletMetaCache,
     required InboxSmsService inboxSmsService,
-  })  : _remoteDataSource = remoteDataSource,
-        _detailsDataSource = detailsDataSource,
-        _deviceInfoService = deviceInfoService,
-        _walletMetaCache = walletMetaCache,
-        _inboxSmsService = inboxSmsService;
+  }) : _remoteDataSource = remoteDataSource,
+       _detailsDataSource = detailsDataSource,
+       _deviceInfoService = deviceInfoService,
+       _walletMetaCache = walletMetaCache,
+       _inboxSmsService = inboxSmsService;
 
   final WalletRemoteDataSource _remoteDataSource;
   final WalletDetailsRemoteDataSource _detailsDataSource;
   final DeviceInfoService _deviceInfoService;
   final WalletMetaCache _walletMetaCache;
   final InboxSmsService _inboxSmsService;
-
-
 
   @override
   Future<Result<List<WalletEntity>>> getWallets() {
@@ -85,12 +83,14 @@ class WalletRepositoryImpl implements WalletRepository {
     return executeAndHandleErrors(() async {
       final walletDto = await _detailsDataSource.getWallet(walletId);
       final wallet = walletDto.toEntity();
-      final transactionsDto =
-          await _detailsDataSource.getRecentTransactions(wallet);
+      final transactionsDto = await _detailsDataSource.getRecentTransactions(
+        wallet,
+      );
       return WalletDetailsEntity(
         wallet: wallet,
-        recentTransactions:
-            transactionsDto.map((dto) => dto.toEntity()).toList(),
+        recentTransactions: transactionsDto
+            .map((dto) => dto.toEntity())
+            .toList(),
       );
     }, tag: 'WalletRepositoryImpl.getWalletDetails');
   }
@@ -101,20 +101,6 @@ class WalletRepositoryImpl implements WalletRepository {
       await _remoteDataSource.deleteWallet(walletId);
       _walletMetaCache.invalidate(walletId);
     }, tag: 'WalletRepositoryImpl.deleteWallet');
-  }
-
-  @override
-  Future<Result<void>> linkSubscriptionId({
-    required String walletId,
-    required int subscriptionId,
-  }) {
-    return executeAndHandleErrors(
-      () => _remoteDataSource.linkSubscriptionId(
-        walletId: walletId,
-        subscriptionId: subscriptionId,
-      ),
-      tag: 'WalletRepositoryImpl.linkSubscriptionId',
-    );
   }
 
   @override

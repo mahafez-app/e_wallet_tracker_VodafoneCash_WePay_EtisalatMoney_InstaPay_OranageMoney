@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/widgets.dart';
 
 import 'app_bootstrap.dart';
@@ -8,12 +10,11 @@ void main() async {
   final initializationResult = await initializeApp();
 
   initializationResult.fold((failure) {
-    // Print the technical message and the type of failure
-    print('❌ BOOTSTRAP FAILED');
-    print('Type: ${failure.runtimeType}');
-    print('Technical Message: ${failure.technicalMessage}');
-    print('Code: ${failure.code}');
-  }, (dependencies) => print('✅ BOOTSTRAP SUCCESS'));
+    log('BOOTSTRAP FAILED', name: 'main');
+    log('Type: ${failure.runtimeType}', name: 'main');
+    log('Technical Message: ${failure.technicalMessage}', name: 'main');
+    log('Code: ${failure.code}', name: 'main');
+  }, (_) => log('BOOTSTRAP SUCCESS', name: 'main'));
 
   runApp(AppBootstrap(initializationResult: initializationResult));
 }

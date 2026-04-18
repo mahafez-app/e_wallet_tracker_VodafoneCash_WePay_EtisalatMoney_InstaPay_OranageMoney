@@ -16,7 +16,6 @@ final class PendingSmsRetryItem extends Equatable {
     required this.userUid,
     required this.createdAt,
     required this.updatedAt,
-    this.subscriptionId,
     this.walletId,
     this.providerName,
     this.retryCount = 0,
@@ -30,7 +29,6 @@ final class PendingSmsRetryItem extends Equatable {
   final String userUid;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final int? subscriptionId;
   final String? walletId;
   final String? providerName;
   final int retryCount;
@@ -44,7 +42,6 @@ final class PendingSmsRetryItem extends Equatable {
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
-    required int? subscriptionId,
     String? walletId,
     String? providerName,
     String? error,
@@ -68,7 +65,6 @@ final class PendingSmsRetryItem extends Equatable {
       userUid: uid,
       createdAt: now,
       updatedAt: now,
-      subscriptionId: subscriptionId,
       walletId: walletId,
       providerName: providerName,
       lastError: error,
@@ -77,19 +73,18 @@ final class PendingSmsRetryItem extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        sender,
-        body,
-        smsReceivedAt,
-        userUid,
-        createdAt,
-        updatedAt,
-        subscriptionId,
-        walletId,
-        providerName,
-        retryCount,
-        lastError,
-      ];
+    id,
+    sender,
+    body,
+    smsReceivedAt,
+    userUid,
+    createdAt,
+    updatedAt,
+    walletId,
+    providerName,
+    retryCount,
+    lastError,
+  ];
 
   PendingSmsRetryItem copyWith({
     String? sender,
@@ -98,7 +93,6 @@ final class PendingSmsRetryItem extends Equatable {
     String? userUid,
     DateTime? createdAt,
     DateTime? updatedAt,
-    int? subscriptionId,
     String? walletId,
     String? providerName,
     int? retryCount,
@@ -112,7 +106,6 @@ final class PendingSmsRetryItem extends Equatable {
       userUid: userUid ?? this.userUid,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      subscriptionId: subscriptionId ?? this.subscriptionId,
       walletId: walletId ?? this.walletId,
       providerName: providerName ?? this.providerName,
       retryCount: retryCount ?? this.retryCount,
@@ -121,19 +114,18 @@ final class PendingSmsRetryItem extends Equatable {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'sender': sender,
-        'body': body,
-        'smsReceivedAt': smsReceivedAt.toIso8601String(),
-        'userUid': userUid,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
-        'subscriptionId': subscriptionId,
-        'walletId': walletId,
-        'providerName': providerName,
-        'retryCount': retryCount,
-        'lastError': lastError,
-      };
+    'id': id,
+    'sender': sender,
+    'body': body,
+    'smsReceivedAt': smsReceivedAt.toIso8601String(),
+    'userUid': userUid,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
+    'walletId': walletId,
+    'providerName': providerName,
+    'retryCount': retryCount,
+    'lastError': lastError,
+  };
 
   factory PendingSmsRetryItem.fromJson(Map<String, dynamic> json) {
     return PendingSmsRetryItem(
@@ -144,7 +136,6 @@ final class PendingSmsRetryItem extends Equatable {
       userUid: json['userUid'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
-      subscriptionId: json['subscriptionId'] as int?,
       walletId: json['walletId'] as String?,
       providerName: json['providerName'] as String?,
       retryCount: json['retryCount'] as int? ?? 0,

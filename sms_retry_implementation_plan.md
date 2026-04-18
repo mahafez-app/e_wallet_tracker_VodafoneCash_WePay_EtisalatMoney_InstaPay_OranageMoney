@@ -44,7 +44,6 @@ Store the raw SMS and enough metadata to retry safely:
 - sender
 - body
 - smsReceivedAt
-- subscriptionId (if available)
 - userUid
 - walletId (optional if already known)
 - providerName (optional if already known)
@@ -95,7 +94,6 @@ This makes transaction creation idempotent and prevents duplicates during retrie
 - `sender`
 - `body`
 - `smsReceivedAt`
-- `subscriptionId`
 - `userUid`
 - `walletId`
 - `providerName`

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:another_telephony/telephony.dart';
 
 import '../../features/transactions/domain/usecases/save_transaction_usecase.dart';
-import '../../features/wallets/domain/usecases/link_subscription_id_usecase.dart';
 import '../data/models/pending_sms_retry_item.dart';
 import '../domain/entities/transaction_entity.dart';
 import '../domain/entities/wallet_entity.dart';
@@ -25,14 +24,11 @@ final class SmsTransactionService {
   SmsTransactionService({
     required SaveTransactionUseCase saveTransactionUseCase,
     required PendingSmsRetryService pendingSmsRetryService,
-    required LinkSubscriptionIdUseCase linkSubscriptionIdUseCase,
-  })  : _saveTransactionUseCase = saveTransactionUseCase,
-        _pendingSmsRetryService = pendingSmsRetryService,
-        _linkSubscriptionIdUseCase = linkSubscriptionIdUseCase;
+  }) : _saveTransactionUseCase = saveTransactionUseCase,
+       _pendingSmsRetryService = pendingSmsRetryService;
 
   final SaveTransactionUseCase _saveTransactionUseCase;
   final PendingSmsRetryService _pendingSmsRetryService;
-  final LinkSubscriptionIdUseCase _linkSubscriptionIdUseCase;
 
   List<WalletEntity> _wallets = const [];
   bool _isListening = false;
@@ -62,13 +58,11 @@ final class SmsTransactionService {
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
-    required int? subscriptionId,
   }) async {
     final success = await _processCore(
       sender: sender,
       body: body,
       smsReceivedAt: smsReceivedAt,
-      subscriptionId: subscriptionId,
     );
 
     if (success) await sweepRetryQueue();
@@ -84,7 +78,6 @@ final class SmsTransactionService {
         sender: item.sender,
         body: item.body,
         smsReceivedAt: item.smsReceivedAt,
-        subscriptionId: item.subscriptionId,
       ),
     );
   }
@@ -102,17 +95,16 @@ final class SmsTransactionService {
       sender: sender,
       body: body,
       smsReceivedAt: message.receivedAt,
-      subscriptionId: message.subscriptionId,
     );
   }
 
-  /// Core pipeline: parse first → wallet resolution with signals → save.
+  /// Core pipeline: parse first -> wallet resolution -> save.
   ///
   /// Two-phase approach:
   ///   Phase 1 — parse the SMS body to extract amount, type, and balance
   ///             (without committing to a wallet).
-  ///   Phase 2 — resolve the wallet using subscription ID + balance-delta
-  ///             correlation, then finalize the entity.
+  ///   Phase 2 — resolve the wallet using balance-delta correlation and
+  ///             fallback heuristics, then finalize the entity.
   ///
   /// Returns `true` if the SMS was handled (saved or intentionally ignored),
   /// `false` if a recoverable failure occurred and the item was enqueued.
@@ -120,7 +112,6 @@ final class SmsTransactionService {
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
-    required int? subscriptionId,
   }) async {
     // Phase 1: parse without wallet commitment.
     final parseResult = SmsParsingService.parseRaw(
@@ -141,7 +132,6 @@ final class SmsTransactionService {
     // Phase 2: resolve wallet using all available signals.
     final wallet = _resolveWallet(
       sender: sender,
-      subscriptionId: subscriptionId,
       amount: parseResult.amount,
       transactionType: parseResult.type,
       parsedBalance: parseResult.balance,
@@ -153,7 +143,6 @@ final class SmsTransactionService {
         sender: sender,
         body: body,
         smsReceivedAt: smsReceivedAt,
-        subscriptionId: subscriptionId,
         error: 'Wallet not found',
       );
       return false;
@@ -167,17 +156,11 @@ final class SmsTransactionService {
       rawMessage: body,
     );
 
-    return _save(
-      transaction,
-      sender: sender,
-      body: body,
-      subscriptionId: subscriptionId,
-    );
+    return _save(transaction, sender: sender, body: body);
   }
 
   WalletEntity? _resolveWallet({
     required String sender,
-    required int? subscriptionId,
     double? amount,
     TransactionType? transactionType,
     double? parsedBalance,
@@ -185,57 +168,27 @@ final class SmsTransactionService {
     final parser = SmsParserRegistry.resolve(sender);
     if (parser == null) return null;
 
-    final candidates =
-        _wallets.where((w) => w.provider == parser.provider).toList();
+    final candidates = _wallets
+        .where((w) => w.provider == parser.provider)
+        .toList();
     if (candidates.isEmpty) {
       log('No wallet registered for provider ${parser.provider}.', name: _tag);
       return null;
     }
 
     final input = SmsWalletMatchInput(
-      subscriptionId: subscriptionId,
       amount: amount,
       transactionType: transactionType,
       parsedBalance: parsedBalance,
     );
 
-    final matchResult = SmsWalletMatcher.resolve(
-      wallets: candidates,
-      input: input,
-    );
-
-    if (matchResult.needsSubscriptionMapping && subscriptionId != null) {
-      _persistSubscriptionLink(matchResult.wallet.id, subscriptionId);
-    }
-
-    return matchResult.wallet;
-  }
-
-  void _persistSubscriptionLink(String walletId, int subscriptionId) {
-    _linkSubscriptionIdUseCase(
-      LinkSubscriptionIdParams(
-        walletId: walletId,
-        subscriptionId: subscriptionId,
-      ),
-    ).then((result) {
-      result.fold(
-        (failure) => log(
-          'Failed to link subscriptionId $subscriptionId: $failure',
-          name: _tag,
-        ),
-        (_) => log(
-          'Learned subscriptionId $subscriptionId for wallet $walletId',
-          name: _tag,
-        ),
-      );
-    });
+    return SmsWalletMatcher.resolve(wallets: candidates, input: input);
   }
 
   Future<bool> _save(
     TransactionEntity transaction, {
     required String sender,
     required String body,
-    required int? subscriptionId,
   }) async {
     final result = await _saveTransactionUseCase(transaction);
     return result.fold(
@@ -245,7 +198,6 @@ final class SmsTransactionService {
           sender: sender,
           body: body,
           smsReceivedAt: transaction.createdAt,
-          subscriptionId: subscriptionId,
           walletId: transaction.walletId,
           providerName: transaction.provider.toValue,
           error: failure.toString(),
@@ -263,7 +215,6 @@ final class SmsTransactionService {
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
-    required int? subscriptionId,
     String? walletId,
     String? providerName,
     required String error,
@@ -272,7 +223,6 @@ final class SmsTransactionService {
       sender: sender,
       body: body,
       smsReceivedAt: smsReceivedAt,
-      subscriptionId: subscriptionId,
       walletId: walletId,
       providerName: providerName,
       error: error,

@@ -11,9 +11,8 @@ import '../domain/repositories/wallet_repository.dart';
 import '../domain/usecases/add_wallets_usecase.dart';
 import '../domain/usecases/delete_wallet_usecase.dart';
 import '../domain/usecases/get_wallets_usecase.dart';
-import '../domain/usecases/link_subscription_id_usecase.dart';
-import '../domain/usecases/wallet_details_usecases.dart';
 import '../domain/usecases/reset_wallet_stats_usecase.dart';
+import '../domain/usecases/wallet_details_usecases.dart';
 
 final walletRemoteDataSourceProvider = Provider<WalletRemoteDataSource>((ref) {
   return WalletRemoteDataSourceImpl(
@@ -24,10 +23,10 @@ final walletRemoteDataSourceProvider = Provider<WalletRemoteDataSource>((ref) {
 
 final walletDetailsRemoteDataSourceProvider =
     Provider<WalletDetailsRemoteDataSource>((ref) {
-  return WalletDetailsRemoteDataSourceImpl(
-    firestore: ref.watch(firestoreProvider),
-  );
-});
+      return WalletDetailsRemoteDataSourceImpl(
+        firestore: ref.watch(firestoreProvider),
+      );
+    });
 
 final walletRepositoryProvider = Provider<WalletRepository>((ref) {
   return WalletRepositoryImpl(
@@ -38,8 +37,6 @@ final walletRepositoryProvider = Provider<WalletRepository>((ref) {
     inboxSmsService: ref.watch(inboxSmsServiceProvider),
   );
 });
-
-
 
 final addWalletsUseCaseProvider = Provider<AddWalletsUseCase>((ref) {
   return AddWalletsUseCase(ref.watch(walletRepositoryProvider));
@@ -57,11 +54,8 @@ final deleteWalletUseCaseProvider = Provider<DeleteWalletUseCase>((ref) {
   return DeleteWalletUseCase(ref.watch(walletRepositoryProvider));
 });
 
-final linkSubscriptionIdUseCaseProvider =
-    Provider<LinkSubscriptionIdUseCase>((ref) {
-  return LinkSubscriptionIdUseCase(ref.watch(walletRepositoryProvider));
-});
-
-final resetWalletStatsUseCaseProvider = Provider<ResetWalletStatsUseCase>((ref) {
+final resetWalletStatsUseCaseProvider = Provider<ResetWalletStatsUseCase>((
+  ref,
+) {
   return ResetWalletStatsUseCase(ref.watch(walletRepositoryProvider));
 });

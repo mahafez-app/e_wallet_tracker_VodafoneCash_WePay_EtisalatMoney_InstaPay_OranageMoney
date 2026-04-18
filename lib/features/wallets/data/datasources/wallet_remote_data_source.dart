@@ -21,13 +21,6 @@ abstract interface class WalletRemoteDataSource {
 
   Future<void> deleteWallet(String walletId);
 
-  /// Associates a SIM subscription ID with a wallet so that future messages
-  /// from that SIM are routed directly without ambiguity.
-  Future<void> linkSubscriptionId({
-    required String walletId,
-    required int subscriptionId,
-  });
-
   Future<void> resetWalletStats(String walletId);
 }
 
@@ -38,8 +31,8 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   const WalletRemoteDataSourceImpl({
     required FirebaseFirestore firestore,
     required FirebaseAuth auth,
-  })  : _firestore = firestore,
-        _auth = auth;
+  }) : _firestore = firestore,
+       _auth = auth;
 
   @override
   Future<List<WalletDto>> getWallets() async {
@@ -76,8 +69,9 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       providers: providers,
     );
 
-    final providersToCreate =
-        providers.where((p) => !existingProvidersSet.contains(p)).toList();
+    final providersToCreate = providers
+        .where((p) => !existingProvidersSet.contains(p))
+        .toList();
 
     if (providersToCreate.isEmpty) {
       throw const ValidationFailure(
@@ -196,17 +190,6 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   }
 
   @override
-  Future<void> linkSubscriptionId({
-    required String walletId,
-    required int subscriptionId,
-  }) async {
-    await _firestore
-        .collection('wallets')
-        .doc(walletId)
-        .update({'subscriptionId': subscriptionId});
-  }
-
-  @override
   Future<void> resetWalletStats(String walletId) async {
     await _firestore.collection('wallets').doc(walletId).update({
       'totalReceived': 0.0,
@@ -250,8 +233,8 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
     final latestActivityAt = wallets.isEmpty
         ? null
         : wallets
-            .map((w) => w.lastBalanceAt)
-            .reduce((a, b) => a.isAfter(b) ? a : b);
+              .map((w) => w.lastBalanceAt)
+              .reduce((a, b) => a.isAfter(b) ? a : b);
 
     await workspaceRef.update({
       'walletsCount': wallets.length,

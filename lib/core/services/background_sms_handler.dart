@@ -28,19 +28,11 @@ import 'pending_sms_retry_service.dart';
 /// Logs all relevant fields of an incoming SMS for diagnostics.
 void logSmsDetails(SmsMessage message, {required bool isBackground}) {
   final tag = isBackground ? 'BackgroundSms' : 'ForegroundSms';
-  if (isBackground) {
-    print('[$tag] Address: ${message.address}');
-    print('[$tag] Body: ${message.body}');
-    print('[$tag] Date: ${message.date}');
-    print('[$tag] SubscriptionId: ${message.subscriptionId}');
-  } else {
-    log('-------', name: tag);
-    log('Address: ${message.address}', name: tag);
-    log('Body: ${message.body}', name: tag);
-    log('Date: ${message.date}', name: tag);
-    log('SubscriptionId: ${message.subscriptionId}', name: tag);
-    log('-------', name: tag);
-  }
+  log('-------', name: tag);
+  log('Address: ${message.address}', name: tag);
+  log('Body: ${message.body}', name: tag);
+  log('Date: ${message.date}', name: tag);
+  log('-------', name: tag);
 }
 
 // ── Background entry point ────────────────────────────────────────────────────
@@ -75,7 +67,6 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
     sender: sender,
     body: body,
     smsReceivedAt: message.receivedAt,
-    subscriptionId: message.subscriptionId,
   );
 }
 
@@ -87,36 +78,36 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
 /// dependencies explicitly, making it testable without a live Firebase session.
 final class _BackgroundSmsProcessor {
   const _BackgroundSmsProcessor({required Box<String> retryBox})
-      : _retryBox = retryBox;
+    : _retryBox = retryBox;
 
   final Box<String> _retryBox;
 
   static const _tag = 'BackgroundSms';
 
-  /// Full pipeline: parse → wallet resolution with signals → saving → retry sweep.
+  /// Full pipeline: parse -> wallet resolution -> saving -> retry sweep.
   Future<void> process({
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
-    required int? subscriptionId,
   }) async {
     try {
       final success = await _runPipeline(
         sender: sender,
         body: body,
         smsReceivedAt: smsReceivedAt,
-        subscriptionId: subscriptionId,
       );
 
       if (success) await _sweepRetryQueue();
     } catch (e, st) {
-      log('Unhandled background error: $e. Enqueuing for retry.',
-          stackTrace: st, name: _tag);
+      log(
+        'Unhandled background error: $e. Enqueuing for retry.',
+        stackTrace: st,
+        name: _tag,
+      );
       _enqueue(
         sender: sender,
         body: body,
         smsReceivedAt: smsReceivedAt,
-        subscriptionId: subscriptionId,
         error: e.toString(),
       );
     }
@@ -126,12 +117,11 @@ final class _BackgroundSmsProcessor {
 
   /// Two-phase pipeline:
   ///   Phase 1 — parse the SMS body to extract amount, type, and balance.
-  ///   Phase 2 — resolve wallet using subscription ID + balance-delta signals.
+  ///   Phase 2 — resolve wallet using balance-delta signals and fallbacks.
   Future<bool> _runPipeline({
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
-    required int? subscriptionId,
   }) async {
     // Phase 1: parse without wallet commitment.
     final parseResult = SmsParsingService.parseRaw(
@@ -167,20 +157,20 @@ final class _BackgroundSmsProcessor {
     final wallet = await _resolveWallet(
       uid: uid,
       providerName: parseResult.provider.toValue,
-      subscriptionId: subscriptionId,
       amount: parseResult.amount,
       transactionType: parseResult.type,
       parsedBalance: parseResult.balance,
     );
 
     if (wallet == null) {
-      log('No matching wallet for provider ${parseResult.provider}. Enqueuing.',
-          name: _tag);
+      log(
+        'No matching wallet for provider ${parseResult.provider}. Enqueuing.',
+        name: _tag,
+      );
       _enqueue(
         sender: sender,
         body: body,
         smsReceivedAt: smsReceivedAt,
-        subscriptionId: subscriptionId,
         providerName: parseResult.provider.toValue,
         error: 'Wallet not found',
       );
@@ -204,7 +194,6 @@ final class _BackgroundSmsProcessor {
         sender: sender,
         body: body,
         smsReceivedAt: smsReceivedAt,
-        subscriptionId: subscriptionId,
         walletId: wallet.id,
         providerName: wallet.provider.toValue,
         error: e.toString(),
@@ -216,7 +205,6 @@ final class _BackgroundSmsProcessor {
   Future<WalletEntity?> _resolveWallet({
     required String uid,
     required String providerName,
-    required int? subscriptionId,
     double? amount,
     TransactionType? transactionType,
     double? parsedBalance,
@@ -231,37 +219,17 @@ final class _BackgroundSmsProcessor {
 
     if (snapshot.docs.isEmpty) return null;
 
-    final candidates =
-        snapshot.docs.map((d) => WalletDto.fromFirestore(d).toEntity()).toList();
+    final candidates = snapshot.docs
+        .map((d) => WalletDto.fromFirestore(d).toEntity())
+        .toList();
 
     final input = SmsWalletMatchInput(
-      subscriptionId: subscriptionId,
       amount: amount,
       transactionType: transactionType,
       parsedBalance: parsedBalance,
     );
 
-    final matchResult = SmsWalletMatcher.resolve(
-      wallets: candidates,
-      input: input,
-    );
-
-    if (matchResult.needsSubscriptionMapping && subscriptionId != null) {
-      // Best-effort: don't let a Firestore write block the main pipeline.
-      firestore
-          .collection('wallets')
-          .doc(matchResult.wallet.id)
-          .update({'subscriptionId': subscriptionId})
-          .then((_) => log(
-                'Learned subscriptionId $subscriptionId for wallet ${matchResult.wallet.id}',
-                name: _tag,
-              ))
-          .catchError(
-            (Object e) => log('Failed to link subscriptionId: $e', name: _tag),
-          );
-    }
-
-    return matchResult.wallet;
+    return SmsWalletMatcher.resolve(wallets: candidates, input: input);
   }
 
   // ── Retry queue ─────────────────────────────────────────────────────────
@@ -280,7 +248,6 @@ final class _BackgroundSmsProcessor {
             sender: item.sender,
             body: item.body,
             smsReceivedAt: item.smsReceivedAt,
-            subscriptionId: item.subscriptionId,
           );
         } catch (e) {
           log('Retry failed for ${item.id}: $e', name: _tag);
@@ -290,14 +257,12 @@ final class _BackgroundSmsProcessor {
     );
   }
 
-
   // ── Enqueue ─────────────────────────────────────────────────────────────
 
   void _enqueue({
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
-    required int? subscriptionId,
     String? walletId,
     String? providerName,
     required String error,
@@ -306,7 +271,6 @@ final class _BackgroundSmsProcessor {
       sender: sender,
       body: body,
       smsReceivedAt: smsReceivedAt,
-      subscriptionId: subscriptionId,
       walletId: walletId,
       providerName: providerName,
       error: error,

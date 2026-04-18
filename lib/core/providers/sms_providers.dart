@@ -17,8 +17,7 @@ typedef SmsReadiness = ({bool isPermitted, List<WalletEntity> wallets});
 /// Invalidate after permission is granted to re-evaluate.
 final smsReadinessProvider = FutureProvider<SmsReadiness>((ref) async {
   final permissionResult = await ref.read(checkSmsPermissionUseCaseProvider)();
-  final isPermitted =
-      permissionResult.fold((_) => false, (granted) => granted);
+  final isPermitted = permissionResult.fold((_) => false, (granted) => granted);
 
   if (!isPermitted) {
     return (isPermitted: false, wallets: const <WalletEntity>[]);
@@ -39,7 +38,6 @@ final smsTransactionServiceProvider = Provider<SmsTransactionService>(
   (ref) => SmsTransactionService(
     saveTransactionUseCase: ref.watch(saveTransactionUseCaseProvider),
     pendingSmsRetryService: ref.watch(pendingSmsRetryServiceProvider),
-    linkSubscriptionIdUseCase: ref.watch(linkSubscriptionIdUseCaseProvider),
   ),
 );
 

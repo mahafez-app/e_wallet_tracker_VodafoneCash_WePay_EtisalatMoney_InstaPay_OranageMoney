@@ -3,8 +3,6 @@ import '../../../../core/error/result.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 
 abstract interface class WalletRepository {
-
-
   Future<Result<List<WalletEntity>>> getWallets();
 
   Future<Result<void>> addWallets({
@@ -15,11 +13,6 @@ abstract interface class WalletRepository {
   Future<Result<WalletDetailsEntity>> getWalletDetails(String walletId);
 
   Future<Result<void>> deleteWallet(String walletId);
-
-  Future<Result<void>> linkSubscriptionId({
-    required String walletId,
-    required int subscriptionId,
-  });
 
   Future<Result<void>> resetWalletStats(String walletId);
 }

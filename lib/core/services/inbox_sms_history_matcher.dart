@@ -1,7 +1,6 @@
 import '../domain/enums/transaction_type.dart';
 import '../utils/egyptian_phone_number.dart';
 import '../utils/sms/sms_parse_result.dart';
-import '../utils/sms/sms_wallet_matcher.dart';
 
 typedef ParsedInboxSmsRecord = ({
   DateTime createdAt,
@@ -174,6 +173,8 @@ final class InboxSmsHistoryMatcher {
     );
   }
 
+  static const double _historyBalanceToleranceEgp = 50.0;
+
   static bool _balancesChain({
     required SmsParseResult older,
     required SmsParseResult newer,
@@ -188,7 +189,7 @@ final class InboxSmsHistoryMatcher {
         ? olderBalance + newer.amount
         : olderBalance - newer.amount;
     final difference = (newerBalance - expectedNewerBalance).abs();
-    return difference <= SmsWalletMatcher.maxBalanceToleranceEgp;
+    return difference <= _historyBalanceToleranceEgp;
   }
 }
 

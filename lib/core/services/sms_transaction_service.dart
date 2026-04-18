@@ -92,7 +92,7 @@ final class SmsTransactionService {
 
     if (parseResult == null) return true;
 
-    final wallet = _resolveWallet(
+    final matchResult = _resolveWallet(
       sender: sender,
       amount: parseResult.amount,
       transactionType: parseResult.type,
@@ -101,29 +101,38 @@ final class SmsTransactionService {
       mentionedPhoneNumbers: parseResult.mentionedPhoneNumbers,
     );
 
-    if (wallet == null) {
-      log('Wallet not found for recognized provider. Enqueuing.', name: _tag);
-      _enqueueFailure(
-        sender: sender,
-        body: body,
-        smsReceivedAt: smsReceivedAt,
-        error: 'Wallet not found',
-      );
-      return false;
+    switch (matchResult) {
+      case SmsWalletDefiniteMiss():
+        // Wallet phone derived from SMS structure matches no registered wallet.
+        // The transaction provably does not belong here — discard silently.
+        log(
+          'Definite miss: derived wallet phone matches no registered wallet. '
+          'Discarding.',
+          name: _tag,
+        );
+        return true;
+      case SmsWalletNoCandidate():
+        log('Wallet not found for recognized provider. Enqueuing.', name: _tag);
+        _enqueueFailure(
+          sender: sender,
+          body: body,
+          smsReceivedAt: smsReceivedAt,
+          error: 'Wallet not found',
+        );
+        return false;
+      case SmsWalletMatchedResult(:final wallet):
+        final transaction = SmsParsingService.buildEntity(
+          result: parseResult,
+          walletId: wallet.id,
+          walletOwnerUid: wallet.ownerUid,
+          walletPhoneNumber: wallet.phoneNumber,
+          rawMessage: body,
+        );
+        return _save(transaction, sender: sender, body: body);
     }
-
-    final transaction = SmsParsingService.buildEntity(
-      result: parseResult,
-      walletId: wallet.id,
-      walletOwnerUid: wallet.ownerUid,
-      walletPhoneNumber: wallet.phoneNumber,
-      rawMessage: body,
-    );
-
-    return _save(transaction, sender: sender, body: body);
   }
 
-  WalletEntity? _resolveWallet({
+  SmsWalletMatchResult _resolveWallet({
     required String sender,
     double? amount,
     TransactionType? transactionType,
@@ -132,14 +141,14 @@ final class SmsTransactionService {
     List<String> mentionedPhoneNumbers = const <String>[],
   }) {
     final parser = SmsParserRegistry.resolve(sender);
-    if (parser == null) return null;
+    if (parser == null) return const SmsWalletNoCandidate();
 
     final candidates = _wallets
         .where((w) => w.provider == parser.provider)
         .toList();
     if (candidates.isEmpty) {
       log('No wallet registered for provider ${parser.provider}.', name: _tag);
-      return null;
+      return const SmsWalletNoCandidate();
     }
 
     final input = SmsWalletMatchInput(

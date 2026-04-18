@@ -15,7 +15,6 @@ import '../../firebase_options.dart';
 import '../cache/wallet_meta_cache.dart';
 import '../data/models/pending_sms_retry_item.dart';
 import '../data/models/wallet_dto.dart';
-import '../domain/entities/wallet_entity.dart';
 import '../domain/enums/transaction_type.dart';
 import '../utils/sms/registry/sms_parser_registry.dart';
 import '../utils/sms/sms_message_extension.dart';
@@ -154,7 +153,7 @@ final class _BackgroundSmsProcessor {
     }
 
     // Phase 2: resolve wallet using all available signals.
-    final wallet = await _resolveWallet(
+    final matchResult = await _resolveWallet(
       uid: uid,
       providerName: parseResult.provider.toValue,
       amount: parseResult.amount,
@@ -164,47 +163,57 @@ final class _BackgroundSmsProcessor {
       mentionedPhoneNumbers: parseResult.mentionedPhoneNumbers,
     );
 
-    if (wallet == null) {
-      log(
-        'No matching wallet for provider ${parseResult.provider}. Enqueuing.',
-        name: _tag,
-      );
-      _enqueue(
-        sender: sender,
-        body: body,
-        smsReceivedAt: smsReceivedAt,
-        providerName: parseResult.provider.toValue,
-        error: 'Wallet not found',
-      );
-      return false;
-    }
+    switch (matchResult) {
+      case SmsWalletDefiniteMiss():
+        // Wallet phone derived from SMS structure matches no registered wallet.
+        // The transaction provably does not belong here — discard silently.
+        log(
+          'Definite miss: derived wallet phone matches no registered wallet. '
+          'Discarding.',
+          name: _tag,
+        );
+        return true;
+      case SmsWalletNoCandidate():
+        log(
+          'No matching wallet for provider ${parseResult.provider}. Enqueuing.',
+          name: _tag,
+        );
+        _enqueue(
+          sender: sender,
+          body: body,
+          smsReceivedAt: smsReceivedAt,
+          providerName: parseResult.provider.toValue,
+          error: 'Wallet not found',
+        );
+        return false;
+      case SmsWalletMatchedResult(:final wallet):
+        final transaction = SmsParsingService.buildEntity(
+          result: parseResult,
+          walletId: wallet.id,
+          walletOwnerUid: wallet.ownerUid,
+          walletPhoneNumber: wallet.phoneNumber,
+          rawMessage: body,
+        );
 
-    final transaction = SmsParsingService.buildEntity(
-      result: parseResult,
-      walletId: wallet.id,
-      walletOwnerUid: wallet.ownerUid,
-      walletPhoneNumber: wallet.phoneNumber,
-      rawMessage: body,
-    );
-
-    try {
-      await _buildDataSource().saveTransaction(transaction);
-      log('Transaction saved: ${transaction.id}', name: _tag);
-      return true;
-    } catch (e) {
-      _enqueue(
-        sender: sender,
-        body: body,
-        smsReceivedAt: smsReceivedAt,
-        walletId: wallet.id,
-        providerName: wallet.provider.toValue,
-        error: e.toString(),
-      );
-      return false;
+        try {
+          await _buildDataSource().saveTransaction(transaction);
+          log('Transaction saved: ${transaction.id}', name: _tag);
+          return true;
+        } catch (e) {
+          _enqueue(
+            sender: sender,
+            body: body,
+            smsReceivedAt: smsReceivedAt,
+            walletId: wallet.id,
+            providerName: wallet.provider.toValue,
+            error: e.toString(),
+          );
+          return false;
+        }
     }
   }
 
-  Future<WalletEntity?> _resolveWallet({
+  Future<SmsWalletMatchResult> _resolveWallet({
     required String uid,
     required String providerName,
     double? amount,
@@ -221,7 +230,7 @@ final class _BackgroundSmsProcessor {
         .where('provider', isEqualTo: providerName)
         .get();
 
-    if (snapshot.docs.isEmpty) return null;
+    if (snapshot.docs.isEmpty) return const SmsWalletNoCandidate();
 
     final candidates = snapshot.docs
         .map((d) => WalletDto.fromFirestore(d).toEntity())

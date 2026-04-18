@@ -10,6 +10,7 @@ class SmsParseResult {
     this.counterpartyNumber,
     this.referenceNumber,
     this.balance,
+    this.mentionedPhoneNumbers = const <String>[],
   });
 
   final double amount;
@@ -19,4 +20,5 @@ class SmsParseResult {
   final String? counterpartyNumber;
   final String? referenceNumber;
   final double? balance;
+  final List<String> mentionedPhoneNumbers;
 }

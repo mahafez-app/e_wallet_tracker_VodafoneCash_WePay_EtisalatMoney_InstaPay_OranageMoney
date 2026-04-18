@@ -160,6 +160,8 @@ final class _BackgroundSmsProcessor {
       amount: parseResult.amount,
       transactionType: parseResult.type,
       parsedBalance: parseResult.balance,
+      counterpartyNumber: parseResult.counterpartyNumber,
+      mentionedPhoneNumbers: parseResult.mentionedPhoneNumbers,
     );
 
     if (wallet == null) {
@@ -208,6 +210,8 @@ final class _BackgroundSmsProcessor {
     double? amount,
     TransactionType? transactionType,
     double? parsedBalance,
+    String? counterpartyNumber,
+    List<String> mentionedPhoneNumbers = const <String>[],
   }) async {
     final firestore = FirebaseFirestore.instance;
 
@@ -227,6 +231,8 @@ final class _BackgroundSmsProcessor {
       amount: amount,
       transactionType: transactionType,
       parsedBalance: parsedBalance,
+      counterpartyNumber: counterpartyNumber,
+      mentionedPhoneNumbers: mentionedPhoneNumbers,
     );
 
     return SmsWalletMatcher.resolve(wallets: candidates, input: input);

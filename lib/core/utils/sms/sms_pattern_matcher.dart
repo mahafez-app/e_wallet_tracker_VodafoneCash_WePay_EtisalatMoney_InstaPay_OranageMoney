@@ -1,6 +1,7 @@
 // lib/core/utils/sms/sms_pattern_matcher.dart
 
 import '../../domain/enums/transaction_type.dart';
+import '../egyptian_phone_number.dart';
 import 'sms_match_result.dart';
 
 class SmsPatternMatcher {
@@ -56,11 +57,6 @@ class SmsPatternMatcher {
   ///   +2xxxxxxxxxx   →  xxxxxxxxxx  (strip "+2",  local number already starts with 01)
   ///   01xxxxxxxxx    →  unchanged   (already local)
   static String? _normalizeNumber(String? raw) {
-    if (raw == null) return null;
-    final digits = raw.replaceAll(RegExp(r'\s+'), '');
-    if (digits.startsWith('002')) return digits.substring(3);   // 002|01xxxxxxxx
-    if (digits.startsWith('+2')) return digits.substring(2);    // +2|01xxxxxxxx
-    if (digits.startsWith('01') && digits.length == 11) return digits;
-    return null;
+    return EgyptianPhoneNumber.tryNormalizeMobile(raw);
   }
 }

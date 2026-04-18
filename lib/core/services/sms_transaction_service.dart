@@ -14,12 +14,6 @@ import '../utils/sms/sms_wallet_matcher.dart';
 import 'background_sms_handler.dart';
 import 'pending_sms_retry_service.dart';
 
-/// Wraps [Telephony.instance.listenIncomingSms] and routes every incoming
-/// SMS through the parser pipeline. If a transaction is recognised it is
-/// persisted via [SaveTransactionUseCase].
-///
-/// Call [startListening] once per session (typically when wallets load).
-/// Riverpod's [ref.onDispose] handles teardown automatically.
 final class SmsTransactionService {
   SmsTransactionService({
     required SaveTransactionUseCase saveTransactionUseCase,
@@ -35,9 +29,7 @@ final class SmsTransactionService {
 
   static const _tag = 'SmsTransactionService';
 
-  void updateWallets(List<WalletEntity> wallets) {
-    _wallets = wallets;
-  }
+  void updateWallets(List<WalletEntity> wallets) => _wallets = wallets;
 
   void startListening() {
     if (_isListening) return;
@@ -51,27 +43,20 @@ final class SmsTransactionService {
     log('SMS listener active (wallets: ${_wallets.length})', name: _tag);
   }
 
-  // ── Entry points ─────────────────────────────────────────────────────────
-
-  /// Processes a foreground SMS and triggers a passive retry sweep on success.
   Future<void> handleIncomingSms({
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
   }) async {
-    final success = await _processCore(
+    if (await _processCore(
       sender: sender,
       body: body,
       smsReceivedAt: smsReceivedAt,
-    );
-
-    if (success) await sweepRetryQueue();
+    )) {
+      await sweepRetryQueue();
+    }
   }
 
-  /// Triggers a passive sweep of the pending-retry queue.
-  ///
-  /// Called after every successful transaction and on app start so that
-  /// "stuck" items eventually clear themselves.
   Future<void> sweepRetryQueue() async {
     await _pendingSmsRetryService.retryPending(
       processItem: (item) => _processCore(
@@ -82,13 +67,9 @@ final class SmsTransactionService {
     );
   }
 
-  // ── Internal pipeline ────────────────────────────────────────────────────
-
   void _handleForegroundMessage(SmsMessage message) {
     logSmsDetails(message, isBackground: false);
-
-    final sender = message.address;
-    final body = message.body;
+    final sender = message.address, body = message.body;
     if (sender == null || body == null) return;
 
     handleIncomingSms(
@@ -98,43 +79,26 @@ final class SmsTransactionService {
     );
   }
 
-  /// Core pipeline: parse first -> wallet resolution -> save.
-  ///
-  /// Two-phase approach:
-  ///   Phase 1 — parse the SMS body to extract amount, type, and balance
-  ///             (without committing to a wallet).
-  ///   Phase 2 — resolve the wallet using balance-delta correlation and
-  ///             fallback heuristics, then finalize the entity.
-  ///
-  /// Returns `true` if the SMS was handled (saved or intentionally ignored),
-  /// `false` if a recoverable failure occurred and the item was enqueued.
   Future<bool> _processCore({
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
   }) async {
-    // Phase 1: parse without wallet commitment.
     final parseResult = SmsParsingService.parseRaw(
       sender: sender,
       message: body,
       smsReceivedAt: smsReceivedAt,
     );
 
-    if (parseResult == null) {
-      // Unknown provider — check if any provider matched the sender at all.
-      if (SmsParserRegistry.resolve(sender) != null) {
-        // Recognized provider but pattern didn't match — ignore silently.
-        return true;
-      }
-      return true; // Completely unknown sender — ignore silently.
-    }
+    if (parseResult == null) return true;
 
-    // Phase 2: resolve wallet using all available signals.
     final wallet = _resolveWallet(
       sender: sender,
       amount: parseResult.amount,
       transactionType: parseResult.type,
       parsedBalance: parseResult.balance,
+      counterpartyNumber: parseResult.counterpartyNumber,
+      mentionedPhoneNumbers: parseResult.mentionedPhoneNumbers,
     );
 
     if (wallet == null) {
@@ -164,6 +128,8 @@ final class SmsTransactionService {
     double? amount,
     TransactionType? transactionType,
     double? parsedBalance,
+    String? counterpartyNumber,
+    List<String> mentionedPhoneNumbers = const <String>[],
   }) {
     final parser = SmsParserRegistry.resolve(sender);
     if (parser == null) return null;
@@ -180,6 +146,8 @@ final class SmsTransactionService {
       amount: amount,
       transactionType: transactionType,
       parsedBalance: parsedBalance,
+      counterpartyNumber: counterpartyNumber,
+      mentionedPhoneNumbers: mentionedPhoneNumbers,
     );
 
     return SmsWalletMatcher.resolve(wallets: candidates, input: input);

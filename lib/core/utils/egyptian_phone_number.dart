@@ -27,6 +27,19 @@ abstract final class EgyptianPhoneNumber {
     return digitsOnly;
   }
 
+  static String? tryNormalizeMobile(String? phoneNumber) {
+    if (phoneNumber == null || phoneNumber.trim().isEmpty) {
+      return null;
+    }
+
+    final normalizedPhoneNumber = normalize(phoneNumber);
+    if (!isValidMobileNumber(normalizedPhoneNumber)) {
+      return null;
+    }
+
+    return normalizedPhoneNumber;
+  }
+
   static bool isValidMobileNumber(String phoneNumber) {
     final normalizedPhoneNumber = normalize(phoneNumber);
     if (normalizedPhoneNumber.length != mobileNumberLength) {

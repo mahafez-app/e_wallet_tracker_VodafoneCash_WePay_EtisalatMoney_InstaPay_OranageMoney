@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import '../../domain/enums/wallet_provider.dart';
 import 'sms_parse_result.dart';
+import 'sms_phone_number_extractor.dart';
 import 'sms_pattern_matcher.dart';
 import 'sms_patterns.dart';
 
@@ -38,6 +39,8 @@ abstract class SmsParser {
       counterpartyNumber: match.counterpartyNumber,
       referenceNumber: extractRef(message),
       balance: extractBalance(message) ?? match.balance,
+      mentionedPhoneNumbers:
+          SmsPhoneNumberExtractor.extractEgyptianMobileNumbers(message),
     );
   }
 

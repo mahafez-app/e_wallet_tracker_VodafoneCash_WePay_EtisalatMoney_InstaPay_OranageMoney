@@ -47,13 +47,23 @@ class WalletRepositoryImpl implements WalletRepository {
   }) {
     return executeAndHandleErrors(() async {
       final deviceId = await _resolveDeviceId();
+      final existingWallets = await _remoteDataSource.getWallets();
 
       final initialBalances = <String, double>{};
       final historicalTransactions = <String, List<TransactionDto>>{};
 
       for (final providerStr in providers) {
         final provider = WalletProvider.fromString(providerStr);
-        final balance = await _inboxSmsService.getLatestBalance(provider);
+        final sameProviderWalletPhoneNumbers = existingWallets
+            .where((wallet) => wallet.provider == provider)
+            .map((wallet) => wallet.phoneNumber)
+            .toList(growable: false);
+
+        final balance = await _inboxSmsService.getLatestBalance(
+          provider: provider,
+          targetPhoneNumber: phoneNumber,
+          sameProviderWalletPhoneNumbers: sameProviderWalletPhoneNumbers,
+        );
         if (balance != null) {
           initialBalances[providerStr] = balance;
         }
@@ -64,6 +74,7 @@ class WalletRepositoryImpl implements WalletRepository {
           walletId: '', // To be filled by data source
           walletOwnerUid: '', // To be filled by data source
           phoneNumber: phoneNumber,
+          sameProviderWalletPhoneNumbers: sameProviderWalletPhoneNumbers,
         );
         historicalTransactions[providerStr] = transactions;
       }

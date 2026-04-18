@@ -12,6 +12,7 @@ import '../domain/usecases/add_wallets_usecase.dart';
 import '../domain/usecases/delete_wallet_usecase.dart';
 import '../domain/usecases/get_wallets_usecase.dart';
 import '../domain/usecases/reset_wallet_stats_usecase.dart';
+import '../domain/usecases/update_wallet_balance_usecase.dart';
 import '../domain/usecases/wallet_details_usecases.dart';
 
 final walletRemoteDataSourceProvider = Provider<WalletRemoteDataSource>((ref) {
@@ -33,6 +34,7 @@ final walletRepositoryProvider = Provider<WalletRepository>((ref) {
     remoteDataSource: ref.watch(walletRemoteDataSourceProvider),
     detailsDataSource: ref.watch(walletDetailsRemoteDataSourceProvider),
     deviceInfoService: ref.watch(deviceInfoServiceProvider),
+    phoneNumberService: ref.watch(phoneNumberServiceProvider),
     walletMetaCache: ref.watch(walletMetaCacheProvider),
     inboxSmsService: ref.watch(inboxSmsServiceProvider),
   );
@@ -59,3 +61,7 @@ final resetWalletStatsUseCaseProvider = Provider<ResetWalletStatsUseCase>((
 ) {
   return ResetWalletStatsUseCase(ref.watch(walletRepositoryProvider));
 });
+
+final updateWalletBalanceUseCaseProvider = Provider<UpdateWalletBalanceUseCase>(
+  (ref) => UpdateWalletBalanceUseCase(ref.watch(walletRepositoryProvider)),
+);

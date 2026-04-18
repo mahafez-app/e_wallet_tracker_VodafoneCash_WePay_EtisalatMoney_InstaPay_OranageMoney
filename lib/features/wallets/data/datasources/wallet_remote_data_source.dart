@@ -22,6 +22,11 @@ abstract interface class WalletRemoteDataSource {
   Future<void> deleteWallet(String walletId);
 
   Future<void> resetWalletStats(String walletId);
+
+  Future<void> updateWalletBalance({
+    required String walletId,
+    required double balance,
+  });
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -195,6 +200,17 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       'totalReceived': 0.0,
       'totalSent': 0.0,
       'statsResetAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  @override
+  Future<void> updateWalletBalance({
+    required String walletId,
+    required double balance,
+  }) async {
+    await _firestore.collection('wallets').doc(walletId).update({
+      'currentBalance': balance,
+      'lastBalanceAt': FieldValue.serverTimestamp(),
     });
   }
 

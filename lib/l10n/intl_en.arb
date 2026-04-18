@@ -520,5 +520,17 @@
   },
   "wallet_resetStats": "Reset Tracked Metrics",
   "wallet_resetStatsDescription": "Are you sure you want to reset the tracked metrics for this wallet? This will zero out your total incoming and outgoing amounts since the last reset. Your current balance will be preserved.",
-  "wallet_resetStatsAction": "Reset Stats"
+  "wallet_resetStatsAction": "Reset Stats",
+  "walletBalanceEditTitle": "Update Current Balance",
+  "walletBalanceEditDescription": "Use this if a historical SMS was missed or your tracked balance needs to be corrected manually.",
+  "walletBalanceEditAction": "Update Balance",
+  "walletBalanceEditHint": "Enter the latest balance",
+  "walletBalanceEditInvalid": "Enter a valid balance amount.",
+  "walletBalanceEditSuccess": "Current balance updated.",
+  "walletBalanceEditSuggested": "Latest detected balance: {amount}",
+  "@walletBalanceEditSuggested": {
+    "placeholders": {
+      "amount": {}
+    }
+  }
 }

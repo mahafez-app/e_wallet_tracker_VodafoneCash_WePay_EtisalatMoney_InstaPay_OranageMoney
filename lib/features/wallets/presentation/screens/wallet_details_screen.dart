@@ -3,24 +3,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wallet_tracker/core/widgets/app_dialog.dart';
 import 'package:wallet_tracker/core/widgets/wallets/wallet_provider_info.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_color_extension.dart';
 import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_error_view.dart';
 import '../../../../core/widgets/app_loader.dart';
-import '../../../../core/widgets/balance_card.dart';
-import '../../../../core/widgets/transactions/no_transactions_card.dart';
-import '../../../../core/widgets/transactions/transaction_card.dart';
-import '../../../transactions/presentation/navigation/transactions_route_data.dart';
-import '../../../transactions/presentation/widgets/details/transaction_details_bottom_sheet.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 import '../providers/wallet_details_controller.dart';
+import '../widgets/wallet_details/wallet_balance_section.dart';
+import '../widgets/wallet_details/wallet_recent_transactions_section.dart';
 
 class WalletDetailsScreen extends StatelessWidget {
   const WalletDetailsScreen({super.key, required this.walletId});
@@ -36,7 +31,8 @@ class WalletDetailsScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () => context.push(AppRoutes.walletReportsPath(walletId)),
+            onPressed: () =>
+                context.push(AppRoutes.walletReportsPath(walletId)),
             icon: const Icon(Icons.bar_chart_rounded),
           ),
         ],
@@ -45,7 +41,6 @@ class WalletDetailsScreen extends StatelessWidget {
     );
   }
 }
-
 
 class _WalletDetailsBody extends ConsumerWidget {
   const _WalletDetailsBody({super.key, required this.walletId});
@@ -63,63 +58,15 @@ class _WalletDetailsBody extends ConsumerWidget {
         padding: AppSpacing.pagePadding,
         child: Column(
           children: [
-            _BalanceSection(details: details),
+            WalletBalanceSection(details: details),
             AppSpacing.md.verticalSpace,
             _WalletInfoSection(details: details),
             AppSpacing.md.verticalSpace,
-            _RecentTransactionsSection(details: details),
+            WalletRecentTransactionsSection(details: details),
           ],
         ),
       ),
     );
-  }
-}
-
-class _BalanceSection extends ConsumerWidget {
-  const _BalanceSection({super.key, required this.details});
-
-  final WalletDetailsEntity details;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final wallet = details.wallet;
-    final localizedLastUpdate = wallet.lastBalanceAt.toFormattedDate(context);
-
-    return BalanceCard(
-      balance: wallet.currentBalance,
-      sentAmount: wallet.totalSent,
-      receivedAmount: wallet.totalReceived,
-      statsResetDate: wallet.statsResetAt,
-      label: l10n.currentBalance,
-      subtitle: Text(
-        '${l10n.lastActivity}: $localizedLastUpdate',
-        style: theme.textTheme.labelMedium?.copyWith(
-          color: context.appColors.statsOnGradient.withAlpha(204),
-        ),
-      ),
-      onReset: () => _handleReset(context, ref),
-    );
-  }
-
-  Future<void> _handleReset(BuildContext context, WidgetRef ref) async {
-    final l10n = context.l10n;
-    final confirmed = await AppDialog.show<bool>(
-      context,
-      title: l10n.wallet_resetStats,
-      message: l10n.wallet_resetStatsDescription,
-      confirmLabel: l10n.wallet_resetStatsAction,
-      cancelLabel: l10n.commonCancelAction,
-      type: AppDialogType.warning,
-      onConfirm: () => Navigator.pop(context, true),
-    );
-
-    if (confirmed == true) {
-      await ref
-          .read(walletDetailsControllerProvider(details.wallet.id).notifier)
-          .resetStats();
-    }
   }
 }
 
@@ -145,69 +92,6 @@ class _WalletInfoSection extends StatelessWidget {
         phoneNumber: wallet.phoneNumber,
         borderRadius: 8,
       ),
-    );
-  }
-}
-
-class _RecentTransactionsSection extends StatelessWidget {
-  const _RecentTransactionsSection({super.key, required this.details});
-
-  final WalletDetailsEntity details;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = context.l10n;
-    final hasTransactions = details.recentTransactions.isNotEmpty;
-
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              l10n.recentTransactions,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            if (hasTransactions)
-              TextButton(
-                onPressed: () {
-                  final contextData = WalletTransactionsRouteData(
-                    walletId: details.wallet.id,
-                    provider: details.wallet.provider,
-                    phoneNumber: details.wallet.phoneNumber,
-                  );
-                  context.push(
-                    AppRoutes.transactionsPath(),
-                    extra: contextData,
-                  );
-                },
-                child: Text(
-                  l10n.viewAll,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-          ],
-        ),
-        AppSpacing.md.verticalSpace,
-        if (!hasTransactions)
-          NoTransactionsCard(
-            title: l10n.transactions_emptyTitle,
-            description: l10n.transactions_emptyWalletDescription,
-          )
-        else
-          ...details.recentTransactions.map(
-            (tx) => GestureDetector(
-              onTap: () => TransactionDetailsBottomSheet.show(context, tx),
-              child: TransactionCard(transaction: tx, showProviderInfo: false),
-            ),
-          ),
-      ],
     );
   }
 }

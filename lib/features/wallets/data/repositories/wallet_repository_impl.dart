@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '../../../../core/cache/wallet_meta_cache.dart';
 import '../../../../core/data/models/transaction_dto.dart';
 import '../../../../core/domain/entities/wallet_entity.dart';
@@ -6,6 +8,8 @@ import '../../../../core/error/failures.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/services/device_info_service.dart';
 import '../../../../core/services/inbox_sms_service.dart';
+import '../../../../core/services/phone_number_service.dart';
+import '../../../../core/utils/egyptian_phone_number.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 import '../../domain/repositories/wallet_repository.dart';
@@ -16,21 +20,24 @@ class WalletRepositoryImpl implements WalletRepository {
   const WalletRepositoryImpl({
     required WalletRemoteDataSource remoteDataSource,
     required WalletDetailsRemoteDataSource detailsDataSource,
-    // removed PhoneNumberService phoneNumberService,
     required DeviceInfoService deviceInfoService,
+    required PhoneNumberService phoneNumberService,
     required WalletMetaCache walletMetaCache,
     required InboxSmsService inboxSmsService,
   }) : _remoteDataSource = remoteDataSource,
        _detailsDataSource = detailsDataSource,
        _deviceInfoService = deviceInfoService,
+       _phoneNumberService = phoneNumberService,
        _walletMetaCache = walletMetaCache,
        _inboxSmsService = inboxSmsService;
 
   final WalletRemoteDataSource _remoteDataSource;
   final WalletDetailsRemoteDataSource _detailsDataSource;
   final DeviceInfoService _deviceInfoService;
+  final PhoneNumberService _phoneNumberService;
   final WalletMetaCache _walletMetaCache;
   final InboxSmsService _inboxSmsService;
+  static const _tag = 'WalletRepositoryImpl';
 
   @override
   Future<Result<List<WalletEntity>>> getWallets() {
@@ -54,10 +61,12 @@ class WalletRepositoryImpl implements WalletRepository {
 
       for (final providerStr in providers) {
         final provider = WalletProvider.fromString(providerStr);
-        final sameProviderWalletPhoneNumbers = existingWallets
-            .where((wallet) => wallet.provider == provider)
-            .map((wallet) => wallet.phoneNumber)
-            .toList(growable: false);
+        final sameProviderWalletPhoneNumbers =
+            await _resolveSameProviderPhoneNumbers(
+              provider: provider,
+              targetPhoneNumber: phoneNumber,
+              existingWallets: existingWallets,
+            );
 
         final balance = await _inboxSmsService.getLatestBalance(
           provider: provider,
@@ -122,6 +131,20 @@ class WalletRepositoryImpl implements WalletRepository {
     );
   }
 
+  @override
+  Future<Result<void>> updateWalletBalance({
+    required String walletId,
+    required double balance,
+  }) {
+    return executeAndHandleErrors(
+      () => _remoteDataSource.updateWalletBalance(
+        walletId: walletId,
+        balance: balance,
+      ),
+      tag: 'WalletRepositoryImpl.updateWalletBalance',
+    );
+  }
+
   // ── Private helpers ──────────────────────────────────────────────────────
 
   Future<String> _resolveDeviceId() async {
@@ -137,5 +160,47 @@ class WalletRepositoryImpl implements WalletRepository {
     if (deviceName.isEmpty) return deviceId;
     if (deviceId.isEmpty) return deviceName;
     return '$deviceName ($deviceId)';
+  }
+
+  Future<List<String>> _resolveSameProviderPhoneNumbers({
+    required WalletProvider provider,
+    required String targetPhoneNumber,
+    required List<WalletEntity> existingWallets,
+  }) async {
+    final fallbackPhoneNumbers =
+        existingWallets
+            .where((wallet) => wallet.provider == provider)
+            .map((wallet) => wallet.phoneNumber)
+            .toSet()
+          ..add(targetPhoneNumber);
+
+    try {
+      final devicePhoneNumbers = await _phoneNumberService
+          .getDevicePhoneNumbers();
+      final providerPhoneNumbers =
+          devicePhoneNumbers
+              .where(
+                (phoneNumber) =>
+                    EgyptianPhoneNumber.primaryProvider(phoneNumber) ==
+                    provider,
+              )
+              .toSet()
+            ..add(targetPhoneNumber)
+            ..addAll(
+              existingWallets
+                  .where((wallet) => wallet.provider == provider)
+                  .map((wallet) => wallet.phoneNumber),
+            );
+
+      return providerPhoneNumbers.toList(growable: false);
+    } catch (error, stackTrace) {
+      log(
+        'Falling back to persisted wallet numbers for ${provider.toValue}.',
+        name: _tag,
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return fallbackPhoneNumbers.toList(growable: false);
+    }
   }
 }

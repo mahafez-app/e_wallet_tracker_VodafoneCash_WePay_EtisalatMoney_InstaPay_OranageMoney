@@ -520,5 +520,17 @@
   },
   "wallet_resetStats": "تصفير المؤشرات",
   "wallet_resetStatsDescription": "متأكد إنك عايز تصفر مؤشرات الوارد والصادر للمحفظة دي؟ ده هيخلي إجمالي المبالغ صفر من بداية النهاردة، لكن رصيدك الحالي مش هيتأثر.",
-  "wallet_resetStatsAction": "تصفير"
+  "wallet_resetStatsAction": "تصفير",
+  "walletBalanceEditTitle": "تحديث الرصيد الحالي",
+  "walletBalanceEditDescription": "استخدم ده لو في رسالة قديمة فاتت التطبيق أو لو محتاج تصحح الرصيد يدويًا.",
+  "walletBalanceEditAction": "تحديث الرصيد",
+  "walletBalanceEditHint": "اكتب آخر رصيد عندك",
+  "walletBalanceEditInvalid": "أدخل قيمة رصيد صحيحة.",
+  "walletBalanceEditSuccess": "تم تحديث الرصيد الحالي.",
+  "walletBalanceEditSuggested": "آخر رصيد تم اكتشافه: {amount}",
+  "@walletBalanceEditSuggested": {
+    "placeholders": {
+      "amount": {}
+    }
+  }
 }

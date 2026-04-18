@@ -15,4 +15,9 @@ abstract interface class WalletRepository {
   Future<Result<void>> deleteWallet(String walletId);
 
   Future<Result<void>> resetWalletStats(String walletId);
+
+  Future<Result<void>> updateWalletBalance({
+    required String walletId,
+    required double balance,
+  });
 }

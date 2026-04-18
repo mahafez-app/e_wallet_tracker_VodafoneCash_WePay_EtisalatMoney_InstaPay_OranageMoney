@@ -12,6 +12,17 @@ final class WalletDetailsEntity extends Equatable {
   final WalletEntity wallet;
   final List<TransactionEntity> recentTransactions;
 
+  double get suggestedBalance {
+    for (final transaction in recentTransactions) {
+      final statusBalance = transaction.statusBalance;
+      if (statusBalance != null) {
+        return statusBalance;
+      }
+    }
+
+    return wallet.currentBalance;
+  }
+
   @override
   List<Object?> get props => [wallet, recentTransactions];
 }

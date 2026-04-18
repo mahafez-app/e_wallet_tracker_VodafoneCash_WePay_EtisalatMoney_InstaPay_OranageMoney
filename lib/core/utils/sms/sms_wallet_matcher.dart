@@ -53,6 +53,7 @@ class SmsWalletMatcher {
   /// Maximum Egyptian provider transfer tax in EGP.
   static const double _maxTaxEgp = 50.0;
   static const double _balanceDecisionGapEgp = 5.0;
+  static double get maxBalanceToleranceEgp => _maxTaxEgp;
 
   static WalletEntity resolve({
     required List<WalletEntity> wallets,

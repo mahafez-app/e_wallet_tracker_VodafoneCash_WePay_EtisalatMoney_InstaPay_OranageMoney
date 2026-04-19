@@ -92,12 +92,9 @@ jobs:
           cd build/ios/iphoneos
           zip -r app.ipa Payload
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools
-
-      - name: Upload iOS to Firebase App Distribution
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: /tmp/firebase_credentials.json
-        run: |
-          echo '${{ secrets.FIREBASE_CREDENTIALS }}' > /tmp/firebase_credentials.json
-          firebase appdistribution:distribute build/ios/iphoneos/app.ipa --app "${{ secrets.FIREBASE_IOS_APP_ID }}" --groups "testers"
+      - name: Upload unsigned IPA to GitHub Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-unsigned-release
+          path: build/ios/iphoneos/app.ipa
+          retention-days: 7

@@ -1,0 +1,74 @@
+name: Firebase App Distribution
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger workflow on tags matching v*, e.g. v1.0.0, v2.1.3
+
+jobs:
+  build-and-distribute-android:
+    name: Build & Distribute Android
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload Android to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS }}
+          groups: testers # Change this to your Firebase testers group, e.g., 'qa-team'
+          file: build/app/outputs/flutter-apk/app-release.apk
+
+  build-and-distribute-ios:
+    name: Build & Distribute iOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      # NOTE: For iOS to successfully distribute via Firebase App Distribution,
+      # the app MUST be code-signed with an Ad-Hoc or Enterprise Apple Developer Certificate.
+      # The below command builds an unsigned archive and packages it, which Firebase will accept,
+      # but an iPhone will NOT install it unless it is signed.
+      - name: Build Unsigned iOS App
+        run: |
+          flutter build ios --release --no-codesign
+          mkdir -p build/ios/iphoneos/Payload
+          cp -r build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload/
+          cd build/ios/iphoneos
+          zip -r app.ipa Payload
+
+      - name: Upload iOS to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS }}
+          groups: testers # Change this to your Firebase testers group
+          file: build/ios/iphoneos/app.ipa

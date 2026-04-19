@@ -92,10 +92,12 @@ jobs:
           cd build/ios/iphoneos
           zip -r app.ipa Payload
 
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
       - name: Upload iOS to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
-          serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS }}
-          groups: testers # Change this to your Firebase testers group
-          file: build/ios/iphoneos/app.ipa
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/firebase_credentials.json
+        run: |
+          echo '${{ secrets.FIREBASE_CREDENTIALS }}' > /tmp/firebase_credentials.json
+          firebase appdistribution:distribute build/ios/iphoneos/app.ipa --app "${{ secrets.FIREBASE_IOS_APP_ID }}" --groups "testers"

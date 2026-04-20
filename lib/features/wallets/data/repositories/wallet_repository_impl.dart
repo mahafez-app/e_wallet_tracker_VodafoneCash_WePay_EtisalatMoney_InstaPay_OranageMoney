@@ -8,6 +8,7 @@ import '../../../../core/error/failures.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/services/device_info_service.dart';
 import '../../../../core/services/inbox_sms_service.dart';
+import '../../../../core/utils/egyptian_phone_number.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 import '../../domain/repositories/wallet_repository.dart';
@@ -62,11 +63,17 @@ class WalletRepositoryImpl implements WalletRepository {
               targetPhoneNumber: phoneNumber,
               existingWallets: existingWallets,
             );
+        final knownWalletBalances = _resolveKnownWalletBalances(
+          provider: provider,
+          targetPhoneNumber: phoneNumber,
+          existingWallets: existingWallets,
+        );
 
         final balance = await _inboxSmsService.getLatestBalance(
           provider: provider,
           targetPhoneNumber: phoneNumber,
           sameProviderWalletPhoneNumbers: sameProviderWalletPhoneNumbers,
+          sameProviderWalletBalances: knownWalletBalances,
         );
         if (balance != null) {
           initialBalances[providerStr] = balance;
@@ -79,6 +86,7 @@ class WalletRepositoryImpl implements WalletRepository {
           walletOwnerUid: '', // To be filled by data source
           phoneNumber: phoneNumber,
           sameProviderWalletPhoneNumbers: sameProviderWalletPhoneNumbers,
+          sameProviderWalletBalances: knownWalletBalances,
         );
         historicalTransactions[providerStr] = transactions;
       }
@@ -174,5 +182,28 @@ class WalletRepositoryImpl implements WalletRepository {
       name: _tag,
     );
     return phoneNumbers.toList(growable: false);
+  }
+
+  /// Builds a map of normalized phone number → current balance for all
+  /// existing wallets of [provider] that are NOT the [targetPhoneNumber].
+  /// Used as anchors for the backward balance-walk in history attribution.
+  Map<String, double> _resolveKnownWalletBalances({
+    required WalletProvider provider,
+    required String targetPhoneNumber,
+    required List<WalletEntity> existingWallets,
+  }) {
+    final normalizedTarget = EgyptianPhoneNumber.tryNormalizeMobile(
+      targetPhoneNumber,
+    );
+    final balances = <String, double>{};
+    for (final wallet in existingWallets) {
+      if (wallet.provider != provider) continue;
+      final normalized = EgyptianPhoneNumber.tryNormalizeMobile(
+        wallet.phoneNumber,
+      );
+      if (normalized == null || normalized == normalizedTarget) continue;
+      balances[normalized] = wallet.currentBalance;
+    }
+    return balances;
   }
 }

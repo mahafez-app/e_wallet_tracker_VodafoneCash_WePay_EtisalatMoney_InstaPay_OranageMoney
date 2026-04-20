@@ -15,11 +15,13 @@ final class InboxSmsHistoryMatcher {
     required List<ParsedInboxSmsRecord> records,
     required String targetPhoneNumber,
     required List<String> sameProviderPhoneNumbers,
+    Map<String, double> knownWalletBalances = const {},
   }) {
     final resolution = _resolve(
       records: records,
       targetPhoneNumber: targetPhoneNumber,
       sameProviderPhoneNumbers: sameProviderPhoneNumbers,
+      knownWalletBalances: knownWalletBalances,
     );
     return resolution.targetRecords;
   }
@@ -28,11 +30,13 @@ final class InboxSmsHistoryMatcher {
     required List<ParsedInboxSmsRecord> records,
     required String targetPhoneNumber,
     required List<String> sameProviderPhoneNumbers,
+    Map<String, double> knownWalletBalances = const {},
   }) {
     final resolution = _resolve(
       records: records,
       targetPhoneNumber: targetPhoneNumber,
       sameProviderPhoneNumbers: sameProviderPhoneNumbers,
+      knownWalletBalances: knownWalletBalances,
     );
 
     for (final record in resolution.targetRecords.reversed) {
@@ -49,6 +53,7 @@ final class InboxSmsHistoryMatcher {
     required List<ParsedInboxSmsRecord> records,
     required String targetPhoneNumber,
     required List<String> sameProviderPhoneNumbers,
+    Map<String, double> knownWalletBalances = const {},
   }) {
     final normalizedTargetPhoneNumber = EgyptianPhoneNumber.tryNormalizeMobile(
       targetPhoneNumber,
@@ -92,6 +97,25 @@ final class InboxSmsHistoryMatcher {
       for (var index = 0; index < mentions.length; index += 1)
         if (mentions[index] == _WalletMention.other) index,
     };
+
+    // Seed ambiguous records via backward balance walk. This bootstraps
+    // attribution when no message explicitly mentions the wallet's own phone —
+    // the common case for Egyptian providers in multi-wallet scenarios.
+    if (knownWalletBalances.isNotEmpty) {
+      final normalizedKnownBalances = <String, double>{};
+      for (final entry in knownWalletBalances.entries) {
+        final phone = EgyptianPhoneNumber.tryNormalizeMobile(entry.key);
+        if (phone != null) normalizedKnownBalances[phone] = entry.value;
+      }
+      _seedFromKnownWalletBalances(
+        records: sortedRecords,
+        mentions: mentions,
+        normalizedTargetPhoneNumber: normalizedTargetPhoneNumber,
+        normalizedKnownWalletBalances: normalizedKnownBalances,
+        targetIndexes: targetIndexes,
+        otherIndexes: otherIndexes,
+      );
+    }
 
     var changed = true;
     while (changed) {
@@ -262,6 +286,102 @@ final class InboxSmsHistoryMatcher {
     final difference = (newerBalance - expectedNewerBalance).abs();
     return difference <= _historyBalanceToleranceEgp;
   }
+
+  // ── Backward balance-walk seeding ──────────────────────────────────────────
+
+  /// Walks sorted records from newest to oldest, attributing ambiguous records
+  /// to the target wallet or a known wallet via balance proximity.
+  ///
+  /// [normalizedKnownWalletBalances] maps each non-target wallet's normalized
+  /// phone to its current Firestore balance, used as an anchor for the walk.
+  /// Records that do not match any known wallet within
+  /// [_historyBalanceToleranceEgp] are attributed to the target by process of
+  /// elimination, solving the bootstrap problem when no message explicitly
+  /// mentions the wallet's own phone number.
+  static void _seedFromKnownWalletBalances({
+    required List<ParsedInboxSmsRecord> records,
+    required List<_WalletMention> mentions,
+    required String normalizedTargetPhoneNumber,
+    required Map<String, double> normalizedKnownWalletBalances,
+    required Set<int> targetIndexes,
+    required Set<int> otherIndexes,
+  }) {
+    final runningKnownBalances = Map<String, double>.from(
+      normalizedKnownWalletBalances,
+    );
+    double? targetRunningBalance;
+
+    for (var i = records.length - 1; i >= 0; i--) {
+      // Anchor target running balance from definitively resolved target records.
+      if (targetIndexes.contains(i)) {
+        final b = records[i].parseResult.balance;
+        if (b != null) {
+          targetRunningBalance = _computePriorBalance(
+            b,
+            records[i].parseResult,
+          );
+        }
+        continue;
+      }
+
+      if (otherIndexes.contains(i)) continue;
+      if (mentions[i] != _WalletMention.ambiguous) continue;
+
+      final result = records[i].parseResult;
+      final balance = result.balance;
+      if (balance == null) continue;
+
+      final priorBalance = _computePriorBalance(balance, result);
+
+      // Find which known wallet's running balance is closest to this balance.
+      String? bestKnownPhone;
+      var bestKnownDiff = _historyBalanceToleranceEgp + 1.0;
+      for (final entry in runningKnownBalances.entries) {
+        final diff = (entry.value - balance).abs();
+        if (diff < bestKnownDiff) {
+          bestKnownDiff = diff;
+          bestKnownPhone = entry.key;
+        }
+      }
+
+      final targetDiff = targetRunningBalance != null
+          ? (targetRunningBalance - balance).abs()
+          : double.infinity;
+
+      final knownMatchExists =
+          bestKnownPhone != null &&
+          bestKnownDiff <= _historyBalanceToleranceEgp;
+
+      if (knownMatchExists && bestKnownDiff <= targetDiff) {
+        // Known wallet balance is the closest match (prefer known when tied
+        // since its Firestore balance is authoritative).
+        otherIndexes.add(i);
+        runningKnownBalances[bestKnownPhone] = priorBalance;
+      } else if (targetRunningBalance != null &&
+          targetDiff <= _historyBalanceToleranceEgp &&
+          targetDiff < bestKnownDiff) {
+        // Target's established running balance is a closer match.
+        targetIndexes.add(i);
+        targetRunningBalance = priorBalance;
+      } else if (!knownMatchExists) {
+        // No known wallet matches → process of elimination → target.
+        targetIndexes.add(i);
+        targetRunningBalance = priorBalance;
+      }
+      // If equidistant between known and target, leave ambiguous.
+      // The chain propagation loop will attempt to resolve it.
+    }
+  }
+
+  /// Returns the balance immediately before [result]'s transaction, given
+  /// [balanceAfter] — the post-transaction balance reported in the SMS.
+  static double _computePriorBalance(
+    double balanceAfter,
+    SmsParseResult result,
+  ) =>
+      result.type == TransactionType.receive
+          ? balanceAfter - result.amount
+          : balanceAfter + result.amount;
 }
 
 enum _WalletMention { target, other, ambiguous }

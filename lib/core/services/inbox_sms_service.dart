@@ -13,6 +13,7 @@ abstract interface class InboxSmsService {
     required WalletProvider provider,
     required String targetPhoneNumber,
     required List<String> sameProviderWalletPhoneNumbers,
+    Map<String, double> sameProviderWalletBalances,
   });
 
   Future<List<TransactionDto>> getHistoricalTransactions({
@@ -21,6 +22,7 @@ abstract interface class InboxSmsService {
     required String walletOwnerUid,
     required String phoneNumber,
     required List<String> sameProviderWalletPhoneNumbers,
+    Map<String, double> sameProviderWalletBalances,
   });
 }
 
@@ -32,6 +34,7 @@ class InboxSmsServiceImpl implements InboxSmsService {
     required WalletProvider provider,
     required String targetPhoneNumber,
     required List<String> sameProviderWalletPhoneNumbers,
+    Map<String, double> sameProviderWalletBalances = const {},
   }) async {
     final parser = SmsParserRegistry.resolveByProvider(provider);
     if (parser == null) {
@@ -74,6 +77,7 @@ class InboxSmsServiceImpl implements InboxSmsService {
         records: records,
         targetPhoneNumber: targetPhoneNumber,
         sameProviderPhoneNumbers: sameProviderWalletPhoneNumbers,
+        knownWalletBalances: sameProviderWalletBalances,
       );
       if (balance != null) {
         log(
@@ -101,6 +105,7 @@ class InboxSmsServiceImpl implements InboxSmsService {
     required String walletOwnerUid,
     required String phoneNumber,
     required List<String> sameProviderWalletPhoneNumbers,
+    Map<String, double> sameProviderWalletBalances = const {},
   }) async {
     final parser = SmsParserRegistry.resolveByProvider(provider);
     if (parser == null) return const [];
@@ -134,6 +139,7 @@ class InboxSmsServiceImpl implements InboxSmsService {
         records: records,
         targetPhoneNumber: phoneNumber,
         sameProviderPhoneNumbers: sameProviderWalletPhoneNumbers,
+        knownWalletBalances: sameProviderWalletBalances,
       );
 
       return matchedRecords

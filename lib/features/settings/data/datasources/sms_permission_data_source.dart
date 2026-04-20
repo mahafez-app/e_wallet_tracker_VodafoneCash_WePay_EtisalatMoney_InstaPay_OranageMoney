@@ -15,21 +15,14 @@ final class SmsPermissionDataSourceImpl implements SmsPermissionDataSource {
 
   @override
   Future<bool> requestPermission() async {
-    final statuses = await <Permission>[
-      Permission.sms,
-      Permission.phone,
-    ].request();
-
-    return _isGranted(statuses[Permission.sms]) &&
-        _isGranted(statuses[Permission.phone]);
+    final smsPermissionStatus = await _requestIfNeeded(Permission.sms);
+    return _isGranted(smsPermissionStatus);
   }
 
   @override
   Future<bool> hasPermission() async {
     final smsPermissionStatus = await Permission.sms.status;
-    final phonePermissionStatus = await Permission.phone.status;
-
-    return _isGranted(smsPermissionStatus) && _isGranted(phonePermissionStatus);
+    return _isGranted(smsPermissionStatus);
   }
 
   @override
@@ -40,6 +33,15 @@ final class SmsPermissionDataSourceImpl implements SmsPermissionDataSource {
         technicalMessage: 'Unable to open the app settings screen.',
       );
     }
+  }
+
+  Future<PermissionStatus> _requestIfNeeded(Permission permission) async {
+    final currentStatus = await permission.status;
+    if (_isGranted(currentStatus)) {
+      return currentStatus;
+    }
+
+    return permission.request();
   }
 
   bool _isGranted(PermissionStatus? status) => status?.isGranted == true;

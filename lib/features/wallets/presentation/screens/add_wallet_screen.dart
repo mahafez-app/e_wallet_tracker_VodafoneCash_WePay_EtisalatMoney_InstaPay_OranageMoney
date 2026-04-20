@@ -74,19 +74,13 @@ class _AddWalletBody extends ConsumerWidget {
         .read(smsPermissionControllerProvider.notifier)
         .handleWalletSetupFlow(
           navigateHome: () {
-            if (context.mounted) {
-              context.go(AppRoutes.home);
-            }
+            if (context.mounted) context.go(AppRoutes.home);
           },
           navigateToPermission: () {
-            if (context.mounted) {
-              context.push(AppRoutes.smsPermissions);
-            }
+            if (context.mounted) context.push(AppRoutes.smsPermissions);
           },
         );
   }
-
-
 
   bool _hasNewSubmissionFailure(AddWalletState? previous, AddWalletState next) {
     return next.submissionStatus == AddWalletSubmissionStatus.failure &&

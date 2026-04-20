@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:another_telephony/telephony.dart';
 
 import '../data/models/transaction_dto.dart';
+import '../domain/entities/transaction_entity.dart';
+import '../domain/entities/wallet_entity.dart';
 import '../domain/enums/wallet_provider.dart';
 import 'inbox_sms_history_matcher.dart';
 import '../utils/sms/registry/sms_parser_registry.dart';
@@ -23,6 +25,14 @@ abstract interface class InboxSmsService {
     required String phoneNumber,
     required List<String> sameProviderWalletPhoneNumbers,
     Map<String, double> sameProviderWalletBalances,
+    DateTime? sinceDate,
+  });
+
+  Future<List<TransactionEntity>> getHistoricalTransactionEntities({
+    required WalletEntity wallet,
+    required List<String> sameProviderWalletPhoneNumbers,
+    Map<String, double> sameProviderWalletBalances,
+    DateTime? sinceDate,
   });
 }
 
@@ -106,40 +116,15 @@ class InboxSmsServiceImpl implements InboxSmsService {
     required String phoneNumber,
     required List<String> sameProviderWalletPhoneNumbers,
     Map<String, double> sameProviderWalletBalances = const {},
+    DateTime? sinceDate,
   }) async {
-    final parser = SmsParserRegistry.resolveByProvider(provider);
-    if (parser == null) return const [];
-
     try {
-      final lastWeek = DateTime.now().subtract(const Duration(days: 7));
-      final lastWeekMs = lastWeek.millisecondsSinceEpoch;
-      final filter = SmsFilter.where(
-        SmsColumn.ADDRESS,
-      ).equals(parser.senderIds.first);
-      for (final id in parser.senderIds) {
-        filter.or(SmsColumn.ADDRESS).equals(id);
-      }
-      final messages = await Telephony.instance.getInboxSms(
-        columns: [SmsColumn.ADDRESS, SmsColumn.BODY, SmsColumn.DATE],
-        filter: filter.and(SmsColumn.DATE).greaterThan(lastWeekMs.toString()),
-        sortOrder: [OrderBy(SmsColumn.DATE, sort: Sort.DESC)],
-      );
-
-      final providerMessages = messages
-          .where((message) {
-            final address = message.address;
-            if (address == null) return false;
-            return parser.senderIds.any(
-              (id) => id.toLowerCase() == address.toLowerCase(),
-            );
-          })
-          .toList(growable: false);
-      final records = _parseRecords(providerMessages);
-      final matchedRecords = InboxSmsHistoryMatcher.resolveWalletHistory(
-        records: records,
-        targetPhoneNumber: phoneNumber,
-        sameProviderPhoneNumbers: sameProviderWalletPhoneNumbers,
-        knownWalletBalances: sameProviderWalletBalances,
+      final matchedRecords = await _getMatchedHistoricalRecords(
+        provider: provider,
+        phoneNumber: phoneNumber,
+        sameProviderWalletPhoneNumbers: sameProviderWalletPhoneNumbers,
+        sameProviderWalletBalances: sameProviderWalletBalances,
+        sinceDate: sinceDate,
       );
 
       return matchedRecords
@@ -169,6 +154,107 @@ class InboxSmsServiceImpl implements InboxSmsService {
       );
       return const [];
     }
+  }
+
+  @override
+  Future<List<TransactionEntity>> getHistoricalTransactionEntities({
+    required WalletEntity wallet,
+    required List<String> sameProviderWalletPhoneNumbers,
+    Map<String, double> sameProviderWalletBalances = const {},
+    DateTime? sinceDate,
+  }) async {
+    try {
+      final matchedRecords = await _getMatchedHistoricalRecords(
+        provider: wallet.provider,
+        phoneNumber: wallet.phoneNumber,
+        sameProviderWalletPhoneNumbers: sameProviderWalletPhoneNumbers,
+        sameProviderWalletBalances: sameProviderWalletBalances,
+        sinceDate: sinceDate,
+      );
+
+      return matchedRecords
+          .map(
+            (record) => SmsParsingService.buildEntity(
+              result: record.parseResult,
+              walletId: wallet.id,
+              walletOwnerUid: wallet.ownerUid,
+              walletPhoneNumber: wallet.phoneNumber,
+              rawMessage: record.body,
+            ),
+          )
+          .toList(growable: false);
+    } catch (e, st) {
+      log(
+        'Failed to query historical transaction entities for '
+        '${wallet.provider.toValue}',
+        name: 'InboxSmsService',
+        error: e,
+        stackTrace: st,
+      );
+      return const [];
+    }
+  }
+
+  Future<List<ParsedInboxSmsRecord>> _getMatchedHistoricalRecords({
+    required WalletProvider provider,
+    required String phoneNumber,
+    required List<String> sameProviderWalletPhoneNumbers,
+    required Map<String, double> sameProviderWalletBalances,
+    DateTime? sinceDate,
+  }) async {
+    final parser = SmsParserRegistry.resolveByProvider(provider);
+    if (parser == null) return const [];
+
+    final messages = await _getProviderMessages(
+      provider: provider,
+      senderIds: parser.senderIds,
+      sinceDate: sinceDate,
+    );
+    final records = _parseRecords(messages);
+
+    return InboxSmsHistoryMatcher.resolveWalletHistory(
+      records: records,
+      targetPhoneNumber: phoneNumber,
+      sameProviderPhoneNumbers: sameProviderWalletPhoneNumbers,
+      knownWalletBalances: sameProviderWalletBalances,
+    );
+  }
+
+  Future<List<SmsMessage>> _getProviderMessages({
+    required WalletProvider provider,
+    required List<String> senderIds,
+    DateTime? sinceDate,
+  }) async {
+    final effectiveSinceDate =
+        sinceDate ?? DateTime.now().subtract(const Duration(days: 7));
+    final sinceMs = effectiveSinceDate.millisecondsSinceEpoch;
+    final filter = SmsFilter.where(SmsColumn.ADDRESS).equals(senderIds.first);
+
+    for (final id in senderIds.skip(1)) {
+      filter.or(SmsColumn.ADDRESS).equals(id);
+    }
+
+    final messages = await Telephony.instance.getInboxSms(
+      columns: [SmsColumn.ADDRESS, SmsColumn.BODY, SmsColumn.DATE],
+      filter: filter.and(SmsColumn.DATE).greaterThan('${sinceMs - 1}'),
+      sortOrder: [OrderBy(SmsColumn.DATE, sort: Sort.DESC)],
+    );
+
+    log(
+      'Queried ${messages.length} messages from inbox for provider '
+      '${provider.toValue}',
+      name: 'InboxSmsService',
+    );
+
+    return messages
+        .where((message) {
+          final address = message.address;
+          if (address == null) return false;
+          return senderIds.any(
+            (id) => id.toLowerCase() == address.toLowerCase(),
+          );
+        })
+        .toList(growable: false);
   }
 
   List<ParsedInboxSmsRecord> _parseRecords(List<SmsMessage> messages) {

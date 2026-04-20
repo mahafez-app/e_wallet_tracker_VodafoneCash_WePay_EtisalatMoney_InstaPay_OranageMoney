@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -54,9 +53,7 @@ class _AppBootstrapState extends State<AppBootstrap> {
           txFirstPageCacheBoxProvider.overrideWithValue(
             data.txFirstPageCacheBox,
           ),
-          pendingSmsRetryBoxProvider.overrideWithValue(
-            data.pendingSmsRetryBox,
-          ),
+          pendingSmsRetryBoxProvider.overrideWithValue(data.pendingSmsRetryBox),
         ],
         child: const App(),
       ),
@@ -89,13 +86,8 @@ class StartupFallbackApp extends StatelessWidget {
         theme: AppTheme.light(),
         darkTheme: AppTheme.dark(),
         themeMode: ThemeMode.system,
-        localizationsDelegates: [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: S.delegate.supportedLocales,
+        localizationsDelegates: S.localizationsDelegates,
+        supportedLocales: S.supportedLocales,
         home: StartupFallbackScreen(isRetrying: isRetrying, onRetry: onRetry),
       ),
     );

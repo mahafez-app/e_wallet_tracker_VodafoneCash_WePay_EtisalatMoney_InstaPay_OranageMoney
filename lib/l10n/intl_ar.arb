@@ -582,5 +582,52 @@
     "placeholders": {
       "phoneNumber": {}
     }
+  },
+  "walletSyncTransactionsTitle": "مزامنة المعاملات الفائتة",
+  "walletSyncTransactionsDescription": "افحص رسائل الـ SMS الأخيرة للبحث عن معاملات وصلت بعد آخر نشاط محفوظ على هذه المحفظة.",
+  "walletSyncTransactionsAction": "مزامنة المعاملات",
+  "walletSyncTransactionsReviewTitle": "راجع المعاملات غير المحفوظة",
+  "walletSyncTransactionsFoundCount": "{count, plural, =0{لم نجد معاملات فائتة} =1{تم العثور على معاملة فائتة واحدة} other{تم العثور على {count} معاملات فائتة}}",
+  "@walletSyncTransactionsFoundCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "walletSyncTransactionsFromDate": "نفحص الرسائل بعد {date}",
+  "@walletSyncTransactionsFromDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "walletSyncTransactionsSelectedCount": "{count, plural, =0{لا توجد معاملات محددة} =1{معاملة واحدة محددة} other{{count} معاملات محددة}}",
+  "@walletSyncTransactionsSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "walletSyncTransactionsSaveAction": "إضافة المحدد",
+  "walletSyncTransactionsEmptyTitle": "لا توجد معاملات فائتة",
+  "walletSyncTransactionsEmptyDescription": "لم نجد أي معاملات SMS غير محفوظة لهذه المحفظة في سجل الرسائل الأخير.",
+  "walletSyncTransactionsEmptySinceDescription": "لم نجد أي معاملات SMS غير محفوظة بعد {date}.",
+  "@walletSyncTransactionsEmptySinceDescription": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "walletSyncTransactionsSavedSuccess": "{count, plural, =1{تمت إضافة معاملة واحدة بنجاح.} other{تمت إضافة {count} معاملات بنجاح.}}",
+  "@walletSyncTransactionsSavedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

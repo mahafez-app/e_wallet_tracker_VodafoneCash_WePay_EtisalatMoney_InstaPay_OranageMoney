@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import '../../../../core/cache/wallet_meta_cache.dart';
 import '../../../../core/data/models/transaction_dto.dart';
+import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/domain/entities/wallet_entity.dart';
 import '../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../core/error/failures.dart';
@@ -11,6 +12,7 @@ import '../../../../core/services/inbox_sms_service.dart';
 import '../../../../core/utils/egyptian_phone_number.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/wallet_details_entity.dart';
+import '../../domain/entities/missing_wallet_transactions_preview.dart';
 import '../../domain/repositories/wallet_repository.dart';
 import '../datasources/wallet_details_remote_data_source.dart';
 import '../datasources/wallet_remote_data_source.dart';
@@ -119,6 +121,61 @@ class WalletRepositoryImpl implements WalletRepository {
   }
 
   @override
+  Future<Result<MissingWalletTransactionsPreview>> previewMissingTransactions(
+    String walletId,
+  ) {
+    return executeAndHandleErrors(() async {
+      final walletDto = await _detailsDataSource.getWallet(walletId);
+      final wallet = walletDto.toEntity();
+      final recentTransactions = await _detailsDataSource.getRecentTransactions(
+        wallet,
+      );
+      final latestSavedTransactionAt = recentTransactions.isEmpty
+          ? null
+          : recentTransactions.first.createdAt;
+      final existingTransactions = latestSavedTransactionAt == null
+          ? const <TransactionDto>[]
+          : await _detailsDataSource.getTransactionsSince(
+              wallet: wallet,
+              fromDate: latestSavedTransactionAt,
+            );
+      final existingWallets = await _remoteDataSource.getWallets();
+      final sameProviderWalletPhoneNumbers =
+          await _resolveSameProviderPhoneNumbers(
+            provider: wallet.provider,
+            targetPhoneNumber: wallet.phoneNumber,
+            existingWallets: existingWallets,
+          );
+      final knownWalletBalances = _resolveKnownWalletBalances(
+        provider: wallet.provider,
+        targetPhoneNumber: wallet.phoneNumber,
+        existingWallets: existingWallets,
+      );
+      final historicalTransactions = await _inboxSmsService
+          .getHistoricalTransactionEntities(
+            wallet: wallet,
+            sameProviderWalletPhoneNumbers: sameProviderWalletPhoneNumbers,
+            sameProviderWalletBalances: knownWalletBalances,
+            sinceDate: latestSavedTransactionAt,
+          );
+      final existingKeys = existingTransactions
+          .map((transaction) => _transactionFingerprint(transaction.toEntity()))
+          .toSet();
+      final missingTransactions = historicalTransactions
+          .where(
+            (transaction) =>
+                !existingKeys.contains(_transactionFingerprint(transaction)),
+          )
+          .toList(growable: false);
+
+      return MissingWalletTransactionsPreview(
+        transactions: missingTransactions,
+        fromDate: latestSavedTransactionAt,
+      );
+    }, tag: 'WalletRepositoryImpl.previewMissingTransactions');
+  }
+
+  @override
   Future<Result<void>> deleteWallet(String walletId) {
     return executeAndHandleErrors(() async {
       await _remoteDataSource.deleteWallet(walletId);
@@ -205,5 +262,16 @@ class WalletRepositoryImpl implements WalletRepository {
       balances[normalized] = wallet.currentBalance;
     }
     return balances;
+  }
+
+  String _transactionFingerprint(TransactionEntity transaction) {
+    return [
+      transaction.type.name,
+      transaction.amount.toStringAsFixed(2),
+      transaction.createdAt.millisecondsSinceEpoch.toString(),
+      transaction.counterpartyNumber ?? '',
+      transaction.referenceNumber ?? '',
+      transaction.message?.trim() ?? '',
+    ].join('|');
   }
 }

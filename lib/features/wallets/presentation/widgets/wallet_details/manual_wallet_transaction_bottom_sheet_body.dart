@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../core/error/failures.dart';
+
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
@@ -54,6 +56,16 @@ class _ManualWalletTransactionBottomSheetBodyState
             next.status == ManualWalletTransactionStatus.failure;
         if (hasNewFailure && next.failure != null) {
           AppSnackbar.showFailure(context, failure: next.failure!);
+
+          // If the manual transaction already exists, there is nothing more the user
+          // can do in this bottom sheet. Pop it so they can see the error clearly.
+          final failure = next.failure;
+          final isAlreadyExists = failure is ValidationFailure &&
+              failure.code == 'transaction-already-exists';
+
+          if (isAlreadyExists) {
+            Navigator.of(context).pop();
+          }
         }
 
         final hasSaved =

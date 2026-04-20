@@ -50,6 +50,7 @@ extension FailureMessaging on BuildContext {
           l10n.errorWorkspaceOwnerRemovalNotAllowed,
         'workspace-member-not-found' => l10n.errorWorkspaceMemberNotFound,
         'transaction-not-found' => l10n.errorTransactionNotFound,
+        'transaction-already-exists' => l10n.errorTransactionAlreadyExists,
         'invitation-self-not-allowed' => l10n.errorInvitationSelfNotAllowed,
         'invitation-already-pending' => l10n.errorInvitationAlreadyPending,
         'invitation-user-not-found' => l10n.errorInvitationUserNotFound,

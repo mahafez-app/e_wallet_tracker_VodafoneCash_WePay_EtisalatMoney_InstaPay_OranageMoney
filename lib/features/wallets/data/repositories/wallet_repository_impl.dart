@@ -8,8 +8,6 @@ import '../../../../core/error/failures.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/services/device_info_service.dart';
 import '../../../../core/services/inbox_sms_service.dart';
-import '../../../../core/services/phone_number_service.dart';
-import '../../../../core/utils/egyptian_phone_number.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 import '../../domain/repositories/wallet_repository.dart';
@@ -21,20 +19,17 @@ class WalletRepositoryImpl implements WalletRepository {
     required WalletRemoteDataSource remoteDataSource,
     required WalletDetailsRemoteDataSource detailsDataSource,
     required DeviceInfoService deviceInfoService,
-    required PhoneNumberService phoneNumberService,
     required WalletMetaCache walletMetaCache,
     required InboxSmsService inboxSmsService,
   }) : _remoteDataSource = remoteDataSource,
        _detailsDataSource = detailsDataSource,
        _deviceInfoService = deviceInfoService,
-       _phoneNumberService = phoneNumberService,
        _walletMetaCache = walletMetaCache,
        _inboxSmsService = inboxSmsService;
 
   final WalletRemoteDataSource _remoteDataSource;
   final WalletDetailsRemoteDataSource _detailsDataSource;
   final DeviceInfoService _deviceInfoService;
-  final PhoneNumberService _phoneNumberService;
   final WalletMetaCache _walletMetaCache;
   final InboxSmsService _inboxSmsService;
   static const _tag = 'WalletRepositoryImpl';
@@ -167,40 +162,17 @@ class WalletRepositoryImpl implements WalletRepository {
     required String targetPhoneNumber,
     required List<WalletEntity> existingWallets,
   }) async {
-    final fallbackPhoneNumbers =
+    final phoneNumbers =
         existingWallets
             .where((wallet) => wallet.provider == provider)
             .map((wallet) => wallet.phoneNumber)
             .toSet()
           ..add(targetPhoneNumber);
 
-    try {
-      final devicePhoneNumbers = await _phoneNumberService
-          .getDevicePhoneNumbers();
-      final providerPhoneNumbers =
-          devicePhoneNumbers
-              .where(
-                (phoneNumber) =>
-                    EgyptianPhoneNumber.primaryProvider(phoneNumber) ==
-                    provider,
-              )
-              .toSet()
-            ..add(targetPhoneNumber)
-            ..addAll(
-              existingWallets
-                  .where((wallet) => wallet.provider == provider)
-                  .map((wallet) => wallet.phoneNumber),
-            );
-
-      return providerPhoneNumbers.toList(growable: false);
-    } catch (error, stackTrace) {
-      log(
-        'Falling back to persisted wallet numbers for ${provider.toValue}.',
-        name: _tag,
-        error: error,
-        stackTrace: stackTrace,
-      );
-      return fallbackPhoneNumbers.toList(growable: false);
-    }
+    log(
+      'Using persisted wallet numbers for ${provider.toValue} during wallet setup.',
+      name: _tag,
+    );
+    return phoneNumbers.toList(growable: false);
   }
 }

@@ -34,7 +34,6 @@ final walletRepositoryProvider = Provider<WalletRepository>((ref) {
     remoteDataSource: ref.watch(walletRemoteDataSourceProvider),
     detailsDataSource: ref.watch(walletDetailsRemoteDataSourceProvider),
     deviceInfoService: ref.watch(deviceInfoServiceProvider),
-    phoneNumberService: ref.watch(phoneNumberServiceProvider),
     walletMetaCache: ref.watch(walletMetaCacheProvider),
     inboxSmsService: ref.watch(inboxSmsServiceProvider),
   );

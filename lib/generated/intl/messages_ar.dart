@@ -66,31 +66,33 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m18(providerName, phoneNumber) =>
       "هل أنت متأكد أنك عايز تحذف محفظة ${providerName} (${phoneNumber})؟ ده هيحذف كل معاملاتها وملاحظاتها نهائياً، وهيلغي ربطها من كل مساحات العمل. الإجراء ده لا يمكن التراجع عنه.";
 
-  static String m19(amount) => "آخر رصيد تم اكتشافه: ${amount}";
+  static String m19(value) => "الحجم الحالي في التطبيق: ${value}";
 
-  static String m20(amount) => "الرصيد بعد الرسالة: ${amount}";
+  static String m20(amount) => "آخر رصيد تم اكتشافه: ${amount}";
 
-  static String m21(phoneNumber) => "رقم المحفظة المذكور: ${phoneNumber}";
+  static String m21(amount) => "الرصيد بعد الرسالة: ${amount}";
 
-  static String m22(date) => "الإحصائيات من ${date}";
+  static String m22(phoneNumber) => "رقم المحفظة المذكور: ${phoneNumber}";
 
-  static String m23(count) =>
+  static String m23(date) => "الإحصائيات من ${date}";
+
+  static String m24(count) =>
       "${Intl.plural(count, zero: 'لا يوجد أعضاء', one: 'عضو واحد', two: 'عضوان', few: '${count} أعضاء', many: '${count} عضوًا', other: '${count} عضو')}";
 
-  static String m24(email) => "سيتم إلغاء الدعوة المرسلة إلى ${email} فوراً.";
+  static String m25(email) => "سيتم إلغاء الدعوة المرسلة إلى ${email} فوراً.";
 
-  static String m25(memberName) =>
+  static String m26(memberName) =>
       "سيتم حذف ${memberName} من مساحة العمل، وسيتم أيضاً حذف أي محافظ ربطها بهذه المساحة. تقدر تبعت له دعوة مرة تانية لاحقاً.";
 
-  static String m26(providerName, phoneNumber) =>
+  static String m27(providerName, phoneNumber) =>
       "سيتم إلغاء ربط محفظة ${providerName} المرتبطة بالرقم ${phoneNumber} من مساحة العمل دي. المحفظة وباقي بياناتها مش هيتم حذفهم.";
 
-  static String m27(ownerName) => "المالك: ${ownerName}";
+  static String m28(ownerName) => "المالك: ${ownerName}";
 
-  static String m28(ownedCount, linkedCount) =>
+  static String m29(ownedCount, linkedCount) =>
       "عندك ${ownedCount} محافظ، و${linkedCount} منها مضافين بالفعل في مساحة العمل.";
 
-  static String m29(count) =>
+  static String m30(count) =>
       "${Intl.plural(count, zero: 'لا توجد محافظ', one: 'محفظة واحدة', two: 'محفظتان', few: '${count} محافظ', many: '${count} محفظة', other: '${count} محفظة')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -676,6 +678,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "userSettingsEditNameTitle": MessageLookupByLibrary.simpleMessage(
       "تعديل الاسم",
     ),
+    "userSettingsFontSizeCurrentValue": m19,
+    "userSettingsFontSizeDescription": MessageLookupByLibrary.simpleMessage(
+      "تحكم في مقياس القراءة المستخدم في التطبيق كله.",
+    ),
+    "userSettingsFontSizeLargeLabel": MessageLookupByLibrary.simpleMessage(
+      "أكبر",
+    ),
+    "userSettingsFontSizePreviewBody": MessageLookupByLibrary.simpleMessage(
+      "استخدم شريط التمرير لتصغير أو تكبير النص في محافظ كله.",
+    ),
+    "userSettingsFontSizePreviewTitle": MessageLookupByLibrary.simpleMessage(
+      "معاينة",
+    ),
+    "userSettingsFontSizeSaveAction": MessageLookupByLibrary.simpleMessage(
+      "تطبيق",
+    ),
+    "userSettingsFontSizeSmallLabel": MessageLookupByLibrary.simpleMessage(
+      "أصغر",
+    ),
+    "userSettingsFontSizeTitle": MessageLookupByLibrary.simpleMessage(
+      "حجم الخط",
+    ),
     "userSettingsLanguageArabicOption": MessageLookupByLibrary.simpleMessage(
       "العربية",
     ),
@@ -752,7 +776,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "walletBalanceEditSuccess": MessageLookupByLibrary.simpleMessage(
       "تم تحديث الرصيد الحالي.",
     ),
-    "walletBalanceEditSuggested": m19,
+    "walletBalanceEditSuggested": m20,
     "walletBalanceEditTitle": MessageLookupByLibrary.simpleMessage(
       "تحديث الرصيد الحالي",
     ),
@@ -760,7 +784,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "walletLabel": MessageLookupByLibrary.simpleMessage("محفظتك"),
     "walletManualTransactionAnalyzeAction":
         MessageLookupByLibrary.simpleMessage("تحليل الرسالة"),
-    "walletManualTransactionBalanceChip": m20,
+    "walletManualTransactionBalanceChip": m21,
     "walletManualTransactionBlockedAction":
         MessageLookupByLibrary.simpleMessage("الرسالة تخص محفظة أخرى"),
     "walletManualTransactionConfirmAction":
@@ -795,7 +819,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "walletManualTransactionPasteAction": MessageLookupByLibrary.simpleMessage(
       "لصق من الحافظة",
     ),
-    "walletManualTransactionPhoneChip": m21,
+    "walletManualTransactionPhoneChip": m22,
     "walletManualTransactionReviewDescription":
         MessageLookupByLibrary.simpleMessage(
           "تم تحليل الرسالة بنجاح، لكن لم نتمكن من تأكيد المحفظة بنسبة كاملة. راجع التفاصيل قبل المتابعة.",
@@ -823,7 +847,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "wallet_resetStatsDescription": MessageLookupByLibrary.simpleMessage(
       "متأكد إنك عايز تصفر مؤشرات الوارد والصادر للمحفظة دي؟ ده هيخلي إجمالي المبالغ صفر من بداية النهاردة، لكن رصيدك الحالي مش هيتأثر.",
     ),
-    "wallet_statsFrom": m22,
+    "wallet_statsFrom": m23,
     "welcome": MessageLookupByLibrary.simpleMessage("أهلاً بيك"),
     "whatIsYourName": MessageLookupByLibrary.simpleMessage("اسمك إيه؟"),
     "workspaceAddSelectedWalletsAction": MessageLookupByLibrary.simpleMessage(
@@ -855,7 +879,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "دعوة عضو",
     ),
     "workspaceMembers": MessageLookupByLibrary.simpleMessage("الأعضاء"),
-    "workspaceMembersCount": m23,
+    "workspaceMembersCount": m24,
     "workspaceMembersEmpty": MessageLookupByLibrary.simpleMessage(
       "لا يوجد أعضاء في مساحة العمل حتى الآن.",
     ),
@@ -878,7 +902,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "workspaceSettingsCancelInvitationAction":
         MessageLookupByLibrary.simpleMessage("إلغاء"),
-    "workspaceSettingsCancelInvitationConfirmMessage": m24,
+    "workspaceSettingsCancelInvitationConfirmMessage": m25,
     "workspaceSettingsCancelInvitationConfirmTitle":
         MessageLookupByLibrary.simpleMessage("إلغاء الدعوة؟"),
     "workspaceSettingsDangerZone": MessageLookupByLibrary.simpleMessage(
@@ -945,19 +969,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "workspaceSettingsRemoveMemberAction": MessageLookupByLibrary.simpleMessage(
       "حذف",
     ),
-    "workspaceSettingsRemoveMemberConfirmMessage": m25,
+    "workspaceSettingsRemoveMemberConfirmMessage": m26,
     "workspaceSettingsRemoveMemberConfirmTitle":
         MessageLookupByLibrary.simpleMessage("حذف العضو؟"),
     "workspaceSettingsRemoveWalletAction": MessageLookupByLibrary.simpleMessage(
       "إلغاء ربط المحفظة",
     ),
-    "workspaceSettingsRemoveWalletConfirmMessage": m26,
+    "workspaceSettingsRemoveWalletConfirmMessage": m27,
     "workspaceSettingsRemoveWalletConfirmTitle":
         MessageLookupByLibrary.simpleMessage("إلغاء ربط المحفظة؟"),
     "workspaceSettingsTitle": MessageLookupByLibrary.simpleMessage(
       "إعدادات المساحة",
     ),
-    "workspaceSettingsWalletOwner": m27,
+    "workspaceSettingsWalletOwner": m28,
     "workspaceSettingsWalletReadOnlyTooltip":
         MessageLookupByLibrary.simpleMessage("فقط مالك المحفظة يمكنه حذفها"),
     "workspaceSettingsWalletRemovedSuccess":
@@ -1019,9 +1043,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "workspaceWalletAvailable": MessageLookupByLibrary.simpleMessage("متاحة"),
     "workspaceWalletSelected": MessageLookupByLibrary.simpleMessage("محددة"),
-    "workspaceWalletSelectionSummary": m28,
+    "workspaceWalletSelectionSummary": m29,
     "workspaceWallets": MessageLookupByLibrary.simpleMessage("المحافظ"),
-    "workspaceWalletsCount": m29,
+    "workspaceWalletsCount": m30,
     "workspaceWalletsEmptyDescription": MessageLookupByLibrary.simpleMessage(
       "المحافظ المشتركة هتظهر هنا بعد ربطها بمساحة العمل.",
     ),

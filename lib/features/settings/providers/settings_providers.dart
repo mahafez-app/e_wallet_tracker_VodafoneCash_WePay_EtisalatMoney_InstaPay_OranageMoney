@@ -64,3 +64,9 @@ final saveLanguagePreferenceUseCaseProvider =
       (ref) =>
           SaveLanguagePreferenceUseCase(ref.watch(settingsRepositoryProvider)),
     );
+
+final saveFontScalePreferenceUseCaseProvider =
+    Provider<SaveFontScalePreferenceUseCase>(
+      (ref) =>
+          SaveFontScalePreferenceUseCase(ref.watch(settingsRepositoryProvider)),
+    );

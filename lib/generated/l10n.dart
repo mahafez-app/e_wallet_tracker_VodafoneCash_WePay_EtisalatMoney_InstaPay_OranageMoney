@@ -1751,6 +1751,86 @@ class S {
     );
   }
 
+  /// `حجم الخط`
+  String get userSettingsFontSizeTitle {
+    return Intl.message(
+      'حجم الخط',
+      name: 'userSettingsFontSizeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تحكم في مقياس القراءة المستخدم في التطبيق كله.`
+  String get userSettingsFontSizeDescription {
+    return Intl.message(
+      'تحكم في مقياس القراءة المستخدم في التطبيق كله.',
+      name: 'userSettingsFontSizeDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تطبيق`
+  String get userSettingsFontSizeSaveAction {
+    return Intl.message(
+      'تطبيق',
+      name: 'userSettingsFontSizeSaveAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `معاينة`
+  String get userSettingsFontSizePreviewTitle {
+    return Intl.message(
+      'معاينة',
+      name: 'userSettingsFontSizePreviewTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `استخدم شريط التمرير لتصغير أو تكبير النص في محافظ كله.`
+  String get userSettingsFontSizePreviewBody {
+    return Intl.message(
+      'استخدم شريط التمرير لتصغير أو تكبير النص في محافظ كله.',
+      name: 'userSettingsFontSizePreviewBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الحجم الحالي في التطبيق: {value}`
+  String userSettingsFontSizeCurrentValue(String value) {
+    return Intl.message(
+      'الحجم الحالي في التطبيق: $value',
+      name: 'userSettingsFontSizeCurrentValue',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `أصغر`
+  String get userSettingsFontSizeSmallLabel {
+    return Intl.message(
+      'أصغر',
+      name: 'userSettingsFontSizeSmallLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أكبر`
+  String get userSettingsFontSizeLargeLabel {
+    return Intl.message(
+      'أكبر',
+      name: 'userSettingsFontSizeLargeLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `إذن قراءة الرسائل`
   String get userSettingsSmsPermissionTitle {
     return Intl.message(

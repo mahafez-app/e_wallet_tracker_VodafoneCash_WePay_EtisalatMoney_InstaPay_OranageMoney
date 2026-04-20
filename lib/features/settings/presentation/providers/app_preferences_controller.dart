@@ -42,6 +42,14 @@ final appLocaleProvider = Provider<Locale?>((ref) {
   };
 });
 
+final appTextScaleProvider = Provider<double>((ref) {
+  return ref.watch(
+    appPreferencesControllerProvider.select(
+      (state) => state.preferences.fontScale,
+    ),
+  );
+});
+
 final class AppPreferencesController extends Notifier<AppPreferencesState> {
   @override
   AppPreferencesState build() {
@@ -89,6 +97,25 @@ final class AppPreferencesController extends Notifier<AppPreferencesState> {
     );
   }
 
+  void setFontScale(double fontScale) {
+    final normalizedScale = AppPreferencesEntity.normalizeFontScale(fontScale);
+    if (state.preferences.fontScale == normalizedScale) {
+      return;
+    }
+
+    final previousPreferences = state.preferences;
+    state = state.copyWith(
+      preferences: previousPreferences.copyWith(fontScale: normalizedScale),
+      failure: null,
+    );
+    unawaited(
+      _saveFontScalePreference(
+        fontScale: normalizedScale,
+        previousPreferences: previousPreferences,
+      ),
+    );
+  }
+
   Future<void> _loadPreferences() async {
     final result = await ref.read(getAppPreferencesUseCaseProvider)();
     if (!ref.mounted) {
@@ -131,6 +158,26 @@ final class AppPreferencesController extends Notifier<AppPreferencesState> {
   }) async {
     final result = await ref.read(saveLanguagePreferenceUseCaseProvider)(
       preference,
+    );
+    if (!ref.mounted) {
+      return;
+    }
+
+    result.fold(
+      (failure) => state = state.copyWith(
+        preferences: previousPreferences,
+        failure: failure,
+      ),
+      (_) => state = state.copyWith(failure: null),
+    );
+  }
+
+  Future<void> _saveFontScalePreference({
+    required double fontScale,
+    required AppPreferencesEntity previousPreferences,
+  }) async {
+    final result = await ref.read(saveFontScalePreferenceUseCaseProvider)(
+      fontScale,
     );
     if (!ref.mounted) {
       return;

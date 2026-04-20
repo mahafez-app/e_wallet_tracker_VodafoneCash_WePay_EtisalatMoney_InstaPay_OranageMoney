@@ -27,6 +27,7 @@ final class SmsTransactionService {
 
   List<WalletEntity> _wallets = const [];
   bool _isListening = false;
+  Future<void> _processingChain = Future<void>.value();
 
   static const _tag = 'SmsTransactionService';
 
@@ -48,14 +49,16 @@ final class SmsTransactionService {
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
-  }) async {
-    if (await _processCore(
-      sender: sender,
-      body: body,
-      smsReceivedAt: smsReceivedAt,
-    )) {
-      await sweepRetryQueue();
-    }
+  }) {
+    final operation = _processingChain.then(
+      (_) => _handleIncomingSmsSequentially(
+        sender: sender,
+        body: body,
+        smsReceivedAt: smsReceivedAt,
+      ),
+    );
+    _processingChain = operation.catchError(_logProcessingChainError);
+    return operation;
   }
 
   Future<void> sweepRetryQueue() async {
@@ -192,9 +195,76 @@ final class SmsTransactionService {
         return false;
       },
       (_) {
+        _updateWalletSnapshot(transaction);
         log('Transaction saved: ${transaction.id}', name: _tag);
         return true;
       },
+    );
+  }
+
+  Future<void> _handleIncomingSmsSequentially({
+    required String sender,
+    required String body,
+    required DateTime smsReceivedAt,
+  }) async {
+    if (await _processCore(
+      sender: sender,
+      body: body,
+      smsReceivedAt: smsReceivedAt,
+    )) {
+      await sweepRetryQueue();
+    }
+  }
+
+  void _updateWalletSnapshot(TransactionEntity transaction) {
+    _wallets = _wallets
+        .map(
+          (wallet) => wallet.id == transaction.walletId
+              ? WalletEntity(
+                  id: wallet.id,
+                  phoneNumber: wallet.phoneNumber,
+                  provider: wallet.provider,
+                  deviceId: wallet.deviceId,
+                  ownerUid: wallet.ownerUid,
+                  currentBalance:
+                      transaction.statusBalance ??
+                      _calculateNextBalance(wallet, transaction),
+                  totalReceived:
+                      wallet.totalReceived +
+                      (transaction.type == TransactionType.receive
+                          ? transaction.amount
+                          : 0),
+                  totalSent:
+                      wallet.totalSent +
+                      (transaction.type == TransactionType.send
+                          ? transaction.amount
+                          : 0),
+                  lastBalanceAt:
+                      transaction.createdAt.isAfter(wallet.lastBalanceAt)
+                      ? transaction.createdAt
+                      : wallet.lastBalanceAt,
+                  createdAt: wallet.createdAt,
+                  statsResetAt: wallet.statsResetAt,
+                )
+              : wallet,
+        )
+        .toList(growable: false);
+  }
+
+  double _calculateNextBalance(
+    WalletEntity wallet,
+    TransactionEntity transaction,
+  ) {
+    return transaction.type == TransactionType.receive
+        ? wallet.currentBalance + transaction.amount
+        : wallet.currentBalance - transaction.amount;
+  }
+
+  void _logProcessingChainError(Object error, StackTrace stackTrace) {
+    log(
+      'Unhandled SMS processing chain error: $error',
+      name: _tag,
+      stackTrace: stackTrace,
     );
   }
 

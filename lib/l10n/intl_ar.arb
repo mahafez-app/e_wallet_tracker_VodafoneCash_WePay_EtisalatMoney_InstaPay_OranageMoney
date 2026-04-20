@@ -223,6 +223,21 @@
   "userSettingsLanguageSystemOption": "لغة الجهاز",
   "userSettingsLanguageEnglishOption": "English",
   "userSettingsLanguageArabicOption": "العربية",
+  "userSettingsFontSizeTitle": "حجم الخط",
+  "userSettingsFontSizeDescription": "تحكم في مقياس القراءة المستخدم في التطبيق كله.",
+  "userSettingsFontSizeSaveAction": "تطبيق",
+  "userSettingsFontSizePreviewTitle": "معاينة",
+  "userSettingsFontSizePreviewBody": "استخدم شريط التمرير لتصغير أو تكبير النص في محافظ كله.",
+  "userSettingsFontSizeCurrentValue": "الحجم الحالي في التطبيق: {value}",
+  "@userSettingsFontSizeCurrentValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "userSettingsFontSizeSmallLabel": "أصغر",
+  "userSettingsFontSizeLargeLabel": "أكبر",
   "userSettingsSmsPermissionTitle": "إذن قراءة الرسائل",
   "userSettingsSmsPermissionCheckingLabel": "جاري التحقق من حالة الإذن...",
   "userSettingsSmsPermissionEnabledLabel": "مفعّل",

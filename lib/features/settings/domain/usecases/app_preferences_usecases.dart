@@ -40,3 +40,14 @@ final class SaveLanguagePreferenceUseCase
     return _repository.saveLanguagePreference(params);
   }
 }
+
+final class SaveFontScalePreferenceUseCase implements UseCase<void, double> {
+  const SaveFontScalePreferenceUseCase(this._repository);
+
+  final SettingsRepository _repository;
+
+  @override
+  Future<Result<void>> call(double params) {
+    return _repository.saveFontScalePreference(params);
+  }
+}

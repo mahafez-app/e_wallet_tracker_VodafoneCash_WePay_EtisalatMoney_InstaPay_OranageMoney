@@ -66,4 +66,12 @@ final class SettingsRepositoryImpl implements SettingsRepository {
       tag: 'SettingsRepositoryImpl.saveLanguagePreference',
     );
   }
+
+  @override
+  Future<Result<void>> saveFontScalePreference(double fontScale) {
+    return executeAndHandleErrors(
+      () => _appPreferencesLocalDataSource.saveFontScalePreference(fontScale),
+      tag: 'SettingsRepositoryImpl.saveFontScalePreference',
+    );
+  }
 }

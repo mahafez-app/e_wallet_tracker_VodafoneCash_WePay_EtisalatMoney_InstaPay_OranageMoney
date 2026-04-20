@@ -223,6 +223,21 @@
   "userSettingsLanguageSystemOption": "System default",
   "userSettingsLanguageEnglishOption": "English",
   "userSettingsLanguageArabicOption": "Arabic",
+  "userSettingsFontSizeTitle": "Font size",
+  "userSettingsFontSizeDescription": "Adjust the reading scale used across the entire app.",
+  "userSettingsFontSizeSaveAction": "Apply",
+  "userSettingsFontSizePreviewTitle": "Preview",
+  "userSettingsFontSizePreviewBody": "Use the slider to make text smaller or larger across Mahafez.",
+  "userSettingsFontSizeCurrentValue": "Current app size: {value}",
+  "@userSettingsFontSizeCurrentValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "userSettingsFontSizeSmallLabel": "Smaller",
+  "userSettingsFontSizeLargeLabel": "Larger",
   "userSettingsSmsPermissionTitle": "SMS read permission",
   "userSettingsSmsPermissionCheckingLabel": "Checking permission status...",
   "userSettingsSmsPermissionEnabledLabel": "Enabled",

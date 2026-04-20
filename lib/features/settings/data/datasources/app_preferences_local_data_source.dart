@@ -10,6 +10,8 @@ abstract interface class AppPreferencesLocalDataSource {
   Future<void> saveThemePreference(AppThemePreference preference);
 
   Future<void> saveLanguagePreference(AppLanguagePreference preference);
+
+  Future<void> saveFontScalePreference(double fontScale);
 }
 
 final class AppPreferencesLocalDataSourceImpl
@@ -18,6 +20,7 @@ final class AppPreferencesLocalDataSourceImpl
 
   static const String _themePreferenceKey = 'theme_preference';
   static const String _languagePreferenceKey = 'language_preference';
+  static const String _fontScalePreferenceKey = 'font_scale_preference';
 
   final SharedPreferences _sharedPreferences;
 
@@ -26,6 +29,7 @@ final class AppPreferencesLocalDataSourceImpl
     return AppPreferencesEntity(
       themePreference: _resolveThemePreference(),
       languagePreference: _resolveLanguagePreference(),
+      fontScale: _resolveFontScalePreference(),
     );
   }
 
@@ -37,6 +41,15 @@ final class AppPreferencesLocalDataSourceImpl
   @override
   Future<void> saveLanguagePreference(AppLanguagePreference preference) async {
     await _sharedPreferences.setString(_languagePreferenceKey, preference.name);
+  }
+
+  @override
+  Future<void> saveFontScalePreference(double fontScale) async {
+    final normalizedScale = AppPreferencesEntity.normalizeFontScale(fontScale);
+    await _sharedPreferences.setDouble(
+      _fontScalePreferenceKey,
+      normalizedScale,
+    );
   }
 
   AppThemePreference _resolveThemePreference() {
@@ -57,5 +70,12 @@ final class AppPreferencesLocalDataSourceImpl
       'arabic' => AppLanguagePreference.arabic,
       _ => AppLanguagePreference.system,
     };
+  }
+
+  double _resolveFontScalePreference() {
+    final savedValue = _sharedPreferences.getDouble(_fontScalePreferenceKey);
+    final fallbackValue = savedValue ?? AppPreferencesEntity.defaultFontScale;
+
+    return AppPreferencesEntity.normalizeFontScale(fallbackValue);
   }
 }

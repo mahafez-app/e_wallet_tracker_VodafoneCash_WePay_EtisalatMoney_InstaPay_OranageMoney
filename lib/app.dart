@@ -20,6 +20,7 @@ class App extends ConsumerWidget {
     final router = ref.watch(routerProvider);
     final themeMode = ref.watch(appThemeModeProvider);
     final locale = ref.watch(appLocaleProvider);
+    final fontScale = ref.watch(appTextScaleProvider);
 
     return ScreenUtilInit(
       designSize: const Size(390, 844),
@@ -31,6 +32,14 @@ class App extends ConsumerWidget {
         darkTheme: AppTheme.dark(),
         themeMode: themeMode,
         debugShowCheckedModeBanner: false,
+        builder: (context, child) {
+          final mediaQuery = MediaQuery.of(context);
+
+          return MediaQuery(
+            data: mediaQuery.copyWith(textScaler: TextScaler.linear(fontScale)),
+            child: child ?? const SizedBox.shrink(),
+          );
+        },
         localizationsDelegates: [
           S.delegate,
           GlobalMaterialLocalizations.delegate,

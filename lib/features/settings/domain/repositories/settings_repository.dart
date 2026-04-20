@@ -15,4 +15,6 @@ abstract interface class SettingsRepository {
   Future<Result<void>> saveThemePreference(AppThemePreference preference);
 
   Future<Result<void>> saveLanguagePreference(AppLanguagePreference preference);
+
+  Future<Result<void>> saveFontScalePreference(double fontScale);
 }

@@ -14,7 +14,7 @@ class SmsPatterns {
 
   /// تم تحويل 4500 جنيه لرقم 01120892874
   static final arSendToNumber = RegExp(
-    r'(?:تم\s+)?(?:تحويل|[اأإ]رسال|حولت)\s*([\d,\.]+)\s*(?:جنيه|ج\.م|جم|جم\s+[اأإ]لى)?.*?(?:لرقم|[اأإ]لى\s+رقم|[اأإ]لى|رقم).*?(\+?[\d]{8,15})',
+    r'(?:تم\s+)?(?:تحويل|[اأإ]رسال|حولت)\s*([\d,\.]+)\s*(?:جنيه|ج\.م|جم|جم\s+[اأإ]لى)?.*?(?:لرقم|[اأإ]لى\s+رقم|لحساب(?:\s+رقم)?)\s*[:\-]?\s*(\+?[\d]{8,15})',
     dotAll: true,
   );
 
@@ -57,17 +57,13 @@ class SmsPatterns {
   // ─── Reference numbers ────────────────────────────────────────────────────
 
   /// رقم العملية: 018959810019
-  static final refOperationAr = RegExp(
-    r'رقم\s+العملية\s*[:\-]?\s*[\.]?(\d+)',
-  );
+  static final refOperationAr = RegExp(r'رقم\s+العملية\s*[:\-]?\s*[\.]?(\d+)');
 
   /// كود العملية 018959810019
   static final refCodeAr = RegExp(r'كود\s+العملية\s*[:\-]?\s*[\.]?(\d+)');
 
   /// رقم المرجع 018959810019
-  static final refNumberAr = RegExp(
-    r'رقم\s+المرجع\s*[:\-]?\s*[\.]?(\d+)',
-  );
+  static final refNumberAr = RegExp(r'رقم\s+المرجع\s*[:\-]?\s*[\.]?(\d+)');
 
   /// رقم مرجعي 643111494336 — strict prefix required, no optional match.
   static final refBankAr = RegExp(r'رقم\s+مرجعي\s*[:\-]?\s*(\d{8,16})');

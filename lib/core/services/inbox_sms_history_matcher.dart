@@ -73,7 +73,7 @@ final class InboxSmsHistoryMatcher {
     final mentions = sortedRecords
         .map(
           (record) => _resolveMention(
-            mentionedPhoneNumbers: record.parseResult.mentionedPhoneNumbers,
+            parseResult: record.parseResult,
             normalizedTargetPhoneNumber: normalizedTargetPhoneNumber,
             normalizedProviderPhoneNumbers: normalizedProviderPhoneNumbers,
           ),
@@ -84,53 +84,69 @@ final class InboxSmsHistoryMatcher {
       for (var index = 0; index < mentions.length; index += 1)
         if (mentions[index] == _WalletMention.target) index,
     };
+    final otherIndexes = <int>{
+      for (var index = 0; index < mentions.length; index += 1)
+        if (mentions[index] == _WalletMention.other) index,
+    };
 
     var changed = true;
     while (changed) {
       changed = false;
-      final currentTargetIndexes = targetIndexes.toList()..sort();
 
-      for (final index in currentTargetIndexes) {
-        final previousIndex = index - 1;
-        if (_canAdoptIndex(
-          candidateIndex: previousIndex,
-          currentIndex: index,
-          mentions: mentions,
-          records: sortedRecords,
-          targetIndexes: targetIndexes,
-        )) {
-          changed = targetIndexes.add(previousIndex) || changed;
+      for (var index = 0; index < sortedRecords.length; index += 1) {
+        if (mentions[index] != _WalletMention.ambiguous ||
+            targetIndexes.contains(index) ||
+            otherIndexes.contains(index)) {
+          continue;
         }
 
-        final nextIndex = index + 1;
-        if (_canAdoptIndex(
-          candidateIndex: nextIndex,
-          currentIndex: index,
-          mentions: mentions,
+        final chainsToTarget = _chainsWithNearestAttributedRecords(
+          index: index,
+          attributedIndexes: targetIndexes,
           records: sortedRecords,
-          targetIndexes: targetIndexes,
-        )) {
-          changed = targetIndexes.add(nextIndex) || changed;
+        );
+        final chainsToOther = _chainsWithNearestAttributedRecords(
+          index: index,
+          attributedIndexes: otherIndexes,
+          records: sortedRecords,
+        );
+
+        if (chainsToTarget == chainsToOther) {
+          continue;
         }
+
+        if (chainsToTarget) {
+          changed = targetIndexes.add(index) || changed;
+          continue;
+        }
+
+        changed = otherIndexes.add(index) || changed;
       }
     }
 
-    final targetRecords = <ParsedInboxSmsRecord>[];
-    for (var index = 0; index < sortedRecords.length; index += 1) {
-      if (targetIndexes.contains(index)) {
-        targetRecords.add(sortedRecords[index]);
-      }
-    }
+    final targetRecords = <ParsedInboxSmsRecord>[
+      for (var index = 0; index < sortedRecords.length; index += 1)
+        if (targetIndexes.contains(index)) sortedRecords[index],
+    ];
 
     return _HistoryResolution(targetRecords: targetRecords);
   }
 
   static _WalletMention _resolveMention({
-    required List<String> mentionedPhoneNumbers,
+    required SmsParseResult parseResult,
     required String normalizedTargetPhoneNumber,
     required Set<String> normalizedProviderPhoneNumbers,
   }) {
-    final mentionedWalletPhoneNumbers = mentionedPhoneNumbers
+    final derivedWalletPhone = _deriveWalletPhone(parseResult);
+    if (derivedWalletPhone != null) {
+      return derivedWalletPhone == normalizedTargetPhoneNumber
+          ? _WalletMention.target
+          : normalizedProviderPhoneNumbers.contains(derivedWalletPhone)
+          ? _WalletMention.other
+          : _WalletMention.ambiguous;
+    }
+
+    final mentionedWalletPhoneNumbers = parseResult.mentionedPhoneNumbers
         .where(normalizedProviderPhoneNumbers.contains)
         .toSet();
 
@@ -146,48 +162,97 @@ final class InboxSmsHistoryMatcher {
     return _WalletMention.other;
   }
 
-  static bool _canAdoptIndex({
-    required int candidateIndex,
-    required int currentIndex,
-    required List<_WalletMention> mentions,
-    required List<ParsedInboxSmsRecord> records,
-    required Set<int> targetIndexes,
-  }) {
-    if (candidateIndex < 0 || candidateIndex >= records.length) {
-      return false;
-    }
-    if (targetIndexes.contains(candidateIndex) ||
-        mentions[candidateIndex] != _WalletMention.ambiguous) {
-      return false;
+  static String? _deriveWalletPhone(SmsParseResult parseResult) {
+    final counterparty = EgyptianPhoneNumber.tryNormalizeMobile(
+      parseResult.counterpartyNumber,
+    );
+    if (counterparty == null || parseResult.mentionedPhoneNumbers.length != 2) {
+      return null;
     }
 
-    final olderIndex = candidateIndex < currentIndex
-        ? candidateIndex
-        : currentIndex;
-    final newerIndex = candidateIndex < currentIndex
-        ? currentIndex
-        : candidateIndex;
-    return _balancesChain(
-      older: records[olderIndex].parseResult,
-      newer: records[newerIndex].parseResult,
-    );
+    final walletPhones = parseResult.mentionedPhoneNumbers
+        .where((number) => number != counterparty)
+        .toList(growable: false);
+    if (walletPhones.length != 1) {
+      return null;
+    }
+
+    return walletPhones.first;
+  }
+
+  static bool _chainsWithNearestAttributedRecords({
+    required int index,
+    required Set<int> attributedIndexes,
+    required List<ParsedInboxSmsRecord> records,
+  }) {
+    final candidateIndexes = <int>{};
+
+    for (final neighborIndex in attributedIndexes) {
+      if (neighborIndex < index) {
+        final current = candidateIndexes
+            .where((candidate) => candidate < index)
+            .fold<int?>(null, (best, candidate) {
+              if (best == null || candidate > best) {
+                return candidate;
+              }
+              return best;
+            });
+        if (current == null || neighborIndex > current) {
+          if (current != null) {
+            candidateIndexes.remove(current);
+          }
+          candidateIndexes.add(neighborIndex);
+        }
+      }
+
+      if (neighborIndex > index) {
+        final current = candidateIndexes
+            .where((candidate) => candidate > index)
+            .fold<int?>(null, (best, candidate) {
+              if (best == null || candidate < best) {
+                return candidate;
+              }
+              return best;
+            });
+        if (current == null || neighborIndex < current) {
+          if (current != null) {
+            candidateIndexes.remove(current);
+          }
+          candidateIndexes.add(neighborIndex);
+        }
+      }
+    }
+
+    for (final neighborIndex in candidateIndexes) {
+      if (_balancesChain(
+        left: records[index].parseResult,
+        right: records[neighborIndex].parseResult,
+      )) {
+        return true;
+      }
+    }
+    return false;
   }
 
   static const double _historyBalanceToleranceEgp = 50.0;
 
   static bool _balancesChain({
-    required SmsParseResult older,
-    required SmsParseResult newer,
+    required SmsParseResult left,
+    required SmsParseResult right,
   }) {
-    final olderBalance = older.balance;
-    final newerBalance = newer.balance;
+    if (left.createdAt.isAfter(right.createdAt)) {
+      return _balancesChain(left: right, right: left);
+    }
+
+    final olderBalance = left.balance;
+    final newerBalance = right.balance;
     if (olderBalance == null || newerBalance == null) {
       return false;
     }
 
-    final expectedNewerBalance = newer.type == TransactionType.receive
-        ? olderBalance + newer.amount
-        : olderBalance - newer.amount;
+    final expectedNewerBalance = right.type == TransactionType.receive
+        ? olderBalance + right.amount
+        : olderBalance - right.amount;
     final difference = (newerBalance - expectedNewerBalance).abs();
     return difference <= _historyBalanceToleranceEgp;
   }

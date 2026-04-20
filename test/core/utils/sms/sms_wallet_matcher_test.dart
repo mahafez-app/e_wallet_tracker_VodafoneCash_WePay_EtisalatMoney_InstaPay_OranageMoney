@@ -1,0 +1,64 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:wallet_tracker/core/domain/entities/wallet_entity.dart';
+import 'package:wallet_tracker/core/domain/enums/transaction_type.dart';
+import 'package:wallet_tracker/core/domain/enums/wallet_provider.dart';
+import 'package:wallet_tracker/core/utils/sms/sms_wallet_matcher.dart';
+
+void main() {
+  final now = DateTime(2026, 4, 20, 12);
+  final wallets = [
+    WalletEntity(
+      id: 'wallet-a',
+      phoneNumber: '01011111111',
+      provider: WalletProvider.vodafoneCash,
+      deviceId: 'device-1',
+      ownerUid: 'owner-1',
+      currentBalance: 14212.66,
+      totalReceived: 0,
+      totalSent: 0,
+      lastBalanceAt: now,
+      createdAt: now,
+    ),
+    WalletEntity(
+      id: 'wallet-b',
+      phoneNumber: '01022222222',
+      provider: WalletProvider.vodafoneCash,
+      deviceId: 'device-1',
+      ownerUid: 'owner-1',
+      currentBalance: 4000,
+      totalReceived: 0,
+      totalSent: 0,
+      lastBalanceAt: now,
+      createdAt: now,
+    ),
+  ];
+
+  test('matches wallet by balance delta when unique', () {
+    final result = SmsWalletMatcher.resolve(
+      wallets: wallets,
+      input: const SmsWalletMatchInput(
+        amount: 6750,
+        transactionType: TransactionType.send,
+        parsedBalance: 7462.66,
+        counterpartyNumber: '01020565524',
+        mentionedPhoneNumbers: ['01020565524'],
+      ),
+    );
+
+    expect(result, isA<SmsWalletMatchedResult>());
+    expect((result as SmsWalletMatchedResult).wallet.id, 'wallet-a');
+  });
+
+  test('returns no candidate instead of unsafe fallback', () {
+    final result = SmsWalletMatcher.resolve(
+      wallets: wallets,
+      input: const SmsWalletMatchInput(
+        amount: 100,
+        transactionType: TransactionType.send,
+        parsedBalance: 50,
+      ),
+    );
+
+    expect(result, isA<SmsWalletNoCandidate>());
+  });
+}

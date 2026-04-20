@@ -80,8 +80,6 @@ final class SmsWalletNoCandidate extends SmsWalletMatchResult {
 ///      provider includes it in the SMS body.
 ///   3. Balance-delta correlation     — uses parsed SMS balance to identify
 ///      which wallet's running total matches after the transaction.
-///   4. Least-recently-used fallback  — last resort, wrong only if both
-///      wallets were used at exactly the same time.
 ///
 /// Balance-delta tolerance is ±[_maxTaxEgp] EGP to absorb transfer taxes
 /// (Egyptian providers charge up to 10 EGP per transaction).
@@ -89,6 +87,7 @@ class SmsWalletMatcher {
   SmsWalletMatcher._();
 
   static const _tag = 'SmsWalletMatcher';
+  static const _maxBalanceDeltaToleranceEgp = 50.0;
 
   static SmsWalletMatchResult resolve({
     required List<WalletEntity> wallets,
@@ -133,10 +132,8 @@ class SmsWalletMatcher {
       return SmsWalletMatchedResult(balanceMatch);
     }
 
-    log('No definitive signal found, falling back to LRU wallet.', name: _tag);
-    final sorted = List<WalletEntity>.from(wallets)
-      ..sort((a, b) => a.lastBalanceAt.compareTo(b.lastBalanceAt));
-    return SmsWalletMatchedResult(sorted.first);
+    log('No definitive wallet signal found.', name: _tag);
+    return const SmsWalletNoCandidate();
   }
 
   // ── Step 0 — Derived wallet phone guard ──────────────────────────────────
@@ -295,6 +292,10 @@ class SmsWalletMatcher {
 
     // If there is an exact tie in distance, we cannot safely decide via balance.
     if (matches.length > 1 && matches[0].difference == matches[1].difference) {
+      return null;
+    }
+
+    if (matches.first.difference > _maxBalanceDeltaToleranceEgp) {
       return null;
     }
 

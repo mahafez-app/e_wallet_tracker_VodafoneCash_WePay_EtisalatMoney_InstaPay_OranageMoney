@@ -135,6 +135,10 @@ class SmsWalletMatcher {
     return const SmsWalletNoCandidate();
   }
 
+  static String? resolveExplicitWalletPhone(SmsWalletMatchInput input) {
+    return _resolveExplicitWalletPhone(input);
+  }
+
   // ── Step 0 — Explicit wallet phone guard ─────────────────────────────────
 
   /// Resolves an explicit wallet phone from the mentioned numbers:

@@ -11,6 +11,7 @@ import '../domain/repositories/wallet_repository.dart';
 import '../domain/usecases/add_wallets_usecase.dart';
 import '../domain/usecases/delete_wallet_usecase.dart';
 import '../domain/usecases/get_wallets_usecase.dart';
+import '../domain/usecases/process_manual_wallet_transaction_usecase.dart';
 import '../domain/usecases/reset_wallet_stats_usecase.dart';
 import '../domain/usecases/update_wallet_balance_usecase.dart';
 import '../domain/usecases/wallet_details_usecases.dart';
@@ -50,6 +51,13 @@ final getWalletDetailsUseCaseProvider = Provider<GetWalletDetailsUseCase>(
 final getWalletsUseCaseProvider = Provider<GetWalletsUseCase>((ref) {
   return GetWalletsUseCase(ref.watch(walletRepositoryProvider));
 });
+
+final processManualWalletTransactionUseCaseProvider =
+    Provider<ProcessManualWalletTransactionUseCase>(
+      (ref) => ProcessManualWalletTransactionUseCase(
+        ref.watch(walletRepositoryProvider),
+      ),
+    );
 
 final deleteWalletUseCaseProvider = Provider<DeleteWalletUseCase>((ref) {
   return DeleteWalletUseCase(ref.watch(walletRepositoryProvider));

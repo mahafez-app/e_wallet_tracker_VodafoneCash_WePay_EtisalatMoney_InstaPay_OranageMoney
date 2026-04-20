@@ -332,6 +332,9 @@
   "errorWalletProviderMismatch": "This phone number only supports its matching mobile wallet provider and InstaPay.",
   "errorWalletAlreadyExists": "This wallet is already added.",
   "errorWalletAllExists": "All selected wallets are already added for this phone number.",
+  "errorManualTransactionMessageRequired": "Paste the SMS text first.",
+  "errorManualTransactionUnrecognized": "This text does not match the selected wallet's SMS format.",
+  "errorManualTransactionWalletMismatch": "This SMS points to a different wallet than the one currently open.",
   "errorWorkspaceNameRequired": "Please enter a workspace name",
   "errorWorkspaceWalletSelectionRequired": "Please select at least one wallet",
   "errorWorkspaceOwnerRemovalNotAllowed": "The workspace owner cannot be removed.",
@@ -531,6 +534,36 @@
   "@walletBalanceEditSuggested": {
     "placeholders": {
       "amount": {}
+    }
+  },
+  "walletManualTransactionEntryAction": "Paste SMS Transaction",
+  "walletManualTransactionTitle": "Add Transaction From SMS",
+  "walletManualTransactionDescription": "Paste the original transaction SMS here. We will parse it with the same wallet matching and transaction rules used by the automatic SMS flow.",
+  "walletManualTransactionFieldLabel": "SMS text",
+  "walletManualTransactionFieldHint": "Paste the full transaction message",
+  "walletManualTransactionPasteAction": "Paste from clipboard",
+  "walletManualTransactionAnalyzeAction": "Process SMS",
+  "walletManualTransactionConfirmAction": "Save to this wallet",
+  "walletManualTransactionForceAction": "Save Anyway",
+  "walletManualTransactionBlockedAction": "Belongs to another wallet",
+  "walletManualTransactionSaved": "Transaction added successfully.",
+  "walletManualTransactionReviewTitle": "Review before saving",
+  "walletManualTransactionReviewDescription": "The SMS was parsed successfully, but the wallet could not be confirmed with full confidence. Review the details before continuing.",
+  "walletManualTransactionExplicitMismatchTitle": "This SMS belongs to another wallet",
+  "walletManualTransactionExplicitMismatchDescription": "The message explicitly mentions a wallet phone number that does not match the wallet you opened.",
+  "walletManualTransactionInferredMismatchTitle": "Another wallet looks more likely",
+  "walletManualTransactionInferredMismatchDescription": "The balance and matching rules suggest a different wallet. Save here only if you are sure this SMS should stay under the current wallet.",
+  "walletManualTransactionSuggestedWalletLabel": "Suggested wallet",
+  "walletManualTransactionBalanceChip": "Balance after SMS: {amount}",
+  "@walletManualTransactionBalanceChip": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "walletManualTransactionPhoneChip": "Mentioned wallet: {phoneNumber}",
+  "@walletManualTransactionPhoneChip": {
+    "placeholders": {
+      "phoneNumber": {}
     }
   }
 }

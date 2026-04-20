@@ -37,6 +37,12 @@ extension FailureMessaging on BuildContext {
         'wallet-provider-mismatch' => l10n.errorWalletProviderMismatch,
         'wallet-already-exists' => l10n.errorWalletAlreadyExists,
         'wallet-all-exists' => l10n.errorWalletAllExists,
+        'manual-transaction-message-required' =>
+          l10n.errorManualTransactionMessageRequired,
+        'manual-transaction-unrecognized' =>
+          l10n.errorManualTransactionUnrecognized,
+        'manual-transaction-wallet-mismatch' =>
+          l10n.errorManualTransactionWalletMismatch,
         'workspace-name-required' => l10n.errorWorkspaceNameRequired,
         'workspace-wallet-selection-required' =>
           l10n.errorWorkspaceWalletSelectionRequired,

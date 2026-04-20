@@ -20,6 +20,8 @@ class AppTextField extends StatelessWidget {
     this.fillColor,
     this.labelStyle,
     this.inputFormatters,
+    this.maxLines = 1,
+    this.minLines,
   });
 
   final String label;
@@ -35,6 +37,8 @@ class AppTextField extends StatelessWidget {
   final Color? fillColor;
   final TextStyle? labelStyle;
   final List<TextInputFormatter>? inputFormatters;
+  final int maxLines;
+  final int? minLines;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +59,8 @@ class AppTextField extends StatelessWidget {
           validator: validator,
           onChanged: onChanged,
           inputFormatters: inputFormatters,
+          maxLines: maxLines,
+          minLines: minLines,
           decoration: InputDecoration(
             hintText: hintText,
             suffixIcon: suffixIcon,

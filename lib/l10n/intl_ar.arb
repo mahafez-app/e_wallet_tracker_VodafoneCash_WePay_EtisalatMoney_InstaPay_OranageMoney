@@ -332,6 +332,9 @@
   "errorWalletProviderMismatch": "رقم الموبايل ده يدعم فقط شركة المحفظة المطابقة له وإنستاباي.",
   "errorWalletAlreadyExists": "هذه المحفظة مضافة بالفعل.",
   "errorWalletAllExists": "كل المحافظ المختارة مضافة بالفعل لهذا الرقم.",
+  "errorManualTransactionMessageRequired": "الصق نص الرسالة أولاً.",
+  "errorManualTransactionUnrecognized": "هذا النص لا يطابق صيغة رسائل هذه المحفظة.",
+  "errorManualTransactionWalletMismatch": "الرسالة تشير إلى محفظة مختلفة عن المحفظة المفتوحة حالياً.",
   "errorWorkspaceNameRequired": "أدخل اسم مساحة العمل",
   "errorWorkspaceWalletSelectionRequired": "اختر محفظة واحدة على الأقل",
   "errorWorkspaceOwnerRemovalNotAllowed": "لا يمكن حذف مالك مساحة العمل.",
@@ -531,6 +534,36 @@
   "@walletBalanceEditSuggested": {
     "placeholders": {
       "amount": {}
+    }
+  },
+  "walletManualTransactionEntryAction": "إضافة معاملة من رسالة",
+  "walletManualTransactionTitle": "إضافة معاملة من SMS",
+  "walletManualTransactionDescription": "الصق رسالة العملية الأصلية هنا، وسنطبق عليها نفس منطق التحليل والمطابقة المستخدم في القراءة التلقائية للرسائل.",
+  "walletManualTransactionFieldLabel": "نص الرسالة",
+  "walletManualTransactionFieldHint": "الصق الرسالة كاملة كما وصلتك",
+  "walletManualTransactionPasteAction": "لصق من الحافظة",
+  "walletManualTransactionAnalyzeAction": "تحليل الرسالة",
+  "walletManualTransactionConfirmAction": "حفظ على هذه المحفظة",
+  "walletManualTransactionForceAction": "حفظ رغم ذلك",
+  "walletManualTransactionBlockedAction": "الرسالة تخص محفظة أخرى",
+  "walletManualTransactionSaved": "تمت إضافة المعاملة بنجاح.",
+  "walletManualTransactionReviewTitle": "راجع المعاملة قبل الحفظ",
+  "walletManualTransactionReviewDescription": "تم تحليل الرسالة بنجاح، لكن لم نتمكن من تأكيد المحفظة بنسبة كاملة. راجع التفاصيل قبل المتابعة.",
+  "walletManualTransactionExplicitMismatchTitle": "الرسالة تخص محفظة أخرى",
+  "walletManualTransactionExplicitMismatchDescription": "الرسالة تذكر رقم محفظة واضح لا يطابق المحفظة التي فتحتها الآن.",
+  "walletManualTransactionInferredMismatchTitle": "محفظة أخرى تبدو أقرب",
+  "walletManualTransactionInferredMismatchDescription": "الرصيد الحالي وقواعد المطابقة تشير إلى محفظة مختلفة. احفظ هنا فقط لو أنت متأكد أن العملية يجب أن تُسجل على المحفظة الحالية.",
+  "walletManualTransactionSuggestedWalletLabel": "المحفظة المقترحة",
+  "walletManualTransactionBalanceChip": "الرصيد بعد الرسالة: {amount}",
+  "@walletManualTransactionBalanceChip": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "walletManualTransactionPhoneChip": "رقم المحفظة المذكور: {phoneNumber}",
+  "@walletManualTransactionPhoneChip": {
+    "placeholders": {
+      "phoneNumber": {}
     }
   }
 }

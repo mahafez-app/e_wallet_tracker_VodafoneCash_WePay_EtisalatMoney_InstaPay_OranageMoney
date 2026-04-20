@@ -12,6 +12,7 @@ import '../../../../../core/widgets/balance_card.dart';
 import '../../../domain/entities/wallet_details_entity.dart';
 import '../../providers/wallet_details_controller.dart';
 import 'edit_wallet_balance_bottom_sheet.dart';
+import 'manual_wallet_transaction_bottom_sheet.dart';
 
 class WalletBalanceSection extends ConsumerWidget {
   const WalletBalanceSection({super.key, required this.details});
@@ -41,6 +42,15 @@ class WalletBalanceSection extends ConsumerWidget {
             ),
           ),
           onReset: () => _handleReset(context, ref),
+        ),
+        AppSpacing.sm.verticalSpace,
+        AppButton(
+          label: l10n.walletManualTransactionEntryAction,
+          icon: const Icon(Icons.sms_rounded),
+          onPressed: () => ManualWalletTransactionBottomSheet.show(
+            context,
+            walletId: wallet.id,
+          ),
         ),
         AppSpacing.sm.verticalSpace,
         AppButton(

@@ -7,6 +7,7 @@ import '../data/models/pending_sms_retry_item.dart';
 import '../domain/entities/transaction_entity.dart';
 import '../domain/entities/wallet_entity.dart';
 import '../domain/enums/transaction_type.dart';
+import '../error/failures.dart';
 import '../utils/sms/registry/sms_parser_registry.dart';
 import '../utils/sms/sms_message_extension.dart';
 import '../utils/sms/sms_parsing_service.dart';
@@ -170,6 +171,15 @@ final class SmsTransactionService {
     final result = await _saveTransactionUseCase(transaction);
     return result.fold(
       (failure) {
+        if (failure is ValidationFailure &&
+            failure.code == 'transaction-already-exists') {
+          log(
+            'Transaction already exists, skipping retry: ${transaction.id}',
+            name: _tag,
+          );
+          return true;
+        }
+
         log('Failed to save transaction: ${failure.runtimeType}', name: _tag);
         _enqueueFailure(
           sender: sender,

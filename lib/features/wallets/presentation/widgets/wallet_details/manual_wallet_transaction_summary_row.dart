@@ -83,12 +83,14 @@ class _SummaryChip extends StatelessWidget {
             size: 18.responsiveRadius,
             color: theme.colorScheme.primary,
           ),
-          AppSpacing.xs.horizontalSpace,
-          Text(
-            label,
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: theme.colorScheme.onSurface,
-              fontWeight: FontWeight.w700,
+          AppSpacing.md.horizontalSpace,
+          Expanded(
+            child: Text(
+              label,
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],

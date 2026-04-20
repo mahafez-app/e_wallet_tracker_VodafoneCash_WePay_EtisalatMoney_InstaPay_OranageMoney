@@ -48,8 +48,9 @@ final class InboxSmsWalletFilter {
             .toSet()
           ..add(normalizedTargetPhoneNumber);
 
-    if (providerWalletPhoneNumbers.length <= 1) {
-      return true;
+    final explicitWalletPhone = _resolveExplicitWalletPhone(parseResult);
+    if (explicitWalletPhone != null) {
+      return explicitWalletPhone == normalizedTargetPhoneNumber;
     }
 
     final mentionedWalletPhoneNumbers = parseResult.mentionedPhoneNumbers
@@ -58,5 +59,20 @@ final class InboxSmsWalletFilter {
 
     return mentionedWalletPhoneNumbers.length == 1 &&
         mentionedWalletPhoneNumbers.first == normalizedTargetPhoneNumber;
+  }
+
+  static String? _resolveExplicitWalletPhone(SmsParseResult parseResult) {
+    final counterparty = EgyptianPhoneNumber.tryNormalizeMobile(
+      parseResult.counterpartyNumber,
+    );
+    final nonCounterpartyMentions = parseResult.mentionedPhoneNumbers
+        .where((number) => number != counterparty)
+        .toSet();
+
+    if (nonCounterpartyMentions.length != 1) {
+      return null;
+    }
+
+    return nonCounterpartyMentions.first;
   }
 }

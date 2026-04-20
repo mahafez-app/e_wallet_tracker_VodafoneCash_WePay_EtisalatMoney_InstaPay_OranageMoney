@@ -95,12 +95,11 @@ class SmsWalletMatcher {
   }) {
     if (wallets.isEmpty) return const SmsWalletNoCandidate();
 
-    // Step 0 — Derived wallet phone guard.
+    // Step 0 — Explicit wallet phone guard.
     //
-    // When the SMS mentions phone numbers and we can unambiguously derive which
-    // one is the wallet's own number (not the counterparty), apply a definite
-    // miss / direct match before any further resolution.
-    final guardResult = _applyDerivedWalletPhoneGuard(
+    // When the SMS explicitly identifies the wallet's own phone number,
+    // apply a definite miss / direct match before any further resolution.
+    final guardResult = _applyExplicitWalletPhoneGuard(
       wallets: wallets,
       input: input,
     );
@@ -136,31 +135,30 @@ class SmsWalletMatcher {
     return const SmsWalletNoCandidate();
   }
 
-  // ── Step 0 — Derived wallet phone guard ──────────────────────────────────
+  // ── Step 0 — Explicit wallet phone guard ─────────────────────────────────
 
-  /// Attempts to derive the wallet's own phone number from [mentionedPhoneNumbers]
-  /// without any regex patterns:
+  /// Resolves an explicit wallet phone from the mentioned numbers:
   ///
   /// - **2 mentioned numbers, counterparty is one of them** → the other is
-  ///   the wallet phone. Apply definite-miss or direct-match.
+  ///   the wallet phone.
   /// - **1 mentioned number that is NOT the counterparty** → that number is
-  ///   the wallet phone. Apply definite-miss or direct-match.
+  ///   the wallet phone.
   /// - Any other combination → returns null (fall through to normal cascade).
-  static SmsWalletMatchResult? _applyDerivedWalletPhoneGuard({
+  static SmsWalletMatchResult? _applyExplicitWalletPhoneGuard({
     required List<WalletEntity> wallets,
     required SmsWalletMatchInput input,
   }) {
-    final derivedWalletPhone = _deriveWalletPhone(input);
-    if (derivedWalletPhone == null) return null;
+    final explicitWalletPhone = _resolveExplicitWalletPhone(input);
+    if (explicitWalletPhone == null) return null;
 
     final matching = wallets.where((w) {
       final normalized = EgyptianPhoneNumber.tryNormalizeMobile(w.phoneNumber);
-      return normalized == derivedWalletPhone;
+      return normalized == explicitWalletPhone;
     }).toList();
 
     if (matching.isEmpty) {
       log(
-        'Derived wallet phone $derivedWalletPhone matches no registered '
+        'Explicit wallet phone $explicitWalletPhone matches no registered '
         'wallet — discarding SMS.',
         name: _tag,
       );
@@ -169,7 +167,7 @@ class SmsWalletMatcher {
 
     if (matching.length == 1) {
       log(
-        'Derived wallet phone $derivedWalletPhone uniquely matched wallet '
+        'Explicit wallet phone $explicitWalletPhone uniquely matched wallet '
         '${matching.first.id}.',
         name: _tag,
       );
@@ -178,7 +176,7 @@ class SmsWalletMatcher {
 
     // Multiple candidates share the same phone — unusual, fall through.
     log(
-      'Derived wallet phone $derivedWalletPhone matched ${matching.length} '
+      'Explicit wallet phone $explicitWalletPhone matched ${matching.length} '
       'wallets — continuing cascade.',
       name: _tag,
     );
@@ -194,19 +192,17 @@ class SmsWalletMatcher {
   /// must be the wallet's own number.
   ///
   /// Returns null when the wallet phone cannot be unambiguously determined.
-  static String? _deriveWalletPhone(SmsWalletMatchInput input) {
-    final mentioned = input.mentionedPhoneNumbers;
-    if (mentioned.length != 2) return null;
-
+  static String? _resolveExplicitWalletPhone(SmsWalletMatchInput input) {
     final counterparty = EgyptianPhoneNumber.tryNormalizeMobile(
       input.counterpartyNumber,
     );
-    if (counterparty == null) return null;
+    final nonCounterpartyMentions = input.mentionedPhoneNumbers
+        .where((number) => number != counterparty)
+        .toSet();
 
-    final withoutCounterparty = mentioned
-        .where((n) => n != counterparty)
-        .toList();
-    return withoutCounterparty.length == 1 ? withoutCounterparty.first : null;
+    return nonCounterpartyMentions.length == 1
+        ? nonCounterpartyMentions.first
+        : null;
   }
 
   // ── Step 2 — Explicit phone mention ─────────────────────────────────────────

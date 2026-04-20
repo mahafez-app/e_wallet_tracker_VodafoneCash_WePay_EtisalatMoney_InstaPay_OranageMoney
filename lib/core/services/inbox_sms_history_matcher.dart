@@ -64,10 +64,6 @@ final class InboxSmsHistoryMatcher {
             .toSet()
           ..add(normalizedTargetPhoneNumber);
 
-    if (normalizedProviderPhoneNumbers.length <= 1) {
-      return _HistoryResolution(targetRecords: records);
-    }
-
     final sortedRecords = List<ParsedInboxSmsRecord>.from(records)
       ..sort((left, right) => left.createdAt.compareTo(right.createdAt));
     final mentions = sortedRecords
@@ -79,6 +75,14 @@ final class InboxSmsHistoryMatcher {
           ),
         )
         .toList(growable: false);
+
+    if (normalizedProviderPhoneNumbers.length <= 1) {
+      final targetRecords = <ParsedInboxSmsRecord>[
+        for (var index = 0; index < sortedRecords.length; index += 1)
+          if (mentions[index] != _WalletMention.other) sortedRecords[index],
+      ];
+      return _HistoryResolution(targetRecords: targetRecords);
+    }
 
     final targetIndexes = <int>{
       for (var index = 0; index < mentions.length; index += 1)
@@ -137,13 +141,11 @@ final class InboxSmsHistoryMatcher {
     required String normalizedTargetPhoneNumber,
     required Set<String> normalizedProviderPhoneNumbers,
   }) {
-    final derivedWalletPhone = _deriveWalletPhone(parseResult);
-    if (derivedWalletPhone != null) {
-      return derivedWalletPhone == normalizedTargetPhoneNumber
+    final explicitWalletPhone = _resolveExplicitWalletPhone(parseResult);
+    if (explicitWalletPhone != null) {
+      return explicitWalletPhone == normalizedTargetPhoneNumber
           ? _WalletMention.target
-          : normalizedProviderPhoneNumbers.contains(derivedWalletPhone)
-          ? _WalletMention.other
-          : _WalletMention.ambiguous;
+          : _WalletMention.other;
     }
 
     final mentionedWalletPhoneNumbers = parseResult.mentionedPhoneNumbers
@@ -162,22 +164,19 @@ final class InboxSmsHistoryMatcher {
     return _WalletMention.other;
   }
 
-  static String? _deriveWalletPhone(SmsParseResult parseResult) {
+  static String? _resolveExplicitWalletPhone(SmsParseResult parseResult) {
     final counterparty = EgyptianPhoneNumber.tryNormalizeMobile(
       parseResult.counterpartyNumber,
     );
-    if (counterparty == null || parseResult.mentionedPhoneNumbers.length != 2) {
-      return null;
-    }
-
-    final walletPhones = parseResult.mentionedPhoneNumbers
+    final nonCounterpartyMentions = parseResult.mentionedPhoneNumbers
         .where((number) => number != counterparty)
-        .toList(growable: false);
-    if (walletPhones.length != 1) {
+        .toSet();
+
+    if (nonCounterpartyMentions.length != 1) {
       return null;
     }
 
-    return walletPhones.first;
+    return nonCounterpartyMentions.first;
   }
 
   static bool _chainsWithNearestAttributedRecords({

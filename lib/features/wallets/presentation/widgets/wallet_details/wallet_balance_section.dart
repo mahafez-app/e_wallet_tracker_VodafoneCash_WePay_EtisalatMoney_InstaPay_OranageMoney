@@ -9,6 +9,7 @@ import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/widgets/app_button.dart';
 import '../../../../../core/widgets/app_dialog.dart';
 import '../../../../../core/widgets/balance_card.dart';
+import '../../../../auth/providers/auth_providers.dart';
 import '../../../domain/entities/wallet_details_entity.dart';
 import '../../providers/wallet_details_controller.dart';
 import 'edit_wallet_balance_bottom_sheet.dart';
@@ -26,6 +27,9 @@ class WalletBalanceSection extends ConsumerWidget {
     final wallet = details.wallet;
     final localizedLastUpdate = wallet.lastBalanceAt.toFormattedDate(context);
 
+    final currentUser = ref.watch(currentUserProvider);
+    final isOwner = currentUser?.uid == wallet.ownerUid;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -41,29 +45,31 @@ class WalletBalanceSection extends ConsumerWidget {
               color: context.appColors.statsOnGradient.withAlpha(204),
             ),
           ),
-          onReset: () => _handleReset(context, ref),
+          onReset: isOwner ? () => _handleReset(context, ref) : null,
         ),
-        AppSpacing.sm.verticalSpace,
-        AppButton(
-          label: l10n.walletManualTransactionEntryAction,
-          icon: const Icon(Icons.sms_rounded),
-          onPressed: () => ManualWalletTransactionBottomSheet.show(
-            context,
-            walletId: wallet.id,
+        if (isOwner) ...[
+          AppSpacing.sm.verticalSpace,
+          AppButton(
+            label: l10n.walletManualTransactionEntryAction,
+            icon: const Icon(Icons.sms_rounded),
+            onPressed: () => ManualWalletTransactionBottomSheet.show(
+              context,
+              walletId: wallet.id,
+            ),
           ),
-        ),
-        AppSpacing.sm.verticalSpace,
-        AppButton(
-          label: l10n.walletBalanceEditAction,
-          type: AppButtonType.secondary,
-          icon: const Icon(Icons.edit_outlined),
-          onPressed: () => EditWalletBalanceBottomSheet.show(
-            context,
-            walletId: wallet.id,
-            currentBalance: wallet.currentBalance,
-            suggestedBalance: details.suggestedBalance,
+          AppSpacing.sm.verticalSpace,
+          AppButton(
+            label: l10n.walletBalanceEditAction,
+            type: AppButtonType.secondary,
+            icon: const Icon(Icons.edit_outlined),
+            onPressed: () => EditWalletBalanceBottomSheet.show(
+              context,
+              walletId: wallet.id,
+              currentBalance: wallet.currentBalance,
+              suggestedBalance: details.suggestedBalance,
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

@@ -85,10 +85,12 @@ final class ProcessManualWalletTransactionUseCase
     final explicitWalletPhone = SmsWalletMatcher.resolveExplicitWalletPhone(
       input,
     );
+
     final explicitlyMentionedWallet = _findWalletByPhone(
       wallets,
       explicitWalletPhone,
     );
+
     if (explicitlyMentionedWallet != null &&
         explicitlyMentionedWallet.id != selectedWallet.id) {
       return Success(
@@ -102,14 +104,20 @@ final class ProcessManualWalletTransactionUseCase
     }
 
     if (explicitWalletPhone != null && explicitlyMentionedWallet == null) {
-      return const FailureResult(
-        ValidationFailure(code: 'manual-transaction-wallet-mismatch'),
+      // Return Success instead of Failure to show the user the parsed data and the mismatch.
+      return Success(
+        ManualWalletTransactionAssessment(
+          transaction: assessment.transaction,
+          reviewKind: ManualWalletTransactionReviewKind.explicitWalletMismatch,
+          explicitWalletPhone: explicitWalletPhone,
+        ),
       );
     }
 
     final candidateWallets = wallets
         .where((wallet) => wallet.provider == selectedWallet.provider)
         .toList();
+
     final matchResult = SmsWalletMatcher.resolve(
       wallets: candidateWallets,
       input: input,
@@ -132,8 +140,12 @@ final class ProcessManualWalletTransactionUseCase
           reviewKind: ManualWalletTransactionReviewKind.needsConfirmation,
         ),
       ),
-      SmsWalletDefiniteMiss() => const FailureResult(
-        ValidationFailure(code: 'manual-transaction-wallet-mismatch'),
+      SmsWalletDefiniteMiss() => Success(
+        ManualWalletTransactionAssessment(
+          transaction: assessment.transaction,
+          reviewKind: ManualWalletTransactionReviewKind.explicitWalletMismatch,
+          explicitWalletPhone: explicitWalletPhone,
+        ),
       ),
     };
   }

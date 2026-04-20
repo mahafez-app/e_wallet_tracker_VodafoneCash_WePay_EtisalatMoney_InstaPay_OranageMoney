@@ -203,7 +203,8 @@ final class WalletTransactionRemoteDataSourceImpl
 
   @override
   Future<void> saveTransaction(TransactionEntity transaction) async {
-    final txRef = _support.txCollection(transaction.walletId).doc(transaction.id);
+    final txRef =
+        _support.txCollection(transaction.walletId).doc(transaction.id);
 
     // Short-circuit if transaction already exists to avoid duplicate balance increments
     final txSnapshot = await txRef.get();
@@ -216,6 +217,18 @@ final class WalletTransactionRemoteDataSourceImpl
     }
 
     final walletRef = _support.walletDocument(transaction.walletId);
+    final walletSnapshot = await walletRef.get();
+    if (!walletSnapshot.exists) return;
+
+    final wallet = WalletDto.fromFirestore(walletSnapshot);
+    final isMostRecent =
+        transaction.createdAt.isAfter(wallet.lastBalanceAt) ||
+        transaction.createdAt.isAtSameMomentAs(wallet.lastBalanceAt);
+
+    final isAfterStatsReset =
+        wallet.statsResetAt == null ||
+        transaction.createdAt.isAfter(wallet.statsResetAt!);
+
     final dto = TransactionDto.fromEntity(transaction);
     final isReceive = transaction.type == TransactionType.receive;
     final amount = transaction.amount;
@@ -223,20 +236,27 @@ final class WalletTransactionRemoteDataSourceImpl
     final batch = txRef.firestore.batch();
     batch.set(txRef, dto.toFirestore());
 
-    final walletUpdate = <String, dynamic>{
-      'totalReceived': FieldValue.increment(isReceive ? amount : 0),
-      'totalSent': FieldValue.increment(isReceive ? 0 : amount),
-      'lastBalanceAt': Timestamp.fromDate(transaction.createdAt),
-    };
+    final walletUpdate = <String, dynamic>{};
 
-    if (transaction.statusBalance != null) {
-      walletUpdate['currentBalance'] = transaction.statusBalance;
-    } else {
-      walletUpdate['currentBalance'] =
-          FieldValue.increment(isReceive ? amount : -amount);
+    if (isAfterStatsReset) {
+      walletUpdate['totalReceived'] = FieldValue.increment(isReceive ? amount : 0);
+      walletUpdate['totalSent'] = FieldValue.increment(isReceive ? 0 : amount);
     }
 
-    batch.update(walletRef, walletUpdate);
+    if (isMostRecent) {
+      walletUpdate['lastBalanceAt'] = Timestamp.fromDate(transaction.createdAt);
+      if (transaction.statusBalance != null) {
+        walletUpdate['currentBalance'] = transaction.statusBalance;
+      } else {
+        walletUpdate['currentBalance'] =
+            FieldValue.increment(isReceive ? amount : -amount);
+      }
+    }
+
+    if (walletUpdate.isNotEmpty) {
+      batch.update(walletRef, walletUpdate);
+    }
+
     await batch.commit();
   }
 

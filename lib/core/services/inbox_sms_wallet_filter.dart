@@ -48,9 +48,18 @@ final class InboxSmsWalletFilter {
             .toSet()
           ..add(normalizedTargetPhoneNumber);
 
+    final targetMentioned = parseResult.mentionedPhoneNumbers.contains(
+      normalizedTargetPhoneNumber,
+    );
     final explicitWalletPhone = _resolveExplicitWalletPhone(parseResult);
     if (explicitWalletPhone != null) {
-      return explicitWalletPhone == normalizedTargetPhoneNumber;
+      if (explicitWalletPhone == normalizedTargetPhoneNumber) {
+        return true;
+      }
+
+      if (!targetMentioned) {
+        return false;
+      }
     }
 
     final mentionedWalletPhoneNumbers = parseResult.mentionedPhoneNumbers

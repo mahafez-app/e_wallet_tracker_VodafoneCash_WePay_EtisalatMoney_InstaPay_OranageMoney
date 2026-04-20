@@ -141,11 +141,18 @@ final class InboxSmsHistoryMatcher {
     required String normalizedTargetPhoneNumber,
     required Set<String> normalizedProviderPhoneNumbers,
   }) {
+    final targetMentioned = parseResult.mentionedPhoneNumbers.contains(
+      normalizedTargetPhoneNumber,
+    );
     final explicitWalletPhone = _resolveExplicitWalletPhone(parseResult);
     if (explicitWalletPhone != null) {
-      return explicitWalletPhone == normalizedTargetPhoneNumber
-          ? _WalletMention.target
-          : _WalletMention.other;
+      if (explicitWalletPhone == normalizedTargetPhoneNumber) {
+        return _WalletMention.target;
+      }
+
+      if (!targetMentioned) {
+        return _WalletMention.other;
+      }
     }
 
     final mentionedWalletPhoneNumbers = parseResult.mentionedPhoneNumbers

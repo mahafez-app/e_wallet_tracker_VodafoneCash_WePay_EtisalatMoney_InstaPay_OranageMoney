@@ -174,6 +174,23 @@ class SmsWalletMatcher {
       return SmsWalletMatchedResult(matching.first);
     }
 
+    final mentionedWalletMatches = wallets.where((wallet) {
+      final normalized = EgyptianPhoneNumber.tryNormalizeMobile(
+        wallet.phoneNumber,
+      );
+      return normalized != null &&
+          input.mentionedPhoneNumbers.contains(normalized);
+    }).toList();
+
+    if (mentionedWalletMatches.length == 1) {
+      log(
+        'Explicit wallet-phone derivation fell back to directly mentioned wallet '
+        '${mentionedWalletMatches.first.id}.',
+        name: _tag,
+      );
+      return SmsWalletMatchedResult(mentionedWalletMatches.first);
+    }
+
     // Multiple candidates share the same phone — unusual, fall through.
     log(
       'Explicit wallet phone $explicitWalletPhone matched ${matching.length} '

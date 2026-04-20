@@ -85,6 +85,7 @@ class _ManualWalletTransactionBottomSheetBodyState
           children: [
              ManualWalletTransactionInputSection(
                messageController: _messageController,
+               isCompact: state.assessment != null,
                validator: _validateMessage,
                onChanged: (value) {
                  ref
@@ -180,7 +181,7 @@ class _ManualWalletTransactionBottomSheetBodyState
       ManualWalletTransactionReviewKind.inferredWalletMismatch =>
         context.l10n.walletManualTransactionForceAction,
       ManualWalletTransactionReviewKind.explicitWalletMismatch =>
-        context.l10n.walletManualTransactionBlockedAction,
+        context.l10n.walletManualTransactionForceAction,
       ManualWalletTransactionReviewKind.none =>
         context.l10n.walletManualTransactionSaveAction,
     };

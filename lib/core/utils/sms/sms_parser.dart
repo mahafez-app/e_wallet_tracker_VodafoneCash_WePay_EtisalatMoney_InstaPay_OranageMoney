@@ -174,8 +174,9 @@ abstract class SmsParser {
 
   int _resolveYear(String yearStr) {
     if (yearStr.length == 2) return 2000 + (int.tryParse(yearStr) ?? 0);
-    if (yearStr.length == 4)
+    if (yearStr.length == 4) {
       return int.tryParse(yearStr) ?? DateTime.now().year;
+    }
     return DateTime.now().year;
   }
 }

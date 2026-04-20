@@ -70,6 +70,11 @@ final class ProcessManualWalletTransactionUseCase
       );
     }
 
+    final explicitWalletPhone = _resolveIntendedWalletPhone(
+      trimmedMessage,
+      parseResult.counterpartyNumber,
+    );
+
     final assessment = ManualWalletTransactionAssessment(
       transaction: SmsParsingService.buildEntity(
         result: parseResult,
@@ -78,6 +83,7 @@ final class ProcessManualWalletTransactionUseCase
         walletPhoneNumber: selectedWallet.phoneNumber,
         rawMessage: trimmedMessage,
       ),
+      explicitWalletPhone: explicitWalletPhone,
     );
     final input = SmsWalletMatchInput(
       amount: parseResult.amount,
@@ -85,9 +91,6 @@ final class ProcessManualWalletTransactionUseCase
       parsedBalance: parseResult.balance,
       counterpartyNumber: parseResult.counterpartyNumber,
       mentionedPhoneNumbers: parseResult.mentionedPhoneNumbers,
-    );
-    final explicitWalletPhone = SmsWalletMatcher.resolveExplicitWalletPhone(
-      input,
     );
 
     final explicitlyMentionedWallet = _findWalletByPhone(
@@ -168,18 +171,47 @@ final class ProcessManualWalletTransactionUseCase
     List<WalletEntity> wallets,
     String? phoneNumber,
   ) {
-    final normalizedPhone = EgyptianPhoneNumber.tryNormalizeMobile(phoneNumber);
-    if (normalizedPhone == null) {
+    if (phoneNumber == null) {
       return null;
     }
 
+    final normalizedPhone = EgyptianPhoneNumber.normalize(phoneNumber);
+
     for (final wallet in wallets) {
-      final normalizedWalletPhone = EgyptianPhoneNumber.tryNormalizeMobile(
+      final normalizedWalletPhone = EgyptianPhoneNumber.normalize(
         wallet.phoneNumber,
       );
-      if (normalizedWalletPhone == normalizedPhone) {
+      if (normalizedWalletPhone == normalizedPhone ||
+          normalizedWalletPhone.endsWith(normalizedPhone) ||
+          normalizedPhone.endsWith(normalizedWalletPhone)) {
         return wallet;
       }
+    }
+
+    return null;
+  }
+
+  /// Identifies the "intended" wallet phone from the message structure.
+  /// As per the rule: the first phone found in the text is the counterparty,
+  /// the second one is the destination wallet.
+  String? _resolveIntendedWalletPhone(String message, String? counterparty) {
+    final numbers =
+        RegExp(r'01[0125]\d+')
+            .allMatches(message)
+            .map((m) => m.group(0)!)
+            .toList();
+
+    if (numbers.isEmpty) return null;
+
+    final normalizedCounterparty =
+        counterparty != null ? EgyptianPhoneNumber.normalize(counterparty) : null;
+
+    // If we have at least one secondary number, it should be the wallet.
+    for (final number in numbers) {
+      final normalized = EgyptianPhoneNumber.normalize(number);
+      if (normalized == normalizedCounterparty) continue;
+
+      return normalized;
     }
 
     return null;

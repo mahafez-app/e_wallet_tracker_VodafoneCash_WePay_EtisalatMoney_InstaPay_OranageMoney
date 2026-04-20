@@ -55,19 +55,21 @@ class ManualWalletTransactionAssessmentCard extends StatelessWidget {
                         fontWeight: FontWeight.w800,
                       ),
                     ),
-                    AppSpacing.xs.verticalSpace,
-                    Text(
-                      _description(context),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
+                    if (assessment.requiresReview) ...[
+                      AppSpacing.xs.verticalSpace,
+                      Text(
+                        _description(context),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ),
             ],
           ),
-          AppSpacing.lg.verticalSpace,
+          AppSpacing.md.verticalSpace,
           ManualWalletTransactionSummaryRow(assessment: assessment),
           if (assessment.suggestedWallet != null) ...[
             AppSpacing.lg.verticalSpace,

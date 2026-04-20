@@ -26,8 +26,7 @@ final class ManualWalletTransactionAssessment extends Equatable {
   bool get requiresReview =>
       reviewKind != ManualWalletTransactionReviewKind.none;
 
-  bool get allowsSaveToSelectedWallet =>
-      reviewKind != ManualWalletTransactionReviewKind.explicitWalletMismatch;
+  bool get allowsSaveToSelectedWallet => true;
 
   @override
   List<Object?> get props => [

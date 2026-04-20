@@ -22,23 +22,21 @@ class ManualWalletTransactionActionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        SizedBox(
-          width: double.infinity,
-          child: AppButton(
-            label: primaryLabel,
-            isLoading: isLoading,
-            onPressed: onPrimaryPressed,
-          ),
-        ),
-        AppSpacing.sm.verticalSpace,
-        SizedBox(
-          width: double.infinity,
+        Expanded(
           child: AppButton(
             label: cancelLabel,
             type: AppButtonType.secondary,
             onPressed: onCancelPressed,
+          ),
+        ),
+        AppSpacing.md.horizontalSpace,
+        Expanded(
+          child: AppButton(
+            label: primaryLabel,
+            isLoading: isLoading,
+            onPressed: onPrimaryPressed,
           ),
         ),
       ],

@@ -13,12 +13,14 @@ class ManualWalletTransactionInputSection extends StatelessWidget {
     required this.validator,
     required this.onChanged,
     required this.onPastePressed,
+    this.isCompact = false,
   });
 
   final TextEditingController messageController;
   final String? Function(String?) validator;
   final ValueChanged<String> onChanged;
   final VoidCallback onPastePressed;
+  final bool isCompact;
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +36,24 @@ class ManualWalletTransactionInputSection extends StatelessWidget {
             fontWeight: FontWeight.w800,
           ),
         ),
-        AppSpacing.sm.verticalSpace,
-        Text(
-          context.l10n.walletManualTransactionDescription,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
+        if (!isCompact) ...[
+          AppSpacing.sm.verticalSpace,
+          Text(
+            context.l10n.walletManualTransactionDescription,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
           ),
-        ),
-        AppSpacing.lg.verticalSpace,
+          AppSpacing.lg.verticalSpace,
+        ] else
+          AppSpacing.md.verticalSpace,
         AppTextField(
           label: context.l10n.walletManualTransactionFieldLabel,
           hintText: context.l10n.walletManualTransactionFieldHint,
           controller: messageController,
           keyboardType: TextInputType.multiline,
-          minLines: 6,
-          maxLines: 10,
+          minLines: isCompact ? 2 : 6,
+          maxLines: isCompact ? 3 : 10,
           validator: validator,
           onChanged: onChanged,
         ),

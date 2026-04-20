@@ -35,6 +35,8 @@
 				</array>
 			</dict>
 		</array>
+		<key>GIDClientID</key>
+		<string>467978053763-lnua67h7mt2edjgjihp1i0vplb5g48bj.apps.googleusercontent.com</string>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<key>UIApplicationSceneManifest</key>

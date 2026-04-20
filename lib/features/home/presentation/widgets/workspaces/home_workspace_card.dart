@@ -246,11 +246,16 @@ class _WorkspaceStat extends StatelessWidget {
                 child: Icon(icon, size: 12.responsiveRadius, color: color),
               ),
               AppSpacing.xs.horizontalSpace,
-              Text(
-                title,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant.withAlpha(180),
-                  fontWeight: FontWeight.w700,
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    title,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant.withAlpha(180),
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
               ),
             ],

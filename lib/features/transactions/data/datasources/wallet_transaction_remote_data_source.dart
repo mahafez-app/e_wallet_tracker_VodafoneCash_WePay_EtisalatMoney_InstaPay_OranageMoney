@@ -213,7 +213,10 @@ final class WalletTransactionRemoteDataSourceImpl
         'Transaction ${transaction.id} already exists. Skipping save.',
         name: 'WalletTransactionRemoteDataSource',
       );
-      return;
+      throw const ValidationFailure(
+        code: 'transaction-already-exists',
+        technicalMessage: 'Transaction already exists.',
+      );
     }
 
     final walletRef = _support.walletDocument(transaction.walletId);

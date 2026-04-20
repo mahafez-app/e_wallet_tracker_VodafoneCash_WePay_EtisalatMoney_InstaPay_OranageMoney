@@ -486,6 +486,7 @@
     }
   },
   "errorTransactionNotFound": "هذه المعاملة لم تعد متاحة.",
+  "errorTransactionAlreadyExists": "هذه المعاملة مسجلة بالفعل.",
   "fullNameValidationEmpty": "يرجى إدخال اسمك",
   "transactions_filterTitle": "الفلاتر",
   "transactions_filterApply": "تطبيق الفلاتر",

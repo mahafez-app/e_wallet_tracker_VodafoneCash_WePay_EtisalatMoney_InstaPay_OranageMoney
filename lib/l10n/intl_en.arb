@@ -486,6 +486,7 @@
     }
   },
   "errorTransactionNotFound": "This transaction is no longer available.",
+  "errorTransactionAlreadyExists": "This transaction has already been tracked.",
   "fullNameValidationEmpty": "Please enter your name",
   "transactions_filterTitle": "Filters",
   "transactions_filterApply": "Apply Filters",

@@ -95,13 +95,11 @@ class SmsPatterns {
   /// 2026-04-14
   static final dateIso = RegExp(r'(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})');
 
-  /// 14-04-2026 or 14-04-26 (DD-MM-YYYY or DD-MM-YY)
-  static final dateDayFirst = RegExp(
+  /// Matches DD-MM-YYYY, DD-MM-YY, and YY-MM-DD.
+  /// Disambiguated in logic using nearest-year heuristic.
+  static final dateShort = RegExp(
     r'(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{2,4})',
   );
-
-  /// 26-04-14 (YY-MM-DD) - Common in Vodafone Cash Arabic receipts
-  static final dateYearFirst = RegExp(r'(\d{2})[\-\/](\d{1,2})[\-\/](\d{1,2})');
 
   /// Apr 14, 2026
   static final dateEnglish = RegExp(

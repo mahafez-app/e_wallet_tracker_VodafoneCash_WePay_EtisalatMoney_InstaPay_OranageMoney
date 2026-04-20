@@ -98,34 +98,60 @@ abstract class SmsParser {
       }
     }
 
-    // 3. Try Day-First (DD-MM-YYYY or DD-MM-YY)
+    // 3. Try short dates (DD-MM-YYYY, DD-MM-YY, or YY-MM-DD)
     if (!dateFound) {
-      final dayFirst = SmsPatterns.dateDayFirst.firstMatch(message);
-      if (dayFirst != null) {
-        final d = int.tryParse(dayFirst.group(1) ?? '') ?? 0;
-        final m = int.tryParse(dayFirst.group(2) ?? '') ?? 0;
-        final yStr = dayFirst.group(3) ?? '';
-        final y = _resolveYear(yStr);
+      final shortDate = SmsPatterns.dateShort.firstMatch(message);
+      if (shortDate != null) {
+        final a = int.tryParse(shortDate.group(1) ?? '') ?? 0;
+        final m = int.tryParse(shortDate.group(2) ?? '') ?? 0;
+        final cStr = shortDate.group(3) ?? '';
+        final c = int.tryParse(cStr) ?? 0;
 
-        // Sanity check: if it looks like YY-MM-DD but matched Day-First
-        // (e.g. 26-04-14), prioritize the year-first interpretation if group 1 > 31
-        if (d <= 31 && m <= 12) {
-          day = d;
+        if (cStr.length == 4) {
+          // Unambiguous DD-MM-YYYY
+          day = a;
           month = m;
-          year = y;
+          year = c;
+          dateFound = true;
+        } else {
+          // Ambiguous: both A and C are 2 digits (DD-MM-YY vs YY-MM-DD).
+          // We figure out which one is the year by comparing with current year.
+          final currentYear2Digit = DateTime.now().year % 100;
+
+          bool aIsYear = false;
+
+          // If one is clearly a day (>31 is impossible for a day in a valid date)
+          if (a > 31) {
+            aIsYear = true;
+          } else if (c > 31) {
+            aIsYear = false;
+          } else {
+            // Distance heuristic: which number is closer to the current year?
+            final distA = (a - currentYear2Digit).abs();
+            final distC = (c - currentYear2Digit).abs();
+
+            if (distA < distC) {
+              aIsYear = true;
+            } else if (distC < distA) {
+              aIsYear = false;
+            } else {
+              // Equidistant. Default to YY-MM-DD (Vodafone Cash standard).
+              // Vodafone Cash Arabic is the most notable user of 2-digit years.
+              aIsYear = true;
+            }
+          }
+
+          if (aIsYear) {
+            year = 2000 + a;
+            month = m;
+            day = c;
+          } else {
+            year = 2000 + c;
+            month = m;
+            day = a;
+          }
           dateFound = true;
         }
-      }
-    }
-
-    // 4. Try Year-First (YY-MM-DD)
-    if (!dateFound) {
-      final yearFirst = SmsPatterns.dateYearFirst.firstMatch(message);
-      if (yearFirst != null) {
-        year = 2000 + (int.tryParse(yearFirst.group(1) ?? '') ?? 0);
-        month = int.tryParse(yearFirst.group(2) ?? '') ?? month;
-        day = int.tryParse(yearFirst.group(3) ?? '') ?? day;
-        dateFound = true;
       }
     }
 

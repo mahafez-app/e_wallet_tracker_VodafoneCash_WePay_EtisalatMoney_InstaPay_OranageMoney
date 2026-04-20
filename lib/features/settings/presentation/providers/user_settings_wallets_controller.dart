@@ -5,13 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../wallets/providers/wallets_providers.dart';
 import 'user_settings_wallets_state.dart';
 
-final userSettingsWalletsControllerProvider = NotifierProvider.autoDispose<
-  UserSettingsWalletsController,
-  UserSettingsWalletsState
->(UserSettingsWalletsController.new);
+final userSettingsWalletsControllerProvider =
+    NotifierProvider.autoDispose<
+      UserSettingsWalletsController,
+      UserSettingsWalletsState
+    >(UserSettingsWalletsController.new);
 
-class UserSettingsWalletsController
-    extends Notifier<UserSettingsWalletsState> {
+class UserSettingsWalletsController extends Notifier<UserSettingsWalletsState> {
   @override
   UserSettingsWalletsState build() {
     _loadWallets();
@@ -29,33 +29,39 @@ class UserSettingsWalletsController
   }
 
   Future<void> deleteWallet(String walletId) async {
+    if (state.action == UserSettingsWalletsAction.deletingWallet) {
+      return;
+    }
+
+    final keepAliveLink = ref.keepAlive();
     state = state.copyWith(
       action: UserSettingsWalletsAction.deletingWallet,
       activeWalletId: walletId,
       error: null,
     );
 
-    final result = await ref.read(deleteWalletUseCaseProvider)(walletId);
-    if (!ref.mounted) return;
+    try {
+      final result = await ref.read(deleteWalletUseCaseProvider)(walletId);
+      if (!ref.mounted) return;
 
-    result.fold(
-      (failure) => state = state.copyWith(
-        action: UserSettingsWalletsAction.none,
-        activeWalletId: null,
-        error: failure,
-      ),
-      (_) {
-        state = state.copyWith(
+      result.fold(
+        (failure) => state = state.copyWith(
           action: UserSettingsWalletsAction.none,
           activeWalletId: null,
-          successMessage: 'Wallet deleted successfully', // Will be localized in UI or via state mapping
-          wallets:
-              state.wallets.where((wallet) => wallet.id != walletId).toList(),
-        );
-        // Also refresh other parts of the app if needed
-        ref.invalidate(getWalletsUseCaseProvider);
-      },
-    );
+          error: failure,
+        ),
+        (_) => state = state.copyWith(
+          action: UserSettingsWalletsAction.none,
+          activeWalletId: null,
+          successMessage: 'Wallet deleted successfully',
+          wallets: state.wallets
+              .where((wallet) => wallet.id != walletId)
+              .toList(),
+        ),
+      );
+    } finally {
+      keepAliveLink.close();
+    }
   }
 
   void clearError() {

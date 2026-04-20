@@ -21,31 +21,37 @@ class UserSettingsWalletsState extends Equatable {
   final Failure? error;
   final String? successMessage;
 
+  static const _unset = Object();
+
   UserSettingsWalletsState copyWith({
     List<WalletEntity>? wallets,
     bool? isLoading,
     UserSettingsWalletsAction? action,
-    String? activeWalletId,
-    Failure? error,
-    String? successMessage,
+    Object? activeWalletId = _unset,
+    Object? error = _unset,
+    Object? successMessage = _unset,
   }) {
     return UserSettingsWalletsState(
       wallets: wallets ?? this.wallets,
       isLoading: isLoading ?? this.isLoading,
       action: action ?? this.action,
-      activeWalletId: activeWalletId ?? this.activeWalletId,
-      error: error,
-      successMessage: successMessage,
+      activeWalletId: activeWalletId == _unset
+          ? this.activeWalletId
+          : activeWalletId as String?,
+      error: error == _unset ? this.error : error as Failure?,
+      successMessage: successMessage == _unset
+          ? this.successMessage
+          : successMessage as String?,
     );
   }
 
   @override
   List<Object?> get props => [
-        wallets,
-        isLoading,
-        action,
-        activeWalletId,
-        error,
-        successMessage,
-      ];
+    wallets,
+    isLoading,
+    action,
+    activeWalletId,
+    error,
+    successMessage,
+  ];
 }

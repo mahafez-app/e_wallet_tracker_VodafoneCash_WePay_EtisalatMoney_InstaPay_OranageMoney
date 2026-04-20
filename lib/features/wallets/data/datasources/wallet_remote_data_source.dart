@@ -156,40 +156,12 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       );
     }
 
-    final linksQuery = await _firestore
-        .collectionGroup('wallets')
-        .where('walletId', isEqualTo: walletId)
-        .get();
+    final workspaceLinks = await _getWorkspaceLinks(walletId);
+    await _deleteWalletTransactions(walletRef);
+    await _deleteInBatches(workspaceLinks.linkReferences);
+    await walletRef.delete();
 
-    final workspaceIds = linksQuery.docs
-        .map((doc) => doc.reference.parent.parent?.id)
-        .whereType<String>()
-        .toList();
-
-    final referencesToDelete = <DocumentReference>[walletRef];
-
-    for (final doc in linksQuery.docs) {
-      referencesToDelete.add(doc.reference);
-    }
-
-    final txCollection = walletRef.collection('transactions');
-    final transactions = await txCollection.get();
-
-    for (final txDoc in transactions.docs) {
-      referencesToDelete.add(txDoc.reference);
-      final history = await txDoc.reference.collection('history').get();
-      for (final h in history.docs) {
-        referencesToDelete.add(h.reference);
-      }
-      final notes = await txDoc.reference.collection('notes').get();
-      for (final n in notes.docs) {
-        referencesToDelete.add(n.reference);
-      }
-    }
-
-    await _deleteInBatches(referencesToDelete);
-
-    for (final workspaceId in workspaceIds) {
+    for (final workspaceId in workspaceLinks.workspaceIds) {
       await _syncWorkspaceMetadata(workspaceId);
     }
   }
@@ -215,6 +187,65 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   }
 
   // ── Private helpers ──────────────────────────────────────────────────────
+
+  Future<_WorkspaceLinks> _getWorkspaceLinks(String walletId) async {
+    final linksQuery = await _firestore
+        .collectionGroup('wallets')
+        .where('walletId', isEqualTo: walletId)
+        .get();
+
+    return _WorkspaceLinks(
+      workspaceIds: linksQuery.docs
+          .map((doc) => doc.reference.parent.parent?.id)
+          .whereType<String>()
+          .toSet(),
+      linkReferences: linksQuery.docs.map((doc) => doc.reference).toList(),
+    );
+  }
+
+  Future<void> _deleteWalletTransactions(
+    DocumentReference<Map<String, dynamic>> walletRef,
+  ) async {
+    while (true) {
+      final snapshot = await walletRef
+          .collection('transactions')
+          .limit(100)
+          .get();
+      if (snapshot.docs.isEmpty) {
+        return;
+      }
+
+      for (final document in snapshot.docs) {
+        await _deleteTransactionChildren(document.reference);
+      }
+
+      await _deleteInBatches(
+        snapshot.docs.map((document) => document.reference).toList(),
+      );
+    }
+  }
+
+  Future<void> _deleteTransactionChildren(
+    DocumentReference<Map<String, dynamic>> transactionRef,
+  ) async {
+    await _deleteCollection(transactionRef.collection('history'));
+    await _deleteCollection(transactionRef.collection('notes'));
+  }
+
+  Future<void> _deleteCollection(
+    CollectionReference<Map<String, dynamic>> collection,
+  ) async {
+    while (true) {
+      final snapshot = await collection.limit(200).get();
+      if (snapshot.docs.isEmpty) {
+        return;
+      }
+
+      await _deleteInBatches(
+        snapshot.docs.map((document) => document.reference).toList(),
+      );
+    }
+  }
 
   Future<void> _deleteInBatches(List<DocumentReference> references) async {
     for (var i = 0; i < references.length; i += 450) {
@@ -281,4 +312,14 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
         .map((wallet) => wallet.provider.toValue)
         .toSet();
   }
+}
+
+class _WorkspaceLinks {
+  const _WorkspaceLinks({
+    required this.workspaceIds,
+    required this.linkReferences,
+  });
+
+  final Set<String> workspaceIds;
+  final List<DocumentReference<Map<String, dynamic>>> linkReferences;
 }

@@ -543,6 +543,7 @@
   "walletManualTransactionFieldHint": "الصق الرسالة كاملة كما وصلتك",
   "walletManualTransactionPasteAction": "لصق من الحافظة",
   "walletManualTransactionAnalyzeAction": "تحليل الرسالة",
+  "walletManualTransactionSaveAction": "حفظ العملية",
   "walletManualTransactionConfirmAction": "حفظ على هذه المحفظة",
   "walletManualTransactionForceAction": "حفظ رغم ذلك",
   "walletManualTransactionBlockedAction": "الرسالة تخص محفظة أخرى",

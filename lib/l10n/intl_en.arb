@@ -543,6 +543,7 @@
   "walletManualTransactionFieldHint": "Paste the full transaction message",
   "walletManualTransactionPasteAction": "Paste from clipboard",
   "walletManualTransactionAnalyzeAction": "Process SMS",
+  "walletManualTransactionSaveAction": "Save Transaction",
   "walletManualTransactionConfirmAction": "Save to this wallet",
   "walletManualTransactionForceAction": "Save Anyway",
   "walletManualTransactionBlockedAction": "Belongs to another wallet",

@@ -54,6 +54,38 @@ class ManualWalletTransactionController
     });
   }
 
+  Future<void> preview(String message) async {
+    final trimmedMessage = message.trim();
+    if (trimmedMessage.isEmpty) {
+      state = state.copyWith(
+        status: ManualWalletTransactionStatus.idle,
+        clearAssessment: true,
+        clearFailure: true,
+      );
+      return;
+    }
+
+    final result =
+        await ref.read(processManualWalletTransactionUseCaseProvider)(
+          ProcessManualWalletTransactionParams(
+            walletId: _walletId,
+            message: trimmedMessage,
+            smsReceivedAt: DateTime.now(),
+          ),
+        );
+
+    result.fold(
+      (failure) => state = state.copyWith(
+        failure: failure,
+        clearAssessment: true,
+      ),
+      (assessment) => state = state.copyWith(
+        assessment: assessment,
+        clearFailure: true,
+      ),
+    );
+  }
+
   Future<void> confirmSelectedWalletSave() async {
     final assessment = state.assessment;
     if (assessment == null || !assessment.allowsSaveToSelectedWallet) {

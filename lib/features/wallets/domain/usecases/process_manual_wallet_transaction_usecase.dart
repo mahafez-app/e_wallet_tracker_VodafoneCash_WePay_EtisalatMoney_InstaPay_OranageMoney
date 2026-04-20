@@ -59,7 +59,11 @@ final class ProcessManualWalletTransactionUseCase
     }
 
     final parser = SmsParserRegistry.resolveByProvider(selectedWallet.provider);
-    final parseResult = parser?.parse(trimmedMessage, params.smsReceivedAt);
+    final parseResult = parser?.parse(
+      trimmedMessage,
+      params.smsReceivedAt,
+      useContentDate: true,
+    );
     if (parseResult == null) {
       return const FailureResult(
         ValidationFailure(code: 'manual-transaction-unrecognized'),

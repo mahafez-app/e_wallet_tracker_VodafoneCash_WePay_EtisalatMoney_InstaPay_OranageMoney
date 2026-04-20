@@ -21,8 +21,14 @@ class SmsParsingService {
     required String walletId,
     required String walletOwnerUid,
     required String walletPhoneNumber,
+    bool useContentDate = false,
   }) {
-    final result = parseRaw(sender: sender, message: message, smsReceivedAt: smsReceivedAt);
+    final result = parseRaw(
+      sender: sender,
+      message: message,
+      smsReceivedAt: smsReceivedAt,
+      useContentDate: useContentDate,
+    );
     if (result == null) return null;
 
     return buildEntity(
@@ -43,10 +49,11 @@ class SmsParsingService {
     required String sender,
     required String message,
     required DateTime smsReceivedAt,
+    bool useContentDate = false,
   }) {
     final parser = SmsParserRegistry.resolve(sender);
     if (parser == null) return null;
-    return parser.parse(message, smsReceivedAt);
+    return parser.parse(message, smsReceivedAt, useContentDate: useContentDate);
   }
 
   /// Phase-2 of the two-phase pipeline: converts a [SmsParseResult] into a

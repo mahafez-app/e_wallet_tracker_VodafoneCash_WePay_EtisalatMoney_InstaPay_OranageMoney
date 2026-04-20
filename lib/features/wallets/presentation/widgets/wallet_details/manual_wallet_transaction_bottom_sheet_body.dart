@@ -83,18 +83,20 @@ class _ManualWalletTransactionBottomSheetBodyState
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ManualWalletTransactionInputSection(
-              messageController: _messageController,
-              validator: _validateMessage,
-              onChanged: (_) => ref
-                  .read(
-                    manualWalletTransactionControllerProvider(
-                      widget.walletId,
-                    ).notifier,
-                  )
-                  .resetTransientState(),
-              onPastePressed: _pasteFromClipboard,
-            ),
+             ManualWalletTransactionInputSection(
+               messageController: _messageController,
+               validator: _validateMessage,
+               onChanged: (value) {
+                 ref
+                     .read(
+                       manualWalletTransactionControllerProvider(
+                         widget.walletId,
+                       ).notifier,
+                     )
+                     .preview(value);
+               },
+               onPastePressed: _pasteFromClipboard,
+             ),
             if (state.assessment != null) ...[
               AppSpacing.lg.verticalSpace,
               ManualWalletTransactionAssessmentCard(
@@ -139,7 +141,7 @@ class _ManualWalletTransactionBottomSheetBodyState
         .read(
           manualWalletTransactionControllerProvider(widget.walletId).notifier,
         )
-        .resetTransientState();
+        .preview(pastedText);
   }
 
   VoidCallback? _resolvePrimaryAction(ManualWalletTransactionState state) {
@@ -180,7 +182,7 @@ class _ManualWalletTransactionBottomSheetBodyState
       ManualWalletTransactionReviewKind.explicitWalletMismatch =>
         context.l10n.walletManualTransactionBlockedAction,
       ManualWalletTransactionReviewKind.none =>
-        context.l10n.walletManualTransactionAnalyzeAction,
+        context.l10n.walletManualTransactionSaveAction,
     };
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/amount_extension.dart';
+import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../domain/entities/manual_wallet_transaction_assessment.dart';
@@ -33,6 +34,10 @@ class ManualWalletTransactionSummaryRow extends StatelessWidget {
           icon: transaction.type.name == 'receive'
               ? Icons.south_west_rounded
               : Icons.north_east_rounded,
+        ),
+        _SummaryChip(
+          label: transaction.createdAt.toFormattedDate(context),
+          icon: Icons.calendar_today_rounded,
         ),
         if (balanceText != null)
           _SummaryChip(

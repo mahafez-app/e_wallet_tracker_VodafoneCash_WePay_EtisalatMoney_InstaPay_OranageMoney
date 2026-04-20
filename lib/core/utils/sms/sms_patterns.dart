@@ -89,4 +89,29 @@ class SmsPatterns {
     r'(?:رصيد\s+حسابك.*?الحالي|رصيدك\s+الحالي)\s*[:\-]?\s*\.?([\d,]+(?:\.\d+)?)',
     dotAll: true,
   );
+
+  // ─── Datetime ─────────────────────────────────────────────────────────────
+
+  /// 2026-04-14
+  static final dateIso = RegExp(r'(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})');
+
+  /// 14-04-2026 or 14-04-26 (DD-MM-YYYY or DD-MM-YY)
+  static final dateDayFirst = RegExp(
+    r'(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{2,4})',
+  );
+
+  /// 26-04-14 (YY-MM-DD) - Common in Vodafone Cash Arabic receipts
+  static final dateYearFirst = RegExp(r'(\d{2})[\-\/](\d{1,2})[\-\/](\d{1,2})');
+
+  /// Apr 14, 2026
+  static final dateEnglish = RegExp(
+    r'(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),?\s+(\d{4})',
+    caseSensitive: false,
+  );
+
+  /// 13:45 or 13:45:00 or 4:55:41 PM
+  static final timePattern = RegExp(
+    r'(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?\s*(AM|PM)?',
+    caseSensitive: false,
+  );
 }

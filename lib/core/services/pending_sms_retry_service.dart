@@ -10,12 +10,10 @@ import '../data/models/pending_sms_retry_item.dart';
 /// It stores raw SMS data in a Hive box and provides methods to enqueue,
 /// retry, and remove items.
 final class PendingSmsRetryService {
-  PendingSmsRetryService({
-    required Box<String> box,
-  }) : _box = box;
+  PendingSmsRetryService({required Box<String> box}) : _box = box;
 
   final Box<String> _box;
-  bool _isRetrying = false;
+  static bool _isRetrying = false;
 
   static const _tag = 'PendingSmsRetryService';
 
@@ -69,8 +67,10 @@ final class PendingSmsRetryService {
         updatedAt: DateTime.now(),
       );
       await _box.put(id, jsonEncode(updatedItem.toJson()));
-      log('Marked failure for item: $id (Retry: ${updatedItem.retryCount})',
-          name: _tag);
+      log(
+        'Marked failure for item: $id (Retry: ${updatedItem.retryCount})',
+        name: _tag,
+      );
     } catch (e) {
       log('Failed to mark failure for item $id: $e', name: _tag);
     }
@@ -90,31 +90,46 @@ final class PendingSmsRetryService {
     log('Starting retry of ${_box.length} pending items', name: _tag);
 
     try {
-      // Create a copy of keys to avoid concurrent modification issues if the box
-      // is modified during iteration.
-      final keys = _box.keys.toList();
+      final items = <PendingSmsRetryItem>[];
+      final keys = _box.keys.toList(growable: false);
 
       for (final key in keys) {
         final json = _box.get(key);
         if (json == null) continue;
 
         try {
-          final item = PendingSmsRetryItem.fromJson(
-            jsonDecode(json) as Map<String, dynamic>,
+          items.add(
+            PendingSmsRetryItem.fromJson(
+              jsonDecode(json) as Map<String, dynamic>,
+            ),
           );
+        } catch (e) {
+          log('Error decoding retry item $key: $e', name: _tag);
+        }
+      }
 
-          log('Retrying item: ${item.id} (Attempt: ${item.retryCount + 1})',
-              name: _tag);
+      items.sort((left, right) {
+        final receivedAtComparison = left.smsReceivedAt.compareTo(
+          right.smsReceivedAt,
+        );
+        if (receivedAtComparison != 0) return receivedAtComparison;
+        return left.createdAt.compareTo(right.createdAt);
+      });
+
+      for (final item in items) {
+        try {
+          log(
+            'Retrying item: ${item.id} (Attempt: ${item.retryCount + 1})',
+            name: _tag,
+          );
 
           final success = await processItem(item);
 
           if (success) {
             await remove(item.id);
           }
-          // markFailure is handled inside processItem or we could handle it here
-          // but usually processItem might have more context about the error.
         } catch (e) {
-          log('Error processing retry item $key: $e', name: _tag);
+          log('Error processing retry item ${item.id}: $e', name: _tag);
         }
       }
     } finally {

@@ -16,6 +16,7 @@ import '../cache/wallet_meta_cache.dart';
 import '../data/models/pending_sms_retry_item.dart';
 import '../data/models/wallet_dto.dart';
 import '../domain/enums/transaction_type.dart';
+import '../error/failures.dart';
 import '../utils/sms/registry/sms_parser_registry.dart';
 import '../utils/sms/sms_message_extension.dart';
 import '../utils/sms/sms_parsing_service.dart';
@@ -90,20 +91,28 @@ final class _BackgroundSmsProcessor {
     required DateTime smsReceivedAt,
   }) async {
     try {
-      final success = await _runPipeline(
+      final wasQueued = await _enqueueForProcessing(
         sender: sender,
         body: body,
         smsReceivedAt: smsReceivedAt,
       );
+      if (!wasQueued) {
+        await _runPipeline(
+          sender: sender,
+          body: body,
+          smsReceivedAt: smsReceivedAt,
+        );
+        return;
+      }
 
-      if (success) await _sweepRetryQueue();
+      await _sweepRetryQueue();
     } catch (e, st) {
       log(
         'Unhandled background error: $e. Enqueuing for retry.',
         stackTrace: st,
         name: _tag,
       );
-      _enqueue(
+      await _enqueue(
         sender: sender,
         body: body,
         smsReceivedAt: smsReceivedAt,
@@ -134,18 +143,7 @@ final class _BackgroundSmsProcessor {
       return true; // Pattern miss — ignore silently.
     }
 
-    // Authenticate user.
-    var currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser == null) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      currentUser = FirebaseAuth.instance.currentUser;
-    }
-
-    String? uid = currentUser?.uid;
-    if (uid == null) {
-      final prefs = await SharedPreferences.getInstance();
-      uid = prefs.getString('last_known_user_uid');
-    }
+    final uid = await _resolveUserUid();
 
     if (uid == null) {
       log('Aborting: user not authenticated and no fallback UID.', name: _tag);
@@ -199,8 +197,26 @@ final class _BackgroundSmsProcessor {
           await _buildDataSource().saveTransaction(transaction);
           log('Transaction saved: ${transaction.id}', name: _tag);
           return true;
+        } on ValidationFailure catch (failure) {
+          if (failure.code == 'transaction-already-exists') {
+            log(
+              'Transaction already exists, skipping retry: ${transaction.id}',
+              name: _tag,
+            );
+            return true;
+          }
+
+          await _enqueue(
+            sender: sender,
+            body: body,
+            smsReceivedAt: smsReceivedAt,
+            walletId: wallet.id,
+            providerName: wallet.provider.toValue,
+            error: failure.toString(),
+          );
+          return false;
         } catch (e) {
-          _enqueue(
+          await _enqueue(
             sender: sender,
             body: body,
             smsReceivedAt: smsReceivedAt,
@@ -249,6 +265,24 @@ final class _BackgroundSmsProcessor {
 
   // ── Retry queue ─────────────────────────────────────────────────────────
 
+  Future<bool> _enqueueForProcessing({
+    required String sender,
+    required String body,
+    required DateTime smsReceivedAt,
+  }) async {
+    final uid = await _resolveUserUid();
+    if (uid == null) return false;
+
+    await _enqueue(
+      sender: sender,
+      body: body,
+      smsReceivedAt: smsReceivedAt,
+      userUid: uid,
+      error: 'Queued for ordered background processing',
+    );
+    return true;
+  }
+
   Future<void> _sweepRetryQueue() async {
     if (_retryBox.isEmpty) return;
 
@@ -274,13 +308,14 @@ final class _BackgroundSmsProcessor {
 
   // ── Enqueue ─────────────────────────────────────────────────────────────
 
-  void _enqueue({
+  Future<void> _enqueue({
     required String sender,
     required String body,
     required DateTime smsReceivedAt,
     String? walletId,
     String? providerName,
     required String error,
+    String? userUid,
   }) {
     final item = PendingSmsRetryItem.create(
       sender: sender,
@@ -289,10 +324,13 @@ final class _BackgroundSmsProcessor {
       walletId: walletId,
       providerName: providerName,
       error: error,
+      userUid: userUid,
     );
-    if (item == null) return; // No logged-in user — nothing to persist against.
+    if (item == null) {
+      return Future<void>.value();
+    }
 
-    PendingSmsRetryService(box: _retryBox).enqueue(item);
+    return PendingSmsRetryService(box: _retryBox).enqueue(item);
   }
 
   // ── Data source factory ─────────────────────────────────────────────────
@@ -304,6 +342,21 @@ final class _BackgroundSmsProcessor {
         metaCache: WalletMetaCache(),
       ),
     );
+  }
+
+  Future<String?> _resolveUserUid() async {
+    var currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      currentUser = FirebaseAuth.instance.currentUser;
+    }
+
+    if (currentUser?.uid case final uid?) {
+      return uid;
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('last_known_user_uid');
   }
 }
 

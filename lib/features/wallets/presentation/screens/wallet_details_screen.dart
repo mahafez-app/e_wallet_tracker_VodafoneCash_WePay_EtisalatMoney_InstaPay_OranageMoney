@@ -63,7 +63,7 @@ class _WalletDetailsBody extends ConsumerWidget {
             AppSpacing.md.verticalSpace,
             _WalletInfoSection(details: details),
             AppSpacing.md.verticalSpace,
-            WalletTransactionSyncSection(walletId: walletId),
+            WalletTransactionSyncSection(details: details),
             AppSpacing.md.verticalSpace,
             WalletRecentTransactionsSection(details: details),
           ],

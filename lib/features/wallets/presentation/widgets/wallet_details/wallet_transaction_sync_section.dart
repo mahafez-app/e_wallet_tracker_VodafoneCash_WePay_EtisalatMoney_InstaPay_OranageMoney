@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/theme/app_color_extension.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/widgets/app_button.dart';
+import '../../../../auth/providers/auth_providers.dart';
+import '../../../domain/entities/wallet_details_entity.dart';
 import 'wallet_transaction_sync_bottom_sheet.dart';
 
-class WalletTransactionSyncSection extends StatelessWidget {
-  const WalletTransactionSyncSection({super.key, required this.walletId});
+class WalletTransactionSyncSection extends ConsumerWidget {
+  const WalletTransactionSyncSection({super.key, required this.details});
 
-  final String walletId;
+  final WalletDetailsEntity details;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.appColors;
     final theme = Theme.of(context);
+    final currentUser = ref.watch(currentUserProvider);
+    final isOwner = currentUser?.uid == details.wallet.ownerUid;
+
+    if (!isOwner) {
+      return const SizedBox.shrink();
+    }
 
     return Container(
       padding: AppResponsive.allPadding(AppSpacing.lg),
@@ -46,7 +55,7 @@ class WalletTransactionSyncSection extends StatelessWidget {
             icon: const Icon(Icons.sync_rounded),
             onPressed: () => WalletTransactionSyncBottomSheet.show(
               context,
-              walletId: walletId,
+              walletId: details.wallet.id,
             ),
           ),
         ],

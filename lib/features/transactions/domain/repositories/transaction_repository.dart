@@ -41,6 +41,8 @@ abstract interface class TransactionRepository {
     required String transactionId,
   });
 
+  Future<Result<DateTime?>> getLatestTransactionDate(String walletId);
+
   // ── Mutations ────────────────────────────────────────────────────────────
 
   Future<Result<void>> markAsPaid({
@@ -57,7 +59,10 @@ abstract interface class TransactionRepository {
     required String userName,
   });
 
-  Future<Result<void>> saveTransaction(TransactionEntity transaction);
+  Future<Result<void>> saveTransaction(
+    TransactionEntity transaction, {
+    bool allowLocallyDeletedRestore = false,
+  });
 
   Future<Result<WorkspaceTransactionsOverviewEntity>>
   getWorkspaceTransactionsOverview({required List<String> walletIds});

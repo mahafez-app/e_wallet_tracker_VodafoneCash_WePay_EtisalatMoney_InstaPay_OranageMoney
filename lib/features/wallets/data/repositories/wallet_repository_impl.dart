@@ -11,6 +11,7 @@ import '../../../../core/services/inbox_sms_service.dart';
 import '../../../../core/utils/egyptian_phone_number.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/wallet_details_entity.dart';
+import '../../domain/entities/missing_wallet_transactions_preview.dart';
 import '../../domain/repositories/wallet_repository.dart';
 import '../datasources/wallet_details_remote_data_source.dart';
 import '../datasources/wallet_remote_data_source.dart';
@@ -116,6 +117,61 @@ class WalletRepositoryImpl implements WalletRepository {
             .toList(),
       );
     }, tag: 'WalletRepositoryImpl.getWalletDetails');
+  }
+
+  @override
+  Future<Result<MissingWalletTransactionsPreview>> previewMissingTransactions(
+    String walletId,
+  ) {
+    return executeAndHandleErrors(() async {
+      final walletDto = await _detailsDataSource.getWallet(walletId);
+      final wallet = walletDto.toEntity();
+      final recentTransactions = await _detailsDataSource.getRecentTransactions(
+        wallet,
+      );
+      final latestSavedTransactionAt = recentTransactions.isEmpty
+          ? null
+          : recentTransactions.first.createdAt;
+      final syncFromDate = latestSavedTransactionAt?.add(
+        const Duration(seconds: 1),
+      );
+      final existingTransactions = syncFromDate == null
+          ? const <TransactionDto>[]
+          : await _detailsDataSource.getTransactionsSince(
+              wallet: wallet,
+              fromDate: syncFromDate,
+            );
+      final existingWallets = await _remoteDataSource.getWallets();
+      final sameProviderWalletPhoneNumbers =
+          await _resolveSameProviderPhoneNumbers(
+            provider: wallet.provider,
+            targetPhoneNumber: wallet.phoneNumber,
+            existingWallets: existingWallets,
+          );
+      final knownWalletBalances = _resolveKnownWalletBalances(
+        provider: wallet.provider,
+        targetPhoneNumber: wallet.phoneNumber,
+        existingWallets: existingWallets,
+      );
+      final historicalTransactions = await _inboxSmsService
+          .getHistoricalTransactionEntities(
+            wallet: wallet,
+            sameProviderWalletPhoneNumbers: sameProviderWalletPhoneNumbers,
+            sameProviderWalletBalances: knownWalletBalances,
+            sinceDate: syncFromDate,
+          );
+      final existingKeys = existingTransactions
+          .map((transaction) => transaction.id)
+          .toSet();
+      final missingTransactions = historicalTransactions
+          .where((transaction) => !existingKeys.contains(transaction.id))
+          .toList(growable: false);
+
+      return MissingWalletTransactionsPreview(
+        transactions: missingTransactions,
+        fromDate: syncFromDate,
+      );
+    }, tag: 'WalletRepositoryImpl.previewMissingTransactions');
   }
 
   @override

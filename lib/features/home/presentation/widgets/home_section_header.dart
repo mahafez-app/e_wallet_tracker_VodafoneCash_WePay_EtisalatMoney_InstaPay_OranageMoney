@@ -27,6 +27,7 @@ class HomeSectionHeader extends StatelessWidget {
         Expanded(
           child: FittedBox(
             fit: BoxFit.scaleDown,
+            alignment: AlignmentDirectional.centerStart,
             child: Text(
               title,
               style: theme.textTheme.titleMedium?.copyWith(

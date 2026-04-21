@@ -105,7 +105,7 @@ Future<void> showRemoveMemberDialog(
     ),
     confirmLabel: context.l10n.workspaceSettingsRemoveMemberAction,
     cancelLabel: context.l10n.commonCancelAction,
-    type: AppDialogType.warning,
+    type: AppDialogType.error,
     onConfirm: () {
       Navigator.of(context).pop();
       controller.removeMember(member);
@@ -126,7 +126,7 @@ Future<void> showCancelInvitationDialog(
     ),
     confirmLabel: context.l10n.workspaceSettingsCancelInvitationAction,
     cancelLabel: context.l10n.commonCancelAction,
-    type: AppDialogType.warning,
+    type: AppDialogType.error,
     onConfirm: () {
       Navigator.of(context).pop();
       controller.cancelInvitation(invitation);
@@ -148,7 +148,7 @@ Future<void> showRemoveWalletDialog(
     ),
     confirmLabel: context.l10n.workspaceSettingsRemoveWalletAction,
     cancelLabel: context.l10n.commonCancelAction,
-    type: AppDialogType.warning,
+    type: AppDialogType.error,
     onConfirm: () {
       Navigator.of(context).pop();
       controller.removeWallet(wallet);
@@ -166,7 +166,7 @@ Future<void> showLeaveWorkspaceDialog(
     message: context.l10n.workspaceSettingsLeaveWorkspaceConfirmMessage,
     confirmLabel: context.l10n.workspaceSettingsLeaveWorkspaceAction,
     cancelLabel: context.l10n.commonCancelAction,
-    type: AppDialogType.warning,
+    type: AppDialogType.error,
     onConfirm: () {
       Navigator.of(context).pop();
       controller.leaveWorkspace();

@@ -17,6 +17,7 @@ final class AppBootstrapDependencies {
     required this.sharedPreferences,
     required this.txFirstPageCacheBox,
     required this.pendingSmsRetryBox,
+    required this.deletedTransactionTombstonesBox,
   });
 
   final SharedPreferences sharedPreferences;
@@ -28,6 +29,10 @@ final class AppBootstrapDependencies {
   /// Opened Hive box for pending SMS retry items.
   /// Typed as [Box<String>] — raw JSON strings of [PendingSmsRetryItem].
   final Box<String> pendingSmsRetryBox;
+
+  /// Opened Hive box for local deleted-transaction tombstones.
+  /// Typed as [Box<String>] — raw JSON strings keyed by transaction id.
+  final Box<String> deletedTransactionTombstonesBox;
 }
 
 Future<Result<AppBootstrapDependencies>> initializeApp() {
@@ -59,18 +64,25 @@ Future<Result<AppBootstrapDependencies>> initializeApp() {
       final pendingSmsRetryBox = await Hive.openBox<String>(
         'pending_sms_retry_queue',
       );
+      final deletedTransactionTombstonesBox = await Hive.openBox<String>(
+        'deleted_transaction_tombstones',
+      );
 
       final sharedPreferences = await SharedPreferences.getInstance();
 
       final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null) {
-        await sharedPreferences.setString('last_known_user_uid', currentUser.uid);
+        await sharedPreferences.setString(
+          'last_known_user_uid',
+          currentUser.uid,
+        );
       }
 
       return AppBootstrapDependencies(
         sharedPreferences: sharedPreferences,
         txFirstPageCacheBox: txFirstPageCacheBox,
         pendingSmsRetryBox: pendingSmsRetryBox,
+        deletedTransactionTombstonesBox: deletedTransactionTombstonesBox,
       );
     },
     tag: 'initializeApp',

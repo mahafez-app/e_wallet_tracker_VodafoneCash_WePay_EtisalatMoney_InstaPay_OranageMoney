@@ -582,5 +582,52 @@
     "placeholders": {
       "phoneNumber": {}
     }
+  },
+  "walletSyncTransactionsTitle": "Sync missed transactions",
+  "walletSyncTransactionsDescription": "Check recent SMS messages for transactions that arrived after your latest saved wallet activity.",
+  "walletSyncTransactionsAction": "Sync transactions",
+  "walletSyncTransactionsReviewTitle": "Review missing transactions",
+  "walletSyncTransactionsFoundCount": "{count, plural, =0{No missing transactions found} =1{1 missing transaction found} other{{count} missing transactions found}}",
+  "@walletSyncTransactionsFoundCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "walletSyncTransactionsFromDate": "Checking messages after {date}",
+  "@walletSyncTransactionsFromDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "walletSyncTransactionsSelectedCount": "{count, plural, =0{No transactions selected} =1{1 transaction selected} other{{count} transactions selected}}",
+  "@walletSyncTransactionsSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "walletSyncTransactionsSaveAction": "Add selected",
+  "walletSyncTransactionsEmptyTitle": "No missing transactions found",
+  "walletSyncTransactionsEmptyDescription": "We did not find any unsaved SMS transactions for this wallet in the recent inbox history.",
+  "walletSyncTransactionsEmptySinceDescription": "We did not find any unsaved SMS transactions after {date}.",
+  "@walletSyncTransactionsEmptySinceDescription": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "walletSyncTransactionsSavedSuccess": "{count, plural, =1{1 transaction added successfully.} other{{count} transactions added successfully.}}",
+  "@walletSyncTransactionsSavedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

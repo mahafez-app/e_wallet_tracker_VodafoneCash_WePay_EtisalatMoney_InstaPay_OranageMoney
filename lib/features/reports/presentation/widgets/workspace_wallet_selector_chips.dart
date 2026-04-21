@@ -16,7 +16,9 @@ class WorkspaceWalletSelectorChips extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final workspaceState = ref.watch(workspaceDetailsControllerProvider(workspaceId));
+    final workspaceState = ref.watch(
+      workspaceDetailsControllerProvider(workspaceId),
+    );
     final filter = ref.watch(workspaceReportFilterProvider(workspaceId));
 
     if (!workspaceState.hasValue) return const SizedBox.shrink();
@@ -28,7 +30,10 @@ class WorkspaceWalletSelectorChips extends ConsumerWidget {
     final allSelected = filter.selectedWalletIds.isEmpty;
 
     return Padding(
-      padding: AppSpacing.pagePadding.copyWith(top: 0, bottom: AppSpacing.sm.responsiveHeight),
+      padding: AppSpacing.pagePadding.copyWith(
+        top: 0,
+        bottom: AppSpacing.sm.responsiveHeight,
+      ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -40,7 +45,10 @@ class WorkspaceWalletSelectorChips extends ConsumerWidget {
                 selected: allSelected,
                 onSelected: (selected) {
                   if (selected) {
-                    ref.read(workspaceReportFilterProvider(workspaceId).notifier)
+                    ref
+                        .read(
+                          workspaceReportFilterProvider(workspaceId).notifier,
+                        )
                         .updateFilter(filter.copyWith(selectedWalletIds: []));
                   }
                 },
@@ -57,20 +65,27 @@ class WorkspaceWalletSelectorChips extends ConsumerWidget {
                   ),
                   selected: isSelected && !allSelected,
                   onSelected: (selected) {
-                    final newSelected = List<String>.from(filter.selectedWalletIds);
+                    final newSelected = List<String>.from(
+                      filter.selectedWalletIds,
+                    );
                     if (selected) {
                       newSelected.add(wallet.id);
                     } else {
                       newSelected.remove(wallet.id);
                     }
-                    
+
                     // If everything is selected, revert to all empty (meaning all)
                     if (newSelected.length == wallets.length) {
                       newSelected.clear();
                     }
 
-                    ref.read(workspaceReportFilterProvider(workspaceId).notifier)
-                        .updateFilter(filter.copyWith(selectedWalletIds: newSelected));
+                    ref
+                        .read(
+                          workspaceReportFilterProvider(workspaceId).notifier,
+                        )
+                        .updateFilter(
+                          filter.copyWith(selectedWalletIds: newSelected),
+                        );
                   },
                   selectedColor: theme.colorScheme.primaryContainer,
                 ),

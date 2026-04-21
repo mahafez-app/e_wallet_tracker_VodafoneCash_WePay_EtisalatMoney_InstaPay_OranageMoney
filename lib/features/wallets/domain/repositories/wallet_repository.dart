@@ -1,5 +1,6 @@
 import '../../../../core/domain/entities/wallet_entity.dart';
 import '../../../../core/error/result.dart';
+import '../entities/missing_wallet_transactions_preview.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 
 abstract interface class WalletRepository {
@@ -11,6 +12,10 @@ abstract interface class WalletRepository {
   });
 
   Future<Result<WalletDetailsEntity>> getWalletDetails(String walletId);
+
+  Future<Result<MissingWalletTransactionsPreview>> previewMissingTransactions(
+    String walletId,
+  );
 
   Future<Result<void>> deleteWallet(String walletId);
 

@@ -7,6 +7,10 @@ import '../../../../core/data/models/wallet_dto.dart';
 abstract interface class WalletDetailsRemoteDataSource {
   Future<WalletDto> getWallet(String walletId);
   Future<List<TransactionDto>> getRecentTransactions(WalletEntity wallet);
+  Future<List<TransactionDto>> getTransactionsSince({
+    required WalletEntity wallet,
+    required DateTime fromDate,
+  });
 }
 
 final class WalletDetailsRemoteDataSourceImpl
@@ -47,5 +51,34 @@ final class WalletDetailsRemoteDataSourceImpl
           ),
         )
         .toList();
+  }
+
+  @override
+  Future<List<TransactionDto>> getTransactionsSince({
+    required WalletEntity wallet,
+    required DateTime fromDate,
+  }) async {
+    final snapshot = await _firestore
+        .collection('wallets')
+        .doc(wallet.id)
+        .collection('transactions')
+        .where(
+          'createdAt',
+          isGreaterThanOrEqualTo: Timestamp.fromDate(fromDate),
+        )
+        .orderBy('createdAt', descending: false)
+        .get();
+
+    return snapshot.docs
+        .map(
+          (doc) => TransactionDto.fromFirestore(
+            doc,
+            wallet.provider,
+            wallet.phoneNumber,
+            wallet.id,
+            wallet.ownerUid,
+          ),
+        )
+        .toList(growable: false);
   }
 }

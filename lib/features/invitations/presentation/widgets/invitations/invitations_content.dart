@@ -97,7 +97,7 @@ class InvitationsContent extends ConsumerWidget {
       message: context.l10n.invitationDeclineConfirmMessage(workspaceName),
       confirmLabel: context.l10n.invitationsDeclineAction,
       cancelLabel: MaterialLocalizations.of(context).cancelButtonLabel,
-      type: AppDialogType.warning,
+      type: AppDialogType.error,
       onConfirm: () => Navigator.of(context).pop(true),
       onCancel: () => Navigator.of(context).pop(false),
     );

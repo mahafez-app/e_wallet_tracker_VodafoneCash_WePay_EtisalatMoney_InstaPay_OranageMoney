@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/cache_providers.dart';
 import '../../../core/providers/firebase_providers.dart';
+import '../data/datasources/deleted_transaction_local_data_source.dart';
 import '../data/datasources/transaction_cache_local_data_source.dart';
 import '../data/datasources/transaction_watch_remote_data_source.dart';
 import '../data/datasources/transaction_firestore_support.dart';
@@ -13,6 +14,7 @@ import '../domain/entities/transaction_page.dart';
 import '../domain/repositories/transaction_repository.dart';
 import '../domain/usecases/delete_transaction_usecase.dart';
 import '../domain/usecases/get_workspace_transactions_overview_usecase.dart';
+import '../domain/usecases/get_latest_transaction_date_usecase.dart';
 import '../domain/usecases/get_wallet_transactions_usecase.dart';
 import '../domain/usecases/get_workspace_transactions_usecase.dart';
 import '../domain/usecases/mark_paid_usecases.dart';
@@ -69,23 +71,28 @@ final transactionCacheLocalDataSourceProvider =
       ),
     );
 
+final deletedTransactionLocalDataSourceProvider =
+    Provider<DeletedTransactionLocalDataSource>(
+      (ref) => DeletedTransactionLocalDataSourceImpl(
+        box: ref.watch(deletedTransactionTombstonesBoxProvider),
+      ),
+    );
+
 /// Reads the cached first page for [walletId] without triggering any network
 /// fetch. Used by [_TransactionsControllerPagination.loadInitial] to
 /// pre-populate the screen on cold open before the Firestore response arrives.
-final transactionFirstPageCacheProvider =
-    FutureProvider.autoDispose.family<TransactionPage?, String>(
-      (ref, walletId) async {
-        final cached = await ref
-            .read(transactionCacheLocalDataSourceProvider)
-            .getFirstPage(walletId);
-        if (cached == null) return null;
-        return TransactionPage(
-          transactions: cached.transactions.map((e) => e.toEntity()).toList(),
-          totalCount: cached.totalCount,
-          nextCursor: null,
-        );
-      },
-    );
+final transactionFirstPageCacheProvider = FutureProvider.autoDispose
+    .family<TransactionPage?, String>((ref, walletId) async {
+      final cached = await ref
+          .read(transactionCacheLocalDataSourceProvider)
+          .getFirstPage(walletId);
+      if (cached == null) return null;
+      return TransactionPage(
+        transactions: cached.transactions.map((e) => e.toEntity()).toList(),
+        totalCount: cached.totalCount,
+        nextCursor: null,
+      );
+    });
 
 // ── Repository ────────────────────────────────────────────────────────────────
 
@@ -104,6 +111,9 @@ final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
       workspaceTransactionsOverviewRemoteDataSourceProvider,
     ),
     cacheDataSource: ref.watch(transactionCacheLocalDataSourceProvider),
+    deletedTransactionLocalDataSource: ref.watch(
+      deletedTransactionLocalDataSourceProvider,
+    ),
   );
 });
 
@@ -112,6 +122,13 @@ final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
 final saveTransactionUseCaseProvider = Provider<SaveTransactionUseCase>((ref) {
   return SaveTransactionUseCase(ref.watch(transactionRepositoryProvider));
 });
+
+final getLatestTransactionDateUseCaseProvider =
+    Provider<GetLatestTransactionDateUseCase>(
+      (ref) => GetLatestTransactionDateUseCase(
+        ref.watch(transactionRepositoryProvider),
+      ),
+    );
 
 final deleteTransactionUseCaseProvider = Provider<DeleteTransactionUseCase>((
   ref,

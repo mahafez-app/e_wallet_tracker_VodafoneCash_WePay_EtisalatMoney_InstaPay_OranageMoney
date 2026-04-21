@@ -66,9 +66,7 @@ class HomeWorkspaceCard extends StatelessWidget {
                 Expanded(
                   child: _WorkspaceStat(
                     title: l10n.totalIn,
-                    amount: workspace.totalReceived.toCurrencyText(
-                      context,
-                    ),
+                    amount: workspace.totalReceived.toCurrencyText(context),
                     icon: Icons.south_west_rounded,
                     color: colors.success,
                   ),
@@ -77,9 +75,7 @@ class HomeWorkspaceCard extends StatelessWidget {
                 Expanded(
                   child: _WorkspaceStat(
                     title: l10n.totalOut,
-                    amount: workspace.totalSent.toCurrencyText(
-                      context,
-                    ),
+                    amount: workspace.totalSent.toCurrencyText(context),
                     icon: Icons.north_east_rounded,
                     color: colors.danger,
                   ),
@@ -248,6 +244,7 @@ class _WorkspaceStat extends StatelessWidget {
               AppSpacing.xs.horizontalSpace,
               Expanded(
                 child: FittedBox(
+                  alignment: AlignmentDirectional.centerStart,
                   fit: BoxFit.scaleDown,
                   child: Text(
                     title,

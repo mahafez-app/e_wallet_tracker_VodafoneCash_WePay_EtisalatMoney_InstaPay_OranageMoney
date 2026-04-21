@@ -16,6 +16,7 @@ import '../../domain/entities/wallet_details_entity.dart';
 import '../providers/wallet_details_controller.dart';
 import '../widgets/wallet_details/wallet_balance_section.dart';
 import '../widgets/wallet_details/wallet_recent_transactions_section.dart';
+import '../widgets/wallet_details/wallet_transaction_sync_section.dart';
 
 class WalletDetailsScreen extends StatelessWidget {
   const WalletDetailsScreen({super.key, required this.walletId});
@@ -61,6 +62,8 @@ class _WalletDetailsBody extends ConsumerWidget {
             WalletBalanceSection(details: details),
             AppSpacing.md.verticalSpace,
             _WalletInfoSection(details: details),
+            AppSpacing.md.verticalSpace,
+            WalletTransactionSyncSection(walletId: walletId),
             AppSpacing.md.verticalSpace,
             WalletRecentTransactionsSection(details: details),
           ],

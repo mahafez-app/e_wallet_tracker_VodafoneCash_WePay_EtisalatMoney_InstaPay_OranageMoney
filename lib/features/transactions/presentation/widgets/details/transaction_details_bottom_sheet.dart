@@ -203,9 +203,9 @@ class _DetailsActionBar extends ConsumerWidget {
     );
     final shareState = ref.watch(shareReceiptControllerProvider);
     final currentUserId = ref.watch(currentUserProvider)?.uid;
-    final canDelete =
-        currentUserId == detailsState.transaction.walletOwnerUid;
-    final isDeletingTransaction = detailsState.currentAction ==
+    final canDelete = currentUserId == detailsState.transaction.walletOwnerUid;
+    final isDeletingTransaction =
+        detailsState.currentAction ==
         TransactionDetailsAction.deletingTransaction;
 
     return Container(
@@ -241,7 +241,9 @@ class _DetailsActionBar extends ConsumerWidget {
                   : const Icon(Icons.share_rounded),
               label: Text(context.l10n.transaction_shareReceipt),
               style: FilledButton.styleFrom(
-                padding: AppResponsive.symmetricPadding(vertical: AppSpacing.md),
+                padding: AppResponsive.symmetricPadding(
+                  vertical: AppSpacing.md,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16.responsiveRadius),
                 ),
@@ -325,7 +327,7 @@ class _DetailsActionBar extends ConsumerWidget {
       message: context.l10n.transaction_deleteMessage,
       confirmLabel: context.l10n.transaction_deleteAction,
       cancelLabel: context.l10n.transaction_cancel,
-      type: AppDialogType.warning,
+      type: AppDialogType.error,
       onConfirm: () {
         Navigator.of(context).pop();
         ref
@@ -338,10 +340,7 @@ class _DetailsActionBar extends ConsumerWidget {
 }
 
 class _DeleteIconButton extends StatelessWidget {
-  const _DeleteIconButton({
-    required this.isLoading,
-    required this.onPressed,
-  });
+  const _DeleteIconButton({required this.isLoading, required this.onPressed});
 
   final bool isLoading;
   final VoidCallback? onPressed;

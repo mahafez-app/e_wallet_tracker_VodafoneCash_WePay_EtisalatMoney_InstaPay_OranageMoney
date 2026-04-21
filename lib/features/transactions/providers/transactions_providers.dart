@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/cache_providers.dart';
 import '../../../core/providers/firebase_providers.dart';
+import '../data/datasources/deleted_transaction_local_data_source.dart';
 import '../data/datasources/transaction_cache_local_data_source.dart';
 import '../data/datasources/transaction_watch_remote_data_source.dart';
 import '../data/datasources/transaction_firestore_support.dart';
@@ -70,6 +71,13 @@ final transactionCacheLocalDataSourceProvider =
       ),
     );
 
+final deletedTransactionLocalDataSourceProvider =
+    Provider<DeletedTransactionLocalDataSource>(
+      (ref) => DeletedTransactionLocalDataSourceImpl(
+        box: ref.watch(deletedTransactionTombstonesBoxProvider),
+      ),
+    );
+
 /// Reads the cached first page for [walletId] without triggering any network
 /// fetch. Used by [_TransactionsControllerPagination.loadInitial] to
 /// pre-populate the screen on cold open before the Firestore response arrives.
@@ -103,6 +111,9 @@ final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
       workspaceTransactionsOverviewRemoteDataSourceProvider,
     ),
     cacheDataSource: ref.watch(transactionCacheLocalDataSourceProvider),
+    deletedTransactionLocalDataSource: ref.watch(
+      deletedTransactionLocalDataSourceProvider,
+    ),
   );
 });
 

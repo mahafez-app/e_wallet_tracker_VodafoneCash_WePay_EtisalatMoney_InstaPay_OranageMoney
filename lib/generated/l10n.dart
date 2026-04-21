@@ -1,2691 +1,4403 @@
-import 'dart:async';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:intl/intl.dart' as intl;
+import 'package:intl/intl.dart';
+import 'intl/messages_all.dart';
 
-import 'l10n_ar.dart';
-import 'l10n_en.dart';
+// **************************************************************************
+// Generator: Flutter Intl IDE plugin
+// Made by Localizely
+// **************************************************************************
 
-// ignore_for_file: type=lint
+// ignore_for_file: non_constant_identifier_names, lines_longer_than_80_chars
+// ignore_for_file: join_return_with_assignment, prefer_final_in_for_each
+// ignore_for_file: avoid_redundant_argument_values, avoid_escaping_inner_quotes
 
-/// Callers can lookup localized strings with an instance of S
-/// returned by `S.of(context)`.
-///
-/// Applications need to include `S.delegate()` in their app's
-/// `localizationDelegates` list, and the locales they support in the app's
-/// `supportedLocales` list. For example:
-///
-/// ```dart
-/// import 'generated/l10n.dart';
-///
-/// return MaterialApp(
-///   localizationsDelegates: S.localizationsDelegates,
-///   supportedLocales: S.supportedLocales,
-///   home: MyApplicationHome(),
-/// );
-/// ```
-///
-/// ## Update pubspec.yaml
-///
-/// Please make sure to update your pubspec.yaml to include the following
-/// packages:
-///
-/// ```yaml
-/// dependencies:
-///   # Internationalization support.
-///   flutter_localizations:
-///     sdk: flutter
-///   intl: any # Use the pinned version from flutter_localizations
-///
-///   # Rest of dependencies
-/// ```
-///
-/// ## iOS Applications
-///
-/// iOS applications define key application metadata, including supported
-/// locales, in an Info.plist file that is built into the application bundle.
-/// To configure the locales supported by your app, you’ll need to edit this
-/// file.
-///
-/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
-/// Then, in the Project Navigator, open the Info.plist file under the Runner
-/// project’s Runner folder.
-///
-/// Next, select the Information Property List item, select Add Item from the
-/// Editor menu, then select Localizations from the pop-up menu.
-///
-/// Select and expand the newly-created Localizations item then, for each
-/// locale your application supports, add a new item and select the locale
-/// you wish to add from the pop-up menu in the Value field. This list should
-/// be consistent with the languages listed in the S.supportedLocales
-/// property.
-abstract class S {
-  S(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+class S {
+  S();
 
-  final String localeName;
+  static S? _current;
 
-  static S? of(BuildContext context) {
+  static S get current {
+    assert(_current != null,
+        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+    return _current!;
+  }
+
+  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
+
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
+
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale.fromSubtags(languageCode: 'ar'),
+    Locale.fromSubtags(languageCode: 'en'),
+  ];
+
+  static Future<S> load(Locale locale) {
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name);
+    return initializeMessages(localeName).then((_) {
+      Intl.defaultLocale = localeName;
+      final instance = S();
+      S._current = instance;
+
+      return instance;
+    });
+  }
+
+  static S of(BuildContext context) {
+    final instance = S.maybeOf(context);
+    assert(instance != null,
+        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    return instance!;
+  }
+
+  static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
   }
 
-  static const LocalizationsDelegate<S> delegate = _SDelegate();
-
-  /// A list of this localizations delegate along with the default localizations
-  /// delegates.
-  ///
-  /// Returns a list of localizations delegates containing this delegate along with
-  /// GlobalMaterialLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
-  /// and GlobalWidgetsLocalizations.delegate.
-  ///
-  /// Additional delegates can be added by appending to this list in
-  /// MaterialApp. This list does not have to be used at all if a custom list
-  /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
-
-  /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('ar'),
-    Locale('en')
-  ];
-
-  /// No description provided for @errorNetwork.
-  ///
-  /// In en, this message translates to:
-  /// **'No internet connection. Please check your network.'**
-  String get errorNetwork;
-
-  /// No description provided for @errorAuthUserNotFound.
-  ///
-  /// In en, this message translates to:
-  /// **'User not found. Please check your credentials.'**
-  String get errorAuthUserNotFound;
-
-  /// No description provided for @errorAuthWrongPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Incorrect password. Please try again.'**
-  String get errorAuthWrongPassword;
-
-  /// No description provided for @errorAuthEmailInUse.
-  ///
-  /// In en, this message translates to:
-  /// **'This email is already registered.'**
-  String get errorAuthEmailInUse;
-
-  /// No description provided for @errorAuthTooManyRequests.
-  ///
-  /// In en, this message translates to:
-  /// **'Too many attempts. Please try again later.'**
-  String get errorAuthTooManyRequests;
-
-  /// No description provided for @errorAuthUserDisabled.
-  ///
-  /// In en, this message translates to:
-  /// **'This account has been disabled.'**
-  String get errorAuthUserDisabled;
-
-  /// No description provided for @errorAuthWeakPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Password is too weak. Please choose a stronger password.'**
-  String get errorAuthWeakPassword;
-
-  /// No description provided for @errorAuthInvalidEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid email address.'**
-  String get errorAuthInvalidEmail;
-
-  /// No description provided for @errorUnauthorized.
-  ///
-  /// In en, this message translates to:
-  /// **'Unauthorized access. Please log in again.'**
-  String get errorUnauthorized;
-
-  /// No description provided for @errorAuthGeneric.
-  ///
-  /// In en, this message translates to:
-  /// **'Authentication failed. Please try again.'**
-  String get errorAuthGeneric;
-
-  /// No description provided for @errorForbidden.
-  ///
-  /// In en, this message translates to:
-  /// **'Access forbidden.'**
-  String get errorForbidden;
-
-  /// No description provided for @errorNotFound.
-  ///
-  /// In en, this message translates to:
-  /// **'Resource not found.'**
-  String get errorNotFound;
-
-  /// No description provided for @errorConflict.
-  ///
-  /// In en, this message translates to:
-  /// **'Resource conflict. Please try again.'**
-  String get errorConflict;
-
-  /// No description provided for @errorUnprocessable.
-  ///
-  /// In en, this message translates to:
-  /// **'Unable to process your request.'**
-  String get errorUnprocessable;
-
-  /// No description provided for @errorServer.
-  ///
-  /// In en, this message translates to:
-  /// **'Server error. Please try again later.'**
-  String get errorServer;
-
-  /// No description provided for @errorServerGeneric.
-  ///
-  /// In en, this message translates to:
-  /// **'Something went wrong. Please try again.'**
-  String get errorServerGeneric;
-
-  /// No description provided for @errorPermissionDenied.
-  ///
-  /// In en, this message translates to:
-  /// **'Permission denied.'**
-  String get errorPermissionDenied;
-
-  /// No description provided for @errorCache.
-  ///
-  /// In en, this message translates to:
-  /// **'Local storage error. Please try again.'**
-  String get errorCache;
-
-  /// No description provided for @errorStorage.
-  ///
-  /// In en, this message translates to:
-  /// **'File storage error.'**
-  String get errorStorage;
-
-  /// No description provided for @errorValidation.
-  ///
-  /// In en, this message translates to:
-  /// **'Validation failed.'**
-  String get errorValidation;
-
-  /// No description provided for @errorValidationWithCode.
-  ///
-  /// In en, this message translates to:
-  /// **'Validation failed: {code}'**
-  String errorValidationWithCode(String code);
-
-  /// No description provided for @errorUnknown.
-  ///
-  /// In en, this message translates to:
-  /// **'An unexpected error occurred.'**
-  String get errorUnknown;
-
-  /// No description provided for @startupFallbackTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Just a moment'**
-  String get startupFallbackTitle;
-
-  /// No description provided for @startupFallbackMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Please try opening Mahafez again.'**
-  String get startupFallbackMessage;
-
-  /// No description provided for @startupFallbackRetryAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Try again'**
-  String get startupFallbackRetryAction;
-
-  /// No description provided for @notFoundStatusCode.
-  ///
-  /// In en, this message translates to:
-  /// **'404'**
-  String get notFoundStatusCode;
-
-  /// No description provided for @notFoundPageTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Page Not Found'**
-  String get notFoundPageTitle;
-
-  /// No description provided for @appName.
-  ///
-  /// In en, this message translates to:
-  /// **'Mahafez'**
-  String get appName;
-
-  /// No description provided for @signIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign In'**
-  String get signIn;
-
-  /// No description provided for @signUp.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign Up'**
-  String get signUp;
-
-  /// No description provided for @email.
-  ///
-  /// In en, this message translates to:
-  /// **'Email'**
-  String get email;
-
-  /// No description provided for @password.
-  ///
-  /// In en, this message translates to:
-  /// **'Password'**
-  String get password;
-
-  /// No description provided for @displayName.
-  ///
-  /// In en, this message translates to:
-  /// **'Name'**
-  String get displayName;
-
-  /// No description provided for @yourName.
-  ///
-  /// In en, this message translates to:
-  /// **'Your Name'**
-  String get yourName;
-
-  /// No description provided for @confirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm'**
-  String get confirm;
-
-  /// No description provided for @signInWithGoogle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign in with Google'**
-  String get signInWithGoogle;
-
-  /// No description provided for @signInWithEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign in with Email'**
-  String get signInWithEmail;
-
-  /// No description provided for @dontHaveAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Don\'t have an account?'**
-  String get dontHaveAccount;
-
-  /// No description provided for @alreadyHaveAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Already have an account?'**
-  String get alreadyHaveAccount;
-
-  /// No description provided for @createAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Create Account'**
-  String get createAccount;
-
-  /// No description provided for @emailHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your email'**
-  String get emailHint;
-
-  /// No description provided for @passwordHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your password'**
-  String get passwordHint;
-
-  /// No description provided for @displayNameHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your name'**
-  String get displayNameHint;
-
-  /// No description provided for @confirmName.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm Name'**
-  String get confirmName;
-
-  /// No description provided for @confirmNameMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Please confirm your name to continue'**
-  String get confirmNameMessage;
-
-  /// No description provided for @or.
-  ///
-  /// In en, this message translates to:
-  /// **'OR'**
-  String get or;
-
-  /// No description provided for @appTagline.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage your business wallets with ease'**
-  String get appTagline;
-
-  /// No description provided for @continueWithGoogle.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue with Google'**
-  String get continueWithGoogle;
-
-  /// No description provided for @forgotPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Forgot password?'**
-  String get forgotPassword;
-
-  /// No description provided for @signUpNow.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign Up Now'**
-  String get signUpNow;
-
-  /// No description provided for @emailPlaceholder.
-  ///
-  /// In en, this message translates to:
-  /// **'example@email.com'**
-  String get emailPlaceholder;
-
-  /// No description provided for @passwordPlaceholder.
-  ///
-  /// In en, this message translates to:
-  /// **'••••••••'**
-  String get passwordPlaceholder;
-
-  /// No description provided for @fullName.
-  ///
-  /// In en, this message translates to:
-  /// **'Full Name'**
-  String get fullName;
-
-  /// No description provided for @fullNamePlaceholder.
-  ///
-  /// In en, this message translates to:
-  /// **'e.g. John Doe'**
-  String get fullNamePlaceholder;
-
-  /// No description provided for @signUpSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Create an account and start tracking your business'**
-  String get signUpSubtitle;
-
-  /// No description provided for @whatIsYourName.
-  ///
-  /// In en, this message translates to:
-  /// **'What is your name?'**
-  String get whatIsYourName;
-
-  /// No description provided for @nameWillBeDisplayed.
-  ///
-  /// In en, this message translates to:
-  /// **'This name appears when payment status is updated, making transactions easier to track.'**
-  String get nameWillBeDisplayed;
-
-  /// No description provided for @welcome.
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome'**
-  String get welcome;
-
-  /// No description provided for @totalBalance.
-  ///
-  /// In en, this message translates to:
-  /// **'Total Balance'**
-  String get totalBalance;
-
-  /// No description provided for @currentBalance.
-  ///
-  /// In en, this message translates to:
-  /// **'Current Balance'**
-  String get currentBalance;
-
-  /// No description provided for @currency.
-  ///
-  /// In en, this message translates to:
-  /// **'EGP'**
-  String get currency;
-
-  /// No description provided for @totalOut.
-  ///
-  /// In en, this message translates to:
-  /// **'Total Out'**
-  String get totalOut;
-
-  /// No description provided for @totalIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Total In'**
-  String get totalIn;
-
-  /// No description provided for @yourWallets.
-  ///
-  /// In en, this message translates to:
-  /// **'Your Wallets'**
-  String get yourWallets;
-
-  /// No description provided for @viewAll.
-  ///
-  /// In en, this message translates to:
-  /// **'View All'**
-  String get viewAll;
-
-  /// No description provided for @workspaces.
-  ///
-  /// In en, this message translates to:
-  /// **'Workspaces'**
-  String get workspaces;
-
-  /// No description provided for @addWorkspace.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Workspace'**
-  String get addWorkspace;
-
-  /// No description provided for @addWallet.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Wallet'**
-  String get addWallet;
-
-  /// No description provided for @walletStatusActive.
-  ///
-  /// In en, this message translates to:
-  /// **'Active'**
-  String get walletStatusActive;
-
-  /// No description provided for @activeWalletsCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{No active wallets} =1{1 active wallet} few{{count} active wallets} other{{count} active wallets}}'**
-  String activeWalletsCount(num count);
-
-  /// No description provided for @activeWalletsHint.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{You haven\'t added any wallets yet} =1{Total balance across your wallet} other{Total balance across your {count} wallets}}'**
-  String activeWalletsHint(num count);
-
-  /// No description provided for @lastActivity.
-  ///
-  /// In en, this message translates to:
-  /// **'Last Activity'**
-  String get lastActivity;
-
-  /// No description provided for @justNow.
-  ///
-  /// In en, this message translates to:
-  /// **'Just Now'**
-  String get justNow;
-
-  /// No description provided for @minutesAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{minutes} mins ago'**
-  String minutesAgo(Object minutes);
-
-  /// No description provided for @egp.
-  ///
-  /// In en, this message translates to:
-  /// **'EGP'**
-  String get egp;
-
-  /// No description provided for @addWalletTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Wallet'**
-  String get addWalletTitle;
-
-  /// No description provided for @addWalletDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'This wallet must be on this device. The app reads new SMS messages from this phone only.'**
-  String get addWalletDescription;
-
-  /// No description provided for @phoneNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Phone Number'**
-  String get phoneNumber;
-
-  /// No description provided for @chooseProvider.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a provider'**
-  String get chooseProvider;
-
-  /// No description provided for @allowAndContinue.
-  ///
-  /// In en, this message translates to:
-  /// **'Allow and Continue'**
-  String get allowAndContinue;
-
-  /// No description provided for @notNow.
-  ///
-  /// In en, this message translates to:
-  /// **'Not Now'**
-  String get notNow;
-
-  /// No description provided for @providerOrange.
-  ///
-  /// In en, this message translates to:
-  /// **'Orange Cash'**
-  String get providerOrange;
-
-  /// No description provided for @providerVodafone.
-  ///
-  /// In en, this message translates to:
-  /// **'Vodafone Cash'**
-  String get providerVodafone;
-
-  /// No description provided for @providerInstapay.
-  ///
-  /// In en, this message translates to:
-  /// **'InstaPay'**
-  String get providerInstapay;
-
-  /// No description provided for @providerEtisalat.
-  ///
-  /// In en, this message translates to:
-  /// **'Etisalat Cash'**
-  String get providerEtisalat;
-
-  /// No description provided for @providerWePay.
-  ///
-  /// In en, this message translates to:
-  /// **'WE Pay'**
-  String get providerWePay;
-
-  /// No description provided for @providerUnknown.
-  ///
-  /// In en, this message translates to:
-  /// **'Wallet'**
-  String get providerUnknown;
-
-  /// No description provided for @smsPermissionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Allow Message and Phone Access'**
-  String get smsPermissionTitle;
-
-  /// No description provided for @smsPermissionDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'The app needs access to messages and phone information to find wallet numbers on this device and sync transactions automatically.'**
-  String get smsPermissionDescription;
-
-  /// No description provided for @smsPermissionAutoUpdateTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Automatic Update'**
-  String get smsPermissionAutoUpdateTitle;
-
-  /// No description provided for @smsPermissionAutoUpdateDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Track payments and expenses as soon as the SMS arrives.'**
-  String get smsPermissionAutoUpdateDesc;
-
-  /// No description provided for @smsPermissionPrivacyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Your privacy matters'**
-  String get smsPermissionPrivacyTitle;
-
-  /// No description provided for @smsPermissionPrivacyDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'We only read financial messages and device phone numbers required for wallet setup; your data is encrypted and never shared.'**
-  String get smsPermissionPrivacyDesc;
-
-  /// No description provided for @smsPermissionXiaomiTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Xiaomi/Redmi Detected'**
-  String get smsPermissionXiaomiTitle;
-
-  /// No description provided for @smsPermissionXiaomiDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'To receive transactions when the app is closed, you must enable \'Autostart\' and set Battery Saver to \'No Restrictions\' in app settings.'**
-  String get smsPermissionXiaomiDescription;
-
-  /// No description provided for @smsPermissionXiaomiAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Fix in Settings'**
-  String get smsPermissionXiaomiAction;
-
-  /// No description provided for @smsPermissionBatteryOptimizationTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Battery Optimization Active'**
-  String get smsPermissionBatteryOptimizationTitle;
-
-  /// No description provided for @smsPermissionBatteryOptimizationDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Android may kill the app in the background to save power. To ensure accuracy, please allow the app to run without battery restrictions.'**
-  String get smsPermissionBatteryOptimizationDescription;
-
-  /// No description provided for @smsPermissionBatteryOptimizationAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Allow Background Activity'**
-  String get smsPermissionBatteryOptimizationAction;
-
-  /// No description provided for @addWalletAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Wallet'**
-  String get addWalletAction;
-
-  /// No description provided for @createWorkspaceTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Create Workspace'**
-  String get createWorkspaceTitle;
-
-  /// No description provided for @createWorkspaceDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Workspaces help you organize your business wallets and share access with trusted members in one place.'**
-  String get createWorkspaceDescription;
-
-  /// No description provided for @workspaceNameLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Workspace Name'**
-  String get workspaceNameLabel;
-
-  /// No description provided for @workspaceNameHint.
-  ///
-  /// In en, this message translates to:
-  /// **'e.g. Mobile Store'**
-  String get workspaceNameHint;
-
-  /// No description provided for @createWorkspacePreviewLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Workspace Preview'**
-  String get createWorkspacePreviewLabel;
-
-  /// No description provided for @createWorkspacePreviewFallback.
-  ///
-  /// In en, this message translates to:
-  /// **'New Workspace'**
-  String get createWorkspacePreviewFallback;
-
-  /// No description provided for @createWorkspacePreviewDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'After you create the workspace, you can add wallets and invite members.'**
-  String get createWorkspacePreviewDescription;
-
-  /// No description provided for @workspaceOwner.
-  ///
-  /// In en, this message translates to:
-  /// **'Owner'**
-  String get workspaceOwner;
-
-  /// No description provided for @workspaceOwnerBadge.
-  ///
-  /// In en, this message translates to:
-  /// **'Owner'**
-  String get workspaceOwnerBadge;
-
-  /// No description provided for @workspaceMembersCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{No members} =1{1 member} other{{count} members}}'**
-  String workspaceMembersCount(int count);
-
-  /// No description provided for @workspaceWalletsCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{No wallets} =1{1 wallet} other{{count} wallets}}'**
-  String workspaceWalletsCount(int count);
-
-  /// No description provided for @createWorkspaceAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Create Workspace'**
-  String get createWorkspaceAction;
-
-  /// No description provided for @createWorkspaceEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Create your first workspace'**
-  String get createWorkspaceEmptyTitle;
-
-  /// No description provided for @createWorkspaceEmptyDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Bring your wallets together, track activity, and work with your team from one place.'**
-  String get createWorkspaceEmptyDescription;
-
-  /// No description provided for @createWalletEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Add your first wallet'**
-  String get createWalletEmptyTitle;
-
-  /// No description provided for @createWalletEmptyDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Connect a wallet on this device to start tracking balances and transactions automatically.'**
-  String get createWalletEmptyDescription;
-
-  /// No description provided for @workspaceWallets.
-  ///
-  /// In en, this message translates to:
-  /// **'Wallets'**
-  String get workspaceWallets;
-
-  /// No description provided for @workspaceMembers.
-  ///
-  /// In en, this message translates to:
-  /// **'Members'**
-  String get workspaceMembers;
-
-  /// No description provided for @workspaceInviteMemberAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Invite member'**
-  String get workspaceInviteMemberAction;
-
-  /// No description provided for @workspaceSettingsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Workspace Settings'**
-  String get workspaceSettingsTitle;
-
-  /// No description provided for @workspaceSettingsInfoSection.
-  ///
-  /// In en, this message translates to:
-  /// **'Workspace Info'**
-  String get workspaceSettingsInfoSection;
-
-  /// No description provided for @workspaceSettingsInviteByEmailAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Invite member'**
-  String get workspaceSettingsInviteByEmailAction;
-
-  /// No description provided for @workspaceSettingsPendingInvitationsSection.
-  ///
-  /// In en, this message translates to:
-  /// **'Pending Invitations'**
-  String get workspaceSettingsPendingInvitationsSection;
-
-  /// No description provided for @workspaceSettingsPendingInvitationsEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'There are no pending invitations for this workspace right now.'**
-  String get workspaceSettingsPendingInvitationsEmpty;
-
-  /// No description provided for @workspaceSettingsAccessSection.
-  ///
-  /// In en, this message translates to:
-  /// **'Your access'**
-  String get workspaceSettingsAccessSection;
-
-  /// No description provided for @workspaceSettingsMemberDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Review the shared members and linked wallets, remove your own wallets when needed, or leave the workspace.'**
-  String get workspaceSettingsMemberDescription;
-
-  /// No description provided for @workspaceSettingsManageAccessAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage access'**
-  String get workspaceSettingsManageAccessAction;
-
-  /// No description provided for @workspaceSettingsWalletsOwnerDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Review every linked wallet in this workspace and remove any wallet that should no longer be shared.'**
-  String get workspaceSettingsWalletsOwnerDescription;
-
-  /// No description provided for @workspaceSettingsWalletsMemberDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You can review every linked wallet here, but you can remove only the wallets you added.'**
-  String get workspaceSettingsWalletsMemberDescription;
-
-  /// No description provided for @workspaceSettingsWalletsEmptyOwner.
-  ///
-  /// In en, this message translates to:
-  /// **'There are no linked wallets in this workspace yet.'**
-  String get workspaceSettingsWalletsEmptyOwner;
-
-  /// No description provided for @workspaceSettingsWalletsEmptyMember.
-  ///
-  /// In en, this message translates to:
-  /// **'There are no linked wallets in this workspace yet.'**
-  String get workspaceSettingsWalletsEmptyMember;
-
-  /// No description provided for @workspaceSettingsWalletOwner.
-  ///
-  /// In en, this message translates to:
-  /// **'Owner: {ownerName}'**
-  String workspaceSettingsWalletOwner(Object ownerName);
-
-  /// No description provided for @workspaceUnknownMember.
-  ///
-  /// In en, this message translates to:
-  /// **'Unknown member'**
-  String get workspaceUnknownMember;
-
-  /// No description provided for @workspaceSettingsWalletReadOnlyTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Only the wallet owner can remove this wallet'**
-  String get workspaceSettingsWalletReadOnlyTooltip;
-
-  /// No description provided for @workspaceSettingsDangerZone.
-  ///
-  /// In en, this message translates to:
-  /// **'Sensitive actions'**
-  String get workspaceSettingsDangerZone;
-
-  /// No description provided for @workspaceSettingsEditNameTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit workspace name'**
-  String get workspaceSettingsEditNameTitle;
-
-  /// No description provided for @workspaceSettingsEditNameDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Update the visible name used across the workspace and shared views.'**
-  String get workspaceSettingsEditNameDescription;
-
-  /// No description provided for @workspaceSettingsEditNameAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Save changes'**
-  String get workspaceSettingsEditNameAction;
-
-  /// No description provided for @workspaceSettingsRemoveMemberAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Remove'**
-  String get workspaceSettingsRemoveMemberAction;
-
-  /// No description provided for @workspaceSettingsRemoveWalletAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Unlink wallet'**
-  String get workspaceSettingsRemoveWalletAction;
-
-  /// No description provided for @workspaceSettingsCancelInvitationAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get workspaceSettingsCancelInvitationAction;
-
-  /// No description provided for @workspaceSettingsLeaveWorkspaceAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Leave workspace'**
-  String get workspaceSettingsLeaveWorkspaceAction;
-
-  /// No description provided for @workspaceSettingsLeaveWorkspaceDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your membership and your linked wallets will be removed from this workspace.'**
-  String get workspaceSettingsLeaveWorkspaceDescription;
-
-  /// No description provided for @workspaceSettingsDeleteWorkspaceAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete workspace'**
-  String get workspaceSettingsDeleteWorkspaceAction;
-
-  /// No description provided for @workspaceSettingsDeleteWorkspaceDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'All linked data and access records will be removed permanently.'**
-  String get workspaceSettingsDeleteWorkspaceDescription;
-
-  /// No description provided for @workspaceSettingsNameUpdatedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Workspace name updated successfully.'**
-  String get workspaceSettingsNameUpdatedSuccess;
-
-  /// No description provided for @workspaceSettingsMemberRemovedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Member removed successfully.'**
-  String get workspaceSettingsMemberRemovedSuccess;
-
-  /// No description provided for @workspaceSettingsWalletRemovedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Wallet unlinked from the workspace successfully.'**
-  String get workspaceSettingsWalletRemovedSuccess;
-
-  /// No description provided for @workspaceSettingsInvitationCancelledSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Invitation cancelled successfully.'**
-  String get workspaceSettingsInvitationCancelledSuccess;
-
-  /// No description provided for @workspaceSettingsRemoveMemberConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Remove member?'**
-  String get workspaceSettingsRemoveMemberConfirmTitle;
-
-  /// No description provided for @workspaceSettingsRemoveMemberConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'You will remove {memberName} from this workspace, and any wallets they linked here will be removed too. They can be invited again later.'**
-  String workspaceSettingsRemoveMemberConfirmMessage(Object memberName);
-
-  /// No description provided for @workspaceSettingsRemoveWalletConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Unlink wallet?'**
-  String get workspaceSettingsRemoveWalletConfirmTitle;
-
-  /// No description provided for @workspaceSettingsRemoveWalletConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'The {providerName} wallet linked to {phoneNumber} will be unlinked from this workspace. The wallet itself and its transactions will NOT be deleted.'**
-  String workspaceSettingsRemoveWalletConfirmMessage(Object providerName, Object phoneNumber);
-
-  /// No description provided for @workspaceSettingsCancelInvitationConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel invitation?'**
-  String get workspaceSettingsCancelInvitationConfirmTitle;
-
-  /// No description provided for @workspaceSettingsCancelInvitationConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'The invitation sent to {email} will be removed immediately.'**
-  String workspaceSettingsCancelInvitationConfirmMessage(Object email);
-
-  /// No description provided for @workspaceSettingsLeaveWorkspaceConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Leave workspace?'**
-  String get workspaceSettingsLeaveWorkspaceConfirmTitle;
-
-  /// No description provided for @workspaceSettingsLeaveWorkspaceConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'You will lose access to this workspace, and the wallets you linked here will be removed from it.'**
-  String get workspaceSettingsLeaveWorkspaceConfirmMessage;
-
-  /// No description provided for @workspaceSettingsDeleteWorkspaceConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete workspace?'**
-  String get workspaceSettingsDeleteWorkspaceConfirmTitle;
-
-  /// No description provided for @workspaceSettingsDeleteWorkspaceConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This will permanently delete the workspace, its member access, wallet links, and pending invitations.'**
-  String get workspaceSettingsDeleteWorkspaceConfirmMessage;
-
-  /// No description provided for @workspaceUnavailableTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Workspace is no longer available'**
-  String get workspaceUnavailableTitle;
-
-  /// No description provided for @workspaceUnavailableMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'It looks like this workspace was deleted or your access was removed. We’ll take you back home.'**
-  String get workspaceUnavailableMessage;
-
-  /// No description provided for @workspaceUnavailableAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Back to home'**
-  String get workspaceUnavailableAction;
-
-  /// No description provided for @userSettingsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get userSettingsTitle;
-
-  /// No description provided for @userSettingsAppSection.
-  ///
-  /// In en, this message translates to:
-  /// **'App'**
-  String get userSettingsAppSection;
-
-  /// No description provided for @userSettingsBackgroundSection.
-  ///
-  /// In en, this message translates to:
-  /// **'Background Reliability'**
-  String get userSettingsBackgroundSection;
-
-  /// No description provided for @userSettingsAccountSection.
-  ///
-  /// In en, this message translates to:
-  /// **'Account'**
-  String get userSettingsAccountSection;
-
-  /// No description provided for @userSettingsAboutSection.
-  ///
-  /// In en, this message translates to:
-  /// **'About'**
-  String get userSettingsAboutSection;
-
-  /// No description provided for @userSettingsNoEmailLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'No email linked to this account'**
-  String get userSettingsNoEmailLabel;
-
-  /// No description provided for @userSettingsEditNameAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit name'**
-  String get userSettingsEditNameAction;
-
-  /// No description provided for @userSettingsEditNameTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit name'**
-  String get userSettingsEditNameTitle;
-
-  /// No description provided for @userSettingsEditNameDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Update the name shown across the app and activity history.'**
-  String get userSettingsEditNameDescription;
-
-  /// No description provided for @userSettingsEditNameSaveAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Save changes'**
-  String get userSettingsEditNameSaveAction;
-
-  /// No description provided for @userSettingsNameUpdatedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Name updated successfully.'**
-  String get userSettingsNameUpdatedSuccess;
-
-  /// No description provided for @userSettingsThemeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Theme'**
-  String get userSettingsThemeTitle;
-
-  /// No description provided for @userSettingsThemeSystemOption.
-  ///
-  /// In en, this message translates to:
-  /// **'System'**
-  String get userSettingsThemeSystemOption;
-
-  /// No description provided for @userSettingsThemeLightOption.
-  ///
-  /// In en, this message translates to:
-  /// **'Light'**
-  String get userSettingsThemeLightOption;
-
-  /// No description provided for @userSettingsThemeDarkOption.
-  ///
-  /// In en, this message translates to:
-  /// **'Dark'**
-  String get userSettingsThemeDarkOption;
-
-  /// No description provided for @userSettingsLanguageTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get userSettingsLanguageTitle;
-
-  /// No description provided for @userSettingsLanguageSystemOption.
-  ///
-  /// In en, this message translates to:
-  /// **'System default'**
-  String get userSettingsLanguageSystemOption;
-
-  /// No description provided for @userSettingsLanguageEnglishOption.
-  ///
-  /// In en, this message translates to:
-  /// **'English'**
-  String get userSettingsLanguageEnglishOption;
-
-  /// No description provided for @userSettingsLanguageArabicOption.
-  ///
-  /// In en, this message translates to:
-  /// **'Arabic'**
-  String get userSettingsLanguageArabicOption;
-
-  /// No description provided for @userSettingsFontSizeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Font size'**
-  String get userSettingsFontSizeTitle;
-
-  /// No description provided for @userSettingsFontSizeDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Adjust the reading scale used across the entire app.'**
-  String get userSettingsFontSizeDescription;
-
-  /// No description provided for @userSettingsFontSizeSaveAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Apply'**
-  String get userSettingsFontSizeSaveAction;
-
-  /// No description provided for @userSettingsFontSizePreviewTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Preview'**
-  String get userSettingsFontSizePreviewTitle;
-
-  /// No description provided for @userSettingsFontSizePreviewBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Use the slider to make text smaller or larger across Mahafez.'**
-  String get userSettingsFontSizePreviewBody;
-
-  /// No description provided for @userSettingsFontSizeCurrentValue.
-  ///
-  /// In en, this message translates to:
-  /// **'Current app size: {value}'**
-  String userSettingsFontSizeCurrentValue(String value);
-
-  /// No description provided for @userSettingsFontSizeSmallLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Smaller'**
-  String get userSettingsFontSizeSmallLabel;
-
-  /// No description provided for @userSettingsFontSizeLargeLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Larger'**
-  String get userSettingsFontSizeLargeLabel;
-
-  /// No description provided for @userSettingsSmsPermissionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'SMS read permission'**
-  String get userSettingsSmsPermissionTitle;
-
-  /// No description provided for @userSettingsSmsPermissionCheckingLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Checking permission status...'**
-  String get userSettingsSmsPermissionCheckingLabel;
-
-  /// No description provided for @userSettingsSmsPermissionEnabledLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Enabled'**
-  String get userSettingsSmsPermissionEnabledLabel;
-
-  /// No description provided for @userSettingsSmsPermissionDisabledLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Disabled, and the app cannot work without it.'**
-  String get userSettingsSmsPermissionDisabledLabel;
-
-  /// No description provided for @userSettingsOpenSystemSettingsAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Open settings'**
-  String get userSettingsOpenSystemSettingsAction;
-
-  /// No description provided for @userSettingsSignOutAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign out'**
-  String get userSettingsSignOutAction;
-
-  /// No description provided for @userSettingsSignOutConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign out?'**
-  String get userSettingsSignOutConfirmTitle;
-
-  /// No description provided for @userSettingsSignOutConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This will end your current session on this device. You can sign in again at any time.'**
-  String get userSettingsSignOutConfirmMessage;
-
-  /// No description provided for @userSettingsDeleteAccountAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete account'**
-  String get userSettingsDeleteAccountAction;
-
-  /// No description provided for @userSettingsDeleteAccountConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete account?'**
-  String get userSettingsDeleteAccountConfirmTitle;
-
-  /// No description provided for @userSettingsDeleteAccountConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This is a sensitive action and, once fully implemented, will permanently remove data linked to your account.'**
-  String get userSettingsDeleteAccountConfirmMessage;
-
-  /// No description provided for @userSettingsDeleteAccountUnavailableTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete account is not available yet'**
-  String get userSettingsDeleteAccountUnavailableTitle;
-
-  /// No description provided for @userSettingsDeleteAccountUnavailableMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'A partial delete would leave linked wallets, workspaces, and invitations behind. This action will be enabled after we add a safe full-data cleanup flow.'**
-  String get userSettingsDeleteAccountUnavailableMessage;
-
-  /// No description provided for @userSettingsAppVersionLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'App version'**
-  String get userSettingsAppVersionLabel;
-
-  /// No description provided for @userSettingsWalletsSection.
-  ///
-  /// In en, this message translates to:
-  /// **'Your Wallets'**
-  String get userSettingsWalletsSection;
-
-  /// No description provided for @userSettingsWalletsDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage the wallets you\'ve added to Mahafez. Deleting a wallet will remove it and all its transactions permanently from all workspaces.'**
-  String get userSettingsWalletsDescription;
-
-  /// No description provided for @userSettingsDeleteWalletAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete Wallet'**
-  String get userSettingsDeleteWalletAction;
-
-  /// No description provided for @userSettingsDeleteWalletConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete Wallet?'**
-  String get userSettingsDeleteWalletConfirmTitle;
-
-  /// No description provided for @userSettingsDeleteWalletConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to delete this {providerName} wallet ({phoneNumber})? This will permanently remove its transactions and notes, and unlink it from all workspaces. This action cannot be undone.'**
-  String userSettingsDeleteWalletConfirmMessage(Object phoneNumber, Object providerName);
-
-  /// No description provided for @userSettingsWalletDeletedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Wallet deleted successfully.'**
-  String get userSettingsWalletDeletedSuccess;
-
-  /// No description provided for @commonDeleteAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get commonDeleteAction;
-
-  /// No description provided for @commonCancelAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get commonCancelAction;
-
-  /// No description provided for @workspaceAddWalletsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Wallets'**
-  String get workspaceAddWalletsTitle;
-
-  /// No description provided for @workspaceAddWalletsAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Wallets'**
-  String get workspaceAddWalletsAction;
-
-  /// No description provided for @workspaceAddWalletsCreateDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose which of your wallets should appear in this workspace now. You can add more later.'**
-  String get workspaceAddWalletsCreateDescription;
-
-  /// No description provided for @workspaceAddWalletsManageDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Share your own wallets with this workspace. Linked wallets become visible to all workspace members.'**
-  String get workspaceAddWalletsManageDescription;
-
-  /// No description provided for @workspaceAddSelectedWalletsAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Selected Wallets'**
-  String get workspaceAddSelectedWalletsAction;
-
-  /// No description provided for @workspaceContinueToDetailsAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue to Workspace'**
-  String get workspaceContinueToDetailsAction;
-
-  /// No description provided for @workspaceSkipWalletsAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Skip for now'**
-  String get workspaceSkipWalletsAction;
-
-  /// No description provided for @workspaceWalletAvailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Available'**
-  String get workspaceWalletAvailable;
-
-  /// No description provided for @workspaceWalletSelected.
-  ///
-  /// In en, this message translates to:
-  /// **'Selected'**
-  String get workspaceWalletSelected;
-
-  /// No description provided for @workspaceWalletAlreadyAdded.
-  ///
-  /// In en, this message translates to:
-  /// **'Already Added'**
-  String get workspaceWalletAlreadyAdded;
-
-  /// No description provided for @workspaceNoOwnedWalletsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'You do not have any wallets yet'**
-  String get workspaceNoOwnedWalletsTitle;
-
-  /// No description provided for @workspaceNoOwnedWalletsDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Add a wallet first, then you can share it with this workspace.'**
-  String get workspaceNoOwnedWalletsDescription;
-
-  /// No description provided for @workspaceAllOwnedWalletsLinkedTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'All of your wallets are already linked'**
-  String get workspaceAllOwnedWalletsLinkedTitle;
-
-  /// No description provided for @workspaceAllOwnedWalletsLinkedDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You can continue to the workspace or add a new wallet later.'**
-  String get workspaceAllOwnedWalletsLinkedDescription;
-
-  /// No description provided for @workspaceWalletSelectionSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'You own {ownedCount} wallets, and {linkedCount} are already linked to this workspace.'**
-  String workspaceWalletSelectionSummary(int ownedCount, int linkedCount);
-
-  /// No description provided for @workspaceWalletsEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No wallets linked yet'**
-  String get workspaceWalletsEmptyTitle;
-
-  /// No description provided for @workspaceWalletsEmptyDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'This workspace will show shared wallets here once they are linked.'**
-  String get workspaceWalletsEmptyDescription;
-
-  /// No description provided for @workspaceMembersEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No members have joined this workspace yet.'**
-  String get workspaceMembersEmpty;
-
-  /// No description provided for @invitationsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Invitations'**
-  String get invitationsTitle;
-
-  /// No description provided for @invitationsEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No pending invitations'**
-  String get invitationsEmptyTitle;
-
-  /// No description provided for @invitationsEmptyDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You do not have any pending workspace invitations right now.'**
-  String get invitationsEmptyDescription;
-
-  /// No description provided for @invitationsListDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Review your workspace invitations and choose what to do.'**
-  String get invitationsListDescription;
-
-  /// No description provided for @invitationsPendingCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{No invitations waiting} =1{1 invitation waiting} other{{count} invitations waiting}}'**
-  String invitationsPendingCount(int count);
-
-  /// No description provided for @invitationsPendingStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'Pending'**
-  String get invitationsPendingStatus;
-
-  /// No description provided for @invitationsDeletedWorkspaceFallback.
-  ///
-  /// In en, this message translates to:
-  /// **'Deleted workspace'**
-  String get invitationsDeletedWorkspaceFallback;
-
-  /// No description provided for @invitationsUnknownInviterFallback.
-  ///
-  /// In en, this message translates to:
-  /// **'Unknown sender'**
-  String get invitationsUnknownInviterFallback;
-
-  /// No description provided for @invitationsAcceptAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Accept'**
-  String get invitationsAcceptAction;
-
-  /// No description provided for @invitationsDeclineAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Decline'**
-  String get invitationsDeclineAction;
-
-  /// No description provided for @invitationsRefreshAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Refresh list'**
-  String get invitationsRefreshAction;
-
-  /// No description provided for @invitationsHowItWorksTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'How invitations work'**
-  String get invitationsHowItWorksTitle;
-
-  /// No description provided for @invitationsHowItWorksDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Workspace invitations can only be sent to an existing Mahafez account using the email linked to that account.'**
-  String get invitationsHowItWorksDescription;
-
-  /// No description provided for @invitationsRecentResponsesTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Recent responses'**
-  String get invitationsRecentResponsesTitle;
-
-  /// No description provided for @invitationSentBy.
-  ///
-  /// In en, this message translates to:
-  /// **'Invited by {name}'**
-  String invitationSentBy(Object name);
-
-  /// No description provided for @invitationAcceptSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'You joined {workspaceName} successfully.'**
-  String invitationAcceptSuccess(Object workspaceName);
-
-  /// No description provided for @invitationAcceptDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'You can start working in this workspace now.'**
-  String get invitationAcceptDetails;
-
-  /// No description provided for @invitationDeclineSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'You declined the invitation to {workspaceName}.'**
-  String invitationDeclineSuccess(Object workspaceName);
-
-  /// No description provided for @invitationDeclineConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Decline invitation?'**
-  String get invitationDeclineConfirmTitle;
-
-  /// No description provided for @invitationDeclineConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'You will remove the invitation to join {workspaceName}. You can ask the workspace owner to send a new invitation later.'**
-  String invitationDeclineConfirmMessage(Object workspaceName);
-
-  /// No description provided for @invitationSentSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Invitation sent successfully.'**
-  String get invitationSentSuccess;
-
-  /// No description provided for @inviteMemberTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Invite a member'**
-  String get inviteMemberTitle;
-
-  /// No description provided for @inviteMemberDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Send a workspace invitation to an existing Mahafez account by email. The invited user will see it in their invitations inbox.'**
-  String get inviteMemberDescription;
-
-  /// No description provided for @inviteMemberEmailLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Member email'**
-  String get inviteMemberEmailLabel;
-
-  /// No description provided for @inviteMemberEmailHint.
-  ///
-  /// In en, this message translates to:
-  /// **'name@example.com'**
-  String get inviteMemberEmailHint;
-
-  /// No description provided for @inviteMemberSendAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Send invitation'**
-  String get inviteMemberSendAction;
-
-  /// No description provided for @errorWalletPhoneNumberRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a phone number'**
-  String get errorWalletPhoneNumberRequired;
-
-  /// No description provided for @errorWalletPhoneNumberInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid Egyptian mobile number.'**
-  String get errorWalletPhoneNumberInvalid;
-
-  /// No description provided for @errorWalletProviderRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Please select at least one provider'**
-  String get errorWalletProviderRequired;
-
-  /// No description provided for @errorWalletProviderMismatch.
-  ///
-  /// In en, this message translates to:
-  /// **'This phone number only supports its matching mobile wallet provider and InstaPay.'**
-  String get errorWalletProviderMismatch;
-
-  /// No description provided for @errorWalletAlreadyExists.
-  ///
-  /// In en, this message translates to:
-  /// **'This wallet is already added.'**
-  String get errorWalletAlreadyExists;
-
-  /// No description provided for @errorWalletAllExists.
-  ///
-  /// In en, this message translates to:
-  /// **'All selected wallets are already added for this phone number.'**
-  String get errorWalletAllExists;
-
-  /// No description provided for @errorManualTransactionMessageRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Paste the SMS text first.'**
-  String get errorManualTransactionMessageRequired;
-
-  /// No description provided for @errorManualTransactionUnrecognized.
-  ///
-  /// In en, this message translates to:
-  /// **'This text does not match the selected wallet\'s SMS format.'**
-  String get errorManualTransactionUnrecognized;
-
-  /// No description provided for @errorManualTransactionWalletMismatch.
-  ///
-  /// In en, this message translates to:
-  /// **'This SMS points to a different wallet than the one currently open.'**
-  String get errorManualTransactionWalletMismatch;
-
-  /// No description provided for @errorWorkspaceNameRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a workspace name'**
-  String get errorWorkspaceNameRequired;
-
-  /// No description provided for @errorWorkspaceWalletSelectionRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Please select at least one wallet'**
-  String get errorWorkspaceWalletSelectionRequired;
-
-  /// No description provided for @errorWorkspaceOwnerRemovalNotAllowed.
-  ///
-  /// In en, this message translates to:
-  /// **'The workspace owner cannot be removed.'**
-  String get errorWorkspaceOwnerRemovalNotAllowed;
-
-  /// No description provided for @errorWorkspaceMemberNotFound.
-  ///
-  /// In en, this message translates to:
-  /// **'This member is no longer available in the workspace.'**
-  String get errorWorkspaceMemberNotFound;
-
-  /// No description provided for @errorInvitationSelfNotAllowed.
-  ///
-  /// In en, this message translates to:
-  /// **'You cannot invite yourself to this workspace.'**
-  String get errorInvitationSelfNotAllowed;
-
-  /// No description provided for @errorInvitationAlreadyPending.
-  ///
-  /// In en, this message translates to:
-  /// **'A pending invitation already exists for this email.'**
-  String get errorInvitationAlreadyPending;
-
-  /// No description provided for @errorInvitationUserNotFound.
-  ///
-  /// In en, this message translates to:
-  /// **'This email is not linked to any Mahafez account.'**
-  String get errorInvitationUserNotFound;
-
-  /// No description provided for @errorInvitationUserAlreadyMember.
-  ///
-  /// In en, this message translates to:
-  /// **'This user is already a member of the workspace.'**
-  String get errorInvitationUserAlreadyMember;
-
-  /// No description provided for @errorInvitationNotPending.
-  ///
-  /// In en, this message translates to:
-  /// **'This invitation is no longer pending.'**
-  String get errorInvitationNotPending;
-
-  /// No description provided for @transactionTypeReceive.
-  ///
-  /// In en, this message translates to:
-  /// **'Receive'**
-  String get transactionTypeReceive;
-
-  /// No description provided for @transactionTypeSend.
-  ///
-  /// In en, this message translates to:
-  /// **'Send'**
-  String get transactionTypeSend;
-
-  /// No description provided for @reportSummaryReceivedTransactionsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Received transactions'**
-  String get reportSummaryReceivedTransactionsTitle;
-
-  /// No description provided for @reportSummaryReceivedTransactionsDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Number of transactions received during this period.'**
-  String get reportSummaryReceivedTransactionsDescription;
-
-  /// No description provided for @reportSummarySentTransactionsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sent transactions'**
-  String get reportSummarySentTransactionsTitle;
-
-  /// No description provided for @reportSummarySentTransactionsDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Number of transactions sent during this period.'**
-  String get reportSummarySentTransactionsDescription;
-
-  /// No description provided for @transactionStatusPaid.
-  ///
-  /// In en, this message translates to:
-  /// **'Paid'**
-  String get transactionStatusPaid;
-
-  /// No description provided for @transactionStatusUnpaid.
-  ///
-  /// In en, this message translates to:
-  /// **'Unpaid'**
-  String get transactionStatusUnpaid;
-
-  /// No description provided for @recentTransactions.
-  ///
-  /// In en, this message translates to:
-  /// **'Recent Transactions'**
-  String get recentTransactions;
-
-  /// No description provided for @transactions_emptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No transactions yet'**
-  String get transactions_emptyTitle;
-
-  /// No description provided for @transactions_emptyWalletDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'This wallet has no transactions yet. New messages will appear here automatically.'**
-  String get transactions_emptyWalletDescription;
-
-  /// No description provided for @transactions_emptyWorkspaceDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'This workspace has no transactions yet. Activity from any linked wallet will appear here automatically.'**
-  String get transactions_emptyWorkspaceDescription;
-
-  /// No description provided for @workspaceTransactionsCtaDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Open the full transaction history for this workspace to see all transactions from linked wallets in one place.'**
-  String get workspaceTransactionsCtaDescription;
-
-  /// No description provided for @workspaceTransactionsCtaDescriptionWithActivity.
-  ///
-  /// In en, this message translates to:
-  /// **'Open the full transaction history for this workspace to see all transactions from linked wallets in one place.'**
-  String get workspaceTransactionsCtaDescriptionWithActivity;
-
-  /// No description provided for @transactions_emptyHintTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Automatic tracking'**
-  String get transactions_emptyHintTitle;
-
-  /// No description provided for @transactions_emptyHintDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'When activity is detected on a connected wallet, we sync it here for you automatically.'**
-  String get transactions_emptyHintDescription;
-
-  /// No description provided for @noTransactionsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No transactions yet. New messages will appear here automatically.'**
-  String get noTransactionsTitle;
-
-  /// No description provided for @deleteWallet.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete Wallet'**
-  String get deleteWallet;
-
-  /// No description provided for @deleteWalletConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete Wallet'**
-  String get deleteWalletConfirmTitle;
-
-  /// No description provided for @deleteWalletConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to delete this wallet? This action cannot be undone.'**
-  String get deleteWalletConfirmMessage;
-
-  /// No description provided for @allTransactions.
-  ///
-  /// In en, this message translates to:
-  /// **'All Transactions'**
-  String get allTransactions;
-
-  /// No description provided for @viewAllTransactions.
-  ///
-  /// In en, this message translates to:
-  /// **'View All Transactions'**
-  String get viewAllTransactions;
-
-  /// No description provided for @walletTransactions.
-  ///
-  /// In en, this message translates to:
-  /// **'Wallet Transactions'**
-  String get walletTransactions;
-
-  /// No description provided for @walletDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'Wallet Details'**
-  String get walletDetails;
-
-  /// No description provided for @transactionsHistory.
-  ///
-  /// In en, this message translates to:
-  /// **'Transaction History'**
-  String get transactionsHistory;
-
-  /// No description provided for @transactionDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'Transaction Details'**
-  String get transactionDetails;
-
-  /// No description provided for @transactionMessageReceive.
-  ///
-  /// In en, this message translates to:
-  /// **'Received {amount} EGP'**
-  String transactionMessageReceive(Object amount);
-
-  /// No description provided for @transactionMessageSend.
-  ///
-  /// In en, this message translates to:
-  /// **'Sent {amount} EGP'**
-  String transactionMessageSend(Object amount);
-
-  /// No description provided for @walletLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Your wallet'**
-  String get walletLabel;
-
-  /// No description provided for @fromLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'From'**
-  String get fromLabel;
-
-  /// No description provided for @toLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'To'**
-  String get toLabel;
-
-  /// No description provided for @viaLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Via'**
-  String get viaLabel;
-
-  /// No description provided for @paymentStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'Payment Status'**
-  String get paymentStatus;
-
-  /// No description provided for @transactions_filter_all.
-  ///
-  /// In en, this message translates to:
-  /// **'All'**
-  String get transactions_filter_all;
-
-  /// No description provided for @transactions_filter_allWallets.
-  ///
-  /// In en, this message translates to:
-  /// **'All Wallets'**
-  String get transactions_filter_allWallets;
-
-  /// No description provided for @transactions_filter_allMembers.
-  ///
-  /// In en, this message translates to:
-  /// **'All Members'**
-  String get transactions_filter_allMembers;
-
-  /// No description provided for @transactions_paymentStatusAll.
-  ///
-  /// In en, this message translates to:
-  /// **'All Statuses'**
-  String get transactions_paymentStatusAll;
-
-  /// No description provided for @transactions_searchHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Search by last 2+ digits'**
-  String get transactions_searchHint;
-
-  /// No description provided for @transactions_date_today.
-  ///
-  /// In en, this message translates to:
-  /// **'Today'**
-  String get transactions_date_today;
-
-  /// No description provided for @transactions_date_yesterday.
-  ///
-  /// In en, this message translates to:
-  /// **'Yesterday'**
-  String get transactions_date_yesterday;
-
-  /// No description provided for @transactions_date_week.
-  ///
-  /// In en, this message translates to:
-  /// **'This Week'**
-  String get transactions_date_week;
-
-  /// No description provided for @transactions_date_month.
-  ///
-  /// In en, this message translates to:
-  /// **'This Month'**
-  String get transactions_date_month;
-
-  /// No description provided for @transactions_date_customRange.
-  ///
-  /// In en, this message translates to:
-  /// **'Custom Range'**
-  String get transactions_date_customRange;
-
-  /// No description provided for @transactions_loadMore.
-  ///
-  /// In en, this message translates to:
-  /// **'Load More'**
-  String get transactions_loadMore;
-
-  /// No description provided for @transactions_viewingCountOfTotal.
-  ///
-  /// In en, this message translates to:
-  /// **'Viewing {count} of {total} transactions'**
-  String transactions_viewingCountOfTotal(int count, int total);
-
-  /// No description provided for @transaction_shareReceipt.
-  ///
-  /// In en, this message translates to:
-  /// **'Share Receipt'**
-  String get transaction_shareReceipt;
-
-  /// No description provided for @transaction_receiptHeader.
-  ///
-  /// In en, this message translates to:
-  /// **'Transaction Receipt — {type}'**
-  String transaction_receiptHeader(String type);
-
-  /// No description provided for @transaction_amount.
-  ///
-  /// In en, this message translates to:
-  /// **'Amount'**
-  String get transaction_amount;
-
-  /// No description provided for @transaction_wallet.
-  ///
-  /// In en, this message translates to:
-  /// **'Wallet'**
-  String get transaction_wallet;
-
-  /// No description provided for @transaction_receivedFrom.
-  ///
-  /// In en, this message translates to:
-  /// **'Received From'**
-  String get transaction_receivedFrom;
-
-  /// No description provided for @transaction_sentTo.
-  ///
-  /// In en, this message translates to:
-  /// **'Sent To'**
-  String get transaction_sentTo;
-
-  /// No description provided for @transaction_date.
-  ///
-  /// In en, this message translates to:
-  /// **'Date'**
-  String get transaction_date;
-
-  /// No description provided for @transaction_dateTime.
-  ///
-  /// In en, this message translates to:
-  /// **'Date & Time'**
-  String get transaction_dateTime;
-
-  /// No description provided for @transaction_referenceNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Reference Number'**
-  String get transaction_referenceNumber;
-
-  /// No description provided for @transaction_history.
-  ///
-  /// In en, this message translates to:
-  /// **'Change History'**
-  String get transaction_history;
-
-  /// No description provided for @transaction_markedAs.
-  ///
-  /// In en, this message translates to:
-  /// **'Marked as {status}'**
-  String transaction_markedAs(String status);
-
-  /// No description provided for @transaction_by.
-  ///
-  /// In en, this message translates to:
-  /// **'By {name}'**
-  String transaction_by(String name);
-
-  /// No description provided for @transaction_notes.
-  ///
-  /// In en, this message translates to:
-  /// **'Notes'**
-  String get transaction_notes;
-
-  /// No description provided for @transaction_addNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Note'**
-  String get transaction_addNote;
-
-  /// No description provided for @transaction_noteHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Write your note here…'**
-  String get transaction_noteHint;
-
-  /// No description provided for @transaction_deleteAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get transaction_deleteAction;
-
-  /// No description provided for @transaction_deleteTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete Transaction'**
-  String get transaction_deleteTitle;
-
-  /// No description provided for @transaction_deleteMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to delete this transaction? This action cannot be undone.'**
-  String get transaction_deleteMessage;
-
-  /// No description provided for @transaction_deletedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Transaction deleted'**
-  String get transaction_deletedSuccess;
-
-  /// No description provided for @transaction_deleteNoteTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete Note'**
-  String get transaction_deleteNoteTitle;
-
-  /// No description provided for @transaction_deleteNoteMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to delete this note? This action cannot be undone.'**
-  String get transaction_deleteNoteMessage;
-
-  /// No description provided for @transaction_noteDeleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Note deleted'**
-  String get transaction_noteDeleted;
-
-  /// No description provided for @transaction_undo.
-  ///
-  /// In en, this message translates to:
-  /// **'Undo'**
-  String get transaction_undo;
-
-  /// No description provided for @transaction_edited.
-  ///
-  /// In en, this message translates to:
-  /// **'Edited'**
-  String get transaction_edited;
-
-  /// No description provided for @transaction_cancel.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get transaction_cancel;
-
-  /// No description provided for @transaction_save.
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get transaction_save;
-
-  /// No description provided for @transaction_smsText.
-  ///
-  /// In en, this message translates to:
-  /// **'SMS Text'**
-  String get transaction_smsText;
-
-  /// No description provided for @transaction_typeReceiveLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Receive Transaction'**
-  String get transaction_typeReceiveLabel;
-
-  /// No description provided for @transaction_typeSendLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Send Transaction'**
-  String get transaction_typeSendLabel;
-
-  /// No description provided for @transaction_errorGeneric.
-  ///
-  /// In en, this message translates to:
-  /// **'An error occurred'**
-  String get transaction_errorGeneric;
-
-  /// No description provided for @transactions_emptyWithFilter.
-  ///
-  /// In en, this message translates to:
-  /// **'No transactions match the selected filter'**
-  String get transactions_emptyWithFilter;
-
-  /// No description provided for @transactions_emptyWithFilterTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No matching transactions'**
-  String get transactions_emptyWithFilterTitle;
-
-  /// No description provided for @transactions_emptyWithFilterDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Try clearing one or more filters to see more activity.'**
-  String get transactions_emptyWithFilterDescription;
-
-  /// No description provided for @transactions_clearFilters.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear Filters'**
-  String get transactions_clearFilters;
-
-  /// No description provided for @transactions_title_wallet.
-  ///
-  /// In en, this message translates to:
-  /// **'Transactions: {name}'**
-  String transactions_title_wallet(String name);
-
-  /// No description provided for @transactions_title_workspace.
-  ///
-  /// In en, this message translates to:
-  /// **'Workspace: {name}'**
-  String transactions_title_workspace(String name);
-
-  /// No description provided for @workspaceTransactionsTodayCollected.
-  ///
-  /// In en, this message translates to:
-  /// **'Collected Today'**
-  String get workspaceTransactionsTodayCollected;
-
-  /// No description provided for @workspaceTransactionsTodaySent.
-  ///
-  /// In en, this message translates to:
-  /// **'Sent Today'**
-  String get workspaceTransactionsTodaySent;
-
-  /// No description provided for @workspaceTransactionsUnpaidCount.
-  ///
-  /// In en, this message translates to:
-  /// **'Unpaid Count'**
-  String get workspaceTransactionsUnpaidCount;
-
-  /// No description provided for @workspaceTransactionsLatestWallets.
-  ///
-  /// In en, this message translates to:
-  /// **'Latest Active Wallets'**
-  String get workspaceTransactionsLatestWallets;
-
-  /// No description provided for @workspaceTransactionsLatestWalletsEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'No wallet activity yet.'**
-  String get workspaceTransactionsLatestWalletsEmpty;
-
-  /// No description provided for @errorTransactionNotFound.
-  ///
-  /// In en, this message translates to:
-  /// **'This transaction is no longer available.'**
-  String get errorTransactionNotFound;
-
-  /// No description provided for @errorTransactionAlreadyExists.
-  ///
-  /// In en, this message translates to:
-  /// **'This transaction has already been tracked.'**
-  String get errorTransactionAlreadyExists;
-
-  /// No description provided for @fullNameValidationEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter your name'**
-  String get fullNameValidationEmpty;
-
-  /// No description provided for @transactions_filterTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Filters'**
-  String get transactions_filterTitle;
-
-  /// No description provided for @transactions_filterApply.
-  ///
-  /// In en, this message translates to:
-  /// **'Apply Filters'**
-  String get transactions_filterApply;
-
-  /// No description provided for @transactions_filterReset.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset'**
-  String get transactions_filterReset;
-
-  /// No description provided for @transactions_filterActiveCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} active {count, plural, =1{filter} other{filters}}'**
-  String transactions_filterActiveCount(int count);
-
-  /// No description provided for @transactions_filterType.
-  ///
-  /// In en, this message translates to:
-  /// **'Type'**
-  String get transactions_filterType;
-
-  /// No description provided for @transactions_filterPaidStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'Status'**
-  String get transactions_filterPaidStatus;
-
-  /// No description provided for @transactions_filterDate.
-  ///
-  /// In en, this message translates to:
-  /// **'Date'**
-  String get transactions_filterDate;
-
-  /// No description provided for @transactions_filterMember.
-  ///
-  /// In en, this message translates to:
-  /// **'Member'**
-  String get transactions_filterMember;
-
-  /// No description provided for @transactions_filterWallet.
-  ///
-  /// In en, this message translates to:
-  /// **'Wallet'**
-  String get transactions_filterWallet;
-
-  /// No description provided for @reports_total_transactions.
-  ///
-  /// In en, this message translates to:
-  /// **'Transactions Count'**
-  String get reports_total_transactions;
-
-  /// No description provided for @reports_all_wallets.
-  ///
-  /// In en, this message translates to:
-  /// **'All Wallets'**
-  String get reports_all_wallets;
-
-  /// No description provided for @reports_period_today.
-  ///
-  /// In en, this message translates to:
-  /// **'Today'**
-  String get reports_period_today;
-
-  /// No description provided for @reports_period_yesterday.
-  ///
-  /// In en, this message translates to:
-  /// **'Yesterday'**
-  String get reports_period_yesterday;
-
-  /// No description provided for @reports_period_lastWeek.
-  ///
-  /// In en, this message translates to:
-  /// **'Last Week'**
-  String get reports_period_lastWeek;
-
-  /// No description provided for @reports_period_lastMonth.
-  ///
-  /// In en, this message translates to:
-  /// **'Last Month'**
-  String get reports_period_lastMonth;
-
-  /// No description provided for @reports_period_custom.
-  ///
-  /// In en, this message translates to:
-  /// **'Custom Range'**
-  String get reports_period_custom;
-
-  /// No description provided for @reports_stat_average.
-  ///
-  /// In en, this message translates to:
-  /// **'Daily Average'**
-  String get reports_stat_average;
-
-  /// No description provided for @reports_balance_label.
-  ///
-  /// In en, this message translates to:
-  /// **'Net Cash Flow'**
-  String get reports_balance_label;
-
-  /// No description provided for @reports_performance_label.
-  ///
-  /// In en, this message translates to:
-  /// **'Financial Performance'**
-  String get reports_performance_label;
-
-  /// No description provided for @reports_wallet_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Wallet Reports'**
-  String get reports_wallet_title;
-
-  /// No description provided for @reports_workspace_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Workspace Reports'**
-  String get reports_workspace_title;
-
-  /// No description provided for @wallet_statsFrom.
-  ///
-  /// In en, this message translates to:
-  /// **'Stats from {date}'**
-  String wallet_statsFrom(Object date);
-
-  /// No description provided for @wallet_resetStats.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset Tracked Metrics'**
-  String get wallet_resetStats;
-
-  /// No description provided for @wallet_resetStatsDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to reset the tracked metrics for this wallet? This will zero out your total incoming and outgoing amounts since the last reset. Your current balance will be preserved.'**
-  String get wallet_resetStatsDescription;
-
-  /// No description provided for @wallet_resetStatsAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset Stats'**
-  String get wallet_resetStatsAction;
-
-  /// No description provided for @walletBalanceEditTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Update Current Balance'**
-  String get walletBalanceEditTitle;
-
-  /// No description provided for @walletBalanceEditDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Use this if a historical SMS was missed or your tracked balance needs to be corrected manually.'**
-  String get walletBalanceEditDescription;
-
-  /// No description provided for @walletBalanceEditAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Update Balance'**
-  String get walletBalanceEditAction;
-
-  /// No description provided for @walletBalanceEditHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter the latest balance'**
-  String get walletBalanceEditHint;
-
-  /// No description provided for @walletBalanceEditInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter a valid balance amount.'**
-  String get walletBalanceEditInvalid;
-
-  /// No description provided for @walletBalanceEditSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Current balance updated.'**
-  String get walletBalanceEditSuccess;
-
-  /// No description provided for @walletBalanceEditSuggested.
-  ///
-  /// In en, this message translates to:
-  /// **'Latest detected balance: {amount}'**
-  String walletBalanceEditSuggested(Object amount);
-
-  /// No description provided for @walletManualTransactionEntryAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Paste SMS Transaction'**
-  String get walletManualTransactionEntryAction;
-
-  /// No description provided for @walletManualTransactionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Transaction From SMS'**
-  String get walletManualTransactionTitle;
-
-  /// No description provided for @walletManualTransactionDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Paste the original transaction SMS here. We will parse it with the same wallet matching and transaction rules used by the automatic SMS flow.'**
-  String get walletManualTransactionDescription;
-
-  /// No description provided for @walletManualTransactionFieldLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'SMS text'**
-  String get walletManualTransactionFieldLabel;
-
-  /// No description provided for @walletManualTransactionFieldHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Paste the full transaction message'**
-  String get walletManualTransactionFieldHint;
-
-  /// No description provided for @walletManualTransactionPasteAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Paste from clipboard'**
-  String get walletManualTransactionPasteAction;
-
-  /// No description provided for @walletManualTransactionAnalyzeAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Process SMS'**
-  String get walletManualTransactionAnalyzeAction;
-
-  /// No description provided for @walletManualTransactionSaveAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Save Transaction'**
-  String get walletManualTransactionSaveAction;
-
-  /// No description provided for @walletManualTransactionConfirmAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Save to this wallet'**
-  String get walletManualTransactionConfirmAction;
-
-  /// No description provided for @walletManualTransactionForceAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Save Anyway'**
-  String get walletManualTransactionForceAction;
-
-  /// No description provided for @walletManualTransactionBlockedAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Belongs to another wallet'**
-  String get walletManualTransactionBlockedAction;
-
-  /// No description provided for @walletManualTransactionSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'Transaction added successfully.'**
-  String get walletManualTransactionSaved;
-
-  /// No description provided for @walletManualTransactionReviewTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Review before saving'**
-  String get walletManualTransactionReviewTitle;
-
-  /// No description provided for @walletManualTransactionReviewDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'The SMS was parsed successfully, but the wallet could not be confirmed with full confidence. Review the details before continuing.'**
-  String get walletManualTransactionReviewDescription;
-
-  /// No description provided for @walletManualTransactionExplicitMismatchTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'This SMS belongs to another wallet'**
-  String get walletManualTransactionExplicitMismatchTitle;
-
-  /// No description provided for @walletManualTransactionExplicitMismatchDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'The message explicitly mentions a wallet phone number that does not match the wallet you opened.'**
-  String get walletManualTransactionExplicitMismatchDescription;
-
-  /// No description provided for @walletManualTransactionInferredMismatchTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Another wallet looks more likely'**
-  String get walletManualTransactionInferredMismatchTitle;
-
-  /// No description provided for @walletManualTransactionInferredMismatchDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'The balance and matching rules suggest a different wallet. Save here only if you are sure this SMS should stay under the current wallet.'**
-  String get walletManualTransactionInferredMismatchDescription;
-
-  /// No description provided for @walletManualTransactionSuggestedWalletLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Suggested wallet'**
-  String get walletManualTransactionSuggestedWalletLabel;
-
-  /// No description provided for @walletManualTransactionBalanceChip.
-  ///
-  /// In en, this message translates to:
-  /// **'Balance after SMS: {amount}'**
-  String walletManualTransactionBalanceChip(Object amount);
-
-  /// No description provided for @walletManualTransactionPhoneChip.
-  ///
-  /// In en, this message translates to:
-  /// **'Mentioned wallet: {phoneNumber}'**
-  String walletManualTransactionPhoneChip(Object phoneNumber);
-
-  /// No description provided for @walletSyncTransactionsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sync missed transactions'**
-  String get walletSyncTransactionsTitle;
-
-  /// No description provided for @walletSyncTransactionsDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Check recent SMS messages for transactions that arrived after your latest saved wallet activity.'**
-  String get walletSyncTransactionsDescription;
-
-  /// No description provided for @walletSyncTransactionsAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Sync transactions'**
-  String get walletSyncTransactionsAction;
-
-  /// No description provided for @walletSyncTransactionsReviewTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Review missing transactions'**
-  String get walletSyncTransactionsReviewTitle;
-
-  /// No description provided for @walletSyncTransactionsFoundCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{No missing transactions found} =1{1 missing transaction found} other{{count} missing transactions found}}'**
-  String walletSyncTransactionsFoundCount(int count);
-
-  /// No description provided for @walletSyncTransactionsFromDate.
-  ///
-  /// In en, this message translates to:
-  /// **'Checking messages after {date}'**
-  String walletSyncTransactionsFromDate(String date);
-
-  /// No description provided for @walletSyncTransactionsSelectedCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{No transactions selected} =1{1 transaction selected} other{{count} transactions selected}}'**
-  String walletSyncTransactionsSelectedCount(int count);
-
-  /// No description provided for @walletSyncTransactionsSaveAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Add selected'**
-  String get walletSyncTransactionsSaveAction;
-
-  /// No description provided for @walletSyncTransactionsEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No missing transactions found'**
-  String get walletSyncTransactionsEmptyTitle;
-
-  /// No description provided for @walletSyncTransactionsEmptyDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'We did not find any unsaved SMS transactions for this wallet in the recent inbox history.'**
-  String get walletSyncTransactionsEmptyDescription;
-
-  /// No description provided for @walletSyncTransactionsEmptySinceDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'We did not find any unsaved SMS transactions after {date}.'**
-  String walletSyncTransactionsEmptySinceDescription(String date);
-
-  /// No description provided for @walletSyncTransactionsSavedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 transaction added successfully.} other{{count} transactions added successfully.}}'**
-  String walletSyncTransactionsSavedSuccess(int count);
+  /// `لا يوجد اتصال بالإنترنت. اتأكد من الشبكة وحاول مرة تانية.`
+  String get errorNetwork {
+    return Intl.message(
+      'لا يوجد اتصال بالإنترنت. اتأكد من الشبكة وحاول مرة تانية.',
+      name: 'errorNetwork',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الحساب غير موجود. اتأكد من بيانات الدخول.`
+  String get errorAuthUserNotFound {
+    return Intl.message(
+      'الحساب غير موجود. اتأكد من بيانات الدخول.',
+      name: 'errorAuthUserNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كلمة المرور غير صحيحة. حاول مرة تانية.`
+  String get errorAuthWrongPassword {
+    return Intl.message(
+      'كلمة المرور غير صحيحة. حاول مرة تانية.',
+      name: 'errorAuthWrongPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذا البريد الإلكتروني مسجل بالفعل.`
+  String get errorAuthEmailInUse {
+    return Intl.message(
+      'هذا البريد الإلكتروني مسجل بالفعل.',
+      name: 'errorAuthEmailInUse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عدد المحاولات كبير جداً. حاول مرة تانية بعد شوية.`
+  String get errorAuthTooManyRequests {
+    return Intl.message(
+      'عدد المحاولات كبير جداً. حاول مرة تانية بعد شوية.',
+      name: 'errorAuthTooManyRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم تعطيل هذا الحساب.`
+  String get errorAuthUserDisabled {
+    return Intl.message(
+      'تم تعطيل هذا الحساب.',
+      name: 'errorAuthUserDisabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كلمة المرور ضعيفة. اختر كلمة مرور أقوى.`
+  String get errorAuthWeakPassword {
+    return Intl.message(
+      'كلمة المرور ضعيفة. اختر كلمة مرور أقوى.',
+      name: 'errorAuthWeakPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `البريد الإلكتروني غير صحيح.`
+  String get errorAuthInvalidEmail {
+    return Intl.message(
+      'البريد الإلكتروني غير صحيح.',
+      name: 'errorAuthInvalidEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `انتهت الجلسة. سجل دخولك مرة تانية.`
+  String get errorUnauthorized {
+    return Intl.message(
+      'انتهت الجلسة. سجل دخولك مرة تانية.',
+      name: 'errorUnauthorized',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تعذر تسجيل الدخول الآن. حاول مرة تانية.`
+  String get errorAuthGeneric {
+    return Intl.message(
+      'تعذر تسجيل الدخول الآن. حاول مرة تانية.',
+      name: 'errorAuthGeneric',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا يمكنك تنفيذ هذا الإجراء.`
+  String get errorForbidden {
+    return Intl.message(
+      'لا يمكنك تنفيذ هذا الإجراء.',
+      name: 'errorForbidden',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المطلوب غير موجود.`
+  String get errorNotFound {
+    return Intl.message(
+      'المطلوب غير موجود.',
+      name: 'errorNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `في تعارض في البيانات. حاول مرة تانية.`
+  String get errorConflict {
+    return Intl.message(
+      'في تعارض في البيانات. حاول مرة تانية.',
+      name: 'errorConflict',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تعذر تنفيذ طلبك. راجع البيانات وحاول تاني.`
+  String get errorUnprocessable {
+    return Intl.message(
+      'تعذر تنفيذ طلبك. راجع البيانات وحاول تاني.',
+      name: 'errorUnprocessable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `في مشكلة في الخدمة حالياً. حاول بعد شوية.`
+  String get errorServer {
+    return Intl.message(
+      'في مشكلة في الخدمة حالياً. حاول بعد شوية.',
+      name: 'errorServer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حصلت مشكلة. حاول مرة تانية.`
+  String get errorServerGeneric {
+    return Intl.message(
+      'حصلت مشكلة. حاول مرة تانية.',
+      name: 'errorServerGeneric',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الصلاحية غير متاحة.`
+  String get errorPermissionDenied {
+    return Intl.message(
+      'الصلاحية غير متاحة.',
+      name: 'errorPermissionDenied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حصلت مشكلة في حفظ البيانات على الجهاز. حاول مرة تانية.`
+  String get errorCache {
+    return Intl.message(
+      'حصلت مشكلة في حفظ البيانات على الجهاز. حاول مرة تانية.',
+      name: 'errorCache',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حصلت مشكلة في حفظ الملف.`
+  String get errorStorage {
+    return Intl.message(
+      'حصلت مشكلة في حفظ الملف.',
+      name: 'errorStorage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `راجع البيانات المدخلة.`
+  String get errorValidation {
+    return Intl.message(
+      'راجع البيانات المدخلة.',
+      name: 'errorValidation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `راجع البيانات المدخلة: {code}`
+  String errorValidationWithCode(String code) {
+    return Intl.message(
+      'راجع البيانات المدخلة: $code',
+      name: 'errorValidationWithCode',
+      desc: '',
+      args: [code],
+    );
+  }
+
+  /// `حصلت مشكلة غير متوقعة.`
+  String get errorUnknown {
+    return Intl.message(
+      'حصلت مشكلة غير متوقعة.',
+      name: 'errorUnknown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لحظة من فضلك`
+  String get startupFallbackTitle {
+    return Intl.message(
+      'لحظة من فضلك',
+      name: 'startupFallbackTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حاول فتح محافظ مرة أخرى.`
+  String get startupFallbackMessage {
+    return Intl.message(
+      'حاول فتح محافظ مرة أخرى.',
+      name: 'startupFallbackMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حاول مرة أخرى`
+  String get startupFallbackRetryAction {
+    return Intl.message(
+      'حاول مرة أخرى',
+      name: 'startupFallbackRetryAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `404`
+  String get notFoundStatusCode {
+    return Intl.message(
+      '404',
+      name: 'notFoundStatusCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الصفحة غير موجودة`
+  String get notFoundPageTitle {
+    return Intl.message(
+      'الصفحة غير موجودة',
+      name: 'notFoundPageTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `محافظ`
+  String get appName {
+    return Intl.message(
+      'محافظ',
+      name: 'appName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تسجيل الدخول`
+  String get signIn {
+    return Intl.message(
+      'تسجيل الدخول',
+      name: 'signIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إنشاء حساب`
+  String get signUp {
+    return Intl.message(
+      'إنشاء حساب',
+      name: 'signUp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `البريد الإلكتروني`
+  String get email {
+    return Intl.message(
+      'البريد الإلكتروني',
+      name: 'email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كلمة المرور`
+  String get password {
+    return Intl.message(
+      'كلمة المرور',
+      name: 'password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الاسم`
+  String get displayName {
+    return Intl.message(
+      'الاسم',
+      name: 'displayName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اسمك`
+  String get yourName {
+    return Intl.message(
+      'اسمك',
+      name: 'yourName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تأكيد`
+  String get confirm {
+    return Intl.message(
+      'تأكيد',
+      name: 'confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تسجيل الدخول بجوجل`
+  String get signInWithGoogle {
+    return Intl.message(
+      'تسجيل الدخول بجوجل',
+      name: 'signInWithGoogle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تسجيل الدخول بالبريد الإلكتروني`
+  String get signInWithEmail {
+    return Intl.message(
+      'تسجيل الدخول بالبريد الإلكتروني',
+      name: 'signInWithEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ليس لديك حساب؟`
+  String get dontHaveAccount {
+    return Intl.message(
+      'ليس لديك حساب؟',
+      name: 'dontHaveAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لديك حساب بالفعل؟`
+  String get alreadyHaveAccount {
+    return Intl.message(
+      'لديك حساب بالفعل؟',
+      name: 'alreadyHaveAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إنشاء حساب`
+  String get createAccount {
+    return Intl.message(
+      'إنشاء حساب',
+      name: 'createAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أدخل بريدك الإلكتروني`
+  String get emailHint {
+    return Intl.message(
+      'أدخل بريدك الإلكتروني',
+      name: 'emailHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أدخل كلمة المرور`
+  String get passwordHint {
+    return Intl.message(
+      'أدخل كلمة المرور',
+      name: 'passwordHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أدخل اسمك`
+  String get displayNameHint {
+    return Intl.message(
+      'أدخل اسمك',
+      name: 'displayNameHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تأكيد الاسم`
+  String get confirmName {
+    return Intl.message(
+      'تأكيد الاسم',
+      name: 'confirmName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أكد اسمك عشان نكمل`
+  String get confirmNameMessage {
+    return Intl.message(
+      'أكد اسمك عشان نكمل',
+      name: 'confirmNameMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أو`
+  String get or {
+    return Intl.message(
+      'أو',
+      name: 'or',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تابع محافظ شغلك بسهولة ومن مكان واحد`
+  String get appTagline {
+    return Intl.message(
+      'تابع محافظ شغلك بسهولة ومن مكان واحد',
+      name: 'appTagline',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كمل باستخدام جوجل`
+  String get continueWithGoogle {
+    return Intl.message(
+      'كمل باستخدام جوجل',
+      name: 'continueWithGoogle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `نسيت كلمة المرور؟`
+  String get forgotPassword {
+    return Intl.message(
+      'نسيت كلمة المرور؟',
+      name: 'forgotPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أنشئ حسابك`
+  String get signUpNow {
+    return Intl.message(
+      'أنشئ حسابك',
+      name: 'signUpNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `example@email.com`
+  String get emailPlaceholder {
+    return Intl.message(
+      'example@email.com',
+      name: 'emailPlaceholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `••••••••`
+  String get passwordPlaceholder {
+    return Intl.message(
+      '••••••••',
+      name: 'passwordPlaceholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الاسم الكامل`
+  String get fullName {
+    return Intl.message(
+      'الاسم الكامل',
+      name: 'fullName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مثلاً: أحمد محمود`
+  String get fullNamePlaceholder {
+    return Intl.message(
+      'مثلاً: أحمد محمود',
+      name: 'fullNamePlaceholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أنشئ حساب جديد وابدأ تتابع شغلك بسهولة`
+  String get signUpSubtitle {
+    return Intl.message(
+      'أنشئ حساب جديد وابدأ تتابع شغلك بسهولة',
+      name: 'signUpSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اسمك إيه؟`
+  String get whatIsYourName {
+    return Intl.message(
+      'اسمك إيه؟',
+      name: 'whatIsYourName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الاسم ده هيظهر وقت تحديث حالة الدفع عشان متابعة العمليات تبقى أسهل.`
+  String get nameWillBeDisplayed {
+    return Intl.message(
+      'الاسم ده هيظهر وقت تحديث حالة الدفع عشان متابعة العمليات تبقى أسهل.',
+      name: 'nameWillBeDisplayed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أهلاً بيك`
+  String get welcome {
+    return Intl.message(
+      'أهلاً بيك',
+      name: 'welcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إجمالي الرصيد`
+  String get totalBalance {
+    return Intl.message(
+      'إجمالي الرصيد',
+      name: 'totalBalance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الرصيد الحالي`
+  String get currentBalance {
+    return Intl.message(
+      'الرصيد الحالي',
+      name: 'currentBalance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ج.م`
+  String get currency {
+    return Intl.message(
+      'ج.م',
+      name: 'currency',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إجمالي الصادر`
+  String get totalOut {
+    return Intl.message(
+      'إجمالي الصادر',
+      name: 'totalOut',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إجمالي الوارد`
+  String get totalIn {
+    return Intl.message(
+      'إجمالي الوارد',
+      name: 'totalIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `محافظك`
+  String get yourWallets {
+    return Intl.message(
+      'محافظك',
+      name: 'yourWallets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عرض الكل`
+  String get viewAll {
+    return Intl.message(
+      'عرض الكل',
+      name: 'viewAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مساحات العمل`
+  String get workspaces {
+    return Intl.message(
+      'مساحات العمل',
+      name: 'workspaces',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة مساحة عمل`
+  String get addWorkspace {
+    return Intl.message(
+      'إضافة مساحة عمل',
+      name: 'addWorkspace',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة محفظة`
+  String get addWallet {
+    return Intl.message(
+      'إضافة محفظة',
+      name: 'addWallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `نشط`
+  String get walletStatusActive {
+    return Intl.message(
+      'نشط',
+      name: 'walletStatusActive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count, plural, =0{لا توجد محافظ نشطة} =1{محفظة واحدة نشطة} =2{محفظتان نشطتان} few{{count} محافظ نشطة} many{{count} محفظة نشطة} other{{count} محفظة نشطة}}`
+  String activeWalletsCount(num count) {
+    return Intl.plural(
+      count,
+      zero: 'لا توجد محافظ نشطة',
+      one: 'محفظة واحدة نشطة',
+      two: 'محفظتان نشطتان',
+      few: '$count محافظ نشطة',
+      many: '$count محفظة نشطة',
+      other: '$count محفظة نشطة',
+      name: 'activeWalletsCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count, plural, =0{لم تقم بإضافة أي محافظ بعد} =1{إجمالي الرصيد لمحفظتك} =2{إجمالي الرصيد لمحفظتيك} few{إجمالي الرصيد لـ {count} من محافظك} many{إجمالي الرصيد لـ {count} من محافظك} other{إجمالي الرصيد لـ {count} من محافظك}}`
+  String activeWalletsHint(num count) {
+    return Intl.plural(
+      count,
+      zero: 'لم تقم بإضافة أي محافظ بعد',
+      one: 'إجمالي الرصيد لمحفظتك',
+      two: 'إجمالي الرصيد لمحفظتيك',
+      few: 'إجمالي الرصيد لـ $count من محافظك',
+      many: 'إجمالي الرصيد لـ $count من محافظك',
+      other: 'إجمالي الرصيد لـ $count من محافظك',
+      name: 'activeWalletsHint',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `آخر نشاط`
+  String get lastActivity {
+    return Intl.message(
+      'آخر نشاط',
+      name: 'lastActivity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الآن`
+  String get justNow {
+    return Intl.message(
+      'الآن',
+      name: 'justNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `منذ {minutes} دقيقة`
+  String minutesAgo(Object minutes) {
+    return Intl.message(
+      'منذ $minutes دقيقة',
+      name: 'minutesAgo',
+      desc: '',
+      args: [minutes],
+    );
+  }
+
+  /// `ج.م`
+  String get egp {
+    return Intl.message(
+      'ج.م',
+      name: 'egp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة محفظة`
+  String get addWalletTitle {
+    return Intl.message(
+      'إضافة محفظة',
+      name: 'addWalletTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لازم تكون المحفظة دي موجودة على الموبايل ده، لأن التطبيق بيقرأ رسائل الـSMS الجديدة من هنا فقط.`
+  String get addWalletDescription {
+    return Intl.message(
+      'لازم تكون المحفظة دي موجودة على الموبايل ده، لأن التطبيق بيقرأ رسائل الـSMS الجديدة من هنا فقط.',
+      name: 'addWalletDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `رقم الموبايل`
+  String get phoneNumber {
+    return Intl.message(
+      'رقم الموبايل',
+      name: 'phoneNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اختر الشركة`
+  String get chooseProvider {
+    return Intl.message(
+      'اختر الشركة',
+      name: 'chooseProvider',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اسمح وكمل`
+  String get allowAndContinue {
+    return Intl.message(
+      'اسمح وكمل',
+      name: 'allowAndContinue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لاحقاً`
+  String get notNow {
+    return Intl.message(
+      'لاحقاً',
+      name: 'notNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أورانج كاش`
+  String get providerOrange {
+    return Intl.message(
+      'أورانج كاش',
+      name: 'providerOrange',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `فودافون كاش`
+  String get providerVodafone {
+    return Intl.message(
+      'فودافون كاش',
+      name: 'providerVodafone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إنستا باي`
+  String get providerInstapay {
+    return Intl.message(
+      'إنستا باي',
+      name: 'providerInstapay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اتصالات كاش`
+  String get providerEtisalat {
+    return Intl.message(
+      'اتصالات كاش',
+      name: 'providerEtisalat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `وي باي`
+  String get providerWePay {
+    return Intl.message(
+      'وي باي',
+      name: 'providerWePay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `محفظة أخرى`
+  String get providerUnknown {
+    return Intl.message(
+      'محفظة أخرى',
+      name: 'providerUnknown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اسمح بالوصول للرسائل والموبايل`
+  String get smsPermissionTitle {
+    return Intl.message(
+      'اسمح بالوصول للرسائل والموبايل',
+      name: 'smsPermissionTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `التطبيق محتاج صلاحية الرسائل والموبايل عشان يتعرف على أرقام المحافظ الموجودة على الجهاز ويضيف الحركات الجديدة تلقائياً.`
+  String get smsPermissionDescription {
+    return Intl.message(
+      'التطبيق محتاج صلاحية الرسائل والموبايل عشان يتعرف على أرقام المحافظ الموجودة على الجهاز ويضيف الحركات الجديدة تلقائياً.',
+      name: 'smsPermissionDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تحديث تلقائي`
+  String get smsPermissionAutoUpdateTitle {
+    return Intl.message(
+      'تحديث تلقائي',
+      name: 'smsPermissionAutoUpdateTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أي حركة جديدة بتتسجل أول ما رسالة العملية توصل.`
+  String get smsPermissionAutoUpdateDesc {
+    return Intl.message(
+      'أي حركة جديدة بتتسجل أول ما رسالة العملية توصل.',
+      name: 'smsPermissionAutoUpdateDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `خصوصيتك محفوظة`
+  String get smsPermissionPrivacyTitle {
+    return Intl.message(
+      'خصوصيتك محفوظة',
+      name: 'smsPermissionPrivacyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `بنقرأ فقط الرسائل الخاصة بالمعاملات وأرقام الموبايل اللازمة لإعداد المحافظ. بياناتك مشفرة ومش بنشاركها مع أي حد.`
+  String get smsPermissionPrivacyDesc {
+    return Intl.message(
+      'بنقرأ فقط الرسائل الخاصة بالمعاملات وأرقام الموبايل اللازمة لإعداد المحافظ. بياناتك مشفرة ومش بنشاركها مع أي حد.',
+      name: 'smsPermissionPrivacyDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم اكتشاف جهاز Xiaomi/Redmi`
+  String get smsPermissionXiaomiTitle {
+    return Intl.message(
+      'تم اكتشاف جهاز Xiaomi/Redmi',
+      name: 'smsPermissionXiaomiTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عشان المعاملات توصلك والتطبيق مقفول، لازم تفعل خاصية 'التشغيل التلقائي' وتخلي موفر البطارية 'بدون قيود' في إعدادات النظام.`
+  String get smsPermissionXiaomiDescription {
+    return Intl.message(
+      'عشان المعاملات توصلك والتطبيق مقفول، لازم تفعل خاصية \'التشغيل التلقائي\' وتخلي موفر البطارية \'بدون قيود\' في إعدادات النظام.',
+      name: 'smsPermissionXiaomiDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ضبط الإعدادات`
+  String get smsPermissionXiaomiAction {
+    return Intl.message(
+      'ضبط الإعدادات',
+      name: 'smsPermissionXiaomiAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تحسين البطارية نشط`
+  String get smsPermissionBatteryOptimizationTitle {
+    return Intl.message(
+      'تحسين البطارية نشط',
+      name: 'smsPermissionBatteryOptimizationTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `نظام أندرويد ممكن يقفل التطبيق في الخلفية لتوفير الطاقة. عشان نضمن دقة التسجيل، يفضل تسمح للتطبيق بالشغل بدون قيود البطارية.`
+  String get smsPermissionBatteryOptimizationDescription {
+    return Intl.message(
+      'نظام أندرويد ممكن يقفل التطبيق في الخلفية لتوفير الطاقة. عشان نضمن دقة التسجيل، يفضل تسمح للتطبيق بالشغل بدون قيود البطارية.',
+      name: 'smsPermissionBatteryOptimizationDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `السماح بالعمل في الخلفية`
+  String get smsPermissionBatteryOptimizationAction {
+    return Intl.message(
+      'السماح بالعمل في الخلفية',
+      name: 'smsPermissionBatteryOptimizationAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أضف المحفظة`
+  String get addWalletAction {
+    return Intl.message(
+      'أضف المحفظة',
+      name: 'addWalletAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إنشاء مساحة عمل`
+  String get createWorkspaceTitle {
+    return Intl.message(
+      'إنشاء مساحة عمل',
+      name: 'createWorkspaceTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مساحة العمل بتساعدك تجمع محافظ شغلك وتشاركها مع الناس الموثوق فيهم من مكان واحد.`
+  String get createWorkspaceDescription {
+    return Intl.message(
+      'مساحة العمل بتساعدك تجمع محافظ شغلك وتشاركها مع الناس الموثوق فيهم من مكان واحد.',
+      name: 'createWorkspaceDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اسم مساحة العمل`
+  String get workspaceNameLabel {
+    return Intl.message(
+      'اسم مساحة العمل',
+      name: 'workspaceNameLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مثلاً: محل موبايلات`
+  String get workspaceNameHint {
+    return Intl.message(
+      'مثلاً: محل موبايلات',
+      name: 'workspaceNameHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `معاينة مساحة العمل`
+  String get createWorkspacePreviewLabel {
+    return Intl.message(
+      'معاينة مساحة العمل',
+      name: 'createWorkspacePreviewLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مساحة عمل جديدة`
+  String get createWorkspacePreviewFallback {
+    return Intl.message(
+      'مساحة عمل جديدة',
+      name: 'createWorkspacePreviewFallback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `بعد إنشاء مساحة العمل، تقدر تضيف محافظ وتبعت دعوات للأعضاء.`
+  String get createWorkspacePreviewDescription {
+    return Intl.message(
+      'بعد إنشاء مساحة العمل، تقدر تضيف محافظ وتبعت دعوات للأعضاء.',
+      name: 'createWorkspacePreviewDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المالك`
+  String get workspaceOwner {
+    return Intl.message(
+      'المالك',
+      name: 'workspaceOwner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مالك`
+  String get workspaceOwnerBadge {
+    return Intl.message(
+      'مالك',
+      name: 'workspaceOwnerBadge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count, plural, =0{لا يوجد أعضاء} =1{عضو واحد} =2{عضوان} few{{count} أعضاء} many{{count} عضوًا} other{{count} عضو}}`
+  String workspaceMembersCount(int count) {
+    return Intl.plural(
+      count,
+      zero: 'لا يوجد أعضاء',
+      one: 'عضو واحد',
+      two: 'عضوان',
+      few: '$count أعضاء',
+      many: '$count عضوًا',
+      other: '$count عضو',
+      name: 'workspaceMembersCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count, plural, =0{لا توجد محافظ} =1{محفظة واحدة} =2{محفظتان} few{{count} محافظ} many{{count} محفظة} other{{count} محفظة}}`
+  String workspaceWalletsCount(int count) {
+    return Intl.plural(
+      count,
+      zero: 'لا توجد محافظ',
+      one: 'محفظة واحدة',
+      two: 'محفظتان',
+      few: '$count محافظ',
+      many: '$count محفظة',
+      other: '$count محفظة',
+      name: 'workspaceWalletsCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `إنشاء مساحة العمل`
+  String get createWorkspaceAction {
+    return Intl.message(
+      'إنشاء مساحة العمل',
+      name: 'createWorkspaceAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ابدأ بأول مساحة عمل`
+  String get createWorkspaceEmptyTitle {
+    return Intl.message(
+      'ابدأ بأول مساحة عمل',
+      name: 'createWorkspaceEmptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اجمع محافظ شغلك، تابع الحركة، وخلي فريقك يشتغل معاك من مكان واحد.`
+  String get createWorkspaceEmptyDescription {
+    return Intl.message(
+      'اجمع محافظ شغلك، تابع الحركة، وخلي فريقك يشتغل معاك من مكان واحد.',
+      name: 'createWorkspaceEmptyDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أضف أول محفظة`
+  String get createWalletEmptyTitle {
+    return Intl.message(
+      'أضف أول محفظة',
+      name: 'createWalletEmptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اربط محفظة موجودة على هذا الجهاز علشان تبدأ تتابع الرصيد والمعاملات تلقائياً.`
+  String get createWalletEmptyDescription {
+    return Intl.message(
+      'اربط محفظة موجودة على هذا الجهاز علشان تبدأ تتابع الرصيد والمعاملات تلقائياً.',
+      name: 'createWalletEmptyDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المحافظ`
+  String get workspaceWallets {
+    return Intl.message(
+      'المحافظ',
+      name: 'workspaceWallets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الأعضاء`
+  String get workspaceMembers {
+    return Intl.message(
+      'الأعضاء',
+      name: 'workspaceMembers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `دعوة عضو`
+  String get workspaceInviteMemberAction {
+    return Intl.message(
+      'دعوة عضو',
+      name: 'workspaceInviteMemberAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إعدادات المساحة`
+  String get workspaceSettingsTitle {
+    return Intl.message(
+      'إعدادات المساحة',
+      name: 'workspaceSettingsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `بيانات المساحة`
+  String get workspaceSettingsInfoSection {
+    return Intl.message(
+      'بيانات المساحة',
+      name: 'workspaceSettingsInfoSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `دعوة عضو`
+  String get workspaceSettingsInviteByEmailAction {
+    return Intl.message(
+      'دعوة عضو',
+      name: 'workspaceSettingsInviteByEmailAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الدعوات المعلقة`
+  String get workspaceSettingsPendingInvitationsSection {
+    return Intl.message(
+      'الدعوات المعلقة',
+      name: 'workspaceSettingsPendingInvitationsSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد دعوات معلقة لهذه المساحة حالياً.`
+  String get workspaceSettingsPendingInvitationsEmpty {
+    return Intl.message(
+      'لا توجد دعوات معلقة لهذه المساحة حالياً.',
+      name: 'workspaceSettingsPendingInvitationsEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `وصولك للمساحة`
+  String get workspaceSettingsAccessSection {
+    return Intl.message(
+      'وصولك للمساحة',
+      name: 'workspaceSettingsAccessSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `راجع الأعضاء والمحافظ المرتبطة، واحذف محافظك عند الحاجة أو غادر المساحة.`
+  String get workspaceSettingsMemberDescription {
+    return Intl.message(
+      'راجع الأعضاء والمحافظ المرتبطة، واحذف محافظك عند الحاجة أو غادر المساحة.',
+      name: 'workspaceSettingsMemberDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إدارة الوصول`
+  String get workspaceSettingsManageAccessAction {
+    return Intl.message(
+      'إدارة الوصول',
+      name: 'workspaceSettingsManageAccessAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `راجع كل المحافظ المرتبطة بهذه المساحة، واحذف أي محفظة لا يجب أن تبقى مشتركة.`
+  String get workspaceSettingsWalletsOwnerDescription {
+    return Intl.message(
+      'راجع كل المحافظ المرتبطة بهذه المساحة، واحذف أي محفظة لا يجب أن تبقى مشتركة.',
+      name: 'workspaceSettingsWalletsOwnerDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تقدر تشوف كل المحافظ المرتبطة هنا، لكن تحذف فقط المحافظ التي أضفتها أنت.`
+  String get workspaceSettingsWalletsMemberDescription {
+    return Intl.message(
+      'تقدر تشوف كل المحافظ المرتبطة هنا، لكن تحذف فقط المحافظ التي أضفتها أنت.',
+      name: 'workspaceSettingsWalletsMemberDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد محافظ مرتبطة بهذه المساحة حتى الآن.`
+  String get workspaceSettingsWalletsEmptyOwner {
+    return Intl.message(
+      'لا توجد محافظ مرتبطة بهذه المساحة حتى الآن.',
+      name: 'workspaceSettingsWalletsEmptyOwner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد محافظ مرتبطة بهذه المساحة حتى الآن.`
+  String get workspaceSettingsWalletsEmptyMember {
+    return Intl.message(
+      'لا توجد محافظ مرتبطة بهذه المساحة حتى الآن.',
+      name: 'workspaceSettingsWalletsEmptyMember',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المالك: {ownerName}`
+  String workspaceSettingsWalletOwner(Object ownerName) {
+    return Intl.message(
+      'المالك: $ownerName',
+      name: 'workspaceSettingsWalletOwner',
+      desc: '',
+      args: [ownerName],
+    );
+  }
+
+  /// `عضو غير معروف`
+  String get workspaceUnknownMember {
+    return Intl.message(
+      'عضو غير معروف',
+      name: 'workspaceUnknownMember',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `فقط مالك المحفظة يمكنه حذفها`
+  String get workspaceSettingsWalletReadOnlyTooltip {
+    return Intl.message(
+      'فقط مالك المحفظة يمكنه حذفها',
+      name: 'workspaceSettingsWalletReadOnlyTooltip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إجراءات حساسة`
+  String get workspaceSettingsDangerZone {
+    return Intl.message(
+      'إجراءات حساسة',
+      name: 'workspaceSettingsDangerZone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تعديل اسم المساحة`
+  String get workspaceSettingsEditNameTitle {
+    return Intl.message(
+      'تعديل اسم المساحة',
+      name: 'workspaceSettingsEditNameTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `غيّر الاسم الظاهر للمساحة في كل الشاشات المشتركة.`
+  String get workspaceSettingsEditNameDescription {
+    return Intl.message(
+      'غيّر الاسم الظاهر للمساحة في كل الشاشات المشتركة.',
+      name: 'workspaceSettingsEditNameDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حفظ التعديلات`
+  String get workspaceSettingsEditNameAction {
+    return Intl.message(
+      'حفظ التعديلات',
+      name: 'workspaceSettingsEditNameAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف`
+  String get workspaceSettingsRemoveMemberAction {
+    return Intl.message(
+      'حذف',
+      name: 'workspaceSettingsRemoveMemberAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إلغاء ربط المحفظة`
+  String get workspaceSettingsRemoveWalletAction {
+    return Intl.message(
+      'إلغاء ربط المحفظة',
+      name: 'workspaceSettingsRemoveWalletAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إلغاء`
+  String get workspaceSettingsCancelInvitationAction {
+    return Intl.message(
+      'إلغاء',
+      name: 'workspaceSettingsCancelInvitationAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مغادرة المساحة`
+  String get workspaceSettingsLeaveWorkspaceAction {
+    return Intl.message(
+      'مغادرة المساحة',
+      name: 'workspaceSettingsLeaveWorkspaceAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم حذف عضويتك والمحافظ التي ربطتها بهذه المساحة.`
+  String get workspaceSettingsLeaveWorkspaceDescription {
+    return Intl.message(
+      'سيتم حذف عضويتك والمحافظ التي ربطتها بهذه المساحة.',
+      name: 'workspaceSettingsLeaveWorkspaceDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف مساحة العمل`
+  String get workspaceSettingsDeleteWorkspaceAction {
+    return Intl.message(
+      'حذف مساحة العمل',
+      name: 'workspaceSettingsDeleteWorkspaceAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم حذف كل البيانات المرتبطة بالمساحة نهائياً.`
+  String get workspaceSettingsDeleteWorkspaceDescription {
+    return Intl.message(
+      'سيتم حذف كل البيانات المرتبطة بالمساحة نهائياً.',
+      name: 'workspaceSettingsDeleteWorkspaceDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم تغيير اسم مساحة العمل.`
+  String get workspaceSettingsNameUpdatedSuccess {
+    return Intl.message(
+      'تم تغيير اسم مساحة العمل.',
+      name: 'workspaceSettingsNameUpdatedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم حذف العضو.`
+  String get workspaceSettingsMemberRemovedSuccess {
+    return Intl.message(
+      'تم حذف العضو.',
+      name: 'workspaceSettingsMemberRemovedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم إلغاء ربط المحفظة من مساحة العمل بنجاح.`
+  String get workspaceSettingsWalletRemovedSuccess {
+    return Intl.message(
+      'تم إلغاء ربط المحفظة من مساحة العمل بنجاح.',
+      name: 'workspaceSettingsWalletRemovedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم إلغاء الدعوة.`
+  String get workspaceSettingsInvitationCancelledSuccess {
+    return Intl.message(
+      'تم إلغاء الدعوة.',
+      name: 'workspaceSettingsInvitationCancelledSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف العضو؟`
+  String get workspaceSettingsRemoveMemberConfirmTitle {
+    return Intl.message(
+      'حذف العضو؟',
+      name: 'workspaceSettingsRemoveMemberConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم حذف {memberName} من مساحة العمل، وسيتم أيضاً حذف أي محافظ ربطها بهذه المساحة. تقدر تبعت له دعوة مرة تانية لاحقاً.`
+  String workspaceSettingsRemoveMemberConfirmMessage(Object memberName) {
+    return Intl.message(
+      'سيتم حذف $memberName من مساحة العمل، وسيتم أيضاً حذف أي محافظ ربطها بهذه المساحة. تقدر تبعت له دعوة مرة تانية لاحقاً.',
+      name: 'workspaceSettingsRemoveMemberConfirmMessage',
+      desc: '',
+      args: [memberName],
+    );
+  }
+
+  /// `إلغاء ربط المحفظة؟`
+  String get workspaceSettingsRemoveWalletConfirmTitle {
+    return Intl.message(
+      'إلغاء ربط المحفظة؟',
+      name: 'workspaceSettingsRemoveWalletConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم إلغاء ربط محفظة {providerName} المرتبطة بالرقم {phoneNumber} من مساحة العمل دي. المحفظة وباقي بياناتها مش هيتم حذفهم.`
+  String workspaceSettingsRemoveWalletConfirmMessage(
+      Object providerName, Object phoneNumber) {
+    return Intl.message(
+      'سيتم إلغاء ربط محفظة $providerName المرتبطة بالرقم $phoneNumber من مساحة العمل دي. المحفظة وباقي بياناتها مش هيتم حذفهم.',
+      name: 'workspaceSettingsRemoveWalletConfirmMessage',
+      desc: '',
+      args: [providerName, phoneNumber],
+    );
+  }
+
+  /// `إلغاء الدعوة؟`
+  String get workspaceSettingsCancelInvitationConfirmTitle {
+    return Intl.message(
+      'إلغاء الدعوة؟',
+      name: 'workspaceSettingsCancelInvitationConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم إلغاء الدعوة المرسلة إلى {email} فوراً.`
+  String workspaceSettingsCancelInvitationConfirmMessage(Object email) {
+    return Intl.message(
+      'سيتم إلغاء الدعوة المرسلة إلى $email فوراً.',
+      name: 'workspaceSettingsCancelInvitationConfirmMessage',
+      desc: '',
+      args: [email],
+    );
+  }
+
+  /// `مغادرة مساحة العمل؟`
+  String get workspaceSettingsLeaveWorkspaceConfirmTitle {
+    return Intl.message(
+      'مغادرة مساحة العمل؟',
+      name: 'workspaceSettingsLeaveWorkspaceConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ستفقد الوصول إلى هذه المساحة، وسيتم حذف المحافظ التي ربطتها بها.`
+  String get workspaceSettingsLeaveWorkspaceConfirmMessage {
+    return Intl.message(
+      'ستفقد الوصول إلى هذه المساحة، وسيتم حذف المحافظ التي ربطتها بها.',
+      name: 'workspaceSettingsLeaveWorkspaceConfirmMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف مساحة العمل؟`
+  String get workspaceSettingsDeleteWorkspaceConfirmTitle {
+    return Intl.message(
+      'حذف مساحة العمل؟',
+      name: 'workspaceSettingsDeleteWorkspaceConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم حذف مساحة العمل وأذونات الأعضاء وربط المحافظ والدعوات المعلقة نهائياً.`
+  String get workspaceSettingsDeleteWorkspaceConfirmMessage {
+    return Intl.message(
+      'سيتم حذف مساحة العمل وأذونات الأعضاء وربط المحافظ والدعوات المعلقة نهائياً.',
+      name: 'workspaceSettingsDeleteWorkspaceConfirmMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مساحة العمل لم تعد متاحة`
+  String get workspaceUnavailableTitle {
+    return Intl.message(
+      'مساحة العمل لم تعد متاحة',
+      name: 'workspaceUnavailableTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `يبدو أن مساحة العمل دي تم حذفها أو تم إلغاء وصولك لها. هنرجعك للرئيسية.`
+  String get workspaceUnavailableMessage {
+    return Intl.message(
+      'يبدو أن مساحة العمل دي تم حذفها أو تم إلغاء وصولك لها. هنرجعك للرئيسية.',
+      name: 'workspaceUnavailableMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `العودة للرئيسية`
+  String get workspaceUnavailableAction {
+    return Intl.message(
+      'العودة للرئيسية',
+      name: 'workspaceUnavailableAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الإعدادات`
+  String get userSettingsTitle {
+    return Intl.message(
+      'الإعدادات',
+      name: 'userSettingsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `التطبيق`
+  String get userSettingsAppSection {
+    return Intl.message(
+      'التطبيق',
+      name: 'userSettingsAppSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `استقرار العمل في الخلفية`
+  String get userSettingsBackgroundSection {
+    return Intl.message(
+      'استقرار العمل في الخلفية',
+      name: 'userSettingsBackgroundSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الحساب`
+  String get userSettingsAccountSection {
+    return Intl.message(
+      'الحساب',
+      name: 'userSettingsAccountSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عن التطبيق`
+  String get userSettingsAboutSection {
+    return Intl.message(
+      'عن التطبيق',
+      name: 'userSettingsAboutSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا يوجد بريد إلكتروني مرتبط`
+  String get userSettingsNoEmailLabel {
+    return Intl.message(
+      'لا يوجد بريد إلكتروني مرتبط',
+      name: 'userSettingsNoEmailLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تعديل الاسم`
+  String get userSettingsEditNameAction {
+    return Intl.message(
+      'تعديل الاسم',
+      name: 'userSettingsEditNameAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تعديل الاسم`
+  String get userSettingsEditNameTitle {
+    return Intl.message(
+      'تعديل الاسم',
+      name: 'userSettingsEditNameTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `غيّر الاسم الظاهر في التطبيق وسجل النشاط.`
+  String get userSettingsEditNameDescription {
+    return Intl.message(
+      'غيّر الاسم الظاهر في التطبيق وسجل النشاط.',
+      name: 'userSettingsEditNameDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حفظ التعديلات`
+  String get userSettingsEditNameSaveAction {
+    return Intl.message(
+      'حفظ التعديلات',
+      name: 'userSettingsEditNameSaveAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم تحديث الاسم بنجاح.`
+  String get userSettingsNameUpdatedSuccess {
+    return Intl.message(
+      'تم تحديث الاسم بنجاح.',
+      name: 'userSettingsNameUpdatedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المظهر`
+  String get userSettingsThemeTitle {
+    return Intl.message(
+      'المظهر',
+      name: 'userSettingsThemeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تلقائي حسب الجهاز`
+  String get userSettingsThemeSystemOption {
+    return Intl.message(
+      'تلقائي حسب الجهاز',
+      name: 'userSettingsThemeSystemOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `فاتح`
+  String get userSettingsThemeLightOption {
+    return Intl.message(
+      'فاتح',
+      name: 'userSettingsThemeLightOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `داكن`
+  String get userSettingsThemeDarkOption {
+    return Intl.message(
+      'داكن',
+      name: 'userSettingsThemeDarkOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اللغة`
+  String get userSettingsLanguageTitle {
+    return Intl.message(
+      'اللغة',
+      name: 'userSettingsLanguageTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لغة الجهاز`
+  String get userSettingsLanguageSystemOption {
+    return Intl.message(
+      'لغة الجهاز',
+      name: 'userSettingsLanguageSystemOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `English`
+  String get userSettingsLanguageEnglishOption {
+    return Intl.message(
+      'English',
+      name: 'userSettingsLanguageEnglishOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `العربية`
+  String get userSettingsLanguageArabicOption {
+    return Intl.message(
+      'العربية',
+      name: 'userSettingsLanguageArabicOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حجم الخط`
+  String get userSettingsFontSizeTitle {
+    return Intl.message(
+      'حجم الخط',
+      name: 'userSettingsFontSizeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تحكم في مقياس القراءة المستخدم في التطبيق كله.`
+  String get userSettingsFontSizeDescription {
+    return Intl.message(
+      'تحكم في مقياس القراءة المستخدم في التطبيق كله.',
+      name: 'userSettingsFontSizeDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تطبيق`
+  String get userSettingsFontSizeSaveAction {
+    return Intl.message(
+      'تطبيق',
+      name: 'userSettingsFontSizeSaveAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `معاينة`
+  String get userSettingsFontSizePreviewTitle {
+    return Intl.message(
+      'معاينة',
+      name: 'userSettingsFontSizePreviewTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `استخدم شريط التمرير لتصغير أو تكبير النص في محافظ كله.`
+  String get userSettingsFontSizePreviewBody {
+    return Intl.message(
+      'استخدم شريط التمرير لتصغير أو تكبير النص في محافظ كله.',
+      name: 'userSettingsFontSizePreviewBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الحجم الحالي في التطبيق: {value}`
+  String userSettingsFontSizeCurrentValue(String value) {
+    return Intl.message(
+      'الحجم الحالي في التطبيق: $value',
+      name: 'userSettingsFontSizeCurrentValue',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `أصغر`
+  String get userSettingsFontSizeSmallLabel {
+    return Intl.message(
+      'أصغر',
+      name: 'userSettingsFontSizeSmallLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أكبر`
+  String get userSettingsFontSizeLargeLabel {
+    return Intl.message(
+      'أكبر',
+      name: 'userSettingsFontSizeLargeLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إذن قراءة الرسائل`
+  String get userSettingsSmsPermissionTitle {
+    return Intl.message(
+      'إذن قراءة الرسائل',
+      name: 'userSettingsSmsPermissionTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `جاري التحقق من حالة الإذن...`
+  String get userSettingsSmsPermissionCheckingLabel {
+    return Intl.message(
+      'جاري التحقق من حالة الإذن...',
+      name: 'userSettingsSmsPermissionCheckingLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مفعّل`
+  String get userSettingsSmsPermissionEnabledLabel {
+    return Intl.message(
+      'مفعّل',
+      name: 'userSettingsSmsPermissionEnabledLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `غير مفعّل، والتطبيق لن يعمل بدونه.`
+  String get userSettingsSmsPermissionDisabledLabel {
+    return Intl.message(
+      'غير مفعّل، والتطبيق لن يعمل بدونه.',
+      name: 'userSettingsSmsPermissionDisabledLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `فتح الإعدادات`
+  String get userSettingsOpenSystemSettingsAction {
+    return Intl.message(
+      'فتح الإعدادات',
+      name: 'userSettingsOpenSystemSettingsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تسجيل الخروج`
+  String get userSettingsSignOutAction {
+    return Intl.message(
+      'تسجيل الخروج',
+      name: 'userSettingsSignOutAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تسجيل الخروج؟`
+  String get userSettingsSignOutConfirmTitle {
+    return Intl.message(
+      'تسجيل الخروج؟',
+      name: 'userSettingsSignOutConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم إنهاء جلستك الحالية على هذا الجهاز، ويمكنك تسجيل الدخول مرة أخرى في أي وقت.`
+  String get userSettingsSignOutConfirmMessage {
+    return Intl.message(
+      'سيتم إنهاء جلستك الحالية على هذا الجهاز، ويمكنك تسجيل الدخول مرة أخرى في أي وقت.',
+      name: 'userSettingsSignOutConfirmMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف الحساب`
+  String get userSettingsDeleteAccountAction {
+    return Intl.message(
+      'حذف الحساب',
+      name: 'userSettingsDeleteAccountAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف الحساب؟`
+  String get userSettingsDeleteAccountConfirmTitle {
+    return Intl.message(
+      'حذف الحساب؟',
+      name: 'userSettingsDeleteAccountConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذا الإجراء حساس وقد يؤدي إلى حذف البيانات المرتبطة بحسابك نهائياً بعد تفعيله بالكامل.`
+  String get userSettingsDeleteAccountConfirmMessage {
+    return Intl.message(
+      'هذا الإجراء حساس وقد يؤدي إلى حذف البيانات المرتبطة بحسابك نهائياً بعد تفعيله بالكامل.',
+      name: 'userSettingsDeleteAccountConfirmMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف الحساب غير متاح حالياً`
+  String get userSettingsDeleteAccountUnavailableTitle {
+    return Intl.message(
+      'حذف الحساب غير متاح حالياً',
+      name: 'userSettingsDeleteAccountUnavailableTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إخفاء الحساب فقط لا يكفي هنا، لأننا نحتاج أولاً إلى تنظيف المحافظ ومساحات العمل والدعوات المرتبطة به بشكل آمن. سنفعل هذا الإجراء بعد إضافة مسار حذف كامل للبيانات.`
+  String get userSettingsDeleteAccountUnavailableMessage {
+    return Intl.message(
+      'إخفاء الحساب فقط لا يكفي هنا، لأننا نحتاج أولاً إلى تنظيف المحافظ ومساحات العمل والدعوات المرتبطة به بشكل آمن. سنفعل هذا الإجراء بعد إضافة مسار حذف كامل للبيانات.',
+      name: 'userSettingsDeleteAccountUnavailableMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إصدار التطبيق`
+  String get userSettingsAppVersionLabel {
+    return Intl.message(
+      'إصدار التطبيق',
+      name: 'userSettingsAppVersionLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `محافظك`
+  String get userSettingsWalletsSection {
+    return Intl.message(
+      'محافظك',
+      name: 'userSettingsWalletsSection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إدارة المحافظ اللي أضفتها لمحافظ. حذف المحفظة هيشيلها هي وكل معاملاتها نهائياً من كل مساحات العمل.`
+  String get userSettingsWalletsDescription {
+    return Intl.message(
+      'إدارة المحافظ اللي أضفتها لمحافظ. حذف المحفظة هيشيلها هي وكل معاملاتها نهائياً من كل مساحات العمل.',
+      name: 'userSettingsWalletsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف المحفظة`
+  String get userSettingsDeleteWalletAction {
+    return Intl.message(
+      'حذف المحفظة',
+      name: 'userSettingsDeleteWalletAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف المحفظة؟`
+  String get userSettingsDeleteWalletConfirmTitle {
+    return Intl.message(
+      'حذف المحفظة؟',
+      name: 'userSettingsDeleteWalletConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هل أنت متأكد أنك عايز تحذف محفظة {providerName} ({phoneNumber})؟ ده هيحذف كل معاملاتها وملاحظاتها نهائياً، وهيلغي ربطها من كل مساحات العمل. الإجراء ده لا يمكن التراجع عنه.`
+  String userSettingsDeleteWalletConfirmMessage(
+      Object providerName, Object phoneNumber) {
+    return Intl.message(
+      'هل أنت متأكد أنك عايز تحذف محفظة $providerName ($phoneNumber)؟ ده هيحذف كل معاملاتها وملاحظاتها نهائياً، وهيلغي ربطها من كل مساحات العمل. الإجراء ده لا يمكن التراجع عنه.',
+      name: 'userSettingsDeleteWalletConfirmMessage',
+      desc: '',
+      args: [providerName, phoneNumber],
+    );
+  }
+
+  /// `تم حذف المحفظة بنجاح.`
+  String get userSettingsWalletDeletedSuccess {
+    return Intl.message(
+      'تم حذف المحفظة بنجاح.',
+      name: 'userSettingsWalletDeletedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف`
+  String get commonDeleteAction {
+    return Intl.message(
+      'حذف',
+      name: 'commonDeleteAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إلغاء`
+  String get commonCancelAction {
+    return Intl.message(
+      'إلغاء',
+      name: 'commonCancelAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة محافظ`
+  String get workspaceAddWalletsTitle {
+    return Intl.message(
+      'إضافة محافظ',
+      name: 'workspaceAddWalletsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة محافظ`
+  String get workspaceAddWalletsAction {
+    return Intl.message(
+      'إضافة محافظ',
+      name: 'workspaceAddWalletsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اختر المحافظ التي تريد تظهر في مساحة العمل الآن. وتقدر تضيف المزيد لاحقاً.`
+  String get workspaceAddWalletsCreateDescription {
+    return Intl.message(
+      'اختر المحافظ التي تريد تظهر في مساحة العمل الآن. وتقدر تضيف المزيد لاحقاً.',
+      name: 'workspaceAddWalletsCreateDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `شارك محافظك مع مساحة العمل. أي محفظة تضيفها هنا هتظهر لكل أعضاء المساحة.`
+  String get workspaceAddWalletsManageDescription {
+    return Intl.message(
+      'شارك محافظك مع مساحة العمل. أي محفظة تضيفها هنا هتظهر لكل أعضاء المساحة.',
+      name: 'workspaceAddWalletsManageDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة المحافظ المحددة`
+  String get workspaceAddSelectedWalletsAction {
+    return Intl.message(
+      'إضافة المحافظ المحددة',
+      name: 'workspaceAddSelectedWalletsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ادخل على مساحة العمل`
+  String get workspaceContinueToDetailsAction {
+    return Intl.message(
+      'ادخل على مساحة العمل',
+      name: 'workspaceContinueToDetailsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تخطي حالياً`
+  String get workspaceSkipWalletsAction {
+    return Intl.message(
+      'تخطي حالياً',
+      name: 'workspaceSkipWalletsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `متاحة`
+  String get workspaceWalletAvailable {
+    return Intl.message(
+      'متاحة',
+      name: 'workspaceWalletAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `محددة`
+  String get workspaceWalletSelected {
+    return Intl.message(
+      'محددة',
+      name: 'workspaceWalletSelected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مضافة`
+  String get workspaceWalletAlreadyAdded {
+    return Intl.message(
+      'مضافة',
+      name: 'workspaceWalletAlreadyAdded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا تملك أي محافظ بعد`
+  String get workspaceNoOwnedWalletsTitle {
+    return Intl.message(
+      'لا تملك أي محافظ بعد',
+      name: 'workspaceNoOwnedWalletsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أضف محفظة أولاً، وبعدها تقدر تشاركها مع مساحة العمل.`
+  String get workspaceNoOwnedWalletsDescription {
+    return Intl.message(
+      'أضف محفظة أولاً، وبعدها تقدر تشاركها مع مساحة العمل.',
+      name: 'workspaceNoOwnedWalletsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كل محافظك مرتبطة بالفعل`
+  String get workspaceAllOwnedWalletsLinkedTitle {
+    return Intl.message(
+      'كل محافظك مرتبطة بالفعل',
+      name: 'workspaceAllOwnedWalletsLinkedTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تقدر تدخل على مساحة العمل أو تضيف محفظة جديدة لاحقاً.`
+  String get workspaceAllOwnedWalletsLinkedDescription {
+    return Intl.message(
+      'تقدر تدخل على مساحة العمل أو تضيف محفظة جديدة لاحقاً.',
+      name: 'workspaceAllOwnedWalletsLinkedDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عندك {ownedCount} محافظ، و{linkedCount} منها مضافين بالفعل في مساحة العمل.`
+  String workspaceWalletSelectionSummary(int ownedCount, int linkedCount) {
+    return Intl.message(
+      'عندك $ownedCount محافظ، و$linkedCount منها مضافين بالفعل في مساحة العمل.',
+      name: 'workspaceWalletSelectionSummary',
+      desc: '',
+      args: [ownedCount, linkedCount],
+    );
+  }
+
+  /// `لا توجد محافظ مرتبطة بعد`
+  String get workspaceWalletsEmptyTitle {
+    return Intl.message(
+      'لا توجد محافظ مرتبطة بعد',
+      name: 'workspaceWalletsEmptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المحافظ المشتركة هتظهر هنا بعد ربطها بمساحة العمل.`
+  String get workspaceWalletsEmptyDescription {
+    return Intl.message(
+      'المحافظ المشتركة هتظهر هنا بعد ربطها بمساحة العمل.',
+      name: 'workspaceWalletsEmptyDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا يوجد أعضاء في مساحة العمل حتى الآن.`
+  String get workspaceMembersEmpty {
+    return Intl.message(
+      'لا يوجد أعضاء في مساحة العمل حتى الآن.',
+      name: 'workspaceMembersEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الدعوات`
+  String get invitationsTitle {
+    return Intl.message(
+      'الدعوات',
+      name: 'invitationsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد دعوات معلقة`
+  String get invitationsEmptyTitle {
+    return Intl.message(
+      'لا توجد دعوات معلقة',
+      name: 'invitationsEmptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد عندك دعوات معلقة حالياً.`
+  String get invitationsEmptyDescription {
+    return Intl.message(
+      'لا توجد عندك دعوات معلقة حالياً.',
+      name: 'invitationsEmptyDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `راجع الدعوات اللي وصلتك واختر إذا كنت هتقبل أو ترفض.`
+  String get invitationsListDescription {
+    return Intl.message(
+      'راجع الدعوات اللي وصلتك واختر إذا كنت هتقبل أو ترفض.',
+      name: 'invitationsListDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count, plural, =0{لا توجد دعوات بانتظار الرد} =1{دعوة واحدة بانتظار الرد} =2{دعوتان بانتظار الرد} few{{count} دعوات بانتظار الرد} many{{count} دعوة بانتظار الرد} other{{count} دعوة بانتظار الرد}}`
+  String invitationsPendingCount(int count) {
+    return Intl.plural(
+      count,
+      zero: 'لا توجد دعوات بانتظار الرد',
+      one: 'دعوة واحدة بانتظار الرد',
+      two: 'دعوتان بانتظار الرد',
+      few: '$count دعوات بانتظار الرد',
+      many: '$count دعوة بانتظار الرد',
+      other: '$count دعوة بانتظار الرد',
+      name: 'invitationsPendingCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `معلقة`
+  String get invitationsPendingStatus {
+    return Intl.message(
+      'معلقة',
+      name: 'invitationsPendingStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مساحة عمل محذوفة`
+  String get invitationsDeletedWorkspaceFallback {
+    return Intl.message(
+      'مساحة عمل محذوفة',
+      name: 'invitationsDeletedWorkspaceFallback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مرسل غير معروف`
+  String get invitationsUnknownInviterFallback {
+    return Intl.message(
+      'مرسل غير معروف',
+      name: 'invitationsUnknownInviterFallback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `قبول`
+  String get invitationsAcceptAction {
+    return Intl.message(
+      'قبول',
+      name: 'invitationsAcceptAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `رفض`
+  String get invitationsDeclineAction {
+    return Intl.message(
+      'رفض',
+      name: 'invitationsDeclineAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تحديث القائمة`
+  String get invitationsRefreshAction {
+    return Intl.message(
+      'تحديث القائمة',
+      name: 'invitationsRefreshAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كيف تعمل الدعوات`
+  String get invitationsHowItWorksTitle {
+    return Intl.message(
+      'كيف تعمل الدعوات',
+      name: 'invitationsHowItWorksTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `يمكن إرسال الدعوة فقط إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المسجل به.`
+  String get invitationsHowItWorksDescription {
+    return Intl.message(
+      'يمكن إرسال الدعوة فقط إلى حساب محافظ موجود بالفعل باستخدام البريد الإلكتروني المسجل به.',
+      name: 'invitationsHowItWorksDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أحدث الردود`
+  String get invitationsRecentResponsesTitle {
+    return Intl.message(
+      'أحدث الردود',
+      name: 'invitationsRecentResponsesTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `دعوة من {name}`
+  String invitationSentBy(Object name) {
+    return Intl.message(
+      'دعوة من $name',
+      name: 'invitationSentBy',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `تم انضمامك إلى مساحة العمل {workspaceName} بنجاح.`
+  String invitationAcceptSuccess(Object workspaceName) {
+    return Intl.message(
+      'تم انضمامك إلى مساحة العمل $workspaceName بنجاح.',
+      name: 'invitationAcceptSuccess',
+      desc: '',
+      args: [workspaceName],
+    );
+  }
+
+  /// `تقدر تبدأ الشغل داخل مساحة العمل الآن.`
+  String get invitationAcceptDetails {
+    return Intl.message(
+      'تقدر تبدأ الشغل داخل مساحة العمل الآن.',
+      name: 'invitationAcceptDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم رفض دعوتك إلى مساحة العمل {workspaceName}.`
+  String invitationDeclineSuccess(Object workspaceName) {
+    return Intl.message(
+      'تم رفض دعوتك إلى مساحة العمل $workspaceName.',
+      name: 'invitationDeclineSuccess',
+      desc: '',
+      args: [workspaceName],
+    );
+  }
+
+  /// `رفض الدعوة؟`
+  String get invitationDeclineConfirmTitle {
+    return Intl.message(
+      'رفض الدعوة؟',
+      name: 'invitationDeclineConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سيتم حذف الدعوة للانضمام إلى مساحة العمل {workspaceName}. تقدر تطلب من مالك المساحة يبعتها لك مرة تانية لاحقاً.`
+  String invitationDeclineConfirmMessage(Object workspaceName) {
+    return Intl.message(
+      'سيتم حذف الدعوة للانضمام إلى مساحة العمل $workspaceName. تقدر تطلب من مالك المساحة يبعتها لك مرة تانية لاحقاً.',
+      name: 'invitationDeclineConfirmMessage',
+      desc: '',
+      args: [workspaceName],
+    );
+  }
+
+  /// `تم إرسال الدعوة بنجاح.`
+  String get invitationSentSuccess {
+    return Intl.message(
+      'تم إرسال الدعوة بنجاح.',
+      name: 'invitationSentSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `دعوة عضو`
+  String get inviteMemberTitle {
+    return Intl.message(
+      'دعوة عضو',
+      name: 'inviteMemberTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ابعت دعوة لمساحة العمل على البريد الإلكتروني لحساب محافظ موجود بالفعل. الشخص المدعو هيلاقيها في شاشة الدعوات.`
+  String get inviteMemberDescription {
+    return Intl.message(
+      'ابعت دعوة لمساحة العمل على البريد الإلكتروني لحساب محافظ موجود بالفعل. الشخص المدعو هيلاقيها في شاشة الدعوات.',
+      name: 'inviteMemberDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `بريد العضو`
+  String get inviteMemberEmailLabel {
+    return Intl.message(
+      'بريد العضو',
+      name: 'inviteMemberEmailLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `name@example.com`
+  String get inviteMemberEmailHint {
+    return Intl.message(
+      'name@example.com',
+      name: 'inviteMemberEmailHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إرسال الدعوة`
+  String get inviteMemberSendAction {
+    return Intl.message(
+      'إرسال الدعوة',
+      name: 'inviteMemberSendAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أدخل رقم الموبايل`
+  String get errorWalletPhoneNumberRequired {
+    return Intl.message(
+      'أدخل رقم الموبايل',
+      name: 'errorWalletPhoneNumberRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أدخل رقم موبايل مصري صحيح.`
+  String get errorWalletPhoneNumberInvalid {
+    return Intl.message(
+      'أدخل رقم موبايل مصري صحيح.',
+      name: 'errorWalletPhoneNumberInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اختر شركة واحدة على الأقل`
+  String get errorWalletProviderRequired {
+    return Intl.message(
+      'اختر شركة واحدة على الأقل',
+      name: 'errorWalletProviderRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `رقم الموبايل ده يدعم فقط شركة المحفظة المطابقة له وإنستاباي.`
+  String get errorWalletProviderMismatch {
+    return Intl.message(
+      'رقم الموبايل ده يدعم فقط شركة المحفظة المطابقة له وإنستاباي.',
+      name: 'errorWalletProviderMismatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذه المحفظة مضافة بالفعل.`
+  String get errorWalletAlreadyExists {
+    return Intl.message(
+      'هذه المحفظة مضافة بالفعل.',
+      name: 'errorWalletAlreadyExists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كل المحافظ المختارة مضافة بالفعل لهذا الرقم.`
+  String get errorWalletAllExists {
+    return Intl.message(
+      'كل المحافظ المختارة مضافة بالفعل لهذا الرقم.',
+      name: 'errorWalletAllExists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الصق نص الرسالة أولاً.`
+  String get errorManualTransactionMessageRequired {
+    return Intl.message(
+      'الصق نص الرسالة أولاً.',
+      name: 'errorManualTransactionMessageRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذا النص لا يطابق صيغة رسائل هذه المحفظة.`
+  String get errorManualTransactionUnrecognized {
+    return Intl.message(
+      'هذا النص لا يطابق صيغة رسائل هذه المحفظة.',
+      name: 'errorManualTransactionUnrecognized',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الرسالة تشير إلى محفظة مختلفة عن المحفظة المفتوحة حالياً.`
+  String get errorManualTransactionWalletMismatch {
+    return Intl.message(
+      'الرسالة تشير إلى محفظة مختلفة عن المحفظة المفتوحة حالياً.',
+      name: 'errorManualTransactionWalletMismatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أدخل اسم مساحة العمل`
+  String get errorWorkspaceNameRequired {
+    return Intl.message(
+      'أدخل اسم مساحة العمل',
+      name: 'errorWorkspaceNameRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اختر محفظة واحدة على الأقل`
+  String get errorWorkspaceWalletSelectionRequired {
+    return Intl.message(
+      'اختر محفظة واحدة على الأقل',
+      name: 'errorWorkspaceWalletSelectionRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا يمكن حذف مالك مساحة العمل.`
+  String get errorWorkspaceOwnerRemovalNotAllowed {
+    return Intl.message(
+      'لا يمكن حذف مالك مساحة العمل.',
+      name: 'errorWorkspaceOwnerRemovalNotAllowed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `العضو ده مش موجود في مساحة العمل حالياً.`
+  String get errorWorkspaceMemberNotFound {
+    return Intl.message(
+      'العضو ده مش موجود في مساحة العمل حالياً.',
+      name: 'errorWorkspaceMemberNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا يمكنك دعوة نفسك إلى مساحة العمل.`
+  String get errorInvitationSelfNotAllowed {
+    return Intl.message(
+      'لا يمكنك دعوة نفسك إلى مساحة العمل.',
+      name: 'errorInvitationSelfNotAllowed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `في دعوة معلقة بالفعل لهذا البريد الإلكتروني.`
+  String get errorInvitationAlreadyPending {
+    return Intl.message(
+      'في دعوة معلقة بالفعل لهذا البريد الإلكتروني.',
+      name: 'errorInvitationAlreadyPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `البريد الإلكتروني ده غير مرتبط بحساب محافظ.`
+  String get errorInvitationUserNotFound {
+    return Intl.message(
+      'البريد الإلكتروني ده غير مرتبط بحساب محافظ.',
+      name: 'errorInvitationUserNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذا المستخدم عضو بالفعل في مساحة العمل.`
+  String get errorInvitationUserAlreadyMember {
+    return Intl.message(
+      'هذا المستخدم عضو بالفعل في مساحة العمل.',
+      name: 'errorInvitationUserAlreadyMember',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الدعوة دي لم تعد معلقة.`
+  String get errorInvitationNotPending {
+    return Intl.message(
+      'الدعوة دي لم تعد معلقة.',
+      name: 'errorInvitationNotPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `استلام`
+  String get transactionTypeReceive {
+    return Intl.message(
+      'استلام',
+      name: 'transactionTypeReceive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إرسال`
+  String get transactionTypeSend {
+    return Intl.message(
+      'إرسال',
+      name: 'transactionTypeSend',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المعاملات المستلمة`
+  String get reportSummaryReceivedTransactionsTitle {
+    return Intl.message(
+      'المعاملات المستلمة',
+      name: 'reportSummaryReceivedTransactionsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عدد المعاملات التي تم استلامها خلال هذه الفترة.`
+  String get reportSummaryReceivedTransactionsDescription {
+    return Intl.message(
+      'عدد المعاملات التي تم استلامها خلال هذه الفترة.',
+      name: 'reportSummaryReceivedTransactionsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المعاملات المرسلة`
+  String get reportSummarySentTransactionsTitle {
+    return Intl.message(
+      'المعاملات المرسلة',
+      name: 'reportSummarySentTransactionsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عدد المعاملات التي تم إرسالها خلال هذه الفترة.`
+  String get reportSummarySentTransactionsDescription {
+    return Intl.message(
+      'عدد المعاملات التي تم إرسالها خلال هذه الفترة.',
+      name: 'reportSummarySentTransactionsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مدفوع`
+  String get transactionStatusPaid {
+    return Intl.message(
+      'مدفوع',
+      name: 'transactionStatusPaid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `غير مدفوع`
+  String get transactionStatusUnpaid {
+    return Intl.message(
+      'غير مدفوع',
+      name: 'transactionStatusUnpaid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `آخر المعاملات`
+  String get recentTransactions {
+    return Intl.message(
+      'آخر المعاملات',
+      name: 'recentTransactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد معاملات بعد`
+  String get transactions_emptyTitle {
+    return Intl.message(
+      'لا توجد معاملات بعد',
+      name: 'transactions_emptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد معاملات على هذه المحفظة حتى الآن. أول ما توصلك رسائل جديدة هتظهر هنا تلقائياً.`
+  String get transactions_emptyWalletDescription {
+    return Intl.message(
+      'لا توجد معاملات على هذه المحفظة حتى الآن. أول ما توصلك رسائل جديدة هتظهر هنا تلقائياً.',
+      name: 'transactions_emptyWalletDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد معاملات داخل مساحة العمل دي حتى الآن. أي نشاط من المحافظ المرتبطة هيظهر هنا تلقائياً.`
+  String get transactions_emptyWorkspaceDescription {
+    return Intl.message(
+      'لا توجد معاملات داخل مساحة العمل دي حتى الآن. أي نشاط من المحافظ المرتبطة هيظهر هنا تلقائياً.',
+      name: 'transactions_emptyWorkspaceDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `افتح كل معاملات مساحة العمل دي علشان تشوف كل معاملات المحافظ المرتبطة في مكان واحد.`
+  String get workspaceTransactionsCtaDescription {
+    return Intl.message(
+      'افتح كل معاملات مساحة العمل دي علشان تشوف كل معاملات المحافظ المرتبطة في مكان واحد.',
+      name: 'workspaceTransactionsCtaDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `افتح كل معاملات مساحة العمل دي علشان تشوف كل معاملات المحافظ المرتبطة في مكان واحد.`
+  String get workspaceTransactionsCtaDescriptionWithActivity {
+    return Intl.message(
+      'افتح كل معاملات مساحة العمل دي علشان تشوف كل معاملات المحافظ المرتبطة في مكان واحد.',
+      name: 'workspaceTransactionsCtaDescriptionWithActivity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `متابعة تلقائية`
+  String get transactions_emptyHintTitle {
+    return Intl.message(
+      'متابعة تلقائية',
+      name: 'transactions_emptyHintTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أول ما نرصد نشاط على محفظة مرتبطة، هنضيفه هنا تلقائياً.`
+  String get transactions_emptyHintDescription {
+    return Intl.message(
+      'أول ما نرصد نشاط على محفظة مرتبطة، هنضيفه هنا تلقائياً.',
+      name: 'transactions_emptyHintDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد معاملات حتى الآن. أول ما توصلك رسائل جديدة هتظهر هنا.`
+  String get noTransactionsTitle {
+    return Intl.message(
+      'لا توجد معاملات حتى الآن. أول ما توصلك رسائل جديدة هتظهر هنا.',
+      name: 'noTransactionsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف المحفظة`
+  String get deleteWallet {
+    return Intl.message(
+      'حذف المحفظة',
+      name: 'deleteWallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف المحفظة`
+  String get deleteWalletConfirmTitle {
+    return Intl.message(
+      'حذف المحفظة',
+      name: 'deleteWalletConfirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هل تريد حذف هذه المحفظة؟ لا يمكن التراجع بعد الحذف.`
+  String get deleteWalletConfirmMessage {
+    return Intl.message(
+      'هل تريد حذف هذه المحفظة؟ لا يمكن التراجع بعد الحذف.',
+      name: 'deleteWalletConfirmMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `جميع المعاملات`
+  String get allTransactions {
+    return Intl.message(
+      'جميع المعاملات',
+      name: 'allTransactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عرض كل المعاملات`
+  String get viewAllTransactions {
+    return Intl.message(
+      'عرض كل المعاملات',
+      name: 'viewAllTransactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `معاملات المحفظة`
+  String get walletTransactions {
+    return Intl.message(
+      'معاملات المحفظة',
+      name: 'walletTransactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تفاصيل المحفظة`
+  String get walletDetails {
+    return Intl.message(
+      'تفاصيل المحفظة',
+      name: 'walletDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تاريخ المعاملات`
+  String get transactionsHistory {
+    return Intl.message(
+      'تاريخ المعاملات',
+      name: 'transactionsHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تفاصيل المعاملة`
+  String get transactionDetails {
+    return Intl.message(
+      'تفاصيل المعاملة',
+      name: 'transactionDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم استلام {amount} ج.م`
+  String transactionMessageReceive(Object amount) {
+    return Intl.message(
+      'تم استلام $amount ج.م',
+      name: 'transactionMessageReceive',
+      desc: '',
+      args: [amount],
+    );
+  }
+
+  /// `تم إرسال {amount} ج.م`
+  String transactionMessageSend(Object amount) {
+    return Intl.message(
+      'تم إرسال $amount ج.م',
+      name: 'transactionMessageSend',
+      desc: '',
+      args: [amount],
+    );
+  }
+
+  /// `محفظتك`
+  String get walletLabel {
+    return Intl.message(
+      'محفظتك',
+      name: 'walletLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `من`
+  String get fromLabel {
+    return Intl.message(
+      'من',
+      name: 'fromLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إلى`
+  String get toLabel {
+    return Intl.message(
+      'إلى',
+      name: 'toLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عبر`
+  String get viaLabel {
+    return Intl.message(
+      'عبر',
+      name: 'viaLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حالة السداد`
+  String get paymentStatus {
+    return Intl.message(
+      'حالة السداد',
+      name: 'paymentStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الكل`
+  String get transactions_filter_all {
+    return Intl.message(
+      'الكل',
+      name: 'transactions_filter_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كل المحافظ`
+  String get transactions_filter_allWallets {
+    return Intl.message(
+      'كل المحافظ',
+      name: 'transactions_filter_allWallets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كل الأعضاء`
+  String get transactions_filter_allMembers {
+    return Intl.message(
+      'كل الأعضاء',
+      name: 'transactions_filter_allMembers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كل الحالات`
+  String get transactions_paymentStatusAll {
+    return Intl.message(
+      'كل الحالات',
+      name: 'transactions_paymentStatusAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ابحث بآخر 2 أرقام أو أكثر`
+  String get transactions_searchHint {
+    return Intl.message(
+      'ابحث بآخر 2 أرقام أو أكثر',
+      name: 'transactions_searchHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اليوم`
+  String get transactions_date_today {
+    return Intl.message(
+      'اليوم',
+      name: 'transactions_date_today',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أمس`
+  String get transactions_date_yesterday {
+    return Intl.message(
+      'أمس',
+      name: 'transactions_date_yesterday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الأسبوع`
+  String get transactions_date_week {
+    return Intl.message(
+      'الأسبوع',
+      name: 'transactions_date_week',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الشهر`
+  String get transactions_date_month {
+    return Intl.message(
+      'الشهر',
+      name: 'transactions_date_month',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `نطاق مخصص`
+  String get transactions_date_customRange {
+    return Intl.message(
+      'نطاق مخصص',
+      name: 'transactions_date_customRange',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عرض المزيد`
+  String get transactions_loadMore {
+    return Intl.message(
+      'عرض المزيد',
+      name: 'transactions_loadMore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عرض {count} من أصل {total} معاملة`
+  String transactions_viewingCountOfTotal(int count, int total) {
+    return Intl.message(
+      'عرض $count من أصل $total معاملة',
+      name: 'transactions_viewingCountOfTotal',
+      desc: '',
+      args: [count, total],
+    );
+  }
+
+  /// `مشاركة إيصال العملية`
+  String get transaction_shareReceipt {
+    return Intl.message(
+      'مشاركة إيصال العملية',
+      name: 'transaction_shareReceipt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إيصال معاملة — {type}`
+  String transaction_receiptHeader(String type) {
+    return Intl.message(
+      'إيصال معاملة — $type',
+      name: 'transaction_receiptHeader',
+      desc: '',
+      args: [type],
+    );
+  }
+
+  /// `المبلغ`
+  String get transaction_amount {
+    return Intl.message(
+      'المبلغ',
+      name: 'transaction_amount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المحفظة`
+  String get transaction_wallet {
+    return Intl.message(
+      'المحفظة',
+      name: 'transaction_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم الاستلام من`
+  String get transaction_receivedFrom {
+    return Intl.message(
+      'تم الاستلام من',
+      name: 'transaction_receivedFrom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم الإرسال إلى`
+  String get transaction_sentTo {
+    return Intl.message(
+      'تم الإرسال إلى',
+      name: 'transaction_sentTo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `التاريخ`
+  String get transaction_date {
+    return Intl.message(
+      'التاريخ',
+      name: 'transaction_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `التاريخ والوقت`
+  String get transaction_dateTime {
+    return Intl.message(
+      'التاريخ والوقت',
+      name: 'transaction_dateTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `رقم العملية`
+  String get transaction_referenceNumber {
+    return Intl.message(
+      'رقم العملية',
+      name: 'transaction_referenceNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سجل التعديلات`
+  String get transaction_history {
+    return Intl.message(
+      'سجل التعديلات',
+      name: 'transaction_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم التحديد كـ {status}`
+  String transaction_markedAs(String status) {
+    return Intl.message(
+      'تم التحديد كـ $status',
+      name: 'transaction_markedAs',
+      desc: '',
+      args: [status],
+    );
+  }
+
+  /// `بواسطة {name}`
+  String transaction_by(String name) {
+    return Intl.message(
+      'بواسطة $name',
+      name: 'transaction_by',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `ملاحظات`
+  String get transaction_notes {
+    return Intl.message(
+      'ملاحظات',
+      name: 'transaction_notes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة ملاحظة`
+  String get transaction_addNote {
+    return Intl.message(
+      'إضافة ملاحظة',
+      name: 'transaction_addNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اكتب ملاحظتك هنا`
+  String get transaction_noteHint {
+    return Intl.message(
+      'اكتب ملاحظتك هنا',
+      name: 'transaction_noteHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف`
+  String get transaction_deleteAction {
+    return Intl.message(
+      'حذف',
+      name: 'transaction_deleteAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف المعاملة`
+  String get transaction_deleteTitle {
+    return Intl.message(
+      'حذف المعاملة',
+      name: 'transaction_deleteTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هل أنت متأكد أنك تريد حذف هذه المعاملة؟ لا يمكن التراجع عن هذا الإجراء.`
+  String get transaction_deleteMessage {
+    return Intl.message(
+      'هل أنت متأكد أنك تريد حذف هذه المعاملة؟ لا يمكن التراجع عن هذا الإجراء.',
+      name: 'transaction_deleteMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم حذف المعاملة`
+  String get transaction_deletedSuccess {
+    return Intl.message(
+      'تم حذف المعاملة',
+      name: 'transaction_deletedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حذف الملاحظة`
+  String get transaction_deleteNoteTitle {
+    return Intl.message(
+      'حذف الملاحظة',
+      name: 'transaction_deleteNoteTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هل أنت متأكد أنك تريد حذف هذه الملاحظة؟ لا يمكن التراجع عن هذا الإجراء.`
+  String get transaction_deleteNoteMessage {
+    return Intl.message(
+      'هل أنت متأكد أنك تريد حذف هذه الملاحظة؟ لا يمكن التراجع عن هذا الإجراء.',
+      name: 'transaction_deleteNoteMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم حذف الملاحظة`
+  String get transaction_noteDeleted {
+    return Intl.message(
+      'تم حذف الملاحظة',
+      name: 'transaction_noteDeleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تراجع`
+  String get transaction_undo {
+    return Intl.message(
+      'تراجع',
+      name: 'transaction_undo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم التعديل`
+  String get transaction_edited {
+    return Intl.message(
+      'تم التعديل',
+      name: 'transaction_edited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إلغاء`
+  String get transaction_cancel {
+    return Intl.message(
+      'إلغاء',
+      name: 'transaction_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حفظ`
+  String get transaction_save {
+    return Intl.message(
+      'حفظ',
+      name: 'transaction_save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `نص الرسالة`
+  String get transaction_smsText {
+    return Intl.message(
+      'نص الرسالة',
+      name: 'transaction_smsText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عملية استلام`
+  String get transaction_typeReceiveLabel {
+    return Intl.message(
+      'عملية استلام',
+      name: 'transaction_typeReceiveLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عملية إرسال`
+  String get transaction_typeSendLabel {
+    return Intl.message(
+      'عملية إرسال',
+      name: 'transaction_typeSendLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حدث خطأ`
+  String get transaction_errorGeneric {
+    return Intl.message(
+      'حدث خطأ',
+      name: 'transaction_errorGeneric',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد معاملات مطابقة للفلاتر المحددة`
+  String get transactions_emptyWithFilter {
+    return Intl.message(
+      'لا توجد معاملات مطابقة للفلاتر المحددة',
+      name: 'transactions_emptyWithFilter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد معاملات مطابقة`
+  String get transactions_emptyWithFilterTitle {
+    return Intl.message(
+      'لا توجد معاملات مطابقة',
+      name: 'transactions_emptyWithFilterTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `جرّب مسح فلتر أو أكثر لعرض معاملات إضافية.`
+  String get transactions_emptyWithFilterDescription {
+    return Intl.message(
+      'جرّب مسح فلتر أو أكثر لعرض معاملات إضافية.',
+      name: 'transactions_emptyWithFilterDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مسح الفلاتر`
+  String get transactions_clearFilters {
+    return Intl.message(
+      'مسح الفلاتر',
+      name: 'transactions_clearFilters',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `معاملات {name}`
+  String transactions_title_wallet(String name) {
+    return Intl.message(
+      'معاملات $name',
+      name: 'transactions_title_wallet',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `معاملات {name}`
+  String transactions_title_workspace(String name) {
+    return Intl.message(
+      'معاملات $name',
+      name: 'transactions_title_workspace',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `المحصّل اليوم`
+  String get workspaceTransactionsTodayCollected {
+    return Intl.message(
+      'المحصّل اليوم',
+      name: 'workspaceTransactionsTodayCollected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المرسَل اليوم`
+  String get workspaceTransactionsTodaySent {
+    return Intl.message(
+      'المرسَل اليوم',
+      name: 'workspaceTransactionsTodaySent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عدد غير المدفوع`
+  String get workspaceTransactionsUnpaidCount {
+    return Intl.message(
+      'عدد غير المدفوع',
+      name: 'workspaceTransactionsUnpaidCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أحدث المحافظ نشاطاً`
+  String get workspaceTransactionsLatestWallets {
+    return Intl.message(
+      'أحدث المحافظ نشاطاً',
+      name: 'workspaceTransactionsLatestWallets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا يوجد نشاط على المحافظ بعد.`
+  String get workspaceTransactionsLatestWalletsEmpty {
+    return Intl.message(
+      'لا يوجد نشاط على المحافظ بعد.',
+      name: 'workspaceTransactionsLatestWalletsEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذه المعاملة لم تعد متاحة.`
+  String get errorTransactionNotFound {
+    return Intl.message(
+      'هذه المعاملة لم تعد متاحة.',
+      name: 'errorTransactionNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `هذه المعاملة مسجلة بالفعل.`
+  String get errorTransactionAlreadyExists {
+    return Intl.message(
+      'هذه المعاملة مسجلة بالفعل.',
+      name: 'errorTransactionAlreadyExists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `يرجى إدخال اسمك`
+  String get fullNameValidationEmpty {
+    return Intl.message(
+      'يرجى إدخال اسمك',
+      name: 'fullNameValidationEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الفلاتر`
+  String get transactions_filterTitle {
+    return Intl.message(
+      'الفلاتر',
+      name: 'transactions_filterTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تطبيق الفلاتر`
+  String get transactions_filterApply {
+    return Intl.message(
+      'تطبيق الفلاتر',
+      name: 'transactions_filterApply',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إعادة ضبط`
+  String get transactions_filterReset {
+    return Intl.message(
+      'إعادة ضبط',
+      name: 'transactions_filterReset',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} فلتر {count, plural, =1{نشط} other{نشط}}`
+  String transactions_filterActiveCount(int count) {
+    return Intl.message(
+      '$count فلتر ${Intl.plural(count, one: 'نشط', other: 'نشط')}',
+      name: 'transactions_filterActiveCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `النوع`
+  String get transactions_filterType {
+    return Intl.message(
+      'النوع',
+      name: 'transactions_filterType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الحالة`
+  String get transactions_filterPaidStatus {
+    return Intl.message(
+      'الحالة',
+      name: 'transactions_filterPaidStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `التاريخ`
+  String get transactions_filterDate {
+    return Intl.message(
+      'التاريخ',
+      name: 'transactions_filterDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `العضو`
+  String get transactions_filterMember {
+    return Intl.message(
+      'العضو',
+      name: 'transactions_filterMember',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المحفظة`
+  String get transactions_filterWallet {
+    return Intl.message(
+      'المحفظة',
+      name: 'transactions_filterWallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عدد المعاملات`
+  String get reports_total_transactions {
+    return Intl.message(
+      'عدد المعاملات',
+      name: 'reports_total_transactions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كافة المحافظ`
+  String get reports_all_wallets {
+    return Intl.message(
+      'كافة المحافظ',
+      name: 'reports_all_wallets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اليوم`
+  String get reports_period_today {
+    return Intl.message(
+      'اليوم',
+      name: 'reports_period_today',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أمس`
+  String get reports_period_yesterday {
+    return Intl.message(
+      'أمس',
+      name: 'reports_period_yesterday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الأسبوع الماضي`
+  String get reports_period_lastWeek {
+    return Intl.message(
+      'الأسبوع الماضي',
+      name: 'reports_period_lastWeek',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الشهر الماضي`
+  String get reports_period_lastMonth {
+    return Intl.message(
+      'الشهر الماضي',
+      name: 'reports_period_lastMonth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `نطاق مخصص`
+  String get reports_period_custom {
+    return Intl.message(
+      'نطاق مخصص',
+      name: 'reports_period_custom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المتوسط اليومي`
+  String get reports_stat_average {
+    return Intl.message(
+      'المتوسط اليومي',
+      name: 'reports_stat_average',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `صافي التدفق النقدي`
+  String get reports_balance_label {
+    return Intl.message(
+      'صافي التدفق النقدي',
+      name: 'reports_balance_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الأداء المالي`
+  String get reports_performance_label {
+    return Intl.message(
+      'الأداء المالي',
+      name: 'reports_performance_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تقارير الـمحفظة`
+  String get reports_wallet_title {
+    return Intl.message(
+      'تقارير الـمحفظة',
+      name: 'reports_wallet_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تقارير مـساحة العمل`
+  String get reports_workspace_title {
+    return Intl.message(
+      'تقارير مـساحة العمل',
+      name: 'reports_workspace_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الإحصائيات من {date}`
+  String wallet_statsFrom(Object date) {
+    return Intl.message(
+      'الإحصائيات من $date',
+      name: 'wallet_statsFrom',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `تصفير المؤشرات`
+  String get wallet_resetStats {
+    return Intl.message(
+      'تصفير المؤشرات',
+      name: 'wallet_resetStats',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `متأكد إنك عايز تصفر مؤشرات الوارد والصادر للمحفظة دي؟ ده هيخلي إجمالي المبالغ صفر من بداية النهاردة، لكن رصيدك الحالي مش هيتأثر.`
+  String get wallet_resetStatsDescription {
+    return Intl.message(
+      'متأكد إنك عايز تصفر مؤشرات الوارد والصادر للمحفظة دي؟ ده هيخلي إجمالي المبالغ صفر من بداية النهاردة، لكن رصيدك الحالي مش هيتأثر.',
+      name: 'wallet_resetStatsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تصفير`
+  String get wallet_resetStatsAction {
+    return Intl.message(
+      'تصفير',
+      name: 'wallet_resetStatsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تحديث الرصيد الحالي`
+  String get walletBalanceEditTitle {
+    return Intl.message(
+      'تحديث الرصيد الحالي',
+      name: 'walletBalanceEditTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `استخدم ده لو في رسالة قديمة فاتت التطبيق أو لو محتاج تصحح الرصيد يدويًا.`
+  String get walletBalanceEditDescription {
+    return Intl.message(
+      'استخدم ده لو في رسالة قديمة فاتت التطبيق أو لو محتاج تصحح الرصيد يدويًا.',
+      name: 'walletBalanceEditDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تحديث الرصيد`
+  String get walletBalanceEditAction {
+    return Intl.message(
+      'تحديث الرصيد',
+      name: 'walletBalanceEditAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اكتب آخر رصيد عندك`
+  String get walletBalanceEditHint {
+    return Intl.message(
+      'اكتب آخر رصيد عندك',
+      name: 'walletBalanceEditHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `أدخل قيمة رصيد صحيحة.`
+  String get walletBalanceEditInvalid {
+    return Intl.message(
+      'أدخل قيمة رصيد صحيحة.',
+      name: 'walletBalanceEditInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم تحديث الرصيد الحالي.`
+  String get walletBalanceEditSuccess {
+    return Intl.message(
+      'تم تحديث الرصيد الحالي.',
+      name: 'walletBalanceEditSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `آخر رصيد تم اكتشافه: {amount}`
+  String walletBalanceEditSuggested(Object amount) {
+    return Intl.message(
+      'آخر رصيد تم اكتشافه: $amount',
+      name: 'walletBalanceEditSuggested',
+      desc: '',
+      args: [amount],
+    );
+  }
+
+  /// `إضافة معاملة من رسالة`
+  String get walletManualTransactionEntryAction {
+    return Intl.message(
+      'إضافة معاملة من رسالة',
+      name: 'walletManualTransactionEntryAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `إضافة معاملة من SMS`
+  String get walletManualTransactionTitle {
+    return Intl.message(
+      'إضافة معاملة من SMS',
+      name: 'walletManualTransactionTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الصق رسالة العملية الأصلية هنا، وسنطبق عليها نفس منطق التحليل والمطابقة المستخدم في القراءة التلقائية للرسائل.`
+  String get walletManualTransactionDescription {
+    return Intl.message(
+      'الصق رسالة العملية الأصلية هنا، وسنطبق عليها نفس منطق التحليل والمطابقة المستخدم في القراءة التلقائية للرسائل.',
+      name: 'walletManualTransactionDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `نص الرسالة`
+  String get walletManualTransactionFieldLabel {
+    return Intl.message(
+      'نص الرسالة',
+      name: 'walletManualTransactionFieldLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الصق الرسالة كاملة كما وصلتك`
+  String get walletManualTransactionFieldHint {
+    return Intl.message(
+      'الصق الرسالة كاملة كما وصلتك',
+      name: 'walletManualTransactionFieldHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لصق من الحافظة`
+  String get walletManualTransactionPasteAction {
+    return Intl.message(
+      'لصق من الحافظة',
+      name: 'walletManualTransactionPasteAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تحليل الرسالة`
+  String get walletManualTransactionAnalyzeAction {
+    return Intl.message(
+      'تحليل الرسالة',
+      name: 'walletManualTransactionAnalyzeAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حفظ العملية`
+  String get walletManualTransactionSaveAction {
+    return Intl.message(
+      'حفظ العملية',
+      name: 'walletManualTransactionSaveAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حفظ على هذه المحفظة`
+  String get walletManualTransactionConfirmAction {
+    return Intl.message(
+      'حفظ على هذه المحفظة',
+      name: 'walletManualTransactionConfirmAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حفظ رغم ذلك`
+  String get walletManualTransactionForceAction {
+    return Intl.message(
+      'حفظ رغم ذلك',
+      name: 'walletManualTransactionForceAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الرسالة تخص محفظة أخرى`
+  String get walletManualTransactionBlockedAction {
+    return Intl.message(
+      'الرسالة تخص محفظة أخرى',
+      name: 'walletManualTransactionBlockedAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تمت إضافة المعاملة بنجاح.`
+  String get walletManualTransactionSaved {
+    return Intl.message(
+      'تمت إضافة المعاملة بنجاح.',
+      name: 'walletManualTransactionSaved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `راجع المعاملة قبل الحفظ`
+  String get walletManualTransactionReviewTitle {
+    return Intl.message(
+      'راجع المعاملة قبل الحفظ',
+      name: 'walletManualTransactionReviewTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `تم تحليل الرسالة بنجاح، لكن لم نتمكن من تأكيد المحفظة بنسبة كاملة. راجع التفاصيل قبل المتابعة.`
+  String get walletManualTransactionReviewDescription {
+    return Intl.message(
+      'تم تحليل الرسالة بنجاح، لكن لم نتمكن من تأكيد المحفظة بنسبة كاملة. راجع التفاصيل قبل المتابعة.',
+      name: 'walletManualTransactionReviewDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الرسالة تخص محفظة أخرى`
+  String get walletManualTransactionExplicitMismatchTitle {
+    return Intl.message(
+      'الرسالة تخص محفظة أخرى',
+      name: 'walletManualTransactionExplicitMismatchTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الرسالة تذكر رقم محفظة واضح لا يطابق المحفظة التي فتحتها الآن.`
+  String get walletManualTransactionExplicitMismatchDescription {
+    return Intl.message(
+      'الرسالة تذكر رقم محفظة واضح لا يطابق المحفظة التي فتحتها الآن.',
+      name: 'walletManualTransactionExplicitMismatchDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `محفظة أخرى تبدو أقرب`
+  String get walletManualTransactionInferredMismatchTitle {
+    return Intl.message(
+      'محفظة أخرى تبدو أقرب',
+      name: 'walletManualTransactionInferredMismatchTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الرصيد الحالي وقواعد المطابقة تشير إلى محفظة مختلفة. احفظ هنا فقط لو أنت متأكد أن العملية يجب أن تُسجل على المحفظة الحالية.`
+  String get walletManualTransactionInferredMismatchDescription {
+    return Intl.message(
+      'الرصيد الحالي وقواعد المطابقة تشير إلى محفظة مختلفة. احفظ هنا فقط لو أنت متأكد أن العملية يجب أن تُسجل على المحفظة الحالية.',
+      name: 'walletManualTransactionInferredMismatchDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المحفظة المقترحة`
+  String get walletManualTransactionSuggestedWalletLabel {
+    return Intl.message(
+      'المحفظة المقترحة',
+      name: 'walletManualTransactionSuggestedWalletLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الرصيد بعد الرسالة: {amount}`
+  String walletManualTransactionBalanceChip(Object amount) {
+    return Intl.message(
+      'الرصيد بعد الرسالة: $amount',
+      name: 'walletManualTransactionBalanceChip',
+      desc: '',
+      args: [amount],
+    );
+  }
+
+  /// `رقم المحفظة المذكور: {phoneNumber}`
+  String walletManualTransactionPhoneChip(Object phoneNumber) {
+    return Intl.message(
+      'رقم المحفظة المذكور: $phoneNumber',
+      name: 'walletManualTransactionPhoneChip',
+      desc: '',
+      args: [phoneNumber],
+    );
+  }
+
+  /// `مزامنة المعاملات الفائتة`
+  String get walletSyncTransactionsTitle {
+    return Intl.message(
+      'مزامنة المعاملات الفائتة',
+      name: 'walletSyncTransactionsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `افحص رسائل الـ SMS الأخيرة للبحث عن معاملات وصلت بعد آخر نشاط محفوظ على هذه المحفظة.`
+  String get walletSyncTransactionsDescription {
+    return Intl.message(
+      'افحص رسائل الـ SMS الأخيرة للبحث عن معاملات وصلت بعد آخر نشاط محفوظ على هذه المحفظة.',
+      name: 'walletSyncTransactionsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مزامنة المعاملات`
+  String get walletSyncTransactionsAction {
+    return Intl.message(
+      'مزامنة المعاملات',
+      name: 'walletSyncTransactionsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `راجع المعاملات غير المحفوظة`
+  String get walletSyncTransactionsReviewTitle {
+    return Intl.message(
+      'راجع المعاملات غير المحفوظة',
+      name: 'walletSyncTransactionsReviewTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count, plural, =0{لم نجد معاملات فائتة} =1{تم العثور على معاملة فائتة واحدة} other{تم العثور على {count} معاملات فائتة}}`
+  String walletSyncTransactionsFoundCount(int count) {
+    return Intl.plural(
+      count,
+      zero: 'لم نجد معاملات فائتة',
+      one: 'تم العثور على معاملة فائتة واحدة',
+      other: 'تم العثور على $count معاملات فائتة',
+      name: 'walletSyncTransactionsFoundCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `نفحص الرسائل بعد {date}`
+  String walletSyncTransactionsFromDate(String date) {
+    return Intl.message(
+      'نفحص الرسائل بعد $date',
+      name: 'walletSyncTransactionsFromDate',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `{count, plural, =0{لا توجد معاملات محددة} =1{معاملة واحدة محددة} other{{count} معاملات محددة}}`
+  String walletSyncTransactionsSelectedCount(int count) {
+    return Intl.plural(
+      count,
+      zero: 'لا توجد معاملات محددة',
+      one: 'معاملة واحدة محددة',
+      other: '$count معاملات محددة',
+      name: 'walletSyncTransactionsSelectedCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `إضافة المحدد`
+  String get walletSyncTransactionsSaveAction {
+    return Intl.message(
+      'إضافة المحدد',
+      name: 'walletSyncTransactionsSaveAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لا توجد معاملات فائتة`
+  String get walletSyncTransactionsEmptyTitle {
+    return Intl.message(
+      'لا توجد معاملات فائتة',
+      name: 'walletSyncTransactionsEmptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لم نجد أي معاملات SMS غير محفوظة لهذه المحفظة في سجل الرسائل الأخير.`
+  String get walletSyncTransactionsEmptyDescription {
+    return Intl.message(
+      'لم نجد أي معاملات SMS غير محفوظة لهذه المحفظة في سجل الرسائل الأخير.',
+      name: 'walletSyncTransactionsEmptyDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `لم نجد أي معاملات SMS غير محفوظة بعد {date}.`
+  String walletSyncTransactionsEmptySinceDescription(String date) {
+    return Intl.message(
+      'لم نجد أي معاملات SMS غير محفوظة بعد $date.',
+      name: 'walletSyncTransactionsEmptySinceDescription',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `{count, plural, =1{تمت إضافة معاملة واحدة بنجاح.} other{تمت إضافة {count} معاملات بنجاح.}}`
+  String walletSyncTransactionsSavedSuccess(int count) {
+    return Intl.plural(
+      count,
+      one: 'تمت إضافة معاملة واحدة بنجاح.',
+      other: 'تمت إضافة $count معاملات بنجاح.',
+      name: 'walletSyncTransactionsSavedSuccess',
+      desc: '',
+      args: [count],
+    );
+  }
 }
 
-class _SDelegate extends LocalizationsDelegate<S> {
-  const _SDelegate();
+class AppLocalizationDelegate extends LocalizationsDelegate<S> {
+  const AppLocalizationDelegate();
 
-  @override
-  Future<S> load(Locale locale) {
-    return SynchronousFuture<S>(lookupS(locale));
+  List<Locale> get supportedLocales {
+    return const <Locale>[
+      Locale.fromSubtags(languageCode: 'ar'),
+      Locale.fromSubtags(languageCode: 'en'),
+    ];
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['ar', 'en'].contains(locale.languageCode);
-
+  bool isSupported(Locale locale) => _isSupported(locale);
   @override
-  bool shouldReload(_SDelegate old) => false;
-}
+  Future<S> load(Locale locale) => S.load(locale);
+  @override
+  bool shouldReload(AppLocalizationDelegate old) => false;
 
-S lookupS(Locale locale) {
-
-
-  // Lookup logic when only language code is specified.
-  switch (locale.languageCode) {
-    case 'ar': return SAr();
-    case 'en': return SEn();
+  bool _isSupported(Locale locale) {
+    for (var supportedLocale in supportedLocales) {
+      if (supportedLocale.languageCode == locale.languageCode) {
+        return true;
+      }
+    }
+    return false;
   }
-
-  throw FlutterError(
-    'S.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
 }

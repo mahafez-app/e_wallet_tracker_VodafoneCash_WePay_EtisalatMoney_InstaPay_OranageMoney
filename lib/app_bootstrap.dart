@@ -54,6 +54,9 @@ class _AppBootstrapState extends State<AppBootstrap> {
             data.txFirstPageCacheBox,
           ),
           pendingSmsRetryBoxProvider.overrideWithValue(data.pendingSmsRetryBox),
+          deletedTransactionTombstonesBoxProvider.overrideWithValue(
+            data.deletedTransactionTombstonesBox,
+          ),
         ],
         child: const App(),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failures.dart';
+import '../../../transactions/domain/usecases/save_transaction_usecase.dart';
 import '../../../transactions/providers/transactions_providers.dart';
 import '../../domain/usecases/preview_missing_wallet_transactions_usecase.dart';
 import '../../providers/wallets_providers.dart';
@@ -89,7 +90,10 @@ class WalletTransactionSyncController
     var syncedCount = 0;
     for (final transaction in selectedTransactions) {
       final result = await ref.read(saveTransactionUseCaseProvider)(
-        transaction,
+        SaveTransactionParams(
+          transaction: transaction,
+          allowLocallyDeletedRestore: true,
+        ),
       );
       final failure = result.fold<Failure?>((failure) => failure, (_) => null);
       if (failure == null || _isAlreadyExistsFailure(failure)) {

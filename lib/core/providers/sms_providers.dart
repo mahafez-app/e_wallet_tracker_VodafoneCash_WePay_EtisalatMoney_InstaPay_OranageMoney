@@ -63,6 +63,7 @@ final smsTransactionListenerProvider = Provider<void>((ref) {
   if (readiness == null || !readiness.isPermitted) return;
 
   final service = ref.watch(smsTransactionServiceProvider);
+  ref.watch(deletedTransactionLocalDataSourceProvider).pruneExpired();
   service.updateWallets(readiness.wallets);
   service.startListening();
 

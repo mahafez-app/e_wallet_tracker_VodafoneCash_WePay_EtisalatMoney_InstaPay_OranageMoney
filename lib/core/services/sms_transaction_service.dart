@@ -186,13 +186,17 @@ final class SmsTransactionService {
     required String sender,
     required String body,
   }) async {
-    final result = await _saveTransactionUseCase(transaction);
+    final result = await _saveTransactionUseCase(
+      SaveTransactionParams(transaction: transaction),
+    );
     return result.fold(
       (failure) {
         if (failure is ValidationFailure &&
-            failure.code == 'transaction-already-exists') {
+            (failure.code == 'transaction-already-exists' ||
+                failure.code == 'transaction-locally-deleted')) {
           log(
-            'Transaction already exists, skipping retry: ${transaction.id}',
+            'Skipping SMS replay for transaction ${transaction.id}: '
+            '${failure.code}',
             name: _tag,
           );
           return true;

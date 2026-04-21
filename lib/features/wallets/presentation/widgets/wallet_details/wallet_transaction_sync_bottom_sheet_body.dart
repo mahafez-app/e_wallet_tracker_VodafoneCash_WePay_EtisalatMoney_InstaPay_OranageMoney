@@ -52,6 +52,11 @@ class _WalletTransactionSyncBottomSheetBodyState
     ref.listen<WalletTransactionSyncState>(
       walletTransactionSyncControllerProvider(widget.walletId),
       (previous, next) {
+        final hasNewFailure = previous?.failure != next.failure;
+        if (hasNewFailure && next.failure != null && context.mounted) {
+          AppSnackbar.showFailure(context, failure: next.failure!);
+        }
+
         final wasSuccessful =
             previous?.status != WalletTransactionSyncStatus.success &&
             next.status == WalletTransactionSyncStatus.success;
@@ -76,19 +81,34 @@ class _WalletTransactionSyncBottomSheetBodyState
 
     return Padding(
       padding: AppSpacing.pagePadding,
-      child: SafeArea(
-        child: switch (state.status) {
-          WalletTransactionSyncStatus.loading => const _SyncLoadingView(),
-          WalletTransactionSyncStatus.failure => AppErrorView(
-            error: state.failure!,
-          ),
-          _ => _SyncContent(
-            walletId: widget.walletId,
-            state: state,
-            preview: preview,
-          ),
-        },
-      ),
+      child: SafeArea(child: _buildBody(state, preview)),
+    );
+  }
+
+  Widget _buildBody(
+    WalletTransactionSyncState state,
+    MissingWalletTransactionsPreview? preview,
+  ) {
+    if (state.status == WalletTransactionSyncStatus.loading) {
+      return const _SyncLoadingView();
+    }
+
+    if (state.status == WalletTransactionSyncStatus.failure &&
+        preview == null) {
+      return _SyncLoadFailureView(
+        failure: state.failure!,
+        onRetry: () => ref
+            .read(
+              walletTransactionSyncControllerProvider(widget.walletId).notifier,
+            )
+            .loadPreview(),
+      );
+    }
+
+    return _SyncContent(
+      walletId: widget.walletId,
+      state: state,
+      preview: preview,
     );
   }
 }
@@ -99,6 +119,46 @@ class _SyncLoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SizedBox(height: 220, child: Center(child: AppLoader()));
+  }
+}
+
+class _SyncLoadFailureView extends StatelessWidget {
+  const _SyncLoadFailureView({
+    super.key,
+    required this.failure,
+    required this.onRetry,
+  });
+
+  final Object failure;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AppErrorView(error: failure),
+        AppSpacing.lg.verticalSpace,
+        Row(
+          children: [
+            Expanded(
+              child: AppButton(
+                label: context.l10n.commonCancelAction,
+                type: AppButtonType.secondary,
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+            AppSpacing.md.horizontalSpace,
+            Expanded(
+              child: AppButton(
+                label: context.l10n.startupFallbackRetryAction,
+                onPressed: onRetry,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
 

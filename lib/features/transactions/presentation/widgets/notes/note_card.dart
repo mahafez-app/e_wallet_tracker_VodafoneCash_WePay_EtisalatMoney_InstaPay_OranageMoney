@@ -86,7 +86,7 @@ class _NoteCardState extends ConsumerState<NoteCard> {
       message: l10n.transaction_deleteNoteMessage,
       confirmLabel: l10n.transaction_deleteAction,
       cancelLabel: MaterialLocalizations.of(context).cancelButtonLabel,
-      type: AppDialogType.warning,
+      type: AppDialogType.error,
       onConfirm: () => Navigator.of(context).pop(true),
       onCancel: () => Navigator.of(context).pop(false),
     );

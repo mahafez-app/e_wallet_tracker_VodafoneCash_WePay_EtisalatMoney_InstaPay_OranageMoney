@@ -41,7 +41,7 @@ class WorkspaceWalletSelectorChips extends ConsumerWidget {
             Padding(
               padding: EdgeInsets.only(right: AppSpacing.sm.responsiveWidth),
               child: FilterChip(
-                label: Text(S.of(context)!.reports_all_wallets),
+                label: Text(S.of(context).reports_all_wallets),
                 selected: allSelected,
                 onSelected: (selected) {
                   if (selected) {

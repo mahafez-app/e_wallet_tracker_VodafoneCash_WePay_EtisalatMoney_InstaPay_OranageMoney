@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/transactions/data/datasources/transaction_firestore_support.dart';
 import '../../features/transactions/data/datasources/wallet_transaction_remote_data_source.dart';
+import '../../features/transactions/data/datasources/deleted_transaction_local_data_source.dart';
 import '../../firebase_options.dart';
 import '../cache/wallet_meta_cache.dart';
 import '../data/models/pending_sms_retry_item.dart';
@@ -60,7 +61,13 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
   }
 
   final retryBox = Hive.box<String>(_BackgroundDependencies.retryBoxName);
-  final processor = _BackgroundSmsProcessor(retryBox: retryBox);
+  final deletedTransactionsBox = Hive.box<String>(
+    _BackgroundDependencies.deletedTransactionsBoxName,
+  );
+  final processor = _BackgroundSmsProcessor(
+    retryBox: retryBox,
+    deletedTransactionsBox: deletedTransactionsBox,
+  );
 
   await processor.process(
     sender: sender,
@@ -76,10 +83,14 @@ Future<void> backgroundSmsHandler(SmsMessage message) async {
 /// Separated from the top-level handler so it can be instantiated with its
 /// dependencies explicitly, making it testable without a live Firebase session.
 final class _BackgroundSmsProcessor {
-  const _BackgroundSmsProcessor({required Box<String> retryBox})
-    : _retryBox = retryBox;
+  const _BackgroundSmsProcessor({
+    required Box<String> retryBox,
+    required Box<String> deletedTransactionsBox,
+  }) : _retryBox = retryBox,
+       _deletedTransactionsBox = deletedTransactionsBox;
 
   final Box<String> _retryBox;
+  final Box<String> _deletedTransactionsBox;
 
   static const _tag = 'BackgroundSms';
 
@@ -186,6 +197,16 @@ final class _BackgroundSmsProcessor {
           walletPhoneNumber: wallet.phoneNumber,
           rawMessage: body,
         );
+        final deletedTransactionLocalDataSource =
+            _buildDeletedTransactionLocalDataSource();
+        await deletedTransactionLocalDataSource.pruneExpired();
+        if (await deletedTransactionLocalDataSource.isDeleted(transaction.id)) {
+          log(
+            'Skipping locally deleted transaction ${transaction.id}.',
+            name: _tag,
+          );
+          return const _BackgroundProcessingResult.success();
+        }
 
         try {
           await _buildDataSource().saveTransaction(transaction);
@@ -248,6 +269,10 @@ final class _BackgroundSmsProcessor {
     );
   }
 
+  DeletedTransactionLocalDataSource _buildDeletedTransactionLocalDataSource() {
+    return DeletedTransactionLocalDataSourceImpl(box: _deletedTransactionsBox);
+  }
+
   Future<String?> _resolveUserUid() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('last_known_user_uid');
@@ -260,6 +285,7 @@ final class _BackgroundDependencies {
   _BackgroundDependencies._();
 
   static const retryBoxName = 'pending_sms_retry_queue';
+  static const deletedTransactionsBoxName = 'deleted_transaction_tombstones';
 
   static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -274,6 +300,9 @@ final class _BackgroundDependencies {
     await Hive.initFlutter();
     if (!Hive.isBoxOpen(retryBoxName)) {
       await Hive.openBox<String>(retryBoxName);
+    }
+    if (!Hive.isBoxOpen(deletedTransactionsBoxName)) {
+      await Hive.openBox<String>(deletedTransactionsBoxName);
     }
   }
 }

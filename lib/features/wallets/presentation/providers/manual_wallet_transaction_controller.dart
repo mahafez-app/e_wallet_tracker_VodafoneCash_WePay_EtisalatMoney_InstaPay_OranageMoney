@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/error/failures.dart';
+import '../../../transactions/domain/usecases/save_transaction_usecase.dart';
 import '../../../transactions/providers/transactions_providers.dart';
 import '../../domain/entities/manual_wallet_transaction_assessment.dart';
 import '../../domain/usecases/process_manual_wallet_transaction_usecase.dart';
@@ -75,14 +76,10 @@ class ManualWalletTransactionController
         );
 
     result.fold(
-      (failure) => state = state.copyWith(
-        failure: failure,
-        clearAssessment: true,
-      ),
-      (assessment) => state = state.copyWith(
-        assessment: assessment,
-        clearFailure: true,
-      ),
+      (failure) =>
+          state = state.copyWith(failure: failure, clearAssessment: true),
+      (assessment) =>
+          state = state.copyWith(assessment: assessment, clearFailure: true),
     );
   }
 
@@ -116,7 +113,12 @@ class ManualWalletTransactionController
       clearSavedTransaction: true,
     );
 
-    final result = await ref.read(saveTransactionUseCaseProvider)(transaction);
+    final result = await ref.read(saveTransactionUseCaseProvider)(
+      SaveTransactionParams(
+        transaction: transaction,
+        allowLocallyDeletedRestore: true,
+      ),
+    );
     result.fold(
       _setFailure,
       (_) => state = state.copyWith(

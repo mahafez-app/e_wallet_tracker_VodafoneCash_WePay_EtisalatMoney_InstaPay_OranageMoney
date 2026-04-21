@@ -42,7 +42,7 @@ class App extends ConsumerWidget {
         localizationsDelegates: S.localizationsDelegates,
         supportedLocales: S.supportedLocales,
         locale: locale,
-        onGenerateTitle: (context) => S.of(context)!.appName,
+        onGenerateTitle: (context) => S.of(context).appName,
       ),
     );
   }

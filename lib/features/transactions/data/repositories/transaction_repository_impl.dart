@@ -3,6 +3,7 @@ import 'dart:async' show unawaited;
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../domain/entities/transaction_date_range.dart';
 import '../../../../core/domain/enums/transaction_type.dart';
+import '../../../../core/error/failures.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/note_entity.dart';
@@ -12,6 +13,7 @@ import '../../domain/entities/transaction_paid_status_filter.dart';
 import '../../domain/entities/workspace_transactions_overview_entity.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../datasources/transaction_cache_local_data_source.dart';
+import '../datasources/deleted_transaction_local_data_source.dart';
 import '../datasources/transaction_watch_remote_data_source.dart';
 import '../datasources/wallet_transaction_remote_data_source.dart';
 import '../datasources/workspace_transactions_overview_remote_data_source.dart';
@@ -25,11 +27,14 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     required WorkspaceTransactionsOverviewRemoteDataSource
     workspaceOverviewRemoteDataSource,
     required TransactionCacheLocalDataSource cacheDataSource,
+    required DeletedTransactionLocalDataSource
+    deletedTransactionLocalDataSource,
   }) : _transactionWatchRemoteDataSource = transactionWatchRemoteDataSource,
        _walletRemoteDataSource = walletRemoteDataSource,
        _workspaceRemoteDataSource = workspaceRemoteDataSource,
        _workspaceOverviewRemoteDataSource = workspaceOverviewRemoteDataSource,
-       _cacheDataSource = cacheDataSource;
+       _cacheDataSource = cacheDataSource,
+       _deletedTransactionLocalDataSource = deletedTransactionLocalDataSource;
 
   final TransactionWatchRemoteDataSource _transactionWatchRemoteDataSource;
   final WalletTransactionRemoteDataSource _walletRemoteDataSource;
@@ -37,6 +42,7 @@ final class TransactionRepositoryImpl implements TransactionRepository {
   final WorkspaceTransactionsOverviewRemoteDataSource
   _workspaceOverviewRemoteDataSource;
   final TransactionCacheLocalDataSource _cacheDataSource;
+  final DeletedTransactionLocalDataSource _deletedTransactionLocalDataSource;
 
   // ── Queries ──────────────────────────────────────────────────────────────
 
@@ -170,12 +176,28 @@ final class TransactionRepositoryImpl implements TransactionRepository {
   );
 
   @override
-  Future<Result<void>> saveTransaction(TransactionEntity transaction) =>
-      executeAndHandleErrors(() async {
-        await _walletRemoteDataSource.saveTransaction(transaction);
-        // Invalidate so the next cold open reflects the new transaction.
-        unawaited(_cacheDataSource.clear(transaction.walletId));
-      }, tag: 'TransactionRepository.saveTransaction');
+  Future<Result<void>> saveTransaction(
+    TransactionEntity transaction, {
+    bool allowLocallyDeletedRestore = false,
+  }) => executeAndHandleErrors(() async {
+    final isLocallyDeleted = await _deletedTransactionLocalDataSource.isDeleted(
+      transaction.id,
+    );
+    if (isLocallyDeleted && !allowLocallyDeletedRestore) {
+      throw const ValidationFailure(
+        code: 'transaction-locally-deleted',
+        technicalMessage:
+            'Transaction was deleted locally and should not be restored.',
+      );
+    }
+
+    await _walletRemoteDataSource.saveTransaction(transaction);
+    if (isLocallyDeleted && allowLocallyDeletedRestore) {
+      await _deletedTransactionLocalDataSource.remove(transaction.id);
+    }
+    // Invalidate so the next cold open reflects the new transaction.
+    unawaited(_cacheDataSource.clear(transaction.walletId));
+  }, tag: 'TransactionRepository.saveTransaction');
 
   @override
   Future<Result<void>> deleteTransaction({
@@ -188,6 +210,7 @@ final class TransactionRepositoryImpl implements TransactionRepository {
       transactionId: transactionId,
       userId: userId,
     );
+    await _deletedTransactionLocalDataSource.markDeleted(transactionId);
     // Invalidate so the deleted transaction is not shown on next cold open.
     unawaited(_cacheDataSource.clear(walletId));
   }, tag: 'TransactionRepository.deleteTransaction');

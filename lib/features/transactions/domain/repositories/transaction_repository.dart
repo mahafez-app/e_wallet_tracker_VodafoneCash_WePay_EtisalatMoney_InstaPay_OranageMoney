@@ -41,6 +41,8 @@ abstract interface class TransactionRepository {
     required String transactionId,
   });
 
+  Future<Result<DateTime?>> getLatestTransactionDate(String walletId);
+
   // ── Mutations ────────────────────────────────────────────────────────────
 
   Future<Result<void>> markAsPaid({

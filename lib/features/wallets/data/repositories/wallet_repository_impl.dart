@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import '../../../../core/cache/wallet_meta_cache.dart';
 import '../../../../core/data/models/transaction_dto.dart';
-import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../core/domain/entities/wallet_entity.dart';
 import '../../../../core/domain/enums/wallet_provider.dart';
 import '../../../../core/error/failures.dart';
@@ -133,11 +132,14 @@ class WalletRepositoryImpl implements WalletRepository {
       final latestSavedTransactionAt = recentTransactions.isEmpty
           ? null
           : recentTransactions.first.createdAt;
-      final existingTransactions = latestSavedTransactionAt == null
+      final syncFromDate = latestSavedTransactionAt?.add(
+        const Duration(seconds: 1),
+      );
+      final existingTransactions = syncFromDate == null
           ? const <TransactionDto>[]
           : await _detailsDataSource.getTransactionsSince(
               wallet: wallet,
-              fromDate: latestSavedTransactionAt,
+              fromDate: syncFromDate,
             );
       final existingWallets = await _remoteDataSource.getWallets();
       final sameProviderWalletPhoneNumbers =
@@ -156,21 +158,18 @@ class WalletRepositoryImpl implements WalletRepository {
             wallet: wallet,
             sameProviderWalletPhoneNumbers: sameProviderWalletPhoneNumbers,
             sameProviderWalletBalances: knownWalletBalances,
-            sinceDate: latestSavedTransactionAt,
+            sinceDate: syncFromDate,
           );
       final existingKeys = existingTransactions
-          .map((transaction) => _transactionFingerprint(transaction.toEntity()))
+          .map((transaction) => transaction.id)
           .toSet();
       final missingTransactions = historicalTransactions
-          .where(
-            (transaction) =>
-                !existingKeys.contains(_transactionFingerprint(transaction)),
-          )
+          .where((transaction) => !existingKeys.contains(transaction.id))
           .toList(growable: false);
 
       return MissingWalletTransactionsPreview(
         transactions: missingTransactions,
-        fromDate: latestSavedTransactionAt,
+        fromDate: syncFromDate,
       );
     }, tag: 'WalletRepositoryImpl.previewMissingTransactions');
   }
@@ -262,16 +261,5 @@ class WalletRepositoryImpl implements WalletRepository {
       balances[normalized] = wallet.currentBalance;
     }
     return balances;
-  }
-
-  String _transactionFingerprint(TransactionEntity transaction) {
-    return [
-      transaction.type.name,
-      transaction.amount.toStringAsFixed(2),
-      transaction.createdAt.millisecondsSinceEpoch.toString(),
-      transaction.counterpartyNumber ?? '',
-      transaction.referenceNumber ?? '',
-      transaction.message?.trim() ?? '',
-    ].join('|');
   }
 }

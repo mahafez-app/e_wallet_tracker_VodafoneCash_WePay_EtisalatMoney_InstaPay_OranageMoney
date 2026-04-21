@@ -13,6 +13,7 @@ import '../domain/entities/transaction_page.dart';
 import '../domain/repositories/transaction_repository.dart';
 import '../domain/usecases/delete_transaction_usecase.dart';
 import '../domain/usecases/get_workspace_transactions_overview_usecase.dart';
+import '../domain/usecases/get_latest_transaction_date_usecase.dart';
 import '../domain/usecases/get_wallet_transactions_usecase.dart';
 import '../domain/usecases/get_workspace_transactions_usecase.dart';
 import '../domain/usecases/mark_paid_usecases.dart';
@@ -72,20 +73,18 @@ final transactionCacheLocalDataSourceProvider =
 /// Reads the cached first page for [walletId] without triggering any network
 /// fetch. Used by [_TransactionsControllerPagination.loadInitial] to
 /// pre-populate the screen on cold open before the Firestore response arrives.
-final transactionFirstPageCacheProvider =
-    FutureProvider.autoDispose.family<TransactionPage?, String>(
-      (ref, walletId) async {
-        final cached = await ref
-            .read(transactionCacheLocalDataSourceProvider)
-            .getFirstPage(walletId);
-        if (cached == null) return null;
-        return TransactionPage(
-          transactions: cached.transactions.map((e) => e.toEntity()).toList(),
-          totalCount: cached.totalCount,
-          nextCursor: null,
-        );
-      },
-    );
+final transactionFirstPageCacheProvider = FutureProvider.autoDispose
+    .family<TransactionPage?, String>((ref, walletId) async {
+      final cached = await ref
+          .read(transactionCacheLocalDataSourceProvider)
+          .getFirstPage(walletId);
+      if (cached == null) return null;
+      return TransactionPage(
+        transactions: cached.transactions.map((e) => e.toEntity()).toList(),
+        totalCount: cached.totalCount,
+        nextCursor: null,
+      );
+    });
 
 // ── Repository ────────────────────────────────────────────────────────────────
 
@@ -112,6 +111,13 @@ final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
 final saveTransactionUseCaseProvider = Provider<SaveTransactionUseCase>((ref) {
   return SaveTransactionUseCase(ref.watch(transactionRepositoryProvider));
 });
+
+final getLatestTransactionDateUseCaseProvider =
+    Provider<GetLatestTransactionDateUseCase>(
+      (ref) => GetLatestTransactionDateUseCase(
+        ref.watch(transactionRepositoryProvider),
+      ),
+    );
 
 final deleteTransactionUseCaseProvider = Provider<DeleteTransactionUseCase>((
   ref,

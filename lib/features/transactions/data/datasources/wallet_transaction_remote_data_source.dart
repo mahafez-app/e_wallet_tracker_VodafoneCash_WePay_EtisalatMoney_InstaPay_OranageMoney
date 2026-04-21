@@ -43,6 +43,8 @@ abstract interface class WalletTransactionRemoteDataSource {
 
   Future<void> saveTransaction(TransactionEntity transaction);
 
+  Future<DateTime?> getLatestTransactionDate(String walletId);
+
   Future<void> deleteTransaction({
     required String walletId,
     required String transactionId,
@@ -203,8 +205,9 @@ final class WalletTransactionRemoteDataSourceImpl
 
   @override
   Future<void> saveTransaction(TransactionEntity transaction) async {
-    final txRef =
-        _support.txCollection(transaction.walletId).doc(transaction.id);
+    final txRef = _support
+        .txCollection(transaction.walletId)
+        .doc(transaction.id);
 
     // Short-circuit if transaction already exists to avoid duplicate balance increments
     final txSnapshot = await txRef.get();
@@ -242,7 +245,9 @@ final class WalletTransactionRemoteDataSourceImpl
     final walletUpdate = <String, dynamic>{};
 
     if (isAfterStatsReset) {
-      walletUpdate['totalReceived'] = FieldValue.increment(isReceive ? amount : 0);
+      walletUpdate['totalReceived'] = FieldValue.increment(
+        isReceive ? amount : 0,
+      );
       walletUpdate['totalSent'] = FieldValue.increment(isReceive ? 0 : amount);
     }
 
@@ -251,8 +256,9 @@ final class WalletTransactionRemoteDataSourceImpl
       if (transaction.statusBalance != null) {
         walletUpdate['currentBalance'] = transaction.statusBalance;
       } else {
-        walletUpdate['currentBalance'] =
-            FieldValue.increment(isReceive ? amount : -amount);
+        walletUpdate['currentBalance'] = FieldValue.increment(
+          isReceive ? amount : -amount,
+        );
       }
     }
 
@@ -263,6 +269,19 @@ final class WalletTransactionRemoteDataSourceImpl
     await batch.commit();
   }
 
+  @override
+  Future<DateTime?> getLatestTransactionDate(String walletId) async {
+    final snapshot = await _support
+        .walletTransactionsQuery(walletId)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isEmpty) return null;
+
+    final data = snapshot.docs.first.data();
+    final createdAt = data['createdAt'] as Timestamp?;
+    return createdAt?.toDate();
+  }
 
   @override
   Future<void> deleteTransaction({
@@ -395,10 +414,10 @@ final class WalletTransactionRemoteDataSourceImpl
         .orderBy('occurredAt', descending: true)
         .snapshots()
         .map(
-              (snapshot) => snapshot.docs
-                  .map(TransactionHistoryEntryDto.fromFirestore)
-                  .toList(),
-            );
+          (snapshot) => snapshot.docs
+              .map(TransactionHistoryEntryDto.fromFirestore)
+              .toList(),
+        );
   }
 
   Future<void> _syncWalletLastBalanceAt({
@@ -413,7 +432,9 @@ final class WalletTransactionRemoteDataSourceImpl
     final wallet = WalletDto.fromFirestore(walletSnapshot);
     final latestCreatedAt = latestTransactionSnapshot.docs.isEmpty
         ? wallet.createdAt
-        : _support.toWalletCursor(latestTransactionSnapshot.docs.first).createdAt;
+        : _support
+              .toWalletCursor(latestTransactionSnapshot.docs.first)
+              .createdAt;
 
     await walletRef.update({
       'lastBalanceAt': Timestamp.fromDate(latestCreatedAt),

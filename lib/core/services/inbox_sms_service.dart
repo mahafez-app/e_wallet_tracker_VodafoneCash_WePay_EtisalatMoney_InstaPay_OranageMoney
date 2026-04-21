@@ -6,9 +6,9 @@ import '../data/models/transaction_dto.dart';
 import '../domain/entities/transaction_entity.dart';
 import '../domain/entities/wallet_entity.dart';
 import '../domain/enums/wallet_provider.dart';
-import 'inbox_sms_history_matcher.dart';
 import '../utils/sms/registry/sms_parser_registry.dart';
 import '../utils/sms/sms_parsing_service.dart';
+import 'inbox_sms_history_matcher.dart';
 
 abstract interface class InboxSmsService {
   Future<double?> getLatestBalance({
@@ -210,14 +210,23 @@ class InboxSmsServiceImpl implements InboxSmsService {
       senderIds: parser.senderIds,
       sinceDate: sinceDate,
     );
-    final records = _parseRecords(messages);
-
-    return InboxSmsHistoryMatcher.resolveWalletHistory(
+    final records = _parseRecords(messages, sinceDate: sinceDate);
+    final matchedRecords = InboxSmsHistoryMatcher.resolveWalletHistory(
       records: records,
       targetPhoneNumber: phoneNumber,
       sameProviderPhoneNumbers: sameProviderWalletPhoneNumbers,
       knownWalletBalances: sameProviderWalletBalances,
     );
+
+    if (matchedRecords.isNotEmpty) {
+      log(
+        'Recovered ${matchedRecords.length} historical SMS records for provider '
+        '${provider.toValue}',
+        name: 'InboxSmsService',
+      );
+    }
+
+    return matchedRecords;
   }
 
   Future<List<SmsMessage>> _getProviderMessages({
@@ -236,14 +245,8 @@ class InboxSmsServiceImpl implements InboxSmsService {
 
     final messages = await Telephony.instance.getInboxSms(
       columns: [SmsColumn.ADDRESS, SmsColumn.BODY, SmsColumn.DATE],
-      filter: filter.and(SmsColumn.DATE).greaterThan('${sinceMs - 1}'),
+      filter: filter.and(SmsColumn.DATE).greaterThan('$sinceMs'),
       sortOrder: [OrderBy(SmsColumn.DATE, sort: Sort.DESC)],
-    );
-
-    log(
-      'Queried ${messages.length} messages from inbox for provider '
-      '${provider.toValue}',
-      name: 'InboxSmsService',
     );
 
     return messages
@@ -257,7 +260,10 @@ class InboxSmsServiceImpl implements InboxSmsService {
         .toList(growable: false);
   }
 
-  List<ParsedInboxSmsRecord> _parseRecords(List<SmsMessage> messages) {
+  List<ParsedInboxSmsRecord> _parseRecords(
+    List<SmsMessage> messages, {
+    DateTime? sinceDate,
+  }) {
     final records = <ParsedInboxSmsRecord>[];
 
     for (final message in messages) {
@@ -268,6 +274,9 @@ class InboxSmsServiceImpl implements InboxSmsService {
       }
 
       final createdAt = _resolveMessageDate(message.date);
+      if (sinceDate != null && !createdAt.isAfter(sinceDate)) {
+        continue;
+      }
       final parseResult = SmsParsingService.parseRaw(
         sender: sender,
         message: body,

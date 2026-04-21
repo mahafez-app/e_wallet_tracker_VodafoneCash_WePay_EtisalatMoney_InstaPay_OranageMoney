@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:another_telephony/telephony.dart';
 
+import '../../features/transactions/domain/usecases/get_latest_transaction_date_usecase.dart';
 import '../../features/transactions/domain/usecases/save_transaction_usecase.dart';
 import '../data/models/pending_sms_retry_item.dart';
 import '../domain/entities/transaction_entity.dart';
@@ -13,21 +14,29 @@ import '../utils/sms/sms_message_extension.dart';
 import '../utils/sms/sms_parsing_service.dart';
 import '../utils/sms/sms_wallet_matcher.dart';
 import 'background_sms_handler.dart';
+import 'inbox_sms_service.dart';
 import 'pending_sms_retry_service.dart';
 
 final class SmsTransactionService {
   SmsTransactionService({
     required SaveTransactionUseCase saveTransactionUseCase,
+    required GetLatestTransactionDateUseCase getLatestTransactionDateUseCase,
+    required InboxSmsService inboxSmsService,
     required PendingSmsRetryService pendingSmsRetryService,
   }) : _saveTransactionUseCase = saveTransactionUseCase,
+       _getLatestTransactionDateUseCase = getLatestTransactionDateUseCase,
+       _inboxSmsService = inboxSmsService,
        _pendingSmsRetryService = pendingSmsRetryService;
 
   final SaveTransactionUseCase _saveTransactionUseCase;
+  final GetLatestTransactionDateUseCase _getLatestTransactionDateUseCase;
+  final InboxSmsService _inboxSmsService;
   final PendingSmsRetryService _pendingSmsRetryService;
 
   List<WalletEntity> _wallets = const [];
   bool _isListening = false;
   Future<void> _processingChain = Future<void>.value();
+  bool _isReconcilingInbox = false;
 
   static const _tag = 'SmsTransactionService';
 
@@ -69,6 +78,12 @@ final class SmsTransactionService {
         smsReceivedAt: item.smsReceivedAt,
       ),
     );
+  }
+
+  Future<void> reconcileInboxHistory() {
+    final operation = _processingChain.then((_) => _reconcileInboxHistory());
+    _processingChain = operation.catchError(_logProcessingChainError);
+    return operation;
   }
 
   void _handleForegroundMessage(SmsMessage message) {
@@ -214,6 +229,87 @@ final class SmsTransactionService {
     )) {
       await sweepRetryQueue();
     }
+  }
+
+  Future<void> _reconcileInboxHistory() async {
+    if (_isReconcilingInbox || _wallets.isEmpty) return;
+
+    _isReconcilingInbox = true;
+    try {
+      await sweepRetryQueue();
+
+      for (final wallet in _wallets) {
+        final latestResult = await _getLatestTransactionDateUseCase(
+          GetLatestTransactionDateParams(walletId: wallet.id),
+        );
+        final latestTransactionDate = latestResult.fold<DateTime?>(
+          (_) => null,
+          (date) => date,
+        );
+
+        final historicalTransactions = await _inboxSmsService
+            .getHistoricalTransactionEntities(
+              wallet: wallet,
+              sameProviderWalletPhoneNumbers: _sameProviderWalletPhoneNumbers(
+                wallet,
+              ),
+              sameProviderWalletBalances: _sameProviderWalletBalances(wallet),
+              sinceDate: latestTransactionDate ?? wallet.createdAt,
+            );
+
+        final orderedTransactions = _newHistoricalTransactions(
+          transactions: historicalTransactions,
+          latestTransactionDate: latestTransactionDate,
+        );
+
+        for (final transaction in orderedTransactions) {
+          final saved = await _save(
+            transaction,
+            sender: transaction.provider.toValue,
+            body: transaction.message ?? '',
+          );
+          if (!saved) break;
+        }
+      }
+    } finally {
+      _isReconcilingInbox = false;
+    }
+  }
+
+  List<TransactionEntity> _newHistoricalTransactions({
+    required List<TransactionEntity> transactions,
+    required DateTime? latestTransactionDate,
+  }) {
+    final filteredTransactions = latestTransactionDate == null
+        ? transactions
+        : transactions
+              .where(
+                (transaction) =>
+                    transaction.createdAt.isAfter(latestTransactionDate),
+              )
+              .toList(growable: false);
+
+    return filteredTransactions
+      ..sort((left, right) => left.createdAt.compareTo(right.createdAt));
+  }
+
+  List<String> _sameProviderWalletPhoneNumbers(WalletEntity wallet) {
+    return _wallets
+        .where((candidate) => candidate.provider == wallet.provider)
+        .map((candidate) => candidate.phoneNumber)
+        .toSet()
+        .toList(growable: false);
+  }
+
+  Map<String, double> _sameProviderWalletBalances(WalletEntity wallet) {
+    final balances = <String, double>{};
+    for (final candidate in _wallets) {
+      if (candidate.provider != wallet.provider || candidate.id == wallet.id) {
+        continue;
+      }
+      balances[candidate.phoneNumber] = candidate.currentBalance;
+    }
+    return balances;
   }
 
   void _updateWalletSnapshot(TransactionEntity transaction) {

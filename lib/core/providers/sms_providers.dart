@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/settings/providers/settings_providers.dart';
@@ -37,6 +38,10 @@ final smsReadinessProvider = FutureProvider<SmsReadiness>((ref) async {
 final smsTransactionServiceProvider = Provider<SmsTransactionService>(
   (ref) => SmsTransactionService(
     saveTransactionUseCase: ref.watch(saveTransactionUseCaseProvider),
+    getLatestTransactionDateUseCase: ref.watch(
+      getLatestTransactionDateUseCaseProvider,
+    ),
+    inboxSmsService: ref.watch(inboxSmsServiceProvider),
     pendingSmsRetryService: ref.watch(pendingSmsRetryServiceProvider),
   ),
 );
@@ -52,6 +57,7 @@ final inboxSmsServiceProvider = Provider<InboxSmsService>(
 final smsTransactionListenerProvider = Provider<void>((ref) {
   // Activate connectivity-based retries.
   ref.watch(connectivityRetryProvider);
+  ref.watch(appLifecycleSmsSyncProvider);
 
   final readiness = ref.watch(smsReadinessProvider).value;
   if (readiness == null || !readiness.isPermitted) return;
@@ -62,4 +68,14 @@ final smsTransactionListenerProvider = Provider<void>((ref) {
 
   // Sweep any leftover items from a previous session.
   service.sweepRetryQueue();
+  service.reconcileInboxHistory();
+});
+
+final appLifecycleSmsSyncProvider = Provider<void>((ref) {
+  final listener = AppLifecycleListener(
+    onResume: () {
+      ref.invalidate(smsReadinessProvider);
+    },
+  );
+  ref.onDispose(listener.dispose);
 });

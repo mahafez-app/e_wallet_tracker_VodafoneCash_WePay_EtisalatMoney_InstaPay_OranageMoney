@@ -64,7 +64,8 @@ final class TransactionRepositoryImpl implements TransactionRepository {
     // Persist first page only when no filters and no cursor (first page).
     // Fire-and-forget — never block the return on a cache write.
     final isFirstPage = cursor == null;
-    final hasNoFilters = type == null &&
+    final hasNoFilters =
+        type == null &&
         paidStatusFilter == TransactionPaidStatusFilter.all &&
         counterpartySuffixQuery == null &&
         dateRange == null;
@@ -126,6 +127,13 @@ final class TransactionRepositoryImpl implements TransactionRepository {
         .map((dto) => dto.toEntity()),
     tag: 'TransactionRepository.watchTransaction',
   );
+
+  @override
+  Future<Result<DateTime?>> getLatestTransactionDate(String walletId) =>
+      executeAndHandleErrors(
+        () => _walletRemoteDataSource.getLatestTransactionDate(walletId),
+        tag: 'TransactionRepository.getLatestTransactionDate',
+      );
 
   // ── Mutations ────────────────────────────────────────────────────────────
 

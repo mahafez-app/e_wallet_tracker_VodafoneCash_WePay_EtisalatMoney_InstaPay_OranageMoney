@@ -6,7 +6,7 @@ import 'package:wallet_product/wallet_product.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../workspaces/presentation/providers/workspace_details_controller.dart';
+import '../providers/workspace_details_controller.dart';
 
 /// Composes workspace-owned wallet metadata into the wallet product's report UI.
 class WorkspaceReportScreen extends ConsumerWidget {

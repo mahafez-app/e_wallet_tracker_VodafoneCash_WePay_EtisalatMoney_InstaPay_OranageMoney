@@ -15,7 +15,7 @@ import '../utils/extensions/localization_extension.dart';
 
 import 'package:wallet_product/wallet_product.dart';
 
-import '../../features/reports/presentation/screens/workspace_report_screen.dart';
+import '../../features/workspaces/presentation/screens/workspace_report_screen.dart';
 import '../../features/workspaces/presentation/screens/create_workspace_screen.dart';
 import '../../features/workspaces/presentation/screens/select_workspace_wallets_screen.dart';
 import '../../features/workspaces/presentation/screens/workspace_details_screen.dart';

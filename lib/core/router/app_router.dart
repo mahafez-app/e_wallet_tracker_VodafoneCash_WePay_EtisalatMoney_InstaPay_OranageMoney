@@ -11,9 +11,10 @@ import '../../features/invitations/presentation/screens/invitations_screen.dart'
 import '../../features/settings/presentation/screens/sms_permissions_screen.dart';
 import '../../features/settings/presentation/screens/user_settings_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
+import '../utils/extensions/localization_extension.dart';
+
 import 'package:wallet_product/wallet_product.dart';
 
-import '../../features/reports/presentation/screens/wallet_report_screen.dart';
 import '../../features/reports/presentation/screens/workspace_report_screen.dart';
 import '../../features/workspaces/presentation/screens/create_workspace_screen.dart';
 import '../../features/workspaces/presentation/screens/select_workspace_wallets_screen.dart';
@@ -209,7 +210,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.walletReports,
         builder: (context, state) {
           final walletId = state.pathParameters['walletId']!;
-          return WalletReportScreen(walletId: walletId);
+          return WalletTransactionReportScreen(
+            walletIds: [walletId],
+            title: context.l10n.reports_wallet_title,
+          );
         },
       ),
     ],

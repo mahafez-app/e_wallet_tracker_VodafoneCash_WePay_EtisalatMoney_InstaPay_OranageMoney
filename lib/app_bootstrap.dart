@@ -6,13 +6,16 @@ import 'package:wallet_product/wallet_product.dart';
 
 import 'app.dart';
 import 'core/di/app_initializer.dart';
+
 import 'package:mahafez_core/mahafez_core.dart';
+
 import 'core/providers/cache_providers.dart';
 import 'core/providers/service_providers.dart';
 import 'features/settings/providers/settings_providers.dart';
+import 'features/workspaces/domain/usecases/remove_wallets_from_workspace_usecase.dart';
+import 'features/workspaces/providers/workspaces_providers.dart';
 import 'features/splash/presentation/screens/startup_fallback_screen.dart';
 import 'generated/l10n.dart';
-
 
 class AppBootstrap extends StatefulWidget {
   const AppBootstrap({super.key, required this.initializationResult});
@@ -64,6 +67,23 @@ class _AppBootstrapState extends State<AppBootstrap> {
           // DeviceInfoService so AddWalletScreen persists correct device IDs.
           walletDeviceIdProvider.overrideWith(
             (ref) => ref.watch(deviceInfoServiceProvider).getDeviceId,
+          ),
+          walletDeletionHookProvider.overrideWith(
+            (ref) => (walletId) async {
+              final workspaceIds = await ref
+                  .read(workspaceRemoteDataSourceProvider)
+                  .getWorkspaceIdsContainingWallet(walletId);
+              for (final workspaceId in workspaceIds) {
+                final result =
+                    await ref.read(removeWalletsFromWorkspaceUseCaseProvider)(
+                      RemoveWalletsFromWorkspaceParams(
+                        workspaceId: workspaceId,
+                        walletIds: [walletId],
+                      ),
+                    );
+                result.fold((failure) => throw failure, (_) {});
+              }
+            },
           ),
         ],
         child: const App(),

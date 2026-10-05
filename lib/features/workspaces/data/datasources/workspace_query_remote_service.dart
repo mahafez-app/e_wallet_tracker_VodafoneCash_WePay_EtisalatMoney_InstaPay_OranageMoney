@@ -2,17 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:wallet_product/wallet_product.dart';
+
 import '../../../../core/data/models/workspace_dto.dart';
+
 import 'package:mahafez_core/mahafez_core.dart';
+
 import '../models/workspace_member_dto.dart';
 
 class WorkspaceQueryRemoteService {
   static const String _usersCollection = 'users';
 
-  const WorkspaceQueryRemoteService({required FirebaseFirestore firestore})
-    : _firestore = firestore;
+  const WorkspaceQueryRemoteService({
+    required FirebaseFirestore firestore,
+    required WalletQueries walletQueries,
+  }) : _firestore = firestore,
+       _walletQueries = walletQueries;
 
   final FirebaseFirestore _firestore;
+  final WalletQueries _walletQueries;
 
   CollectionReference<Map<String, dynamic>> get _workspacesCollection =>
       _firestore.collection('workspaces');
@@ -34,7 +41,7 @@ class WorkspaceQueryRemoteService {
       if (!document.exists) {
         return null;
       }
- 
+
       return WorkspaceDto.fromFirestore(document);
     });
   }
@@ -74,24 +81,15 @@ class WorkspaceQueryRemoteService {
     });
   }
 
-  Future<List<WalletDto>> getWorkspaceWallets(String workspaceId) async {
+  Future<List<WalletEntity>> getWorkspaceWallets(String workspaceId) async {
     final linkedWalletIds = await _getLinkedWalletIds(workspaceId);
     if (linkedWalletIds.isEmpty) {
-      return const <WalletDto>[];
+      return const <WalletEntity>[];
     }
-
-    final futures = linkedWalletIds.map(
-      (walletId) => _firestore.collection('wallets').doc(walletId).get(),
-    );
-    final walletDocuments = await Future.wait(futures);
-
-    return walletDocuments
-        .where((document) => document.exists)
-        .map(WalletDto.fromFirestore)
-        .toList();
+    return _walletQueries.getByIds(linkedWalletIds);
   }
 
-  Stream<List<WalletDto>> watchWorkspaceWallets(String workspaceId) {
+  Stream<List<WalletEntity>> watchWorkspaceWallets(String workspaceId) {
     final linksStream = _workspacesCollection
         .doc(workspaceId)
         .collection('wallets')
@@ -104,25 +102,26 @@ class WorkspaceQueryRemoteService {
           .toList();
 
       if (walletIds.isEmpty) {
-        return Stream.value(const <WalletDto>[]);
+        return Stream.value(const <WalletEntity>[]);
       }
-
-      final walletStreams = walletIds.map(
-        (walletId) =>
-            _firestore.collection('wallets').doc(walletId).snapshots(),
-      );
-
-      return Rx.combineLatestList(walletStreams).map((walletDocuments) {
-        return walletDocuments
-            .where((document) => document.exists)
-            .map(WalletDto.fromFirestore)
-            .toList();
-      });
+      return _walletQueries.watchByIds(walletIds);
     });
   }
 
   Future<List<String>> getLinkedWalletIds(String workspaceId) {
     return _getLinkedWalletIds(workspaceId);
+  }
+
+  Future<List<String>> getWorkspaceIdsContainingWallet(String walletId) async {
+    final links = await _firestore
+        .collectionGroup('wallets')
+        .where('walletId', isEqualTo: walletId)
+        .get();
+    return links.docs
+        .map((document) => document.reference.parent.parent?.id)
+        .whereType<String>()
+        .toSet()
+        .toList();
   }
 
   Future<WorkspaceMemberDto> _getWorkspaceMemberProfile(

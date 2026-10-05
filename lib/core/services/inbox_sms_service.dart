@@ -6,6 +6,7 @@ import 'package:wallet_product/wallet_product.dart';
 import 'package:mahafez_core/mahafez_core.dart';
 import 'package:sms_engine/sms_engine.dart'
     hide InboxSmsService, InboxSmsServiceImpl;
+
 import '../utils/sms/sms_transaction_entity_builder.dart';
 
 abstract interface class InboxSmsService {
@@ -14,16 +15,6 @@ abstract interface class InboxSmsService {
     required String targetPhoneNumber,
     required List<String> sameProviderWalletPhoneNumbers,
     Map<String, double> sameProviderWalletBalances,
-  });
-
-  Future<List<TransactionDto>> getHistoricalTransactions({
-    required WalletProvider provider,
-    required String walletId,
-    required String walletOwnerUid,
-    required String phoneNumber,
-    required List<String> sameProviderWalletPhoneNumbers,
-    Map<String, double> sameProviderWalletBalances,
-    DateTime? sinceDate,
   });
 
   Future<List<TransactionEntity>> getHistoricalTransactionEntities({
@@ -59,9 +50,8 @@ class InboxSmsServiceImpl implements InboxSmsService {
 
       final messages = await Telephony.instance.getInboxSms(
         columns: [SmsColumn.ADDRESS, SmsColumn.BODY, SmsColumn.DATE],
-        filter: SmsFilter.where(
-          SmsColumn.DATE,
-        ).greaterThan(thirtyDaysAgoMs.toString()),
+        filter: SmsFilter.where(SmsColumn.DATE)
+            .greaterThan(thirtyDaysAgoMs.toString()),
         sortOrder: [OrderBy(SmsColumn.DATE, sort: Sort.DESC)],
       );
 
@@ -104,54 +94,6 @@ class InboxSmsServiceImpl implements InboxSmsService {
     }
 
     return null;
-  }
-
-  @override
-  Future<List<TransactionDto>> getHistoricalTransactions({
-    required WalletProvider provider,
-    required String walletId,
-    required String walletOwnerUid,
-    required String phoneNumber,
-    required List<String> sameProviderWalletPhoneNumbers,
-    Map<String, double> sameProviderWalletBalances = const {},
-    DateTime? sinceDate,
-  }) async {
-    try {
-      final matchedRecords = await _getMatchedHistoricalRecords(
-        provider: provider,
-        phoneNumber: phoneNumber,
-        sameProviderWalletPhoneNumbers: sameProviderWalletPhoneNumbers,
-        sameProviderWalletBalances: sameProviderWalletBalances,
-        sinceDate: sinceDate,
-      );
-
-      return matchedRecords
-          .map(
-            (record) => TransactionDto(
-              id: '',
-              type: record.parseResult.type,
-              amount: record.parseResult.amount,
-              createdAt: record.createdAt,
-              walletId: walletId,
-              walletOwnerUid: walletOwnerUid,
-              provider: provider,
-              phoneNumber: phoneNumber,
-              counterpartyNumber: record.parseResult.counterpartyNumber,
-              referenceNumber: record.parseResult.referenceNumber,
-              statusBalance: record.parseResult.balance,
-              message: record.body,
-            ),
-          )
-          .toList(growable: false);
-    } catch (e, st) {
-      log(
-        'Failed to query historical transactions for provider ${provider.toValue}',
-        name: 'InboxSmsService',
-        error: e,
-        stackTrace: st,
-      );
-      return const [];
-    }
   }
 
   @override

@@ -1,10 +1,13 @@
 import 'package:rxdart/rxdart.dart';
 
 import 'package:wallet_product/wallet_product.dart';
+
 import '../../../../core/data/models/workspace_dto.dart';
 import '../../../../core/domain/entities/workspace_entity.dart';
 import '../../../../core/error/failure_mapper.dart';
+
 import 'package:mahafez_core/mahafez_core.dart';
+
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/home_dashboard_entity.dart';
 import '../../domain/repositories/home_repository.dart';
@@ -23,39 +26,44 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Stream<Result<HomeDashboardEntity>> watchHomeDashboard() {
     return executeStreamAndHandleErrors(
-      () => Rx.combineLatest3<List<WalletDto>, List<WorkspaceEntity>, int,
-          HomeDashboardEntity>(
-        _remote.watchUserWallets(),
-        _watchWorkspaceSummaries(),
-        _remote.watchPendingInvitationsCount(),
-        (wallets, workspaces, invitesCount) {
-          final walletEntities = wallets.map((w) => w.toEntity()).toList();
+      () =>
+          Rx.combineLatest3<
+            List<WalletEntity>,
+            List<WorkspaceEntity>,
+            int,
+            HomeDashboardEntity
+          >(
+            _remote.watchUserWallets(),
+            _watchWorkspaceSummaries(),
+            _remote.watchPendingInvitationsCount(),
+            (wallets, workspaces, invitesCount) {
+              final walletEntities = wallets;
 
-          final totalBalance = walletEntities.fold<double>(
-            0.0,
-            (sum, wallet) => sum + wallet.currentBalance,
-          );
+              final totalBalance = walletEntities.fold<double>(
+                0.0,
+                (sum, wallet) => sum + wallet.currentBalance,
+              );
 
-          final totalReceived = walletEntities.fold<double>(
-            0.0,
-            (sum, wallet) => sum + wallet.totalReceived,
-          );
+              final totalReceived = walletEntities.fold<double>(
+                0.0,
+                (sum, wallet) => sum + wallet.totalReceived,
+              );
 
-          final totalSent = walletEntities.fold<double>(
-            0.0,
-            (sum, wallet) => sum + wallet.totalSent,
-          );
+              final totalSent = walletEntities.fold<double>(
+                0.0,
+                (sum, wallet) => sum + wallet.totalSent,
+              );
 
-          return HomeDashboardEntity(
-            totalBalance: totalBalance,
-            totalReceived: totalReceived,
-            totalSent: totalSent,
-            wallets: walletEntities,
-            workspaces: workspaces,
-            invitationsCount: invitesCount,
-          );
-        },
-      ),
+              return HomeDashboardEntity(
+                totalBalance: totalBalance,
+                totalReceived: totalReceived,
+                totalSent: totalSent,
+                wallets: walletEntities,
+                workspaces: workspaces,
+                invitationsCount: invitesCount,
+              );
+            },
+          ),
       tag: 'HomeRepository.watchHomeDashboard',
       mapper: _mapper,
     );
@@ -84,7 +92,7 @@ class HomeRepositoryImpl implements HomeRepository {
 
   WorkspaceEntity _buildWorkspaceSummary({
     required WorkspaceDto workspace,
-    required List<WalletDto> wallets,
+    required List<WalletEntity> wallets,
   }) {
     final totalReceived = wallets.fold<double>(
       0.0,

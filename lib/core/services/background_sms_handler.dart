@@ -3,16 +3,19 @@ import 'dart:ui';
 
 import 'package:another_telephony/telephony.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:wallet_product/wallet_product.dart';
+
 import '../../firebase_options.dart';
 
 import 'package:mahafez_core/mahafez_core.dart';
 import 'package:sms_engine/sms_engine.dart';
+
 import '../utils/sms/sms_transaction_entity_builder.dart';
 
 // ── Public helpers ────────────────────────────────────────────────────────────
@@ -126,9 +129,8 @@ final class _BackgroundSmsProcessor {
         return;
       }
 
-      await PendingSmsRetryService(
-        box: _retryBox,
-      ).markFailure(queueItem.id, result.error);
+      await PendingSmsRetryService(box: _retryBox)
+          .markFailure(queueItem.id, result.error);
     } catch (e, st) {
       log(
         'Unhandled background error: $e. Enqueuing for retry.',
@@ -136,9 +138,8 @@ final class _BackgroundSmsProcessor {
         name: _tag,
       );
       if (queueItem != null) {
-        await PendingSmsRetryService(
-          box: _retryBox,
-        ).markFailure(queueItem.id, e.toString());
+        await PendingSmsRetryService(box: _retryBox)
+            .markFailure(queueItem.id, e.toString());
       }
     }
   }
@@ -188,10 +189,12 @@ final class _BackgroundSmsProcessor {
           walletPhoneNumber: wallet.phoneNumber,
           rawMessage: body,
         );
-        final deletedTransactionLocalDataSource =
-            _buildDeletedTransactionLocalDataSource();
-        await deletedTransactionLocalDataSource.pruneExpired();
-        if (await deletedTransactionLocalDataSource.isDeleted(transaction.id)) {
+        final transactionStore = BackgroundTransactionStore(
+          firestore: FirebaseFirestore.instance,
+          deletedTransactionIds: _deletedTransactionsBox,
+        );
+        await transactionStore.pruneExpiredTombstones();
+        if (await transactionStore.isTransactionDeleted(transaction.id)) {
           log(
             'Skipping locally deleted transaction ${transaction.id}.',
             name: _tag,
@@ -200,7 +203,7 @@ final class _BackgroundSmsProcessor {
         }
 
         try {
-          await _buildDataSource().saveTransaction(transaction);
+          await transactionStore.save(transaction);
           log('Transaction saved: ${transaction.id}', name: _tag);
           return const _BackgroundProcessingResult.success();
         } on ValidationFailure catch (failure) {
@@ -223,17 +226,11 @@ final class _BackgroundSmsProcessor {
     String? counterpartyNumber,
     List<String> mentionedPhoneNumbers = const <String>[],
   }) async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('wallets')
-        .where('ownerUid', isEqualTo: uid)
-        .where('provider', isEqualTo: providerName)
-        .get();
-
-    if (snapshot.docs.isEmpty) return const SmsWalletNoCandidate();
-
-    final candidates = snapshot.docs
-        .map((document) => WalletDto.fromFirestore(document).toEntity())
-        .toList(growable: false);
+    final candidates = await WalletQueries(
+      firestore: FirebaseFirestore.instance,
+      auth: FirebaseAuth.instance,
+    ).getByOwnerAndProvider(ownerUid: uid, provider: providerName);
+    if (candidates.isEmpty) return const SmsWalletNoCandidate();
 
     return SmsWalletMatcher.resolve(
       wallets: candidates,
@@ -249,19 +246,6 @@ final class _BackgroundSmsProcessor {
 
   Future<void> _enqueue(PendingSmsRetryItem item) {
     return PendingSmsRetryService(box: _retryBox).enqueue(item);
-  }
-
-  WalletTransactionRemoteDataSource _buildDataSource() {
-    return WalletTransactionRemoteDataSourceImpl(
-      support: TransactionFirestoreSupport(
-        firestore: FirebaseFirestore.instance,
-        metaCache: WalletMetaCache(),
-      ),
-    );
-  }
-
-  DeletedTransactionLocalDataSource _buildDeletedTransactionLocalDataSource() {
-    return DeletedTransactionLocalDataSourceImpl(box: _deletedTransactionsBox);
   }
 
   Future<String?> _resolveUserUid() async {

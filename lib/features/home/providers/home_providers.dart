@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wallet_product/wallet_product.dart';
 
 import '../../../core/providers/firebase_providers.dart';
 import '../data/datasources/home_remote_data_source.dart';
@@ -10,6 +11,10 @@ final homeRemoteDataSourceProvider = Provider<HomeRemoteDataSource>(
   (ref) => HomeRemoteDataSourceImpl(
     firestore: ref.watch(firestoreProvider),
     auth: ref.watch(firebaseAuthProvider),
+    walletQueries: WalletQueries(
+      firestore: ref.watch(firestoreProvider),
+      auth: ref.watch(firebaseAuthProvider),
+    ),
   ),
 );
 

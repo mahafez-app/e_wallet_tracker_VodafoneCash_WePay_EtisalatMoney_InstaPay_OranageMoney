@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:wallet_product/wallet_product.dart';
+
 import '../../../../core/data/models/workspace_dto.dart';
 import '../models/workspace_member_dto.dart';
 import 'workspace_command_remote_service.dart';
@@ -40,17 +41,23 @@ abstract interface class WorkspaceRemoteDataSource {
 
   Stream<List<WorkspaceMemberDto>> watchWorkspaceMembers(String workspaceId);
 
-  Future<List<WalletDto>> getWorkspaceWallets(String workspaceId);
+  Future<List<WalletEntity>> getWorkspaceWallets(String workspaceId);
 
-  Stream<List<WalletDto>> watchWorkspaceWallets(String workspaceId);
+  Stream<List<WalletEntity>> watchWorkspaceWallets(String workspaceId);
+
+  Future<List<String>> getWorkspaceIdsContainingWallet(String walletId);
 }
 
 class WorkspaceRemoteDataSourceImpl implements WorkspaceRemoteDataSource {
   factory WorkspaceRemoteDataSourceImpl({
     required FirebaseFirestore firestore,
     required FirebaseAuth auth,
+    required WalletQueries walletQueries,
   }) {
-    final queryService = WorkspaceQueryRemoteService(firestore: firestore);
+    final queryService = WorkspaceQueryRemoteService(
+      firestore: firestore,
+      walletQueries: walletQueries,
+    );
     return WorkspaceRemoteDataSourceImpl._(
       commandService: WorkspaceCommandRemoteService(
         firestore: firestore,
@@ -145,12 +152,17 @@ class WorkspaceRemoteDataSourceImpl implements WorkspaceRemoteDataSource {
   }
 
   @override
-  Future<List<WalletDto>> getWorkspaceWallets(String workspaceId) {
+  Future<List<WalletEntity>> getWorkspaceWallets(String workspaceId) {
     return _queryService.getWorkspaceWallets(workspaceId);
   }
 
   @override
-  Stream<List<WalletDto>> watchWorkspaceWallets(String workspaceId) {
+  Stream<List<WalletEntity>> watchWorkspaceWallets(String workspaceId) {
     return _queryService.watchWorkspaceWallets(workspaceId);
+  }
+
+  @override
+  Future<List<String>> getWorkspaceIdsContainingWallet(String walletId) {
+    return _queryService.getWorkspaceIdsContainingWallet(walletId);
   }
 }

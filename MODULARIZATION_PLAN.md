@@ -232,12 +232,12 @@ Complete these phases in order. Do not mark Layer 4 complete until every precedi
 
 ### Phase 1: Close the `wallet_product` Boundary
 *Goal: make the wallet product independently consumable before extracting more app features.*
-- [ ] Define a small supported public API for wallet entities, wallet queries by ID, product screens/configuration, reports, and SMS integration
-- [ ] Stop exporting DTOs, Firestore data sources, repository implementations, and other persistence internals from `wallet_product.dart`
-- [ ] Replace app imports/usages of `WalletDto` and `TransactionDto` with supported domain/API contracts
-- [ ] Move report domain behavior, state, and wallet-report UI into `wallet_product`; app supplies generic wallet IDs and workspace display/filter metadata
-- [ ] Remove app-owned wallet Firestore reads; retain workspace-link reads only until `workspace_product` owns them
-- [ ] Publish the breaking API cleanup with an appropriate semantic version and update the app lockfile
+- [x] Define a supported public API for wallet queries by ID, report screens/configuration, background persistence, and a generic deletion hook
+- [x] Stop exporting DTOs, Firestore data sources, repository implementations, and cache implementations from `wallet_product.dart`
+- [x] Replace app imports/usages of `WalletDto` and `TransactionDto` with product domain/API contracts
+- [x] Move report filter state and wallet/multi-wallet report UI into `wallet_product`; app supplies generic wallet IDs and display labels
+- [x] Remove app-owned wallet document reads; app retains workspace-link reads until `workspace_product` owns them
+- [x] Publish the breaking API cleanup as `wallet_product` v2.0.0 and pin the app lockfile to that tag
 
 ### Phase 2: Put SMS-to-Wallet Orchestration Behind the Product
 *Goal: remove the app's direct Layer 2 dependency while preserving OS lifecycle and permissions.*

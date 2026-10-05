@@ -1,9 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-export 'package:wallet_product/wallet_product.dart'
-    show walletMetaCacheProvider, WalletMetaCache;
-
 // ── Phase 4 — Hive box for tx first-page cache ────────────────────────────────
 
 /// Hive box opened during app bootstrap and injected via

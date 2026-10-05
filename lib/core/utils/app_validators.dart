@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
+import 'package:mahafez_app/core/utils/extensions/localization_extension.dart';
 
 abstract final class AppValidators {
   static String? email(BuildContext context, String? value) {

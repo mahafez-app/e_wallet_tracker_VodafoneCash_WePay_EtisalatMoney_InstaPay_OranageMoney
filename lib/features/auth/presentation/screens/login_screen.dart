@@ -4,7 +4,7 @@ import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
+import 'package:mahafez_app/core/utils/extensions/localization_extension.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../providers/auth_controller.dart';

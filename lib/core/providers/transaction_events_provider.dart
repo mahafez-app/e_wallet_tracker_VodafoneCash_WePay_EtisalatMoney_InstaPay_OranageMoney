@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../domain/entities/transaction_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 
 final transactionUpdatesProvider =
     NotifierProvider.autoDispose<

@@ -1,9 +1,8 @@
 import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/domain/entities/wallet_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/wallets/app_wallet_tile.dart';
 import 'workspace_settings_empty_state_card.dart';
 import 'workspace_settings_section_title.dart';
 
@@ -53,7 +52,7 @@ class WorkspaceSettingsWalletsSection extends StatelessWidget {
                 .map(
                   (wallet) => Padding(
                     padding: MahafezResponsive.onlyPadding(bottom: MahafezSpacing.md),
-                    child: AppWalletTile(
+                    child: WalletTile(
                       wallet: wallet,
                       ownerName: memberNamesByUid[wallet.ownerUid],
                       showOwnerName: true,

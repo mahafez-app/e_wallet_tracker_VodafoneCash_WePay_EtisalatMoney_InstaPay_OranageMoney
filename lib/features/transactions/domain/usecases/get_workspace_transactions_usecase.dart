@@ -1,14 +1,13 @@
-import '../entities/transaction_date_range.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import '../entities/transaction_page.dart';
-import '../entities/transaction_paid_status_filter.dart';
-import '../repositories/transaction_repository.dart';
+import 'package:wallet_product/wallet_product.dart';
+
+import '../repositories/workspace_transaction_repository.dart';
 
 final class GetWorkspaceTransactionsUseCase
     implements UseCase<TransactionPage, GetWorkspaceTransactionsParams> {
   const GetWorkspaceTransactionsUseCase(this._repository);
 
-  final TransactionRepository _repository;
+  final WorkspaceTransactionRepository _repository;
 
   @override
   Future<Result<TransactionPage>> call(GetWorkspaceTransactionsParams params) =>

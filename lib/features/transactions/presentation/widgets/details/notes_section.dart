@@ -4,7 +4,7 @@ import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/domain/entities/transaction_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../../features/auth/providers/auth_providers.dart';
 import '../../providers/notes/notes_controller.dart';
 import '../../providers/transaction_details_controller.dart';

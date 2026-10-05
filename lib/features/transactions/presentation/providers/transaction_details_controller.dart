@@ -3,15 +3,11 @@ import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/domain/entities/transaction_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../core/providers/transaction_events_provider.dart';
 import '../../../../features/auth/domain/entities/user_entity.dart';
 import '../../../../features/auth/providers/auth_providers.dart';
-import '../../domain/usecases/delete_transaction_usecase.dart';
-import '../../domain/usecases/mark_paid_usecases.dart';
-import '../../domain/usecases/note_usecases.dart';
-import '../../domain/usecases/watch_transaction_usecase.dart';
 import '../../providers/transactions_providers.dart';
 import 'transaction_details_state.dart';
 

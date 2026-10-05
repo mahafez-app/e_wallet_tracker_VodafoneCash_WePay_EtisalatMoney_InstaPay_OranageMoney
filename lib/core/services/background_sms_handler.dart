@@ -8,15 +8,11 @@ import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../features/transactions/data/datasources/transaction_firestore_support.dart';
-import '../../features/transactions/data/datasources/wallet_transaction_remote_data_source.dart';
-import '../../features/transactions/data/datasources/deleted_transaction_local_data_source.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../firebase_options.dart';
-import '../cache/wallet_meta_cache.dart';
-import '../data/models/wallet_dto.dart';
-import '../domain/entities/wallet_entity.dart';
+
 import 'package:mahafez_core/mahafez_core.dart';
-import 'package:mahafez_sms_engine/mahafez_sms_engine.dart';
+import 'package:sms_engine/sms_engine.dart';
 import '../utils/sms/sms_transaction_entity_builder.dart';
 
 // ── Public helpers ────────────────────────────────────────────────────────────

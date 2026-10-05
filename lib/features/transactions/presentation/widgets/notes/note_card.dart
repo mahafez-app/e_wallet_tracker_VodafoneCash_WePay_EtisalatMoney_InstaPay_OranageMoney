@@ -4,9 +4,8 @@ import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../../core/domain/entities/transaction_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../domain/entities/note_entity.dart';
 import '../../providers/notes/notes_controller.dart';
 import 'note_input_field.dart';
 import 'note_read_view.dart';

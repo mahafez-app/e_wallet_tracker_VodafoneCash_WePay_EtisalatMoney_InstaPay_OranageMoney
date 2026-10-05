@@ -3,9 +3,8 @@
 import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/domain/entities/transaction_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
-import '../../../../../core/widgets/transactions/transaction_card.dart';
 
 /// Groups transactions by calendar day and renders date headers.
 class TransactionsDateGroupedList extends StatelessWidget {

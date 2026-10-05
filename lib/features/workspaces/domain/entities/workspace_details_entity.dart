@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../../core/domain/entities/wallet_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../core/domain/entities/workspace_entity.dart';
 import 'workspace_member_entity.dart';
 

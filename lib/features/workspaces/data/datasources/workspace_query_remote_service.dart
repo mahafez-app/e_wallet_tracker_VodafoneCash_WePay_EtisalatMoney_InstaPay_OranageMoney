@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../../core/data/models/wallet_dto.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../core/data/models/workspace_dto.dart';
 import 'package:mahafez_core/mahafez_core.dart';
 import '../models/workspace_member_dto.dart';

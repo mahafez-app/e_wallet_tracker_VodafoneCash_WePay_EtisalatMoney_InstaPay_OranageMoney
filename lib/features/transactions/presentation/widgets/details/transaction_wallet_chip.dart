@@ -1,10 +1,9 @@
 import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/domain/entities/transaction_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../../../core/widgets/wallets/wallet_provider_icon.dart';
 
 class TransactionWalletChip extends StatelessWidget {
   const TransactionWalletChip({super.key, required this.transaction});
@@ -18,7 +17,7 @@ class TransactionWalletChip extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        WalletProviderIcon(
+        ProviderIcon(
           provider: transaction.provider,
           size: MahafezSpacing.xl.responsiveRadius,
         ),

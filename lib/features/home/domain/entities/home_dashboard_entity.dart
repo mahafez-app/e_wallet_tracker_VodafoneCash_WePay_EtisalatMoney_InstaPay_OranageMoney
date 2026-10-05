@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'package:wallet_tracker/core/domain/entities/wallet_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../core/domain/entities/workspace_entity.dart';
 
 final class HomeDashboardEntity extends Equatable {

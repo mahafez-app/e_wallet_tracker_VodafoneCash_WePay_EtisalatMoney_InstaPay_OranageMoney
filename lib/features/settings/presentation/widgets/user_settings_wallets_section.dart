@@ -2,11 +2,10 @@ import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/domain/entities/wallet_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../../core/widgets/wallets/app_wallet_tile.dart';
 import '../providers/user_settings_wallets_controller.dart';
 import '../providers/user_settings_wallets_state.dart';
 import 'settings_section_title.dart';
@@ -46,7 +45,7 @@ class UserSettingsWalletsSection extends ConsumerWidget {
         ...state.wallets.map(
           (wallet) => Padding(
             padding: MahafezResponsive.onlyPadding(bottom: MahafezSpacing.md),
-            child: AppWalletTile(
+            child: WalletTile(
               wallet: wallet,
               onActionPressed: () => _showDeleteDialog(
                 context,

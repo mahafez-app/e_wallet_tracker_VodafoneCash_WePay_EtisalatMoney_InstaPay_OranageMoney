@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallet_tracker/core/domain/entities/wallet_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import 'package:mahafez_sms_engine/mahafez_sms_engine.dart';
+import 'package:sms_engine/sms_engine.dart';
 
 void main() {
   final now = DateTime(2026, 4, 20, 12);

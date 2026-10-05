@@ -44,10 +44,14 @@ dependencies:
       ref: v1.0.2
 
   # --- Layer 2 Capabilities ---
-  mahafez_sms_engine:
+  sms_engine:
     git:
-      url: https://github.com/mahafez-app/mahafez_sms_engine.git
-      ref: v1.0.0
+      url: https://github.com/mahafez-app/sms_engine.git
+      ref: v1.0.1
+
+  # --- Layer 3 Products ---
+  wallet_product:
+    path: ../wallet_product
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

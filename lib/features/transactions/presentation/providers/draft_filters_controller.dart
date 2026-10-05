@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../domain/entities/transaction_paid_status_filter.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../navigation/transactions_route_data.dart';
 import 'transactions_controller.dart';
 import 'transactions_state.dart';

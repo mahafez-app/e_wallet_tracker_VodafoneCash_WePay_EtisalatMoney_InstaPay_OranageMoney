@@ -1,20 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../cache/wallet_meta_cache.dart';
-
-// ── Phase 2 — WalletMeta in-memory cache ─────────────────────────────────────
-
-/// Single session-scoped [WalletMetaCache] instance.
-///
-/// Not autoDispose — must outlive individual screen navigations so the cache
-/// survives back-presses and re-entries. Shared between
-/// [TransactionFirestoreSupport] and [WalletRepositoryImpl] so that a wallet
-/// delete in the wallets feature immediately invalidates entries used by the
-/// transactions feature.
-final walletMetaCacheProvider = Provider<WalletMetaCache>(
-  (_) => WalletMetaCache(),
-);
+export 'package:wallet_product/wallet_product.dart'
+    show walletMetaCacheProvider, WalletMetaCache;
 
 // ── Phase 4 — Hive box for tx first-page cache ────────────────────────────────
 

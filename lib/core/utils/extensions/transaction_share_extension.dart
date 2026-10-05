@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-import '../../domain/entities/transaction_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 
 extension TransactionShareExtension on TransactionEntity {
   String get receiptFileName {

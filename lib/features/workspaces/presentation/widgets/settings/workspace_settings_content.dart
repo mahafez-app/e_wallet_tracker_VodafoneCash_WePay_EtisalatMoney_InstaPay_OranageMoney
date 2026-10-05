@@ -1,7 +1,7 @@
 import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/domain/entities/wallet_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../invitations/domain/entities/workspace_pending_invitation_entity.dart';
 import '../../../domain/entities/workspace_member_entity.dart';
 import '../../providers/workspace_settings_state.dart';

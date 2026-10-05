@@ -7,7 +7,7 @@ import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../../../core/widgets/wallets/wallet_provider_icon.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../domain/entities/workspace_transactions_overview_entity.dart';
 import '../../navigation/transactions_route_data.dart';
 import '../../providers/workspace_transactions_overview_provider.dart';
@@ -268,7 +268,7 @@ class _LatestWalletsCard extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      WalletProviderIcon(
+                      ProviderIcon(
                         provider: wallet.provider,
                         size: 25.responsiveRadius,
                       ),

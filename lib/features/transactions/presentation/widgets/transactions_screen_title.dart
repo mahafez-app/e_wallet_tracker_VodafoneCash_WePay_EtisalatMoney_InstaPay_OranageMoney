@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../../core/widgets/wallets/wallet_provider_icon.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../navigation/transactions_route_data.dart';
 
 class TransactionsScreenTitle extends StatelessWidget {
@@ -21,7 +21,7 @@ class TransactionsScreenTitle extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          WalletProviderIcon(provider: provider, size: 32.responsiveRadius),
+          ProviderIcon(provider: provider, size: 32.responsiveRadius),
           MahafezSpacing.md.horizontalSpace,
           Flexible(
             child: _DoubleLineTitleText(

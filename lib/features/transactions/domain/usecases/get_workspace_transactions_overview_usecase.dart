@@ -1,6 +1,6 @@
 import 'package:mahafez_core/mahafez_core.dart';
 import '../entities/workspace_transactions_overview_entity.dart';
-import '../repositories/transaction_repository.dart';
+import '../repositories/workspace_transaction_repository.dart';
 
 final class GetWorkspaceTransactionsOverviewParams {
   const GetWorkspaceTransactionsOverviewParams({required this.walletIds});
@@ -16,7 +16,7 @@ final class GetWorkspaceTransactionsOverviewUseCase
         > {
   const GetWorkspaceTransactionsOverviewUseCase(this._repository);
 
-  final TransactionRepository _repository;
+  final WorkspaceTransactionRepository _repository;
 
   @override
   Future<Result<WorkspaceTransactionsOverviewEntity>> call(

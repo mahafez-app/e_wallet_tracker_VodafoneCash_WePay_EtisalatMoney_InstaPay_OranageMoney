@@ -2,7 +2,7 @@ import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/domain/entities/wallet_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';

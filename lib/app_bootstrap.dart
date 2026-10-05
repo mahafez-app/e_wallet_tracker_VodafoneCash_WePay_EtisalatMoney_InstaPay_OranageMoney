@@ -2,14 +2,17 @@ import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wallet_product/wallet_product.dart';
 
 import 'app.dart';
 import 'core/di/app_initializer.dart';
 import 'package:mahafez_core/mahafez_core.dart';
 import 'core/providers/cache_providers.dart';
+import 'core/providers/service_providers.dart';
 import 'features/settings/providers/settings_providers.dart';
 import 'features/splash/presentation/screens/startup_fallback_screen.dart';
 import 'generated/l10n.dart';
+
 
 class AppBootstrap extends StatefulWidget {
   const AppBootstrap({super.key, required this.initializationResult});
@@ -56,6 +59,11 @@ class _AppBootstrapState extends State<AppBootstrap> {
           pendingSmsRetryBoxProvider.overrideWithValue(data.pendingSmsRetryBox),
           deletedTransactionTombstonesBoxProvider.overrideWithValue(
             data.deletedTransactionTombstonesBox,
+          ),
+          // Override the product's device-ID stub with the shell's real
+          // DeviceInfoService so AddWalletScreen persists correct device IDs.
+          walletDeviceIdProvider.overrideWith(
+            (ref) => ref.watch(deviceInfoServiceProvider).getDeviceId,
           ),
         ],
         child: const App(),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../domain/entities/transaction_paid_status_filter.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../navigation/transactions_route_data.dart';
 import '../../providers/draft_filters_controller.dart';
 import '../../providers/transactions_state.dart';

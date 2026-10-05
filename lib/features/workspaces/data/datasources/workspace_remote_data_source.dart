@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../../../core/data/models/wallet_dto.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../core/data/models/workspace_dto.dart';
 import '../models/workspace_member_dto.dart';
 import 'workspace_command_remote_service.dart';

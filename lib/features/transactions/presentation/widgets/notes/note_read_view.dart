@@ -2,7 +2,7 @@
 
 import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:wallet_tracker/features/transactions/domain/entities/note_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 
 import '../../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../../core/utils/extensions/localization_extension.dart';

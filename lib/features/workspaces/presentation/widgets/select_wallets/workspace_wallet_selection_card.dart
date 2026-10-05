@@ -3,12 +3,12 @@
 import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/domain/entities/wallet_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../../../core/widgets/wallets/wallet_provider_icon.dart';
+
 
 class WorkspaceWalletSelectionCard extends StatelessWidget {
   const WorkspaceWalletSelectionCard({
@@ -90,7 +90,7 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                WalletProviderIcon(
+                ProviderIcon(
                   provider: wallet.provider,
                   size: MahafezSpacing.xxl.responsiveRadius,
                 ),

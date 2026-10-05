@@ -1,11 +1,8 @@
-import '../../../../core/data/models/transaction_dto.dart';
-import '../../../../core/data/models/wallet_dto.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../domain/entities/transaction_date_range.dart';
-import '../../domain/entities/transaction_paid_status_filter.dart';
+import 'package:wallet_product/wallet_product.dart';
+
 import '../../domain/entities/workspace_transactions_overview_entity.dart';
 import '../models/workspace_transactions_overview_dto.dart';
-import 'transaction_firestore_support.dart';
 
 abstract interface class WorkspaceTransactionsOverviewRemoteDataSource {
   Future<WorkspaceTransactionsOverviewDto> getWorkspaceTransactionsOverview({

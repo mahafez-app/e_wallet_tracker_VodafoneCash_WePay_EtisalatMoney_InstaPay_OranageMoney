@@ -3,9 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/settings/providers/settings_providers.dart';
 import '../../features/transactions/providers/transactions_providers.dart';
-import '../../features/wallets/providers/wallets_providers.dart';
-import '../domain/entities/wallet_entity.dart';
-import 'package:mahafez_sms_engine/mahafez_sms_engine.dart'
+import 'package:wallet_product/wallet_product.dart';
+import 'package:sms_engine/sms_engine.dart'
     hide InboxSmsService, InboxSmsServiceImpl;
 import '../services/inbox_sms_service.dart';
 import '../services/sms_transaction_service.dart';

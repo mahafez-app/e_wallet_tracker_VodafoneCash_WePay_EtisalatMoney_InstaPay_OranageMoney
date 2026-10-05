@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../invitations/domain/entities/workspace_pending_invitation_entity.dart';
 import '../../../invitations/providers/invitations_providers.dart';
-import '../../../../core/domain/entities/wallet_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/entities/workspace_member_entity.dart';
 import '../../domain/usecases/delete_workspace_usecase.dart';

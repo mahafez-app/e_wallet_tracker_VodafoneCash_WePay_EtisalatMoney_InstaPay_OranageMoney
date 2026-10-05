@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../domain/entities/transaction_history_entry_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 
 /// Section 5: Timeline of paid/unpaid status changes.
 class TransactionHistorySection extends StatelessWidget {

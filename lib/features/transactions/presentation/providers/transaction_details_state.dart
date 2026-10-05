@@ -1,9 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../../core/domain/entities/transaction_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../domain/entities/note_entity.dart';
-import '../../domain/entities/transaction_history_entry_entity.dart';
 
 enum TransactionDetailsAction {
   none,

@@ -1,6 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 
-import '../../../../core/data/models/wallet_dto.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../core/data/models/workspace_dto.dart';
 import '../../../../core/domain/entities/workspace_entity.dart';
 import '../../../../core/error/failure_mapper.dart';

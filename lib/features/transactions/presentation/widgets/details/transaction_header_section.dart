@@ -1,7 +1,7 @@
 import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/domain/entities/transaction_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';

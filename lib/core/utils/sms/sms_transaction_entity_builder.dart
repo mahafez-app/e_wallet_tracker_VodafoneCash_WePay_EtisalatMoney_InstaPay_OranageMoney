@@ -1,7 +1,7 @@
-import 'package:mahafez_sms_engine/mahafez_sms_engine.dart';
+import 'package:sms_engine/sms_engine.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../domain/entities/transaction_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 
 final class SmsTransactionEntityBuilder {
   SmsTransactionEntityBuilder._();

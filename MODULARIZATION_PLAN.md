@@ -1,0 +1,224 @@
+# Mahafez Platform — 4-Layer Modularization Plan & Checklist
+
+> **Ecosystem:** `mahafez-app` GitHub Organization  
+> **Target Architecture:** Strict 4-Layer Modular Architecture (Core $\to$ Services $\to$ Product $\to$ Experience)  
+> **Source Project:** `/Users/radyhaggag/Programming/Flutter/wallet_tracker`
+
+---
+
+## 1. Architectural Rationale: Why Are We Doing This?
+
+### 1.1 The Monolithic Problem
+The current `wallet_tracker` application is structured as a feature-based monolith. While it utilizes Clean Architecture principles internally within features, it suffers from critical architectural decay common to growing mobile codebases:
+
+1. **Circular & Inverted Dependencies:**
+   - The native SMS service (`lib/core/services/sms_transaction_service.dart`) in the Core layer directly imports `SaveTransactionUseCase` from `features/transactions`. A lower-level infrastructure service depends directly on a higher-level product feature.
+2. **Domain Impurity:**
+   - The domain entity enum `WalletProvider` (`lib/core/domain/enums/wallet_provider.dart`) imports Flutter presentation elements (`BuildContext`, `AppColors`, icons). This prevents domain models from being reused in headless background workers or pure Dart tests.
+3. **Core Layer Pollution:**
+   - `lib/core/widgets/` contains domain-specific UI widgets such as `balance_card.dart`, `wallets/`, and `transactions/`. Core should only contain generic, reusable Design System primitives.
+4. **Tight Cross-Feature Coupling:**
+   - `home` directly imports `wallets` and `workspaces`.
+   - `transactions` directly depends on wallet domain types.
+   - Any modification in wallet handling risks breaking transaction rendering or SMS listening.
+
+### 1.2 The 4-Layer Architecture Rules
+To establish an enterprise-grade standard, the codebase is being decoupled into isolated packages following four non-negotiable rules:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                   LAYER 4: EXPERIENCE / APP SHELL                      │
+│   mahafez_mobile_app (Deployable Shell: main.dart, GoRouter, DI)       │
+└──────────────────┬───────────────────────────────┬─────────────────────┘
+                   │                               │
+        ┌──────────▼──────────┐         ┌──────────▼──────────┐
+        │  wallet_product     │ ◄─────► │ transaction_product │ (❌ ZERO Cross-Imports)
+        │  (Layer 3: Domain)  │  NO     │ (Layer 3: Domain)   │
+        └──────────┬──────────┘  PEER   └──────────┬──────────┘
+                   │             DEPS              │
+┌──────────────────▼───────────────────────────────▼─────────────────────┐
+│                 LAYER 2: SERVICES / CAPABILITIES                       │
+│   mahafez_sms_engine  │  mahafez_auth_service  │  mahafez_workspace    │
+│   (Headless Logic, No UI, Reusable Business Capabilities)              │
+└──────────────────────────────────┬─────────────────────────────────────┘
+                                   │
+┌──────────────────────────────────▼─────────────────────────────────────┐
+│                    LAYER 1: CORE / PLATFORM                            │
+│   mahafez_core (Pure Dart)   │   mahafez_design_system (UI Primitives) │
+│   mahafez_storage (Cache/DB) │   (Zero Business Logic, Fully Stable)   │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Strict Downward Dependencies ($L_4 \to L_3 \to L_2 \to L_1$):**
+   - Higher layers can depend on lower layers.
+   - Lower layers have **zero knowledge** of higher layers.
+2. **Zero Peer Dependencies in Products ($L_3 \not\leftrightarrow L_3$):**
+   - `wallet_product` and `transaction_product` must **never** import each other.
+   - Cross-product communication is coordinated by the Layer 4 App Shell via routing contracts or domain event contracts.
+3. **Purity of Core & Services ($L_1$ and $L_2$):**
+   - **Layer 1 (Core)** contains no business logic.
+   - **Layer 2 (Services)** contains headless business logic, but **zero UI widgets** and no knowledge of specific products.
+4. **Shell as Pure Orchestrator ($L_4$):**
+   - Contains no business logic or repository queries.
+   - Owns `main.dart`, `GoRouter`, Riverpod `ProviderContainer` setup, permissions, and embeds product screens.
+
+### 1.3 Why Git Packages & GitHub Organization?
+Instead of a single local monorepo, each layer/module is extracted into an independent Git repository under the `mahafez-app` GitHub organization:
+* **True Isolation:** Ensures boundaries cannot be accidentally bypassed by relative file imports (`../../`).
+* **Semantic Versioning:** Consumers lock to Git tags (e.g., `ref: v1.0.0`), preventing unintended breaking changes.
+* **Mirrors Enterprise DevOps:** Exactly mirrors private Git repositories / package feeds in Azure DevOps/TFS.
+* **Developer Ergonomics:** Uses `dependency_overrides` with local file paths during rapid feature development, switching back to Git tags for releases.
+
+---
+
+## 2. Target Repositories Overview
+
+| Repository | Layer | Type | Key Contents |
+| :--- | :--- | :--- | :--- |
+| **`mahafez_core`** | **Layer 1** | Pure Dart | `Failure`, `Result<T>`, `EgyptianPhoneNumber`, formatters, base validators, clean enums |
+| **`mahafez_design_system`** | **Layer 1** | Flutter | Cairo fonts, `AppColors`, `AppSpacing`, `AppResponsive`, buttons, inputs, loaders, dialogs |
+| **`mahafez_sms_engine`** | **Layer 2** | Flutter (Headless) | Android Telephony, 5 Egyptian wallet regex parsers, retry queue, background SMS stream |
+| **`wallet_product`** | **Layer 3** | Flutter (Feature) | Wallet domain, DTOs, `WalletCard`, `AddWalletScreen`, `WalletDetailsScreen`, Riverpod controllers |
+| **`transaction_product`** | **Layer 3** | Flutter (Feature) | Transaction domain, DTOs, `TransactionTile`, ledger screen, receipt sharing, filter chips |
+| **`mahafez_mobile_app`** | **Layer 4** | Deployable App | `main.dart`, `GoRouter`, DI bootstrap, Firebase configuration, `HomeScreen` compositor |
+
+---
+
+## 3. Phased Implementation Plan & Checklist
+
+### Phase 0: Organization & Foundation Setup
+- [x] Create GitHub Organization: [`mahafez-app`](https://github.com/orgs/mahafez-app)
+- [x] Transfer main repository: `mahafez-app/e_wallet_tracker_VodafoneCash_WePay_EtisalatMoney_InstaPay_OranageMoney`
+- [x] Confirm local project path: `/Users/radyhaggag/Programming/Flutter/wallet_tracker`
+- [x] Create Master Plan documentation: `MODULARIZATION_PLAN.md`
+
+---
+
+### Phase 1: Layer 1 — `mahafez_core` Extraction (Pure Dart)
+*Goal: Standalone, pure Dart package with zero Flutter dependencies and zero business rules.*
+- [ ] Create repository: `https://github.com/mahafez-app/mahafez_core`
+- [ ] Initialize package structure:
+  - [ ] `lib/mahafez_core.dart` (Public barrel export file)
+  - [ ] `lib/src/error/failures.dart` (`Failure`, `ServerFailure`, `CacheFailure`, `ValidationFailure`)
+  - [ ] `lib/src/error/result.dart` (`Result<T>`)
+  - [ ] `lib/src/utils/egyptian_phone_number.dart`
+  - [ ] `lib/src/utils/app_validators.dart`
+  - [ ] `lib/src/enums/transaction_type.dart`
+  - [ ] `lib/src/enums/wallet_provider.dart` (Pure enum without UI/Flutter imports)
+- [ ] Add unit tests for `EgyptianPhoneNumber` and `Result<T>`
+- [ ] Tag release `v1.0.0` and push to GitHub
+- [ ] Add `mahafez_core` as Git dependency in the main project
+- [ ] Remove extracted local files from `wallet_tracker/lib/core` and replace with package imports
+- [ ] Verify `flutter analyze` passes in the main project
+
+---
+
+### Phase 2: Layer 1 — `mahafez_design_system` Extraction (UI Primitives)
+*Goal: Reusable UI component library and styling tokens with zero business logic.*
+- [ ] Create repository: `https://github.com/mahafez-app/mahafez_design_system`
+- [ ] Initialize package structure:
+  - [ ] Cairo font assets (`assets/fonts/Cairo/*`)
+  - [ ] `lib/mahafez_design_system.dart` (Barrel file)
+  - [ ] `lib/src/tokens/app_colors.dart`
+  - [ ] `lib/src/tokens/app_spacing.dart`
+  - [ ] `lib/src/tokens/app_typography.dart`
+  - [ ] `lib/src/tokens/app_responsive.dart`
+  - [ ] `lib/src/widgets/app_button.dart`
+  - [ ] `lib/src/widgets/app_text_field.dart`
+  - [ ] `lib/src/widgets/app_dialog.dart`
+  - [ ] `lib/src/widgets/app_loader.dart`
+  - [ ] `lib/src/widgets/app_snackbar.dart`
+  - [ ] `lib/src/widgets/app_error_view.dart`
+  - [ ] `lib/src/widgets/skeleton_loader.dart`
+- [ ] Strip out domain widgets (`balance_card.dart`, `wallets/`, `transactions/`) — to be moved to Products
+- [ ] Create example app or widget gallery tests
+- [ ] Tag release `v1.0.0` and push to GitHub
+- [ ] Add `mahafez_design_system` as Git dependency in the main project
+- [ ] Remove extracted widget/theme files from `wallet_tracker/lib/core` and update imports
+- [ ] Verify `flutter analyze` passes
+
+---
+
+### Phase 3: Layer 2 — `mahafez_sms_engine` Extraction (Capability Engine)
+*Goal: Headless Egyptian wallet SMS scraping and parsing engine.*
+- [ ] Create repository: `https://github.com/mahafez-app/mahafez_sms_engine`
+- [ ] Implement Contract-First architecture:
+  - [ ] Define `ParsedSmsRecord` model
+  - [ ] Define `SmsEngineService` interface (`Stream<ParsedSmsRecord> get onTransactionDetected`)
+- [ ] Migrate regex parsers:
+  - [ ] `VodafoneCashParser`
+  - [ ] `InstaPayParser`
+  - [ ] `OrangeMoneyParser`
+  - [ ] `EtisalatCashParser`
+  - [ ] `WePayParser`
+- [ ] Migrate infrastructure:
+  - [ ] `SmsParserRegistry` & `SmsPatternMatcher`
+  - [ ] `BackgroundSmsHandler`
+  - [ ] `PendingSmsRetryService`
+  - [ ] `InboxSmsService`
+- [ ] **Decouple:** Remove direct dependency on `SaveTransactionUseCase` and `WalletEntity`
+- [ ] Add unit tests verifying regex extraction against sample Egyptian telecom SMS texts
+- [ ] Tag release `v1.0.0` and push to GitHub
+- [ ] Add `mahafez_sms_engine` as Git dependency in the main project
+- [ ] Connect engine stream to application coordinator in `wallet_tracker`
+- [ ] Verify `flutter analyze` passes
+
+---
+
+### Phase 4: Layer 3 — `wallet_product` Extraction (Business Vertical)
+*Goal: Autonomous business domain for wallet management.*
+- [ ] Create repository: `https://github.com/mahafez-app/wallet_product`
+- [ ] Migrate Domain:
+  - [ ] `WalletEntity`
+  - [ ] `GetWalletsUseCase`, `AddWalletUseCase`, `UpdateWalletBalanceUseCase`
+- [ ] Migrate Data:
+  - [ ] `WalletDto`, `WalletRemoteDataSource`, `WalletRepositoryImpl`
+- [ ] Migrate Presentation:
+  - [ ] `WalletCard` (moved from core widgets)
+  - [ ] `AddWalletScreen`, `WalletDetailsScreen`
+  - [ ] Riverpod state notifiers & controllers
+  - [ ] `WalletProductEntry` / route definitions
+- [ ] Tag release `v1.0.0` and push to GitHub
+- [ ] Add `wallet_product` as Git dependency in the main project
+- [ ] Remove `lib/features/wallets` from the main project
+- [ ] Verify `flutter analyze` passes
+
+---
+
+### Phase 5: Layer 3 — `transaction_product` Extraction (Business Vertical)
+*Goal: Autonomous business domain for transactions with ZERO dependencies on `wallet_product`.*
+- [ ] Create repository: `https://github.com/mahafez-app/transaction_product`
+- [ ] Migrate Domain:
+  - [ ] `TransactionEntity`
+  - [ ] `GetTransactionsUseCase`, `SaveTransactionUseCase`, `MarkTransactionPaidUseCase`
+- [ ] Migrate Data:
+  - [ ] `TransactionDto`, `TransactionRemoteDataSource`, `TransactionRepositoryImpl`
+- [ ] Migrate Presentation:
+  - [ ] `TransactionTile`, `TransactionFilterChips`, `TransactionReceiptCard`
+  - [ ] `TransactionsScreen`, `TransactionDetailScreen`
+  - [ ] Riverpod state notifiers & controllers
+- [ ] **Enforce Peer Isolation:** Replace `WalletEntity` filter references with `TransactionFilterTarget(id, name)`
+- [ ] Tag release `v1.0.0` and push to GitHub
+- [ ] Add `transaction_product` as Git dependency in the main project
+- [ ] Remove `lib/features/transactions` from the main project
+- [ ] Verify `flutter analyze` passes
+
+---
+
+### Phase 6: Layer 4 — App Shell Composition & Finalization
+*Goal: Transform main repository into `mahafez_mobile_app` App Shell.*
+- [ ] Configure `app_router.dart`:
+  - [ ] Connect exported routes from `wallet_product` and `transaction_product`
+  - [ ] Eliminate direct imports to internal feature screens
+- [ ] Refactor `HomeScreen` into a pure Compositor:
+  - [ ] Embed `WalletCarouselWidget` from `wallet_product`
+  - [ ] Embed `RecentTransactionsListWidget` from `transaction_product`
+- [ ] Refactor `app_bootstrap.dart`:
+  - [ ] Wire `mahafez_sms_engine` stream events to `SaveTransactionUseCase` and `UpdateWalletBalanceUseCase`
+- [ ] Audit remaining features (`auth`, `workspaces`, `settings`) for clean boundaries
+- [ ] Verify end-to-end functionality:
+  - [ ] App launches and splash screen transitions correctly
+  - [ ] Wallets render and can be added
+  - [ ] SMS parsing triggers balance updates and transaction creation
+  - [ ] All tests pass
+- [ ] Final architecture audit tag `v1.0.0`

@@ -13,14 +13,11 @@ import '../../features/transactions/data/datasources/wallet_transaction_remote_d
 import '../../features/transactions/data/datasources/deleted_transaction_local_data_source.dart';
 import '../../firebase_options.dart';
 import '../cache/wallet_meta_cache.dart';
-import '../data/models/pending_sms_retry_item.dart';
 import '../data/models/wallet_dto.dart';
+import '../domain/entities/wallet_entity.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import '../utils/sms/registry/sms_parser_registry.dart';
-import '../utils/sms/sms_message_extension.dart';
-import '../utils/sms/sms_parsing_service.dart';
-import '../utils/sms/sms_wallet_matcher.dart';
-import 'pending_sms_retry_service.dart';
+import 'package:mahafez_sms_engine/mahafez_sms_engine.dart';
+import '../utils/sms/sms_transaction_entity_builder.dart';
 
 // ── Public helpers ────────────────────────────────────────────────────────────
 
@@ -117,7 +114,6 @@ final class _BackgroundSmsProcessor {
         userUid: uid,
         error: 'Captured in background for durable processing',
       );
-      if (queueItem == null) return;
 
       await _enqueue(queueItem);
       log('Background SMS queued for durable processing.', name: _tag);
@@ -189,7 +185,7 @@ final class _BackgroundSmsProcessor {
       case SmsWalletNoCandidate():
         return const _BackgroundProcessingResult.failure('Wallet not found');
       case SmsWalletMatchedResult(:final wallet):
-        final transaction = SmsParsingService.buildEntity(
+        final transaction = SmsTransactionEntityBuilder.build(
           result: parseResult,
           walletId: wallet.id,
           walletOwnerUid: wallet.ownerUid,
@@ -222,7 +218,7 @@ final class _BackgroundSmsProcessor {
     }
   }
 
-  Future<SmsWalletMatchResult> _resolveWallet({
+  Future<SmsWalletMatchResult<WalletEntity>> _resolveWallet({
     required String uid,
     required String providerName,
     double? amount,

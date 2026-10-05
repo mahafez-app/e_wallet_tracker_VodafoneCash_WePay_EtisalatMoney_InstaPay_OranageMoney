@@ -1,8 +1,7 @@
 import '../../../../core/domain/entities/wallet_entity.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../../../core/utils/sms/registry/sms_parser_registry.dart';
-import '../../../../core/utils/sms/sms_parsing_service.dart';
-import '../../../../core/utils/sms/sms_wallet_matcher.dart';
+import 'package:mahafez_sms_engine/mahafez_sms_engine.dart';
+import '../../../../core/utils/sms/sms_transaction_entity_builder.dart';
 import '../entities/manual_wallet_transaction_assessment.dart';
 import '../repositories/wallet_repository.dart';
 
@@ -73,7 +72,7 @@ final class ProcessManualWalletTransactionUseCase
     );
 
     final assessment = ManualWalletTransactionAssessment(
-      transaction: SmsParsingService.buildEntity(
+      transaction: SmsTransactionEntityBuilder.build(
         result: parseResult,
         walletId: selectedWallet.id,
         walletOwnerUid: selectedWallet.ownerUid,

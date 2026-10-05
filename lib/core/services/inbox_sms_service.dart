@@ -6,9 +6,9 @@ import '../data/models/transaction_dto.dart';
 import '../domain/entities/transaction_entity.dart';
 import '../domain/entities/wallet_entity.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import '../utils/sms/registry/sms_parser_registry.dart';
-import '../utils/sms/sms_parsing_service.dart';
-import 'inbox_sms_history_matcher.dart';
+import 'package:mahafez_sms_engine/mahafez_sms_engine.dart'
+    hide InboxSmsService, InboxSmsServiceImpl;
+import '../utils/sms/sms_transaction_entity_builder.dart';
 
 abstract interface class InboxSmsService {
   Future<double?> getLatestBalance({
@@ -174,7 +174,7 @@ class InboxSmsServiceImpl implements InboxSmsService {
 
       return matchedRecords
           .map(
-            (record) => SmsParsingService.buildEntity(
+            (record) => SmsTransactionEntityBuilder.build(
               result: record.parseResult,
               walletId: wallet.id,
               walletOwnerUid: wallet.ownerUid,

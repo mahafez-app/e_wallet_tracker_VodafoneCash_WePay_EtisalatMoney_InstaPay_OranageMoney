@@ -148,27 +148,33 @@ Instead of a single local monorepo, each layer/module is extracted into an indep
 
 ### Phase 3: Layer 2 — `mahafez_sms_engine` Extraction (Capability Engine)
 *Goal: Headless Egyptian wallet SMS scraping and parsing engine.*
-- [ ] Create repository: `https://github.com/mahafez-app/mahafez_sms_engine`
-- [ ] Implement Contract-First architecture:
-  - [ ] Define `ParsedSmsRecord` model
-  - [ ] Define `SmsEngineService` interface (`Stream<ParsedSmsRecord> get onTransactionDetected`)
-- [ ] Migrate regex parsers:
-  - [ ] `VodafoneCashParser`
-  - [ ] `InstaPayParser`
-  - [ ] `OrangeMoneyParser`
-  - [ ] `EtisalatCashParser`
-  - [ ] `WePayParser`
-- [ ] Migrate infrastructure:
-  - [ ] `SmsParserRegistry` & `SmsPatternMatcher`
-  - [ ] `BackgroundSmsHandler`
-  - [ ] `PendingSmsRetryService`
-  - [ ] `InboxSmsService`
-- [ ] **Decouple:** Remove direct dependency on `SaveTransactionUseCase` and `WalletEntity`
-- [ ] Add unit tests verifying regex extraction against sample Egyptian telecom SMS texts
-- [ ] Tag release `v1.0.0` and push to GitHub
-- [ ] Add `mahafez_sms_engine` as Git dependency in the main project
-- [ ] Connect engine stream to application coordinator in `wallet_tracker`
-- [ ] Verify `flutter analyze` passes
+- [x] Create repository: `https://github.com/mahafez-app/mahafez_sms_engine`
+- [x] Implement Contract-First architecture:
+  - [x] Define `SmsParseResult`, `ParsedInboxSmsRecord`, `SmsWalletCandidate`, and `SmsTransactionEvent` models
+  - [x] Define `SmsEngineService` interface (`Stream<SmsTransactionEvent> get onTransactionDetected`) and `TelephonySmsEngineService`
+- [x] Migrate telecom regex parsers:
+  - [x] `VodafoneCashSmsParser`
+  - [x] `InstaPaySmsParser`
+  - [x] `OrangeMoneySmsParser`
+  - [x] `EtisalatCashSmsParser`
+  - [x] `WePaySmsParser`
+- [x] Migrate pattern matching & disambiguation infrastructure:
+  - [x] `SmsParserRegistry` & `SmsPatternMatcher`
+  - [x] `SmsWalletMatcher<T extends SmsWalletCandidate>` (generic, decoupled from concrete domain entities)
+  - [x] `SmsPhoneNumberExtractor`
+  - [x] `InboxSmsHistoryMatcher`
+  - [x] `InboxSmsService` / `InboxSmsServiceImpl`
+  - [x] `PendingSmsRetryService` & `PendingSmsRetryItem`
+- [x] **Decouple:** Completely removed direct dependency on `SaveTransactionUseCase`, `WalletEntity`, and Firebase Auth from the engine package
+- [x] Add extensive unit and regression tests (19/19 passed in package):
+  - [x] Regression testing against Vodafone Cash, InstaPay, Orange Money, Etisalat Cash, and WePay datasets
+  - [x] Wallet balance delta matching and inbox history matching unit tests
+- [x] Tag release `v1.0.0` and push to GitHub (`mahafez-app/mahafez_sms_engine`)
+- [x] Add `mahafez_sms_engine` as Git dependency in `wallet_tracker/pubspec.yaml` (`ref: v1.0.0`)
+- [x] Implement `SmsTransactionEntityBuilder` in `wallet_tracker` for product-level transaction entity hydration
+- [x] Physically delete all 15 extracted SMS parser, registry, matcher, and retry service files from `wallet_tracker`
+- [x] Update `WalletEntity` to implement `SmsWalletCandidate`
+- [x] Verify `flutter analyze` passes (**0 issues found**) and `flutter test` passes (**11/11 passed**) in `wallet_tracker`
 
 ---
 

@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:mahafez_core/mahafez_core.dart';
-class WalletEntity extends Equatable {
+import 'package:mahafez_sms_engine/mahafez_sms_engine.dart';
+
+class WalletEntity extends Equatable implements SmsWalletCandidate {
   const WalletEntity({
     required this.id,
     required this.phoneNumber,
@@ -16,11 +18,14 @@ class WalletEntity extends Equatable {
     this.statsResetAt,
   });
 
+  @override
   final String id;
+  @override
   final String phoneNumber;
   final WalletProvider provider;
   final String deviceId;
   final String ownerUid;
+  @override
   final double currentBalance;
   final double totalReceived;
   final double totalSent;

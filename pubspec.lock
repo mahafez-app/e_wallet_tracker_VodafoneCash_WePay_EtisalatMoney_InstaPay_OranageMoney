@@ -783,6 +783,15 @@ packages:
       url: "https://github.com/mahafez-app/mahafez_design_system.git"
     source: git
     version: "1.0.2"
+  mahafez_sms_engine:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "v1.0.0"
+      resolved-ref: "25fa521de90b36b26ffc071e8b348f9ba8cafe6a"
+      url: "https://github.com/mahafez-app/mahafez_sms_engine.git"
+    source: git
+    version: "1.0.0"
   matcher:
     dependency: transitive
     description:

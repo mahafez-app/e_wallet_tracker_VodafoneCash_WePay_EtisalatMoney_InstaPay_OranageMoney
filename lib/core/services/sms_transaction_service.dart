@@ -1,20 +1,18 @@
 import 'dart:developer';
 
 import 'package:another_telephony/telephony.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../features/transactions/domain/usecases/get_latest_transaction_date_usecase.dart';
 import '../../features/transactions/domain/usecases/save_transaction_usecase.dart';
-import '../data/models/pending_sms_retry_item.dart';
 import '../domain/entities/transaction_entity.dart';
 import '../domain/entities/wallet_entity.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import '../utils/sms/registry/sms_parser_registry.dart';
-import '../utils/sms/sms_message_extension.dart';
-import '../utils/sms/sms_parsing_service.dart';
-import '../utils/sms/sms_wallet_matcher.dart';
+import 'package:mahafez_sms_engine/mahafez_sms_engine.dart'
+    hide InboxSmsService, InboxSmsServiceImpl;
+import '../utils/sms/sms_transaction_entity_builder.dart';
 import 'background_sms_handler.dart';
 import 'inbox_sms_service.dart';
-import 'pending_sms_retry_service.dart';
 
 final class SmsTransactionService {
   SmsTransactionService({
@@ -139,7 +137,7 @@ final class SmsTransactionService {
         );
         return false;
       case SmsWalletMatchedResult(:final wallet):
-        final transaction = SmsParsingService.buildEntity(
+        final transaction = SmsTransactionEntityBuilder.build(
           result: parseResult,
           walletId: wallet.id,
           walletOwnerUid: wallet.ownerUid,
@@ -150,7 +148,7 @@ final class SmsTransactionService {
     }
   }
 
-  SmsWalletMatchResult _resolveWallet({
+  SmsWalletMatchResult<WalletEntity> _resolveWallet({
     required String sender,
     double? amount,
     TransactionType? transactionType,
@@ -375,14 +373,20 @@ final class SmsTransactionService {
     String? providerName,
     required String error,
   }) {
+    final uid =
+        _wallets.firstOrNull?.ownerUid ??
+        FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+
     final item = PendingSmsRetryItem.create(
       sender: sender,
       body: body,
       smsReceivedAt: smsReceivedAt,
+      userUid: uid,
       walletId: walletId,
       providerName: providerName,
       error: error,
     );
-    if (item != null) _pendingSmsRetryService.enqueue(item);
+    _pendingSmsRetryService.enqueue(item);
   }
 }

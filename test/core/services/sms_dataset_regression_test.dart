@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallet_tracker/core/services/inbox_sms_history_matcher.dart';
-import 'package:wallet_tracker/core/utils/sms/sms_parsing_service.dart';
+import 'package:mahafez_sms_engine/mahafez_sms_engine.dart';
 
 import '../../support/sms_dataset_test_helper.dart';
 

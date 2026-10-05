@@ -32,12 +32,10 @@ abstract interface class AuthRemoteDataSource {
 
 final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl({
-    required FirebaseAuth firebaseAuth,
-    required FirebaseFirestore firestore,
-    required GoogleSignIn googleSignIn,
-  }) : _firebaseAuth = firebaseAuth,
-       _firestore = firestore,
-       _googleSignIn = googleSignIn;
+    required this._firebaseAuth,
+    required this._firestore,
+    required this._googleSignIn,
+  });
 
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;

@@ -13,10 +13,9 @@ class WorkspaceQueryRemoteService {
   static const String _usersCollection = 'users';
 
   const WorkspaceQueryRemoteService({
-    required FirebaseFirestore firestore,
-    required WalletQueries walletQueries,
-  }) : _firestore = firestore,
-       _walletQueries = walletQueries;
+    required this._firestore,
+    required this._walletQueries,
+  });
 
   final FirebaseFirestore _firestore;
   final WalletQueries _walletQueries;

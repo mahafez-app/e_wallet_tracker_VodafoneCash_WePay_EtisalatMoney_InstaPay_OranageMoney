@@ -7,12 +7,10 @@ import 'workspace_query_remote_service.dart';
 
 class WorkspaceCommandRemoteService {
   const WorkspaceCommandRemoteService({
-    required FirebaseFirestore firestore,
-    required FirebaseAuth auth,
-    required WorkspaceQueryRemoteService queryService,
-  }) : _firestore = firestore,
-       _auth = auth,
-       _queryService = queryService;
+    required this._firestore,
+    required this._auth,
+    required this._queryService,
+  });
 
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;

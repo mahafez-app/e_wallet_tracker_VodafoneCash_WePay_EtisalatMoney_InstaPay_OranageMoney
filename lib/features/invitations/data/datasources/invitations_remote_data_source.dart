@@ -50,10 +50,9 @@ class InvitationsRemoteDataSourceImpl implements InvitationsRemoteDataSource {
   }
 
   const InvitationsRemoteDataSourceImpl._({
-    required InvitationRemoteQueryService queryService,
-    required InvitationRemoteCommandService commandService,
-  }) : _queryService = queryService,
-       _commandService = commandService;
+    required this._queryService,
+    required this._commandService,
+  });
 
   final InvitationRemoteQueryService _queryService;
   final InvitationRemoteCommandService _commandService;

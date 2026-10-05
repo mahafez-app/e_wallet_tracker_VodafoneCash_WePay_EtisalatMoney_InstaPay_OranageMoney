@@ -9,10 +9,9 @@ import '../datasources/sms_permission_data_source.dart';
 
 final class SettingsRepositoryImpl implements SettingsRepository {
   const SettingsRepositoryImpl({
-    required SmsPermissionDataSource smsPermissionDataSource,
-    required AppPreferencesLocalDataSource appPreferencesLocalDataSource,
-  }) : _smsPermissionDataSource = smsPermissionDataSource,
-       _appPreferencesLocalDataSource = appPreferencesLocalDataSource;
+    required this._smsPermissionDataSource,
+    required this._appPreferencesLocalDataSource,
+  });
 
   final SmsPermissionDataSource _smsPermissionDataSource;
   final AppPreferencesLocalDataSource _appPreferencesLocalDataSource;

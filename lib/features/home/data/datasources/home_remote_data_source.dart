@@ -14,12 +14,10 @@ abstract interface class HomeRemoteDataSource {
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   const HomeRemoteDataSourceImpl({
-    required FirebaseFirestore firestore,
-    required FirebaseAuth auth,
-    required WalletQueries walletQueries,
-  }) : _firestore = firestore,
-       _auth = auth,
-       _walletQueries = walletQueries;
+    required this._firestore,
+    required this._auth,
+    required this._walletQueries,
+  });
 
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;

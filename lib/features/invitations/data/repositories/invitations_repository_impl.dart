@@ -6,8 +6,7 @@ import '../../domain/repositories/invitations_repository.dart';
 import '../datasources/invitations_remote_data_source.dart';
 
 class InvitationsRepositoryImpl implements InvitationsRepository {
-  const InvitationsRepositoryImpl({required InvitationsRemoteDataSource remote})
-    : _remote = remote;
+  const InvitationsRepositoryImpl({required this._remote});
 
   final InvitationsRemoteDataSource _remote;
 

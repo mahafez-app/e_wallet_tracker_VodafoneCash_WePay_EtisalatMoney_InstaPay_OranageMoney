@@ -15,10 +15,9 @@ import '../datasources/home_remote_data_source.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
   const HomeRepositoryImpl({
-    required HomeRemoteDataSource remote,
+    required this._remote,
     FailureMapper failureMapper = const FailureMapper(),
-  }) : _remote = remote,
-       _mapper = failureMapper;
+  }) : _mapper = failureMapper;
 
   final HomeRemoteDataSource _remote;
   final FailureMapper _mapper;

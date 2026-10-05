@@ -69,10 +69,9 @@ class WorkspaceRemoteDataSourceImpl implements WorkspaceRemoteDataSource {
   }
 
   const WorkspaceRemoteDataSourceImpl._({
-    required WorkspaceCommandRemoteService commandService,
-    required WorkspaceQueryRemoteService queryService,
-  }) : _commandService = commandService,
-       _queryService = queryService;
+    required this._commandService,
+    required this._queryService,
+  });
 
   final WorkspaceCommandRemoteService _commandService;
   final WorkspaceQueryRemoteService _queryService;

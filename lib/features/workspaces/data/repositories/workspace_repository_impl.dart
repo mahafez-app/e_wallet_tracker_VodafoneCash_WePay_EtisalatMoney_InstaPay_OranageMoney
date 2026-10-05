@@ -13,8 +13,7 @@ import '../../domain/repositories/workspace_repository.dart';
 import '../datasources/workspace_remote_data_source.dart';
 
 class WorkspaceRepositoryImpl implements WorkspaceRepository {
-  const WorkspaceRepositoryImpl({required WorkspaceRemoteDataSource remote})
-    : _remote = remote;
+  const WorkspaceRepositoryImpl({required this._remote});
 
   final WorkspaceRemoteDataSource _remote;
 

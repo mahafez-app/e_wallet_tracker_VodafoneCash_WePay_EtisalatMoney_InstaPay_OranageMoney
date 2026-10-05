@@ -7,10 +7,9 @@ import 'invitation_remote_query_service.dart';
 
 class InvitationRemoteCommandService {
   const InvitationRemoteCommandService({
-    required FirebaseFirestore firestore,
-    required InvitationRemoteQueryService queryService,
-  }) : _firestore = firestore,
-       _queryService = queryService;
+    required this._firestore,
+    required this._queryService,
+  });
 
   final FirebaseFirestore _firestore;
   final InvitationRemoteQueryService _queryService;

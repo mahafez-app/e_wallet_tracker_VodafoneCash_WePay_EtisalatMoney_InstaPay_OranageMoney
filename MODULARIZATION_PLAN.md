@@ -96,20 +96,20 @@ Instead of a single local monorepo, each layer/module is extracted into an indep
 
 ### Phase 1: Layer 1 — `mahafez_core` Extraction (Pure Dart)
 *Goal: Standalone, pure Dart package with zero Flutter dependencies and zero business rules.*
-- [ ] Create repository: `https://github.com/mahafez-app/mahafez_core`
-- [ ] Initialize package structure:
-  - [ ] `lib/mahafez_core.dart` (Public barrel export file)
-  - [ ] `lib/src/error/failures.dart` (`Failure`, `ServerFailure`, `CacheFailure`, `ValidationFailure`)
-  - [ ] `lib/src/error/result.dart` (`Result<T>`)
-  - [ ] `lib/src/utils/egyptian_phone_number.dart`
-  - [ ] `lib/src/utils/app_validators.dart`
-  - [ ] `lib/src/enums/transaction_type.dart`
-  - [ ] `lib/src/enums/wallet_provider.dart` (Pure enum without UI/Flutter imports)
-- [ ] Add unit tests for `EgyptianPhoneNumber` and `Result<T>`
-- [ ] Tag release `v1.0.0` and push to GitHub
-- [ ] Add `mahafez_core` as Git dependency in the main project
-- [ ] Remove extracted local files from `wallet_tracker/lib/core` and replace with package imports
-- [ ] Verify `flutter analyze` passes in the main project
+- [x] Create repository: `https://github.com/mahafez-app/mahafez_core`
+- [x] Initialize package structure:
+  - [x] `lib/mahafez_core.dart` (Public barrel export file)
+  - [x] `lib/src/error/failures.dart` (`Failure`, `ServerFailure`, `CacheFailure`, `ValidationFailure`)
+  - [x] `lib/src/error/result.dart` (`Result<T>`)
+  - [x] `lib/src/utils/egyptian_phone_number.dart`
+  - [x] `lib/src/utils/text_validators.dart`
+  - [x] `lib/src/enums/transaction_type.dart`
+  - [x] `lib/src/enums/wallet_provider.dart` (Pure enum without UI/Flutter imports)
+- [x] Add unit tests for `EgyptianPhoneNumber`, `Result<T>`, and `TextValidators`
+- [x] Tag release `v1.0.0` and push to GitHub
+- [x] Add `mahafez_core` as Git dependency in the main project
+- [x] Clean redundant local implementations in `wallet_tracker` and replace with `mahafez_core` package
+- [x] Verify `flutter analyze` and `flutter test` pass in the main project
 
 ---
 

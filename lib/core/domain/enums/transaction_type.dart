@@ -1,12 +1,2 @@
-enum TransactionType {
-  receive,
-  send;
-
-  factory TransactionType.fromString(String str) {
-    return switch (str) {
-      'send' => TransactionType.send,
-      'receive' => TransactionType.receive,
-      _ => throw ArgumentError('Invalid transaction type string: $str'),
-    };
-  }
-}
+// Forward export to Layer 1 platform package: mahafez_core
+export 'package:mahafez_core/mahafez_core.dart' show TransactionType;

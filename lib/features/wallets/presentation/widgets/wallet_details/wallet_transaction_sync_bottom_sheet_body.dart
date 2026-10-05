@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
-import '../../../../../core/domain/enums/transaction_type.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../../core/theme/app_color_extension.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';

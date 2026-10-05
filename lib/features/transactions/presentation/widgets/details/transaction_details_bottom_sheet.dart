@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../../core/error/failure_mapper.dart';
-import '../../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../../core/providers/transaction_events_provider.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';

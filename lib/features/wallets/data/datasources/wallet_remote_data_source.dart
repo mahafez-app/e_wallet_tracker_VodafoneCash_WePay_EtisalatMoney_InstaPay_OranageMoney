@@ -3,11 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/data/models/transaction_dto.dart';
 import '../../../../core/data/models/wallet_dto.dart';
-import '../../../../core/domain/enums/transaction_type.dart';
-import '../../../../core/domain/enums/wallet_provider.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/utils/egyptian_phone_number.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 abstract interface class WalletRemoteDataSource {
   Future<List<WalletDto>> addWallets({
     required String phoneNumber,

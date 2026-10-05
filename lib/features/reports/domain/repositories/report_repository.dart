@@ -1,4 +1,4 @@
-import '../../../../core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../entities/report_entity.dart';
 
 abstract interface class ReportRepository {

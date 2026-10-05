@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/error/failures.dart';
-import '../../../../core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/usecases/sign_in_with_email_password_usecase.dart';
 import '../../domain/usecases/sign_up_with_email_password_usecase.dart';
 import '../../domain/usecases/update_display_name_usecase.dart';

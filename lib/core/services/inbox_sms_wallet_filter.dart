@@ -1,4 +1,4 @@
-import '../utils/egyptian_phone_number.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../utils/sms/sms_parse_result.dart';
 import '../utils/sms/sms_parsing_service.dart';
 

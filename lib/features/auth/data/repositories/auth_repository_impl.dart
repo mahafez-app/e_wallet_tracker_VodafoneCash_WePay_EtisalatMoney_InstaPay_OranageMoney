@@ -1,4 +1,4 @@
-import '../../../../core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';

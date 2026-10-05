@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/data/models/workspace_dto.dart';
-import '../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import 'workspace_query_remote_service.dart';
 
 class WorkspaceCommandRemoteService {

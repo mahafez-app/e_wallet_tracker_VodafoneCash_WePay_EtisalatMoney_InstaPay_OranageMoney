@@ -1,9 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallet_tracker/core/domain/enums/transaction_type.dart';
-import 'package:wallet_tracker/core/domain/enums/wallet_provider.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import 'package:wallet_tracker/core/services/inbox_sms_history_matcher.dart';
 import 'package:wallet_tracker/core/utils/sms/sms_parse_result.dart';
-
 void main() {
   test(
     'keeps only explicit target records when same-provider wallets coexist',

@@ -1,5 +1,4 @@
-import '../../../../core/error/result.dart';
-import '../../../../core/usecase/usecase.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../entities/note_entity.dart';
 import '../entities/transaction_history_entry_entity.dart';
 import '../repositories/transaction_repository.dart';

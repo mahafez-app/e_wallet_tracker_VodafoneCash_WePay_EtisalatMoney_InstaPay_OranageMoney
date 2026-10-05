@@ -1,5 +1,5 @@
 import '../../../../core/domain/entities/workspace_entity.dart';
-import '../../../../core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../entities/workspace_details_entity.dart';
 
 abstract interface class WorkspaceRepository {

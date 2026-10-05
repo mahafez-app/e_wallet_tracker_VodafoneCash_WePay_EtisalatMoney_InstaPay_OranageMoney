@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/domain/entities/wallet_entity.dart';
-import '../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/entities/workspace_details_entity.dart';
 import '../../../wallets/providers/wallets_providers.dart';
 import '../../domain/usecases/add_wallets_to_workspace_usecase.dart';

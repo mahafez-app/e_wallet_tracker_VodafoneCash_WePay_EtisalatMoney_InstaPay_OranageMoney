@@ -1,6 +1,4 @@
-import '../../domain/enums/transaction_type.dart';
-import '../../domain/enums/wallet_provider.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 class SmsParseResult {
   const SmsParseResult({
     required this.amount,

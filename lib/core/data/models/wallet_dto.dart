@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../domain/entities/wallet_entity.dart';
-import '../../domain/enums/wallet_provider.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 final class WalletDto extends WalletEntity {
   const WalletDto({
     required super.id,

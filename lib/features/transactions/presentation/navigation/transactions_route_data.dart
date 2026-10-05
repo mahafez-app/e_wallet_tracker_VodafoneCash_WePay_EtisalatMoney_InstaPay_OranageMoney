@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../../../core/domain/enums/wallet_provider.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 /// Lightweight wallet metadata used to build workspace filter chips.
 final class WalletFilterOption extends Equatable {
   const WalletFilterOption({

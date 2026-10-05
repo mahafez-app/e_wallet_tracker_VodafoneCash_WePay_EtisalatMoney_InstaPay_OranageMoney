@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/domain/entities/transaction_entity.dart';
-import '../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../../transactions/domain/usecases/save_transaction_usecase.dart';
 import '../../../transactions/providers/transactions_providers.dart';
 import '../../domain/entities/manual_wallet_transaction_assessment.dart';

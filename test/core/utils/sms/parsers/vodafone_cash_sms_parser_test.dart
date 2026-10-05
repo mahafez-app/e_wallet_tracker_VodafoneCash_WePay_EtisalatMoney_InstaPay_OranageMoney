@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallet_tracker/core/domain/enums/transaction_type.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import 'package:wallet_tracker/core/utils/sms/parsers/vodafone_cash_sms_parser.dart';
 
 void main() {

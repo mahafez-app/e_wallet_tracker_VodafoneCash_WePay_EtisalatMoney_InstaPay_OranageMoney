@@ -5,7 +5,6 @@ import 'package:uuid/uuid.dart';
 import '../../domain/entities/transaction_entity.dart';
 import 'registry/sms_parser_registry.dart';
 import 'sms_parse_result.dart';
-
 class SmsParsingService {
   SmsParsingService._();
 

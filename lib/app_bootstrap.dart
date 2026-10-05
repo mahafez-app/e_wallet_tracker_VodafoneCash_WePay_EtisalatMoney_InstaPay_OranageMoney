@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'app.dart';
 import 'core/di/app_initializer.dart';
-import 'core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import 'core/providers/cache_providers.dart';
 import 'core/theme/app_theme.dart';
 import 'features/settings/providers/settings_providers.dart';

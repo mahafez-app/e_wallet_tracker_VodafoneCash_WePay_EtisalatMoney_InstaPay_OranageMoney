@@ -1,7 +1,6 @@
 import 'dart:developer';
 import '../error/failure_mapper.dart';
-import '../error/result.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 /// For synchronous repository methods. Never convert a naturally synchronous
 /// call to Future just to use the async variant.
 Result<T> executeAndHandleErrorsSync<T>(

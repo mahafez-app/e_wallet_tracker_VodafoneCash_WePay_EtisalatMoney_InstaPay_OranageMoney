@@ -1,7 +1,6 @@
 // lib/core/utils/sms/sms_match_result.dart
 
-import '../../domain/enums/transaction_type.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 class SmsMatchResult {
   const SmsMatchResult({
     required this.amount,

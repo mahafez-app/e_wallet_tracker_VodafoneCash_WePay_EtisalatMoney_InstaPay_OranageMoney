@@ -1,8 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../enums/transaction_type.dart';
-import '../enums/wallet_provider.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 base class TransactionEntity extends Equatable {
   const TransactionEntity({
     required this.id,

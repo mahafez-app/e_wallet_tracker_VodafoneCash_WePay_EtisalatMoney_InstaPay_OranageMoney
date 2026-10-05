@@ -2,7 +2,7 @@
 
 import 'dart:developer';
 
-import '../../domain/enums/wallet_provider.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import 'sms_parse_result.dart';
 import 'sms_pattern_matcher.dart';
 import 'sms_patterns.dart';

@@ -1,6 +1,5 @@
 import '../../../../core/domain/entities/workspace_entity.dart';
-import '../../../../core/error/result.dart';
-import '../../../../core/usecase/usecase.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../repositories/workspace_repository.dart';
 
 class UpdateWorkspaceNameParams {

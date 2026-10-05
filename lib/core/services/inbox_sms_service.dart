@@ -5,7 +5,7 @@ import 'package:another_telephony/telephony.dart';
 import '../data/models/transaction_dto.dart';
 import '../domain/entities/transaction_entity.dart';
 import '../domain/entities/wallet_entity.dart';
-import '../domain/enums/wallet_provider.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../utils/sms/registry/sms_parser_registry.dart';
 import '../utils/sms/sms_parsing_service.dart';
 import 'inbox_sms_history_matcher.dart';

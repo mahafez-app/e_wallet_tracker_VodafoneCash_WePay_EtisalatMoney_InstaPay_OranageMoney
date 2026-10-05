@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/domain/entities/transaction_entity.dart';
 
-import '../../domain/enums/transaction_type.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../theme/app_color_extension.dart';
 import '../../theme/app_responsive.dart';
 import '../../theme/app_spacing.dart';

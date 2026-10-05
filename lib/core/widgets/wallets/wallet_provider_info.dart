@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_tracker/core/domain/enums/wallet_provider.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import 'package:wallet_tracker/core/theme/app_responsive.dart';
 import 'package:wallet_tracker/core/theme/app_spacing.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';

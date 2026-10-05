@@ -1,7 +1,6 @@
 import '../entities/transaction_date_range.dart';
 import '../../../../core/domain/entities/transaction_entity.dart';
-import '../../../../core/error/result.dart';
-import '../../../../core/domain/enums/transaction_type.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../entities/transaction_history_entry_entity.dart';
 import '../entities/note_entity.dart';
 import '../entities/transaction_page.dart';

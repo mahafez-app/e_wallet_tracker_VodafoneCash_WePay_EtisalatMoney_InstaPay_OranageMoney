@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:wallet_tracker/core/domain/enums/transaction_type.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 final class SmsDatasetMessage {
   const SmsDatasetMessage({
     required this.sender,

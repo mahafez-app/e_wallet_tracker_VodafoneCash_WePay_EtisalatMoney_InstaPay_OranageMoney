@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/app_dialog.dart';

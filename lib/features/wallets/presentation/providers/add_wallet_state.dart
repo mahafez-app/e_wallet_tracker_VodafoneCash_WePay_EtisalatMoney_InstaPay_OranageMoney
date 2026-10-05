@@ -1,7 +1,4 @@
-import '../../../../core/domain/enums/wallet_provider.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/utils/egyptian_phone_number.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 const unsetFailure = Object();
 
 enum AddWalletSubmissionStatus { idle, loading, success, failure }

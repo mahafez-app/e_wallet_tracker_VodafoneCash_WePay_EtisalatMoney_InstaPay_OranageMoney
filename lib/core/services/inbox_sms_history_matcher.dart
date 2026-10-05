@@ -1,7 +1,5 @@
-import '../domain/enums/transaction_type.dart';
-import '../utils/egyptian_phone_number.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../utils/sms/sms_parse_result.dart';
-
 typedef ParsedInboxSmsRecord = ({
   DateTime createdAt,
   String body,

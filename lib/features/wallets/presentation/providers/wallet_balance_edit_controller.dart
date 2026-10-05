@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/usecases/update_wallet_balance_usecase.dart';
 import '../../providers/wallets_providers.dart';
 

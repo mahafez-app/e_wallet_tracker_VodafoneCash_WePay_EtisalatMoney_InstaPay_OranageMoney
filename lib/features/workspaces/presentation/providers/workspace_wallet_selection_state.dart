@@ -1,6 +1,5 @@
 import '../../../../core/domain/entities/wallet_entity.dart';
-import '../../../../core/error/failures.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 const workspaceWalletSelectionUnsetFailure = Object();
 
 enum WorkspaceWalletSelectionSubmissionStatus {

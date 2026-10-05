@@ -1,5 +1,4 @@
-import '../../../../core/error/result.dart';
-import '../../../../core/usecase/usecase.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../entities/app_preferences_entity.dart';
 import '../enums/app_language_preference.dart';
 import '../enums/app_theme_preference.dart';

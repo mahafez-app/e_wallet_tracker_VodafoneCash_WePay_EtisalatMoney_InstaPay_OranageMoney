@@ -3,7 +3,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../../core/data/models/wallet_dto.dart';
 import '../../../../core/data/models/workspace_dto.dart';
-import '../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../models/workspace_member_dto.dart';
 
 class WorkspaceQueryRemoteService {

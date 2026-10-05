@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../../error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import 'localization_extension.dart';
 
 extension FailureMessaging on BuildContext {

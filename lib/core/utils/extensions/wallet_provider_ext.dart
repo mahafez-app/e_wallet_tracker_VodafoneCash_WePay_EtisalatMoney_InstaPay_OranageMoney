@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
-import '../../domain/enums/wallet_provider.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../theme/app_colors.dart';
 import '../app_assets.dart';
 

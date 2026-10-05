@@ -1,4 +1,4 @@
-import '../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/entities/missing_wallet_transactions_preview.dart';
 
 enum WalletTransactionSyncStatus {

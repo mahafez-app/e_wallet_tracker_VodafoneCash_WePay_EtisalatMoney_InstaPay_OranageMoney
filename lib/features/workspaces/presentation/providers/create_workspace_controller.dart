@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/domain/entities/workspace_entity.dart';
-import '../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/usecases/create_workspace_usecase.dart';
 import '../../providers/workspaces_providers.dart';
 

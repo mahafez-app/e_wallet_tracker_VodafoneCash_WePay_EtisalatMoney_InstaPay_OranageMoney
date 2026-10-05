@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/entities/invitation_entity.dart';
 import '../../domain/enums/invitation_status.dart';
 import '../../providers/invitations_providers.dart';

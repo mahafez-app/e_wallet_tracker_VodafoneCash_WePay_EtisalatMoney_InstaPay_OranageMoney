@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../utils/execute_and_handle_errors.dart';
 import '../../firebase_options.dart';
 

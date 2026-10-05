@@ -1,4 +1,4 @@
-import '../../../../core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../entities/user_entity.dart';
 
 /// Repository interface for authentication operations.

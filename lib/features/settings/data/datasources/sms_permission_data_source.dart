@@ -1,7 +1,6 @@
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../../../core/error/failures.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 abstract interface class SmsPermissionDataSource {
   Future<bool> requestPermission();
 

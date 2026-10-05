@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
-import '../error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../theme/app_responsive.dart';
 import '../theme/app_spacing.dart';
 import '../utils/extensions/failure_extension.dart';

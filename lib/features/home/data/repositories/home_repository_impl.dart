@@ -4,7 +4,7 @@ import '../../../../core/data/models/wallet_dto.dart';
 import '../../../../core/data/models/workspace_dto.dart';
 import '../../../../core/domain/entities/workspace_entity.dart';
 import '../../../../core/error/failure_mapper.dart';
-import '../../../../core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/home_dashboard_entity.dart';
 import '../../domain/repositories/home_repository.dart';

@@ -1,4 +1,4 @@
-import '../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/entities/app_preferences_entity.dart';
 
 const _unsetFailure = Object();

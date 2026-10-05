@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/domain/enums/wallet_provider.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/utils/egyptian_phone_number.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/usecases/add_wallets_usecase.dart';
 import '../../providers/wallets_providers.dart';
 import 'add_wallet_state.dart';

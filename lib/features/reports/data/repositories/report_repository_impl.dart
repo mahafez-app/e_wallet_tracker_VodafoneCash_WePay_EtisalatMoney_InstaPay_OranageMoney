@@ -1,5 +1,5 @@
 import '../../../../core/utils/execute_and_handle_errors.dart';
-import '../../../../core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/entities/report_entity.dart';
 import '../../domain/repositories/report_repository.dart';
 import '../datasources/report_remote_data_source.dart';

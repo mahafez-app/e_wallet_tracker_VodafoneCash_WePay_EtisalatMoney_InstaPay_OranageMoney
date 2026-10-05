@@ -1,5 +1,4 @@
-import '../../../../core/error/failures.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 const unsetSmsPermissionFailure = Object();
 
 final class SmsPermissionState {

@@ -1,8 +1,7 @@
 import 'dart:developer';
 
 import '../../domain/entities/wallet_entity.dart';
-import '../../domain/enums/transaction_type.dart';
-import '../egyptian_phone_number.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 
 /// Signals extracted from a parsed SMS, used to disambiguate between wallets
 /// that share the same provider.

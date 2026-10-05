@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/enums/invitation_status.dart';
 import '../models/invitation_dto.dart';
 import 'invitation_remote_query_service.dart';

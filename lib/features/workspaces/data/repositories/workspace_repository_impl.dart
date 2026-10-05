@@ -3,8 +3,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../../core/domain/entities/workspace_entity.dart';
 import '../../../../core/error/failure_mapper.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/workspace_details_entity.dart';
 import '../../domain/repositories/workspace_repository.dart';

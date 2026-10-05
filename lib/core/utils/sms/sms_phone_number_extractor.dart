@@ -1,4 +1,4 @@
-import '../egyptian_phone_number.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 
 final class SmsPhoneNumberExtractor {
   SmsPhoneNumberExtractor._();

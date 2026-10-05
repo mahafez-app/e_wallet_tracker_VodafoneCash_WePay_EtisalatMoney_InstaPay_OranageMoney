@@ -1,6 +1,6 @@
 import '../../../../core/data/models/transaction_dto.dart';
 import '../../../../core/data/models/wallet_dto.dart';
-import '../../../../core/domain/enums/transaction_type.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/entities/transaction_date_range.dart';
 import '../../domain/entities/transaction_paid_status_filter.dart';
 import '../../domain/entities/workspace_transactions_overview_entity.dart';

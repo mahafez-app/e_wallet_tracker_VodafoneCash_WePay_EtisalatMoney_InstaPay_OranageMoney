@@ -1,5 +1,5 @@
 import '../../../../core/domain/entities/wallet_entity.dart';
-import '../../../../core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../entities/missing_wallet_transactions_preview.dart';
 import '../../domain/entities/wallet_details_entity.dart';
 

@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../../core/domain/enums/wallet_provider.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 class WorkspaceActiveWalletEntity extends Equatable {
   const WorkspaceActiveWalletEntity({
     required this.walletId,

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/entities/workspace_transactions_overview_entity.dart';
 import '../../domain/usecases/get_workspace_transactions_overview_usecase.dart';
 import '../../providers/transactions_providers.dart';

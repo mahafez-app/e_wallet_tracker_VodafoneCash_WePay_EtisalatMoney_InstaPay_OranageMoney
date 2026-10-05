@@ -1,8 +1,5 @@
 import '../../../../core/domain/entities/wallet_entity.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/error/result.dart';
-import '../../../../core/usecase/usecase.dart';
-import '../../../../core/utils/egyptian_phone_number.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../core/utils/sms/registry/sms_parser_registry.dart';
 import '../../../../core/utils/sms/sms_parsing_service.dart';
 import '../../../../core/utils/sms/sms_wallet_matcher.dart';

@@ -1,4 +1,4 @@
-import '../../../../core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../entities/invitation_entity.dart';
 import '../entities/workspace_pending_invitation_entity.dart';
 

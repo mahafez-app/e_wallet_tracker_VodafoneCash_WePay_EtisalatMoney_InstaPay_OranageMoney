@@ -1,5 +1,5 @@
 import '../../../../core/domain/entities/transaction_entity.dart';
-import '../../../../core/error/failures.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/entities/manual_wallet_transaction_assessment.dart';
 
 enum ManualWalletTransactionStatus {

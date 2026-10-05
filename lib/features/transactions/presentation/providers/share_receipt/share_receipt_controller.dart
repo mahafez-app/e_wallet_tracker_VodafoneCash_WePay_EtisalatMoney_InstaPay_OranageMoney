@@ -6,8 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../../core/error/failure_mapper.dart';
-import '../../../../../core/error/failures.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 final shareReceiptControllerProvider =
     AsyncNotifierProvider.autoDispose<ShareReceiptController, void>(
       ShareReceiptController.new,

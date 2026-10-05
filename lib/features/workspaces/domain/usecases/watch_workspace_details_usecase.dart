@@ -1,5 +1,4 @@
-import '../../../../core/error/result.dart';
-import '../../../../core/usecase/usecase.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../entities/workspace_details_entity.dart';
 import '../repositories/workspace_repository.dart';
 

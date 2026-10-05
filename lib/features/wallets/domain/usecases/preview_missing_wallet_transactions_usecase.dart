@@ -1,5 +1,4 @@
-import '../../../../core/error/result.dart';
-import '../../../../core/usecase/usecase.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../entities/missing_wallet_transactions_preview.dart';
 import '../repositories/wallet_repository.dart';
 

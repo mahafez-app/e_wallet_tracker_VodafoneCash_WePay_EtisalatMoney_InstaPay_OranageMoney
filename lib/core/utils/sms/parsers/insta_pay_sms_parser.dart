@@ -1,4 +1,4 @@
-import '../../../domain/enums/wallet_provider.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../sms_parser.dart';
 import '../sms_patterns.dart';
 

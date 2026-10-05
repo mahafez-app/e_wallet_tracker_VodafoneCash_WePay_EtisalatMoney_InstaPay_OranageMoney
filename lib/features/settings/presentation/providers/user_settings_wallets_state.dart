@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../../../core/domain/entities/wallet_entity.dart';
-import '../../../../core/error/failures.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 enum UserSettingsWalletsAction { none, deletingWallet }
 
 class UserSettingsWalletsState extends Equatable {

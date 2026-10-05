@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../../core/domain/enums/transaction_type.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../domain/entities/report_entity.dart';
 
 abstract interface class ReportRemoteDataSource {

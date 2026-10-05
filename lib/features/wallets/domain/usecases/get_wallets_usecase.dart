@@ -1,6 +1,5 @@
 import '../../../../core/domain/entities/wallet_entity.dart';
-import '../../../../core/error/result.dart';
-import '../../../../core/usecase/usecase.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../repositories/wallet_repository.dart';
 
 class GetWalletsUseCase implements NoParamsUseCase<List<WalletEntity>> {

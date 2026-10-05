@@ -4,8 +4,7 @@ import 'dart:developer';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../../core/data/models/transaction_dto.dart';
-import '../../../../core/domain/enums/transaction_type.dart';
-import '../../../../core/domain/enums/wallet_provider.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../models/transaction_page_dto.dart';
 
 // ── Interface ─────────────────────────────────────────────────────────────────

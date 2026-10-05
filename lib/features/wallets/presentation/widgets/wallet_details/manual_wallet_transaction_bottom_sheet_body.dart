@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/error/failures.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';

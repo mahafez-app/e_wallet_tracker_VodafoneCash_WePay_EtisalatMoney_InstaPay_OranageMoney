@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../domain/enums/wallet_provider.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../theme/app_color_extension.dart';
 import '../../theme/app_responsive.dart';
 import '../../theme/app_spacing.dart';

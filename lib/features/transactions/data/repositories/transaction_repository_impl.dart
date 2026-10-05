@@ -2,9 +2,7 @@ import 'dart:async' show unawaited;
 
 import '../../../../core/domain/entities/transaction_entity.dart';
 import '../../domain/entities/transaction_date_range.dart';
-import '../../../../core/domain/enums/transaction_type.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/error/result.dart';
+import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../core/utils/execute_and_handle_errors.dart';
 import '../../domain/entities/note_entity.dart';
 import '../../domain/entities/transaction_history_entry_entity.dart';

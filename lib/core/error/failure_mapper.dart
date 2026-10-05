@@ -1,8 +1,7 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'failures.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 class FailureMapper {
   const FailureMapper();
 

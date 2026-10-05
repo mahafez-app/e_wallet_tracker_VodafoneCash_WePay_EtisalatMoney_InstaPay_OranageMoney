@@ -1,8 +1,7 @@
 import '../entities/app_preferences_entity.dart';
 import '../enums/app_language_preference.dart';
 import '../enums/app_theme_preference.dart';
-import '../../../../core/error/result.dart';
-
+import 'package:mahafez_core/mahafez_core.dart';
 abstract interface class SettingsRepository {
   Future<Result<bool>> requestSmsPermission();
 

@@ -179,7 +179,7 @@ Instead of a single local monorepo, each layer/module is extracted into an indep
 
 ### Phase 4: Layer 3 — `wallet_product` Extraction (Business Vertical)
 *Goal: Autonomous wallet product, including its transaction ledger and related workflows.*
-- [x] Create local Git package/repository: `wallet_product` (remote release remains a separate publish step)
+- [x] Create Git package/repository: `wallet_product` (released as `v1.1.0`)
 - [x] Migrate Domain:
   - [x] `WalletEntity`
   - [x] `GetWalletsUseCase`, `AddWalletUseCase`, `UpdateWalletBalanceUseCase`

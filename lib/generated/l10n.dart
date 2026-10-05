@@ -1,6 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'intl/messages_all.dart';
 
@@ -25,19 +24,6 @@ class S {
   }
 
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
-
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
-
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale.fromSubtags(languageCode: 'ar'),
-    Locale.fromSubtags(languageCode: 'en'),
-  ];
 
   static Future<S> load(Locale locale) {
     final name = (locale.countryCode?.isEmpty ?? false)

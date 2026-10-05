@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wallet_tracker/generated/l10n.dart';
@@ -39,8 +40,13 @@ class App extends ConsumerWidget {
             child: child ?? const SizedBox.shrink(),
           );
         },
-        localizationsDelegates: S.localizationsDelegates,
-        supportedLocales: S.supportedLocales,
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
         locale: locale,
         onGenerateTitle: (context) => S.of(context).appName,
       ),

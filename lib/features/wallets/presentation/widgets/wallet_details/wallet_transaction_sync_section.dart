@@ -1,11 +1,8 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/app_button.dart';
 import '../../../../auth/providers/auth_providers.dart';
 import '../../../domain/entities/wallet_details_entity.dart';
 import 'wallet_transaction_sync_bottom_sheet.dart';
@@ -17,7 +14,7 @@ class WalletTransactionSyncSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
     final currentUser = ref.watch(currentUserProvider);
     final isOwner = currentUser?.uid == details.wallet.ownerUid;
@@ -27,7 +24,7 @@ class WalletTransactionSyncSection extends ConsumerWidget {
     }
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.lg),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
       decoration: BoxDecoration(
         color: colors.cardBackground,
         borderRadius: BorderRadiusDirectional.circular(24.responsiveRadius),
@@ -42,15 +39,15 @@ class WalletTransactionSyncSection extends ConsumerWidget {
               fontWeight: FontWeight.w800,
             ),
           ),
-          AppSpacing.xs.verticalSpace,
+          MahafezSpacing.xs.verticalSpace,
           Text(
             context.l10n.walletSyncTransactionsDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
-          AppSpacing.md.verticalSpace,
-          AppButton(
+          MahafezSpacing.md.verticalSpace,
+          MahafezButton(
             label: context.l10n.walletSyncTransactionsAction,
             icon: const Icon(Icons.sync_rounded),
             onPressed: () => WalletTransactionSyncBottomSheet.show(

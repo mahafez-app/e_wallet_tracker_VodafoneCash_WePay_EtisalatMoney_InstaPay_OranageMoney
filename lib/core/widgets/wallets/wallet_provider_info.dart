@@ -1,7 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import 'package:wallet_tracker/core/theme/app_responsive.dart';
-import 'package:wallet_tracker/core/theme/app_spacing.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 import 'package:wallet_tracker/core/utils/extensions/phone_number_extension.dart';
 import 'package:wallet_tracker/core/utils/extensions/wallet_provider_ext.dart';
@@ -26,7 +25,7 @@ class WalletProviderInfo extends StatelessWidget {
     return Row(
       children: [
         WalletProviderIcon(provider: provider, size: 40.responsiveRadius),
-        AppSpacing.md.horizontalSpace,
+        MahafezSpacing.md.horizontalSpace,
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +40,7 @@ class WalletProviderInfo extends StatelessWidget {
                   ),
                 ),
               ),
-              AppSpacing.xs.verticalSpace,
+              MahafezSpacing.xs.verticalSpace,
               FittedBox(
                 child: Text(
                   phoneNumber.formattedEgyptianPhoneNumber,
@@ -55,7 +54,7 @@ class WalletProviderInfo extends StatelessWidget {
             ],
           ),
         ),
-        AppSpacing.md.horizontalSpace,
+        MahafezSpacing.md.horizontalSpace,
         _WalletStatusBadge(provider: provider),
       ],
     );
@@ -70,7 +69,7 @@ class _WalletStatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: AppResponsive.symmetricPadding(horizontal: 10, vertical: 4),
+      padding: MahafezResponsive.symmetricPadding(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: provider.brandColor.withAlpha(30),
         borderRadius: BorderRadius.all(Radius.circular(8.responsiveRadius)),
@@ -96,7 +95,7 @@ class _WalletStatusBadge extends StatelessWidget {
               ],
             ),
           ),
-          AppSpacing.xs.horizontalSpace,
+          MahafezSpacing.xs.horizontalSpace,
           Text(
             context.l10n.walletStatusActive.toUpperCase(),
             style: Theme.of(context).textTheme.labelSmall?.copyWith(

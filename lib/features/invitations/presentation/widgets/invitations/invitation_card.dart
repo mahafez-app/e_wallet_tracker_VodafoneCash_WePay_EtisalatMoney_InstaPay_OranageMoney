@@ -1,8 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import 'invitation_card_actions.dart';
 import 'invitation_card_header.dart';
@@ -31,7 +29,7 @@ class InvitationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     return Container(
@@ -73,7 +71,7 @@ class InvitationCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: AppResponsive.allPadding(AppSpacing.xl),
+              padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -81,11 +79,11 @@ class InvitationCard extends StatelessWidget {
                     workspaceName: workspaceName,
                     inviterName: inviterName,
                   ),
-                  AppSpacing.lg.verticalSpace,
+                  MahafezSpacing.lg.verticalSpace,
                   Row(
                     children: [
                       Container(
-                        padding: AppResponsive.allPadding(4.responsiveRadius),
+                        padding: MahafezResponsive.allPadding(4.responsiveRadius),
                         decoration: BoxDecoration(
                           color: theme.colorScheme.onSurfaceVariant.withAlpha(15),
                           shape: BoxShape.circle,
@@ -96,7 +94,7 @@ class InvitationCard extends StatelessWidget {
                           size: 16.responsiveRadius,
                         ),
                       ),
-                      AppSpacing.sm.horizontalSpace,
+                      MahafezSpacing.sm.horizontalSpace,
                       Expanded(
                         child: Text(
                           createdAt.toTimeAgo(context),
@@ -108,7 +106,7 @@ class InvitationCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AppSpacing.xl.verticalSpace,
+                  MahafezSpacing.xl.verticalSpace,
                   InvitationCardActions(
                     isAccepting: isAccepting,
                     isDeclining: isDeclining,

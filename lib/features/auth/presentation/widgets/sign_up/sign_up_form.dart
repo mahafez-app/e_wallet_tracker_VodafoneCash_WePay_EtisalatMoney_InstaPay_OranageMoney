@@ -1,13 +1,10 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/app_validators.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/app_text_field.dart';
 import '../../providers/auth_controller.dart';
 
 class SignUpForm extends ConsumerStatefulWidget {
@@ -60,23 +57,23 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          AppTextField(
+          MahafezTextField(
             label: l10n.fullName,
             hintText: l10n.fullNamePlaceholder,
             controller: _nameController,
             keyboardType: TextInputType.name,
             validator: (value) => AppValidators.required(context, value),
           ),
-          AppSpacing.xl.verticalSpace,
-          AppTextField(
+          MahafezSpacing.xl.verticalSpace,
+          MahafezTextField(
             label: l10n.email,
             hintText: l10n.emailPlaceholder,
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             validator: (value) => AppValidators.email(context, value),
           ),
-          AppSpacing.xl.verticalSpace,
-          AppTextField(
+          MahafezSpacing.xl.verticalSpace,
+          MahafezTextField(
             label: l10n.password,
             hintText: l10n.passwordPlaceholder,
             controller: _passwordController,
@@ -91,7 +88,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
             validator: (value) => AppValidators.password(context, value),
           ),
           32.verticalSpace,
-          AppButton(
+          MahafezButton(
             label: l10n.createAccount,
             onPressed: _submit,
             isLoading: authState.loadingMethod == AuthLoadingMethod.email,

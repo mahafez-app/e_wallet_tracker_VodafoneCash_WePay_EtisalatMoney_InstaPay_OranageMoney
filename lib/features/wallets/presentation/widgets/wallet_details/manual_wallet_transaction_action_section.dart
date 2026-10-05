@@ -1,8 +1,5 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../core/widgets/app_button.dart';
 
 class ManualWalletTransactionActionSection extends StatelessWidget {
   const ManualWalletTransactionActionSection({
@@ -25,15 +22,15 @@ class ManualWalletTransactionActionSection extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: AppButton(
+          child: MahafezButton(
             label: cancelLabel,
-            type: AppButtonType.secondary,
+            type: MahafezButtonType.secondary,
             onPressed: onCancelPressed,
           ),
         ),
-        AppSpacing.md.horizontalSpace,
+        MahafezSpacing.md.horizontalSpace,
         Expanded(
-          child: AppButton(
+          child: MahafezButton(
             label: primaryLabel,
             isLoading: isLoading,
             onPressed: onPrimaryPressed,

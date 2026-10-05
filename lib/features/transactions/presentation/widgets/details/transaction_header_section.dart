@@ -1,10 +1,8 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 
@@ -17,7 +15,7 @@ class TransactionHeaderSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final l10n = context.l10n;
     final isReceive = transaction.type == TransactionType.receive;
     final typeColor = isReceive ? colors.success : colors.danger;
@@ -80,7 +78,7 @@ class TransactionHeaderSection extends StatelessWidget {
             ),
           ],
         ),
-        AppSpacing.lg.verticalSpace,
+        MahafezSpacing.lg.verticalSpace,
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -95,7 +93,7 @@ class TransactionHeaderSection extends StatelessWidget {
                 fontSize: 40.responsiveFont,
               ),
             ),
-            AppSpacing.xs.horizontalSpace,
+            MahafezSpacing.xs.horizontalSpace,
             Text(
               l10n.currency,
               style: theme.textTheme.titleMedium?.copyWith(
@@ -105,11 +103,11 @@ class TransactionHeaderSection extends StatelessWidget {
             ),
           ],
         ),
-        AppSpacing.xs.verticalSpace,
+        MahafezSpacing.xs.verticalSpace,
         Container(
-          padding: AppResponsive.symmetricPadding(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.xs,
+          padding: MahafezResponsive.symmetricPadding(
+            horizontal: MahafezSpacing.md,
+            vertical: MahafezSpacing.xs,
           ),
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHighest.withAlpha(120),

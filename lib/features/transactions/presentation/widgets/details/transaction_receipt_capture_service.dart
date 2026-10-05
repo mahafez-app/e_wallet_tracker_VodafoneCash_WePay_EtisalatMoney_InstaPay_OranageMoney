@@ -1,13 +1,12 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:screenshot/screenshot.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import 'transaction_receipt_image.dart';
 
 final class TransactionReceiptCaptureService {
@@ -74,18 +73,18 @@ class _ReceiptCaptureRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final borderRadius = BorderRadius.circular(AppSpacing.xl.responsiveRadius);
+    final borderRadius = BorderRadius.circular(MahafezSpacing.xl.responsiveRadius);
 
     return ColoredBox(
       color: theme.colorScheme.surfaceContainerLow,
       child: SizedBox(
         width: width,
         child: Padding(
-          padding: AppResponsive.onlyPadding(
-            top: AppSpacing.xl,
-            end: AppSpacing.md,
-            bottom: AppSpacing.xl,
-            start: AppSpacing.md,
+          padding: MahafezResponsive.onlyPadding(
+            top: MahafezSpacing.xl,
+            end: MahafezSpacing.md,
+            bottom: MahafezSpacing.xl,
+            start: MahafezSpacing.md,
           ),
           child: Material(
             color: theme.scaffoldBackgroundColor,

@@ -1,13 +1,10 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/app_validators.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/app_text_field.dart';
 import '../../providers/auth_controller.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
@@ -59,15 +56,15 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          AppTextField(
+          MahafezTextField(
             label: l10n.email,
             hintText: l10n.emailPlaceholder,
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             validator: (value) => AppValidators.email(context, value),
           ),
-          AppSpacing.lg.verticalSpace,
-          AppTextField(
+          MahafezSpacing.lg.verticalSpace,
+          MahafezTextField(
             label: l10n.password,
             hintText: '••••••',
             controller: _passwordController,
@@ -80,8 +77,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             ),
             validator: (value) => AppValidators.required(context, value),
           ),
-          AppSpacing.xl.verticalSpace,
-          AppButton(
+          MahafezSpacing.xl.verticalSpace,
+          MahafezButton(
             label: l10n.signIn,
             onPressed: _submit,
             isLoading: authState.loadingMethod == AuthLoadingMethod.email,

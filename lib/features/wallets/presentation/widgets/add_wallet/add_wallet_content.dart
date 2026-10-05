@@ -1,11 +1,8 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/info_card.dart';
 import '../../providers/add_wallet_state.dart';
 import 'add_wallet_phone_number_section.dart';
 import 'add_wallet_provider_grid.dart';
@@ -33,19 +30,19 @@ class AddWalletContent extends StatelessWidget {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: AppResponsive.allPadding(AppSpacing.md),
+            padding: MahafezResponsive.allPadding(MahafezSpacing.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                InfoCard(text: s.addWalletDescription),
-                AppSpacing.lg.verticalSpace,
+                MahafezInfoCard(text: s.addWalletDescription),
+                MahafezSpacing.lg.verticalSpace,
                 AddWalletPhoneNumberSection(
                   phoneNumber: state.phoneNumber,
                   onPhoneNumberChanged: onPhoneNumberChanged,
                 ),
-                AppSpacing.lg.verticalSpace,
+                MahafezSpacing.lg.verticalSpace,
                 Text(s.chooseProvider, style: theme.textTheme.titleMedium),
-                AppSpacing.md.verticalSpace,
+                MahafezSpacing.md.verticalSpace,
                 AddWalletProviderGrid(
                   selectedProviders: state.selectedProviders,
                   allowedProviders: state.allowedProviders,
@@ -56,8 +53,8 @@ class AddWalletContent extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: AppResponsive.allPadding(AppSpacing.md),
-          child: AppButton(
+          padding: MahafezResponsive.allPadding(MahafezSpacing.md),
+          child: MahafezButton(
             label: s.addWalletAction,
             icon: const Icon(Icons.add_circle_outline),
             isLoading: state.isSubmitting,

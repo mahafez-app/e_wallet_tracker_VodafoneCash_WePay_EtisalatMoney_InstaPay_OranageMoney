@@ -1,12 +1,9 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/app_text_field.dart';
 import '../../../providers/auth_providers.dart';
 import '../../providers/auth_controller.dart';
 
@@ -64,7 +61,7 @@ class _ConfirmNameFormState extends ConsumerState<ConfirmNameForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Name Field
-          AppTextField(
+          MahafezTextField(
             controller: _nameController,
             label: l10n.fullName,
             hintText: l10n.fullNamePlaceholder,
@@ -81,13 +78,13 @@ class _ConfirmNameFormState extends ConsumerState<ConfirmNameForm> {
           40.responsiveHeight.verticalSpace,
 
           // Submit Button
-          AppButton(
+          MahafezButton(
             label: l10n.confirm,
             onPressed: _submit,
             isLoading: isLoading,
           ),
 
-          AppSpacing.xl.verticalSpace,
+          MahafezSpacing.xl.verticalSpace,
         ],
       ),
     );

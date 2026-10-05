@@ -1,10 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/app_button.dart';
-
 class InvitationCardActions extends StatelessWidget {
   const InvitationCardActions({
     super.key,
@@ -28,17 +25,17 @@ class InvitationCardActions extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: AppButton(
+          child: MahafezButton(
             label: context.l10n.invitationsAcceptAction,
             isLoading: isAccepting,
             onPressed: canTap ? onAccept : null,
           ),
         ),
-        AppSpacing.md.horizontalSpace,
+        MahafezSpacing.md.horizontalSpace,
         Expanded(
-          child: AppButton(
+          child: MahafezButton(
             label: context.l10n.invitationsDeclineAction,
-            type: AppButtonType.secondary,
+            type: MahafezButtonType.secondary,
             isLoading: isDeclining,
             onPressed: canTap ? onDecline : null,
           ),

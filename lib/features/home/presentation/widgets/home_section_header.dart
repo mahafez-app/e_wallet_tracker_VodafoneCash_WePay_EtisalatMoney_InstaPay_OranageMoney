@@ -1,7 +1,5 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 
 class HomeSectionHeader extends StatelessWidget {
   const HomeSectionHeader({
@@ -38,13 +36,13 @@ class HomeSectionHeader extends StatelessWidget {
             ),
           ),
         ),
-        AppSpacing.md.horizontalSpace,
+        MahafezSpacing.md.horizontalSpace,
         TextButton(
           onPressed: onPressed,
           style: TextButton.styleFrom(
             backgroundColor: theme.colorScheme.primary.withAlpha(20),
             foregroundColor: theme.colorScheme.primary,
-            padding: AppResponsive.symmetricPadding(horizontal: 16, vertical: 8),
+            padding: MahafezResponsive.symmetricPadding(horizontal: 16, vertical: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.responsiveRadius),
             ),
@@ -59,7 +57,7 @@ class HomeSectionHeader extends StatelessWidget {
                   fontSize: 13.responsiveFont,
                 ),
               ),
-              AppSpacing.xs.horizontalSpace,
+              MahafezSpacing.xs.horizontalSpace,
               Icon(icon, size: 16.responsiveRadius),
             ],
           ),

@@ -1,14 +1,11 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/domain/entities/wallet_entity.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../../core/widgets/app_dialog.dart';
-import '../../../../core/widgets/app_loader.dart';
 import '../../../../core/widgets/wallets/app_wallet_tile.dart';
 import '../providers/user_settings_wallets_controller.dart';
 import '../providers/user_settings_wallets_state.dart';
@@ -25,7 +22,7 @@ class UserSettingsWalletsSection extends ConsumerWidget {
     if (state.isLoading) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 20),
-        child: AppLoader(),
+        child: MahafezLoader(),
       );
     }
 
@@ -35,9 +32,9 @@ class UserSettingsWalletsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SettingsSectionTitle(label: context.l10n.userSettingsWalletsSection),
-        AppSpacing.xs.verticalSpace,
+        MahafezSpacing.xs.verticalSpace,
         Padding(
-          padding: AppResponsive.horizontalPadding(AppSpacing.sm),
+          padding: MahafezResponsive.horizontalPadding(MahafezSpacing.sm),
           child: Text(
             context.l10n.userSettingsWalletsDescription,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -45,10 +42,10 @@ class UserSettingsWalletsSection extends ConsumerWidget {
             ),
           ),
         ),
-        AppSpacing.sm.verticalSpace,
+        MahafezSpacing.sm.verticalSpace,
         ...state.wallets.map(
           (wallet) => Padding(
-            padding: AppResponsive.onlyPadding(bottom: AppSpacing.md),
+            padding: MahafezResponsive.onlyPadding(bottom: MahafezSpacing.md),
             child: AppWalletTile(
               wallet: wallet,
               onActionPressed: () => _showDeleteDialog(
@@ -72,9 +69,9 @@ class UserSettingsWalletsSection extends ConsumerWidget {
     UserSettingsWalletsController controller,
     WalletEntity wallet,
   ) {
-    AppDialog.show(
+    MahafezDialog.show(
       context,
-      type: AppDialogType.error,
+      type: MahafezDialogType.error,
       title: context.l10n.userSettingsDeleteWalletConfirmTitle,
       message: context.l10n.userSettingsDeleteWalletConfirmMessage(
         wallet.provider.displayName(context),

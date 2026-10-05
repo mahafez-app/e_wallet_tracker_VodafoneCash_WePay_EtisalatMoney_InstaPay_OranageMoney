@@ -1,8 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
 import '../../../../../core/widgets/wallets/wallet_provider_icon.dart';
@@ -21,9 +20,9 @@ class TransactionWalletChip extends StatelessWidget {
       children: [
         WalletProviderIcon(
           provider: transaction.provider,
-          size: AppSpacing.xl.responsiveRadius,
+          size: MahafezSpacing.xl.responsiveRadius,
         ),
-        AppSpacing.sm.horizontalSpace,
+        MahafezSpacing.sm.horizontalSpace,
         Expanded(
           child: Text(
             '${transaction.provider.displayName(context)} · ${transaction.phoneNumber.formattedEgyptianPhoneNumber}',

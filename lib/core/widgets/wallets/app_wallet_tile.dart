@@ -1,9 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/wallet_entity.dart';
-import '../../theme/app_color_extension.dart';
-import '../../theme/app_responsive.dart';
-import '../../theme/app_spacing.dart';
 import '../../utils/extensions/localization_extension.dart';
 import '../../utils/extensions/phone_number_extension.dart';
 import '../../utils/extensions/wallet_provider_ext.dart';
@@ -33,7 +31,7 @@ class AppWalletTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
     final provider = wallet.provider;
     final resolvedOwnerName = ownerName?.trim().isNotEmpty == true
@@ -41,16 +39,16 @@ class AppWalletTile extends StatelessWidget {
         : context.l10n.workspaceUnknownMember;
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.lg),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
       decoration: BoxDecoration(
-        color: context.appColors.cardBackground,
-        borderRadius: BorderRadius.circular(AppSpacing.lg.responsiveRadius),
+        color: context.mahafezColors.cardBackground,
+        borderRadius: BorderRadius.circular(MahafezSpacing.lg.responsiveRadius),
         border: Border.all(color: theme.colorScheme.outlineVariant),
         boxShadow: [
           BoxShadow(
             color: colors.cardShadow,
-            blurRadius: AppSpacing.md.responsiveRadius,
-            offset: Offset(0, AppSpacing.xs.responsiveHeight),
+            blurRadius: MahafezSpacing.md.responsiveRadius,
+            offset: Offset(0, MahafezSpacing.xs.responsiveHeight),
           ),
         ],
       ),
@@ -58,9 +56,9 @@ class AppWalletTile extends StatelessWidget {
         children: [
           WalletProviderIcon(
             provider: provider,
-            size: AppSpacing.xxl.responsiveRadius,
+            size: MahafezSpacing.xxl.responsiveRadius,
           ),
-          AppSpacing.md.horizontalSpace,
+          MahafezSpacing.md.horizontalSpace,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,9 +94,9 @@ class AppWalletTile extends StatelessWidget {
               tooltip: actionTooltip,
               icon: isActionLoading
                   ? SizedBox.square(
-                      dimension: AppSpacing.lg.responsiveWidth,
+                      dimension: MahafezSpacing.lg.responsiveWidth,
                       child: CircularProgressIndicator(
-                        strokeWidth: AppSpacing.xxs.responsiveWidth,
+                        strokeWidth: MahafezSpacing.xxs.responsiveWidth,
                       ),
                     )
                   : Icon(

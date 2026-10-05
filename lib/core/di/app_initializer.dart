@@ -6,7 +6,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:mahafez_core/mahafez_core.dart';
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import '../utils/execute_and_handle_errors.dart';
+import '../utils/extensions/failure_extension.dart';
+import '../utils/extensions/localization_extension.dart';
 import '../../firebase_options.dart';
 
 /// Dependencies resolved during app startup and passed down via ProviderScope
@@ -39,6 +42,24 @@ Future<Result<AppBootstrapDependencies>> initializeApp() {
   return executeAndHandleErrors(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+
+      MahafezErrorView.errorHandler = (context, error) =>
+          error is Failure
+              ? error.toLocalizedString(context)
+              : context.l10n.errorUnknown;
+      MahafezErrorView.retryLabelHandler =
+          (context) => context.l10n.startupFallbackRetryAction;
+      MahafezSnackbar.failureHandler = (context, failure, duration) {
+        final message = failure is Failure
+            ? failure.toLocalizedString(context)
+            : failure.toString();
+        MahafezSnackbar.show(
+          context,
+          message: message,
+          type: .error,
+          duration: duration,
+        );
+      };
 
       if (Firebase.apps.isEmpty) {
         await Firebase.initializeApp(

@@ -1,12 +1,11 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../invitations/presentation/widgets/invitations/invite_member_bottom_sheet.dart';
 import '../../domain/entities/workspace_details_entity.dart';
@@ -105,21 +104,21 @@ class _WorkspaceDetailsDataView extends ConsumerWidget {
     final canInviteMembers = currentUser?.uid == details.workspace.ownerUid;
 
     return SingleChildScrollView(
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           WorkspaceSummaryCard(details: details),
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
           WorkspaceWalletsSection(
             wallets: details.wallets,
             onAddWallets: () => context.push(
               AppRoutes.workspaceWalletSelectionPath(details.workspace.id),
             ),
           ),
-          AppSpacing.xxl.verticalSpace,
+          MahafezSpacing.xxl.verticalSpace,
           WorkspaceTransactionsSection(details: details),
-          AppSpacing.xxl.verticalSpace,
+          MahafezSpacing.xxl.verticalSpace,
           WorkspaceMembersSection(
             members: details.members,
             onInviteMember: canInviteMembers

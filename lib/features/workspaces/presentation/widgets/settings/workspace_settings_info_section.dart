@@ -1,10 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import 'workspace_settings_section_title.dart';
 
@@ -28,7 +26,7 @@ class WorkspaceSettingsInfoSection extends StatelessWidget {
         WorkspaceSettingsSectionTitle(
           title: context.l10n.workspaceSettingsInfoSection,
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         _WorkspaceInfoCard(
           name: workspaceName,
           canEdit: canEdit,
@@ -52,36 +50,36 @@ class _WorkspaceInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(AppSpacing.lg.responsiveRadius),
+        borderRadius: BorderRadius.circular(MahafezSpacing.lg.responsiveRadius),
         onTap: onTap,
         child: Container(
-          padding: AppResponsive.allPadding(AppSpacing.lg),
+          padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
           decoration: BoxDecoration(
-            color: context.appColors.cardBackground,
-            borderRadius: BorderRadius.circular(AppSpacing.lg.responsiveRadius),
+            color: context.mahafezColors.cardBackground,
+            borderRadius: BorderRadius.circular(MahafezSpacing.lg.responsiveRadius),
             boxShadow: [
               BoxShadow(
                 color: colors.cardShadow,
-                blurRadius: AppSpacing.md.responsiveRadius,
-                offset: Offset(0, AppSpacing.xs.responsiveHeight),
+                blurRadius: MahafezSpacing.md.responsiveRadius,
+                offset: Offset(0, MahafezSpacing.xs.responsiveHeight),
               ),
             ],
           ),
           child: Row(
             children: [
               Container(
-                width: AppSpacing.xxxl.responsiveRadius,
-                height: AppSpacing.xxxl.responsiveRadius,
+                width: MahafezSpacing.xxxl.responsiveRadius,
+                height: MahafezSpacing.xxxl.responsiveRadius,
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(
-                    AppSpacing.md.responsiveRadius,
+                    MahafezSpacing.md.responsiveRadius,
                   ),
                 ),
                 alignment: Alignment.center,
@@ -90,7 +88,7 @@ class _WorkspaceInfoCard extends StatelessWidget {
                   color: theme.colorScheme.onPrimaryContainer,
                 ),
               ),
-              AppSpacing.lg.horizontalSpace,
+              MahafezSpacing.lg.horizontalSpace,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +112,7 @@ class _WorkspaceInfoCard extends StatelessWidget {
                 Icon(
                   Icons.edit_outlined,
                   color: theme.colorScheme.outline,
-                  size: AppSpacing.xl.responsiveRadius,
+                  size: MahafezSpacing.xl.responsiveRadius,
                 ),
               ],
             ],

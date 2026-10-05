@@ -1,5 +1,6 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +9,6 @@ import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../core/providers/sms_providers.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/app_snackbar.dart';
 import '../../../settings/presentation/providers/sms_permission_controller.dart';
 import '../providers/add_wallet_controller.dart';
 import '../providers/add_wallet_state.dart';
@@ -94,6 +94,6 @@ class _AddWalletBody extends ConsumerWidget {
   }
 
   void _showFailureSnackbar(BuildContext context, Failure failure) {
-    AppSnackbar.showFailure(context, failure: failure);
+    MahafezSnackbar.showFailure(context, failure: failure);
   }
 }

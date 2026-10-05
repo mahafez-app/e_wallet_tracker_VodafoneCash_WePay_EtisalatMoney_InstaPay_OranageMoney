@@ -1,12 +1,11 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/domain/entities/wallet_entity.dart';
 import '../../../../../core/router/app_routes.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/widgets/wallets/wallet_card.dart';
 
@@ -45,14 +44,14 @@ class WorkspaceWalletsSection extends StatelessWidget {
             ),
           ],
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         if (wallets.isEmpty)
           _WorkspaceWalletsEmptyState(onAddWallets: onAddWallets)
         else
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              spacing: AppSpacing.md,
+              spacing: MahafezSpacing.md,
               children: wallets.map((wallet) {
                 return GestureDetector(
                   onTap: () =>
@@ -83,7 +82,7 @@ class _WorkspaceWalletsEmptyState extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: AppResponsive.allPadding(AppSpacing.xl),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withAlpha(76),
         borderRadius: BorderRadius.circular(20.responsiveRadius),
@@ -97,7 +96,7 @@ class _WorkspaceWalletsEmptyState extends StatelessWidget {
             color: theme.colorScheme.primary,
             size: 28.responsiveRadius,
           ),
-          AppSpacing.md.verticalSpace,
+          MahafezSpacing.md.verticalSpace,
           Text(
             l10n.workspaceWalletsEmptyTitle,
             style: theme.textTheme.titleMedium?.copyWith(
@@ -105,14 +104,14 @@ class _WorkspaceWalletsEmptyState extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          AppSpacing.xs.verticalSpace,
+          MahafezSpacing.xs.verticalSpace,
           Text(
             l10n.workspaceWalletsEmptyDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
-          AppSpacing.md.verticalSpace,
+          MahafezSpacing.md.verticalSpace,
           TextButton.icon(
             onPressed: onAddWallets,
             icon: const Icon(Icons.add_circle_outline),

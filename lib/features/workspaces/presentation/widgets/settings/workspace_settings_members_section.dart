@@ -1,9 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../domain/entities/workspace_member_entity.dart';
 import '../../providers/workspace_settings_state.dart';
@@ -44,14 +43,14 @@ class WorkspaceSettingsMembersSection extends StatelessWidget {
             ),
             if (canManageWorkspace)
               Padding(
-                padding: AppResponsive.onlyPadding(start: AppSpacing.md),
+                padding: MahafezResponsive.onlyPadding(start: MahafezSpacing.md),
                 child: OutlinedButton.icon(
                   onPressed: onInviteMember,
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(0, 40.responsiveHeight),
-                    padding: AppResponsive.symmetricPadding(
-                      horizontal: AppSpacing.md,
-                      vertical: AppSpacing.sm,
+                    padding: MahafezResponsive.symmetricPadding(
+                      horizontal: MahafezSpacing.md,
+                      vertical: MahafezSpacing.sm,
                     ),
                   ),
                   icon: const Icon(Icons.mail_outline_rounded),
@@ -63,7 +62,7 @@ class WorkspaceSettingsMembersSection extends StatelessWidget {
               ),
           ],
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         if (members.isEmpty)
           WorkspaceSettingsEmptyStateCard(
             message: context.l10n.workspaceMembersEmpty,
@@ -73,7 +72,7 @@ class WorkspaceSettingsMembersSection extends StatelessWidget {
             children: members
                 .map(
                   (member) => Padding(
-                    padding: AppResponsive.onlyPadding(bottom: AppSpacing.md),
+                    padding: MahafezResponsive.onlyPadding(bottom: MahafezSpacing.md),
                     child: WorkspaceSettingsMemberTile(
                       member: member,
                       canRemove: canManageWorkspace && !member.isOwner,

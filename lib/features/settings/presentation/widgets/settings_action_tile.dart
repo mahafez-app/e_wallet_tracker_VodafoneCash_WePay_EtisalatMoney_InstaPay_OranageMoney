@@ -1,9 +1,7 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 
 class SettingsActionTile extends StatelessWidget {
   const SettingsActionTile({
@@ -32,11 +30,11 @@ class SettingsActionTile extends StatelessWidget {
       onTap: isLoading ? null : onTap,
       borderRadius: BorderRadius.circular(24.responsiveRadius),
       child: Padding(
-        padding: AppResponsive.allPadding(AppSpacing.lg),
+        padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
         child: Row(
           children: [
             _ActionIconChip(icon: icon, isDanger: isDanger),
-            AppSpacing.md.horizontalSpace,
+            MahafezSpacing.md.horizontalSpace,
             Expanded(
               child: Text(
                 label,
@@ -82,7 +80,7 @@ class _ActionIconChip extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.sm),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
       decoration: BoxDecoration(
         color: isDanger
             ? colorScheme.errorContainer

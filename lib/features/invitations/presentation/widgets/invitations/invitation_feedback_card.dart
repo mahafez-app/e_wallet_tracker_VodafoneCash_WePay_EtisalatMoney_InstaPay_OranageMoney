@@ -1,9 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../providers/invitation_display_provider.dart';
 import '../../providers/invitations_state.dart';
@@ -24,7 +22,7 @@ class InvitationFeedbackCard extends ConsumerWidget {
     final style = _resolveStyle(context: context, workspaceName: workspaceName);
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.lg),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
       decoration: BoxDecoration(
         color: style.backgroundColor,
         borderRadius: BorderRadius.circular(20.responsiveRadius),
@@ -47,7 +45,7 @@ class InvitationFeedbackCard extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: AppResponsive.onlyPadding(start: AppSpacing.sm),
+            padding: MahafezResponsive.onlyPadding(start: MahafezSpacing.sm),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -64,7 +62,7 @@ class InvitationFeedbackCard extends ConsumerWidget {
                     size: 22.responsiveRadius,
                   ),
                 ),
-                AppSpacing.md.horizontalSpace,
+                MahafezSpacing.md.horizontalSpace,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +73,7 @@ class InvitationFeedbackCard extends ConsumerWidget {
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                      AppSpacing.xs.verticalSpace,
+                      MahafezSpacing.xs.verticalSpace,
                       Text(
                         style.subtitle,
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -98,7 +96,7 @@ class InvitationFeedbackCard extends ConsumerWidget {
     required BuildContext context,
     required String workspaceName,
   }) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final colorScheme = Theme.of(context).colorScheme;
 
     return switch (feedback.action) {

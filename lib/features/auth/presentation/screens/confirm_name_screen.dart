@@ -1,14 +1,12 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/app_logo.dart';
-import '../../../../core/widgets/app_snackbar.dart';
 import '../providers/auth_controller.dart';
 import '../widgets/confirm_name/confirm_name_form.dart';
 
@@ -27,7 +25,7 @@ class ConfirmNameScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppLogo(size: 32.responsiveRadius),
-            AppSpacing.sm.horizontalSpace,
+            MahafezSpacing.sm.horizontalSpace,
             Text(
               l10n.appName,
               style: theme.textTheme.titleLarge?.copyWith(
@@ -40,9 +38,9 @@ class ConfirmNameScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppResponsive.symmetricPadding(
-            horizontal: AppSpacing.lg,
-            vertical: AppSpacing.xxxl,
+          padding: MahafezResponsive.symmetricPadding(
+            horizontal: MahafezSpacing.lg,
+            vertical: MahafezSpacing.xxxl,
           ),
           child: const _ConfirmNameBody(),
         ),
@@ -58,7 +56,7 @@ class _ConfirmNameBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AuthState>(authNotifierProvider, (_, next) {
       if (!next.isLoading && next.error != null) {
-        AppSnackbar.showFailure(context, failure: next.error!);
+        MahafezSnackbar.showFailure(context, failure: next.error!);
         ref.read(authNotifierProvider.notifier).clearError();
       }
     });
@@ -70,7 +68,7 @@ class _ConfirmNameBody extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        AppSpacing.xxl.verticalSpace,
+        MahafezSpacing.xxl.verticalSpace,
 
         Center(
           child: Container(
@@ -96,7 +94,7 @@ class _ConfirmNameBody extends ConsumerWidget {
           ),
         ),
 
-        AppSpacing.xxl.verticalSpace,
+        MahafezSpacing.xxl.verticalSpace,
 
         Text(
           l10n.whatIsYourName,
@@ -107,10 +105,10 @@ class _ConfirmNameBody extends ConsumerWidget {
           ),
         ),
 
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
 
         Padding(
-          padding: AppResponsive.symmetricPadding(horizontal: AppSpacing.md),
+          padding: MahafezResponsive.symmetricPadding(horizontal: MahafezSpacing.md),
           child: Text(
             l10n.nameWillBeDisplayed,
             textAlign: TextAlign.center,

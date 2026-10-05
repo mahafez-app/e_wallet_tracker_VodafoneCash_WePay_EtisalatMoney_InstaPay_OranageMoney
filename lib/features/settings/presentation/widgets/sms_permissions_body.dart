@@ -1,16 +1,13 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/app_snackbar.dart';
 import '../providers/sms_permission_controller.dart';
 import 'sms_permission_feature_item.dart';
 
@@ -27,10 +24,10 @@ class SmsPermissionsBody extends ConsumerWidget {
       next,
     ) {
       if (next.error != null) {
-        AppSnackbar.show(
+        MahafezSnackbar.show(
           context,
           message: next.error!.toLocalizedString(context),
-          type: AppSnackbarType.error,
+          type: MahafezSnackbarType.error,
         );
         smsPermissionController.clearError();
         return;
@@ -53,18 +50,18 @@ class SmsPermissionsBody extends ConsumerWidget {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: AppResponsive.allPadding(AppSpacing.xl),
+            padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
             child: Column(
               children: [
-                AppSpacing.xxxl.verticalSpace,
+                MahafezSpacing.xxxl.verticalSpace,
                 const _PermissionHeader(),
-                AppSpacing.xxl.verticalSpace,
+                MahafezSpacing.xxl.verticalSpace,
                 Text(
                   l10n.smsPermissionTitle,
                   style: theme.textTheme.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
-                AppSpacing.md.verticalSpace,
+                MahafezSpacing.md.verticalSpace,
                 Text(
                   l10n.smsPermissionDescription,
                   style: theme.textTheme.bodyLarge?.copyWith(
@@ -72,13 +69,13 @@ class SmsPermissionsBody extends ConsumerWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                AppSpacing.xxxl.verticalSpace,
+                MahafezSpacing.xxxl.verticalSpace,
                 SmsPermissionFeatureItem(
                   icon: Icons.update,
                   title: l10n.smsPermissionAutoUpdateTitle,
                   description: l10n.smsPermissionAutoUpdateDesc,
                 ),
-                AppSpacing.lg.verticalSpace,
+                MahafezSpacing.lg.verticalSpace,
                 SmsPermissionFeatureItem(
                   icon: Icons.shield_outlined,
                   title: l10n.smsPermissionPrivacyTitle,
@@ -89,16 +86,16 @@ class SmsPermissionsBody extends ConsumerWidget {
           ),
         ),
         Padding(
-          padding: AppResponsive.allPadding(AppSpacing.xl),
+          padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              AppButton(
+              MahafezButton(
                 label: l10n.allowAndContinue,
                 isLoading: state.isRequesting || state.isOpeningSettings,
                 onPressed: smsPermissionController.requestPermission,
               ),
-              AppSpacing.md.verticalSpace,
+              MahafezSpacing.md.verticalSpace,
               TextButton(
                 onPressed: () => context.go(AppRoutes.home),
                 child: Text(
@@ -124,7 +121,7 @@ class _PermissionHeader extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.xl),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
       decoration: BoxDecoration(
         color: theme.colorScheme.primary.withAlpha(20),
         shape: BoxShape.circle,
@@ -140,7 +137,7 @@ class _PermissionHeader extends StatelessWidget {
           Transform.translate(
             offset: Offset(12.responsiveWidth, -12.responsiveHeight),
             child: Container(
-              padding: AppResponsive.allPadding(4),
+              padding: MahafezResponsive.allPadding(4),
               decoration: BoxDecoration(
                 color: theme.colorScheme.tertiaryContainer,
                 shape: BoxShape.circle,

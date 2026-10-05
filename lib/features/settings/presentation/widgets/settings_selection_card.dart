@@ -1,9 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import 'settings_card.dart';
 
 class SettingsSelectionCard extends StatelessWidget {
@@ -30,11 +29,11 @@ class SettingsSelectionCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(24.responsiveRadius),
         child: Padding(
-          padding: AppResponsive.allPadding(AppSpacing.lg),
+          padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
           child: Row(
             children: [
               _SelectionIconChip(icon: icon),
-              AppSpacing.md.horizontalSpace,
+              MahafezSpacing.md.horizontalSpace,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +45,7 @@ class SettingsSelectionCard extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    AppSpacing.xs.verticalSpace,
+                    MahafezSpacing.xs.verticalSpace,
                     Text(
                       valueLabel,
                       style: theme.textTheme.bodyMedium?.copyWith(
@@ -56,7 +55,7 @@ class SettingsSelectionCard extends StatelessWidget {
                   ],
                 ),
               ),
-              AppSpacing.sm.horizontalSpace,
+              MahafezSpacing.sm.horizontalSpace,
               Icon(Icons.chevron_right_rounded, color: colorScheme.outline),
             ],
           ),
@@ -76,7 +75,7 @@ class _SelectionIconChip extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.sm),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(14.responsiveRadius),

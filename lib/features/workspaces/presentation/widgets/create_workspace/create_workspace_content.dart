@@ -1,11 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/app_text_field.dart';
-import '../../../../../core/widgets/info_card.dart';
 import '../../providers/create_workspace_controller.dart';
 import 'create_workspace_preview_card.dart';
 
@@ -32,7 +28,7 @@ class CreateWorkspaceContent extends StatelessWidget {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: AppResponsive.allPadding(AppSpacing.md),
+            padding: MahafezResponsive.allPadding(MahafezSpacing.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -40,10 +36,10 @@ class CreateWorkspaceContent extends StatelessWidget {
                   workspaceName: state.name,
                   ownerName: ownerName,
                 ),
-                AppSpacing.lg.verticalSpace,
-                InfoCard(text: l10n.createWorkspaceDescription),
-                AppSpacing.lg.verticalSpace,
-                AppTextField(
+                MahafezSpacing.lg.verticalSpace,
+                MahafezInfoCard(text: l10n.createWorkspaceDescription),
+                MahafezSpacing.lg.verticalSpace,
+                MahafezTextField(
                   label: l10n.workspaceNameLabel,
                   hintText: l10n.workspaceNameHint,
                   onChanged: onNameChanged,
@@ -59,8 +55,8 @@ class CreateWorkspaceContent extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: AppResponsive.allPadding(AppSpacing.md),
-          child: AppButton(
+          padding: MahafezResponsive.allPadding(MahafezSpacing.md),
+          child: MahafezButton(
             label: l10n.createWorkspaceAction,
             icon: const Icon(Icons.add_business_outlined),
             isLoading: state.isSubmitting,

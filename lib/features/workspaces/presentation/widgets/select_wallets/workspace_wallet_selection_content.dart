@@ -1,14 +1,11 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/app_routes.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/info_card.dart';
 import '../../providers/workspace_wallet_selection_state.dart';
 import 'workspace_wallet_selection_card.dart';
 
@@ -37,16 +34,16 @@ class WorkspaceWalletSelectionContent extends StatelessWidget {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: AppSpacing.pagePadding,
+            padding: MahafezSpacing.pagePadding,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InfoCard(
+                MahafezInfoCard(
                   text: isCreateFlow
                       ? l10n.workspaceAddWalletsCreateDescription
                       : l10n.workspaceAddWalletsManageDescription,
                 ),
-                AppSpacing.lg.verticalSpace,
+                MahafezSpacing.lg.verticalSpace,
                 Text(
                   state.workspaceName,
                   style: theme.textTheme.headlineSmall?.copyWith(
@@ -54,7 +51,7 @@ class WorkspaceWalletSelectionContent extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                AppSpacing.sm.verticalSpace,
+                MahafezSpacing.sm.verticalSpace,
                 Text(
                   l10n.workspaceWalletSelectionSummary(
                     state.ownedWallets.length,
@@ -64,7 +61,7 @@ class WorkspaceWalletSelectionContent extends StatelessWidget {
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
-                AppSpacing.lg.verticalSpace,
+                MahafezSpacing.lg.verticalSpace,
                 if (state.ownedWallets.isEmpty)
                   const _WorkspaceWalletSelectionEmptyState(
                     titleKey: _WorkspaceWalletSelectionEmptyStateKey.noWallets,
@@ -78,8 +75,8 @@ class WorkspaceWalletSelectionContent extends StatelessWidget {
                     children: state.ownedWallets
                         .map(
                           (wallet) => Padding(
-                            padding: AppResponsive.onlyPadding(
-                              bottom: AppSpacing.md,
+                            padding: MahafezResponsive.onlyPadding(
+                              bottom: MahafezSpacing.md,
                             ),
                             child: WorkspaceWalletSelectionCard(
                               wallet: wallet,
@@ -100,10 +97,10 @@ class WorkspaceWalletSelectionContent extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: AppSpacing.pagePadding,
+          padding: MahafezSpacing.pagePadding,
           child: Column(
             children: [
-              AppButton(
+              MahafezButton(
                 label: state.hasSelectableWallets
                     ? l10n.workspaceAddSelectedWalletsAction
                     : l10n.workspaceContinueToDetailsAction,
@@ -116,10 +113,10 @@ class WorkspaceWalletSelectionContent extends StatelessWidget {
                 onPressed: state.canSubmit ? onSubmit : null,
               ),
               if (isCreateFlow && state.hasSelectableWallets) ...[
-                AppSpacing.sm.verticalSpace,
-                AppButton(
+                MahafezSpacing.sm.verticalSpace,
+                MahafezButton(
                   label: l10n.workspaceSkipWalletsAction,
-                  type: AppButtonType.tertiary,
+                  type: MahafezButtonType.tertiary,
                   onPressed: state.isSubmitting
                       ? null
                       : () {
@@ -162,7 +159,7 @@ class _WorkspaceWalletSelectionEmptyState extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: AppResponsive.allPadding(AppSpacing.xl),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withAlpha(76),
         borderRadius: BorderRadius.circular(24.responsiveRadius),
@@ -176,7 +173,7 @@ class _WorkspaceWalletSelectionEmptyState extends StatelessWidget {
             color: theme.colorScheme.primary,
             size: 28.responsiveRadius,
           ),
-          AppSpacing.md.verticalSpace,
+          MahafezSpacing.md.verticalSpace,
           Text(
             title,
             style: theme.textTheme.titleMedium?.copyWith(
@@ -184,7 +181,7 @@ class _WorkspaceWalletSelectionEmptyState extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          AppSpacing.xs.verticalSpace,
+          MahafezSpacing.xs.verticalSpace,
           Text(
             description,
             style: theme.textTheme.bodyMedium?.copyWith(

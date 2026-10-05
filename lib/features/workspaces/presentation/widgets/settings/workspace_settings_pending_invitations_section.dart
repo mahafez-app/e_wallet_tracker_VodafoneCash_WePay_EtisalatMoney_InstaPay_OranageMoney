@@ -1,9 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../invitations/domain/entities/workspace_pending_invitation_entity.dart';
 import '../../providers/workspace_settings_state.dart';
@@ -32,7 +31,7 @@ class WorkspaceSettingsPendingInvitationsSection extends StatelessWidget {
         WorkspaceSettingsSectionTitle(
           title: context.l10n.workspaceSettingsPendingInvitationsSection,
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         if (invitations.isEmpty)
           WorkspaceSettingsEmptyStateCard(
             message: context.l10n.workspaceSettingsPendingInvitationsEmpty,
@@ -42,7 +41,7 @@ class WorkspaceSettingsPendingInvitationsSection extends StatelessWidget {
             children: invitations
                 .map(
                   (invitation) => Padding(
-                    padding: AppResponsive.onlyPadding(bottom: AppSpacing.md),
+                    padding: MahafezResponsive.onlyPadding(bottom: MahafezSpacing.md),
                     child: _WorkspacePendingInvitationTile(
                       invitation: invitation,
                       isCancelling:
@@ -76,16 +75,16 @@ class _WorkspacePendingInvitationTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.lg),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(AppSpacing.lg.responsiveRadius),
+        borderRadius: BorderRadius.circular(MahafezSpacing.lg.responsiveRadius),
       ),
       child: Row(
         children: [
           Container(
-            width: AppSpacing.xl.responsiveRadius,
-            height: AppSpacing.xl.responsiveRadius,
+            width: MahafezSpacing.xl.responsiveRadius,
+            height: MahafezSpacing.xl.responsiveRadius,
             decoration: BoxDecoration(
               color: theme.colorScheme.tertiaryContainer.withAlpha(51),
               shape: BoxShape.circle,
@@ -94,10 +93,10 @@ class _WorkspacePendingInvitationTile extends StatelessWidget {
             child: Icon(
               Icons.alternate_email_rounded,
               color: theme.colorScheme.tertiary,
-              size: AppSpacing.lg.responsiveRadius,
+              size: MahafezSpacing.lg.responsiveRadius,
             ),
           ),
-          AppSpacing.md.horizontalSpace,
+          MahafezSpacing.md.horizontalSpace,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,14 +113,14 @@ class _WorkspacePendingInvitationTile extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      width: AppSpacing.xs.responsiveRadius,
-                      height: AppSpacing.xs.responsiveRadius,
+                      width: MahafezSpacing.xs.responsiveRadius,
+                      height: MahafezSpacing.xs.responsiveRadius,
                       decoration: BoxDecoration(
                         color: theme.colorScheme.tertiary,
                         shape: BoxShape.circle,
                       ),
                     ),
-                    AppSpacing.xs.horizontalSpace,
+                    MahafezSpacing.xs.horizontalSpace,
                     Text(
                       context.l10n.invitationsPendingStatus,
                       style: theme.textTheme.labelSmall?.copyWith(
@@ -134,14 +133,14 @@ class _WorkspacePendingInvitationTile extends StatelessWidget {
               ],
             ),
           ),
-          AppSpacing.md.horizontalSpace,
+          MahafezSpacing.md.horizontalSpace,
           TextButton(
             onPressed: isCancelling ? null : onCancel,
             child: isCancelling
                 ? SizedBox.square(
-                    dimension: AppSpacing.lg.responsiveWidth,
+                    dimension: MahafezSpacing.lg.responsiveWidth,
                     child: CircularProgressIndicator(
-                      strokeWidth: AppSpacing.xxs.responsiveWidth,
+                      strokeWidth: MahafezSpacing.xxs.responsiveWidth,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         theme.colorScheme.error,
                       ),

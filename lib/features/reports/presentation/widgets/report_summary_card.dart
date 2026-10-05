@@ -1,8 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_color_extension.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../domain/entities/report_entity.dart';
@@ -21,7 +19,7 @@ class ReportSummaryCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _MainBalanceCard(report: report),
-        AppSpacing.xl.verticalSpace,
+        MahafezSpacing.xl.verticalSpace,
         Text(
           l10n.reports_performance_label,
           style: theme.textTheme.titleSmall?.copyWith(
@@ -29,13 +27,13 @@ class ReportSummaryCard extends StatelessWidget {
             letterSpacing: 0.5,
           ),
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         GridView.count(
           crossAxisCount: 2,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          mainAxisSpacing: AppSpacing.md.responsiveHeight,
-          crossAxisSpacing: AppSpacing.md.responsiveWidth,
+          mainAxisSpacing: MahafezSpacing.md.responsiveHeight,
+          crossAxisSpacing: MahafezSpacing.md.responsiveWidth,
           childAspectRatio: 1.4,
           children: [
             _MetricCard(
@@ -95,12 +93,12 @@ class _MainBalanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = context.l10n;
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final isPositive = report.balanceChange >= 0;
 
     return Container(
       width: double.infinity,
-      padding: AppResponsive.allPadding(AppSpacing.xl),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(32.responsiveRadius),
         gradient: LinearGradient(
@@ -127,7 +125,7 @@ class _MainBalanceCard extends StatelessWidget {
               letterSpacing: 1.2,
             ),
           ),
-          AppSpacing.xs.verticalSpace,
+          MahafezSpacing.xs.verticalSpace,
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -140,9 +138,9 @@ class _MainBalanceCard extends StatelessWidget {
                   letterSpacing: -1.0,
                 ),
               ),
-              AppSpacing.xs.horizontalSpace,
+              MahafezSpacing.xs.horizontalSpace,
               Padding(
-                padding: AppResponsive.onlyPadding(bottom: 8),
+                padding: MahafezResponsive.onlyPadding(bottom: 8),
                 child: Text(
                   l10n.currency,
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -175,10 +173,10 @@ class _MetricCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.md),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.md),
       decoration: BoxDecoration(
         color: colors.cardBackground,
         borderRadius: BorderRadius.circular(24.responsiveRadius),
@@ -197,14 +195,14 @@ class _MetricCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: AppResponsive.allPadding(4.responsiveRadius),
+                padding: MahafezResponsive.allPadding(4.responsiveRadius),
                 decoration: BoxDecoration(
                   color: color.withAlpha(30),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, size: 14.responsiveRadius, color: color),
               ),
-              AppSpacing.xs.horizontalSpace,
+              MahafezSpacing.xs.horizontalSpace,
               Expanded(
                 child: Text(
                   title,
@@ -218,7 +216,7 @@ class _MetricCard extends StatelessWidget {
               ),
             ],
           ),
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
           FittedBox(
             child: Text(
               amount,

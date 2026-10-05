@@ -1,9 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 
 class CreateWorkspacePreviewCard extends StatelessWidget {
@@ -27,7 +26,7 @@ class CreateWorkspacePreviewCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: AppResponsive.allPadding(AppSpacing.xl),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28.responsiveRadius),
         gradient: LinearGradient(
@@ -45,7 +44,7 @@ class CreateWorkspacePreviewCard extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.storefront_outlined, color: colorScheme.onPrimary),
-              AppSpacing.sm.horizontalSpace,
+              MahafezSpacing.sm.horizontalSpace,
               Expanded(
                 child: Text(
                   l10n.createWorkspacePreviewLabel,
@@ -57,7 +56,7 @@ class CreateWorkspacePreviewCard extends StatelessWidget {
               ),
             ],
           ),
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
           Text(
             previewName,
             style: theme.textTheme.headlineSmall?.copyWith(
@@ -65,17 +64,17 @@ class CreateWorkspacePreviewCard extends StatelessWidget {
               fontWeight: FontWeight.w800,
             ),
           ),
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
           Text(
             l10n.createWorkspacePreviewDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: colorScheme.onPrimary.withAlpha(217),
             ),
           ),
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
           Wrap(
-            spacing: AppSpacing.sm.responsiveWidth,
-            runSpacing: AppSpacing.sm.responsiveHeight,
+            spacing: MahafezSpacing.sm.responsiveWidth,
+            runSpacing: MahafezSpacing.sm.responsiveHeight,
             children: [
               _PreviewChip(
                 label: l10n.workspaceMembersCount(1),
@@ -107,7 +106,7 @@ class _PreviewChip extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Container(
-      padding: AppResponsive.symmetricPadding(horizontal: 12, vertical: 8),
+      padding: MahafezResponsive.symmetricPadding(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: colorScheme.onPrimary.withAlpha(31),
         borderRadius: BorderRadius.circular(999.responsiveRadius),
@@ -116,7 +115,7 @@ class _PreviewChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 16.responsiveRadius, color: colorScheme.onPrimary),
-          AppSpacing.xs.horizontalSpace,
+          MahafezSpacing.xs.horizontalSpace,
           Text(
             label,
             style: theme.textTheme.labelMedium?.copyWith(

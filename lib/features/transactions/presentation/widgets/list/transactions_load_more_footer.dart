@@ -1,8 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../navigation/transactions_route_data.dart';
 import '../../providers/transactions_controller.dart';
@@ -21,17 +20,17 @@ class TransactionsLoadMoreFooter extends ConsumerWidget {
 
     if (state.isLoadingMore) {
       return Padding(
-        padding: AppResponsive.symmetricPadding(vertical: AppSpacing.xl),
+        padding: MahafezResponsive.symmetricPadding(vertical: MahafezSpacing.xl),
         child: const Center(child: CircularProgressIndicator()),
       );
     }
 
-    if (!state.hasMore) return AppSpacing.lg.verticalSpace;
+    if (!state.hasMore) return MahafezSpacing.lg.verticalSpace;
 
     return Padding(
-      padding: AppResponsive.symmetricPadding(
-        vertical: AppSpacing.xl,
-        horizontal: AppSpacing.lg,
+      padding: MahafezResponsive.symmetricPadding(
+        vertical: MahafezSpacing.xl,
+        horizontal: MahafezSpacing.lg,
       ),
       child: Column(
         children: [
@@ -39,9 +38,9 @@ class TransactionsLoadMoreFooter extends ConsumerWidget {
             onTap: () => controller.loadMore(),
             borderRadius: BorderRadius.circular(20.responsiveRadius),
             child: Container(
-              padding: AppResponsive.symmetricPadding(
-                horizontal: AppSpacing.xl,
-                vertical: AppSpacing.md,
+              padding: MahafezResponsive.symmetricPadding(
+                horizontal: MahafezSpacing.xl,
+                vertical: MahafezSpacing.md,
               ),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary.withAlpha(20),
@@ -58,7 +57,7 @@ class TransactionsLoadMoreFooter extends ConsumerWidget {
                     color: Theme.of(context).colorScheme.primary,
                     size: 20.responsiveRadius,
                   ),
-                  AppSpacing.sm.horizontalSpace,
+                  MahafezSpacing.sm.horizontalSpace,
                   Text(
                     context.l10n.transactions_loadMore,
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -70,11 +69,11 @@ class TransactionsLoadMoreFooter extends ConsumerWidget {
               ),
             ),
           ),
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
           Container(
-            padding: AppResponsive.symmetricPadding(
-              horizontal: AppSpacing.md,
-              vertical: AppSpacing.xs,
+            padding: MahafezResponsive.symmetricPadding(
+              horizontal: MahafezSpacing.md,
+              vertical: MahafezSpacing.xs,
             ),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surfaceContainerHighest,

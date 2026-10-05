@@ -1,7 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import 'settings_action_tile.dart';
 import 'settings_card.dart';
@@ -30,7 +29,7 @@ class SettingsAccountActions extends StatelessWidget {
             isLoading: isSigningOut,
           ),
           Padding(
-            padding: AppResponsive.symmetricPadding(horizontal: AppSpacing.lg),
+            padding: MahafezResponsive.symmetricPadding(horizontal: MahafezSpacing.lg),
             child: Divider(
               height: 1.responsiveHeight,
               thickness: 1.responsiveHeight,

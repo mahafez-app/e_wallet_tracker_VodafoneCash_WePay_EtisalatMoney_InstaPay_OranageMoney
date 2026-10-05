@@ -1,11 +1,10 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../navigation/transactions_route_data.dart';
 import '../../providers/draft_filters_controller.dart';
@@ -62,9 +61,9 @@ class _TransactionSearchFilterState
     final hasQuery = _controller.text.isNotEmpty;
 
     return Padding(
-      padding: AppResponsive.symmetricPadding(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.sm,
+      padding: MahafezResponsive.symmetricPadding(
+        horizontal: MahafezSpacing.lg,
+        vertical: MahafezSpacing.sm,
       ),
       child: TextField(
         controller: _controller,

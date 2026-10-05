@@ -1,7 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../providers/invitations_state.dart';
 import 'invitation_feedback_card.dart';
@@ -26,10 +25,10 @@ class InvitationsFeedbackSection extends StatelessWidget {
             context,
           ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         for (var index = 0; index < feedbacks.length; index++) ...[
           InvitationFeedbackCard(feedback: feedbacks[index]),
-          if (index != feedbacks.length - 1) AppSpacing.md.verticalSpace,
+          if (index != feedbacks.length - 1) MahafezSpacing.md.verticalSpace,
         ],
       ],
     );

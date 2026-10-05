@@ -1,9 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_color_extension.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../domain/enums/app_language_preference.dart';
 import '../../domain/enums/app_theme_preference.dart';
@@ -131,7 +129,7 @@ Color settingsSmsStatusColor(
   }
 
   return smsPermissionState.hasPermission
-      ? context.appColors.success
+      ? context.mahafezColors.success
       : Theme.of(context).colorScheme.error;
 }
 
@@ -145,7 +143,7 @@ class SettingsTileDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppResponsive.horizontalPadding(AppSpacing.lg),
+      padding: MahafezResponsive.horizontalPadding(MahafezSpacing.lg),
       child: Divider(
         height: 1.responsiveHeight,
         thickness: 1.responsiveHeight,

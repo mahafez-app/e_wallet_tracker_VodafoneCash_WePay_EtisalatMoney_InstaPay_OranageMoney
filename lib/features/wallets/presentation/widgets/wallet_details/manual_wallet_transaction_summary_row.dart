@@ -1,7 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
@@ -26,8 +25,8 @@ class ManualWalletTransactionSummaryRow extends StatelessWidget {
     final balanceText = transaction.statusBalance?.toCurrencyText(context);
 
     return Wrap(
-      spacing: AppSpacing.sm.responsiveWidth,
-      runSpacing: AppSpacing.sm.responsiveHeight,
+      spacing: MahafezSpacing.sm.responsiveWidth,
+      runSpacing: MahafezSpacing.sm.responsiveHeight,
       children: [
         _SummaryChip(
           label: '$typeLabel • $amountText',
@@ -67,9 +66,9 @@ class _SummaryChip extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.symmetricPadding(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.sm,
+      padding: MahafezResponsive.symmetricPadding(
+        horizontal: MahafezSpacing.md,
+        vertical: MahafezSpacing.sm,
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface.withAlpha(190),
@@ -83,7 +82,7 @@ class _SummaryChip extends StatelessWidget {
             size: 18.responsiveRadius,
             color: theme.colorScheme.primary,
           ),
-          AppSpacing.md.horizontalSpace,
+          MahafezSpacing.md.horizontalSpace,
           Expanded(
             child: Text(
               label,

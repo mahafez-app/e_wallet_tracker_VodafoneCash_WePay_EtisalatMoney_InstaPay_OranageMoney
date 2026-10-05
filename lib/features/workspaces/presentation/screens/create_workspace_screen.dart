@@ -1,5 +1,6 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/app_snackbar.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../providers/create_workspace_controller.dart';
 import '../widgets/create_workspace/create_workspace_content.dart';
@@ -89,6 +89,6 @@ class _CreateWorkspaceBody extends ConsumerWidget {
   }
 
   void _showFailureSnackbar(BuildContext context, Failure failure) {
-    AppSnackbar.showFailure(context, failure: failure);
+    MahafezSnackbar.showFailure(context, failure: failure);
   }
 }

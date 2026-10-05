@@ -1,13 +1,11 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../providers/transaction_details_controller.dart';
@@ -31,7 +29,7 @@ class DetailsCardSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final l10n = context.l10n;
     final dateTimeText = transaction.createdAt.toTransactionDateTimeLabel(
       context,
@@ -116,7 +114,7 @@ class _PaidStatusRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final controller = isReadOnly
         ? null
         : ref.read(
@@ -138,7 +136,7 @@ class _PaidStatusRow extends ConsumerWidget {
                 ? null
                 : () => controller?.markAsPaid(),
           ),
-          AppSpacing.sm.horizontalSpace,
+          MahafezSpacing.sm.horizontalSpace,
           PaidStatusChip(
             label: context.l10n.transactionStatusUnpaid,
             isActive: !(transaction.isPaid ?? false),

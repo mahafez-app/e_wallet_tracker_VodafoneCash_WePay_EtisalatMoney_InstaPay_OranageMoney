@@ -1,9 +1,7 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 
 class SettingsCompactTile extends StatelessWidget {
   const SettingsCompactTile({
@@ -35,14 +33,14 @@ class SettingsCompactTile extends StatelessWidget {
     return InkWell(
       onTap: isLoading ? null : onTap,
       child: Padding(
-        padding: AppResponsive.symmetricPadding(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.md,
+        padding: MahafezResponsive.symmetricPadding(
+          horizontal: MahafezSpacing.lg,
+          vertical: MahafezSpacing.md,
         ),
         child: Row(
           children: [
             _SettingsCompactIconChip(icon: icon, isDanger: isDanger),
-            AppSpacing.md.horizontalSpace,
+            MahafezSpacing.md.horizontalSpace,
             Expanded(
               child: Text(
                 title,
@@ -53,7 +51,7 @@ class SettingsCompactTile extends StatelessWidget {
               ),
             ),
             if (_hasTrailingContent) ...[
-              AppSpacing.md.horizontalSpace,
+              MahafezSpacing.md.horizontalSpace,
               _TrailingSection(
                 trailingLabel: trailingLabel,
                 trailingLabelColor: trailingLabelColor,
@@ -109,13 +107,13 @@ class _TrailingSection extends StatelessWidget {
               ),
             ),
           if (isLoading) ...[
-            if (trailingLabel != null) AppSpacing.sm.horizontalSpace,
+            if (trailingLabel != null) MahafezSpacing.sm.horizontalSpace,
             SizedBox.square(
               dimension: 18.responsiveWidth,
               child: CircularProgressIndicator(strokeWidth: 2.responsiveWidth),
             ),
           ] else if (showChevron) ...[
-            if (trailingLabel != null) AppSpacing.xs.horizontalSpace,
+            if (trailingLabel != null) MahafezSpacing.xs.horizontalSpace,
             Icon(Icons.chevron_right_rounded, color: colorScheme.outline),
           ],
         ],
@@ -139,7 +137,7 @@ class _SettingsCompactIconChip extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.sm),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
       decoration: BoxDecoration(
         color: isDanger
             ? colorScheme.errorContainer.withAlpha(80)

@@ -1,13 +1,11 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/domain/entities/workspace_entity.dart';
 import '../../../../../core/router/app_routes.dart';
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
@@ -20,13 +18,13 @@ class HomeWorkspaceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final l10n = context.l10n;
 
     return GestureDetector(
       onTap: () => context.push(AppRoutes.workspaceDetailsPath(workspace.id)),
       child: Container(
-        padding: AppResponsive.allPadding(AppSpacing.xl),
+        padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
         decoration: BoxDecoration(
           color: colors.cardBackground,
           borderRadius: BorderRadius.circular(28.responsiveRadius),
@@ -60,7 +58,7 @@ class HomeWorkspaceCard extends StatelessWidget {
                 ),
               ],
             ),
-            AppSpacing.xl.verticalSpace,
+            MahafezSpacing.xl.verticalSpace,
             Row(
               children: [
                 Expanded(
@@ -71,7 +69,7 @@ class HomeWorkspaceCard extends StatelessWidget {
                     color: colors.success,
                   ),
                 ),
-                AppSpacing.md.horizontalSpace,
+                MahafezSpacing.md.horizontalSpace,
                 Expanded(
                   child: _WorkspaceStat(
                     title: l10n.totalOut,
@@ -102,7 +100,7 @@ class _WorkspaceHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final l10n = context.l10n;
 
     return Row(
@@ -134,7 +132,7 @@ class _WorkspaceHeader extends StatelessWidget {
             size: 24.responsiveRadius,
           ),
         ),
-        AppSpacing.md.horizontalSpace,
+        MahafezSpacing.md.horizontalSpace,
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +147,7 @@ class _WorkspaceHeader extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              AppSpacing.xxs.verticalSpace,
+              MahafezSpacing.xxs.verticalSpace,
               Text(
                 l10n.activeWalletsCount(walletsCount),
                 style: theme.textTheme.labelMedium?.copyWith(
@@ -188,7 +186,7 @@ class _WorkspaceLastActivity extends StatelessWidget {
             fontSize: 9.responsiveFont,
           ),
         ),
-        AppSpacing.xxs.verticalSpace,
+        MahafezSpacing.xxs.verticalSpace,
         Text(
           timeText,
           style: theme.textTheme.labelMedium?.copyWith(
@@ -220,7 +218,7 @@ class _WorkspaceStat extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.md),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.md),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withAlpha(60),
         borderRadius: BorderRadius.circular(20.responsiveRadius),
@@ -234,14 +232,14 @@ class _WorkspaceStat extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: AppResponsive.allPadding(2.responsiveRadius),
+                padding: MahafezResponsive.allPadding(2.responsiveRadius),
                 decoration: BoxDecoration(
                   color: color.withAlpha(20),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, size: 12.responsiveRadius, color: color),
               ),
-              AppSpacing.xs.horizontalSpace,
+              MahafezSpacing.xs.horizontalSpace,
               Expanded(
                 child: FittedBox(
                   alignment: AlignmentDirectional.centerStart,
@@ -257,7 +255,7 @@ class _WorkspaceStat extends StatelessWidget {
               ),
             ],
           ),
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
           FittedBox(
             child: Text(
               amount,

@@ -1,7 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/widgets/wallets/wallet_provider_info.dart';
 import '../../../domain/entities/manual_wallet_transaction_assessment.dart';
@@ -23,7 +22,7 @@ class ManualWalletTransactionAssessmentCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: AppResponsive.allPadding(AppSpacing.lg),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
       decoration: BoxDecoration(
         color: colors.$1,
         borderRadius: BorderRadius.circular(24.responsiveRadius),
@@ -36,14 +35,14 @@ class ManualWalletTransactionAssessmentCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: AppResponsive.allPadding(AppSpacing.sm),
+                padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
                 decoration: BoxDecoration(
                   color: colors.$2.withAlpha(26),
                   borderRadius: BorderRadius.circular(14.responsiveRadius),
                 ),
                 child: Icon(_icon, color: colors.$3, size: 22.responsiveRadius),
               ),
-              AppSpacing.md.horizontalSpace,
+              MahafezSpacing.md.horizontalSpace,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +55,7 @@ class ManualWalletTransactionAssessmentCard extends StatelessWidget {
                       ),
                     ),
                     if (assessment.requiresReview) ...[
-                      AppSpacing.xs.verticalSpace,
+                      MahafezSpacing.xs.verticalSpace,
                       Text(
                         _description(context),
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -69,10 +68,10 @@ class ManualWalletTransactionAssessmentCard extends StatelessWidget {
               ),
             ],
           ),
-          AppSpacing.md.verticalSpace,
+          MahafezSpacing.md.verticalSpace,
           ManualWalletTransactionSummaryRow(assessment: assessment),
           if (assessment.suggestedWallet != null) ...[
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             Text(
               context.l10n.walletManualTransactionSuggestedWalletLabel,
               style: theme.textTheme.labelLarge?.copyWith(
@@ -80,7 +79,7 @@ class ManualWalletTransactionAssessmentCard extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            AppSpacing.sm.verticalSpace,
+            MahafezSpacing.sm.verticalSpace,
             WalletProviderInfo(
               provider: assessment.suggestedWallet!.provider,
               phoneNumber: assessment.suggestedWallet!.phoneNumber,

@@ -1,9 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 
 /// Section 3: raw SMS text in a muted selectable container.
@@ -23,11 +22,11 @@ class SmsSection extends StatelessWidget {
           title: context.l10n.transaction_smsText,
           icon: Icons.message_rounded,
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         Stack(
           children: [
             Container(
-              padding: AppResponsive.allPadding(AppSpacing.lg),
+              padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
               decoration: BoxDecoration(
                 color: theme.colorScheme.surfaceContainerHighest.withAlpha(80),
                 borderRadius: BorderRadius.circular(24.responsiveRadius),
@@ -78,7 +77,7 @@ class _SectionTitle extends StatelessWidget {
           size: 16.responsiveRadius,
           color: theme.colorScheme.primary,
         ),
-        AppSpacing.sm.horizontalSpace,
+        MahafezSpacing.sm.horizontalSpace,
         Text(
           title,
           style: theme.textTheme.titleSmall?.copyWith(

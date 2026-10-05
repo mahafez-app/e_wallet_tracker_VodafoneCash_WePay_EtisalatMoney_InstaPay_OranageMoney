@@ -1,10 +1,9 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/utils/extensions/name_extension.dart';
 import '../../../auth/providers/auth_providers.dart';
@@ -26,9 +25,9 @@ class HomeHeaderWidget extends ConsumerWidget {
     final user = ref.watch(currentUserProvider);
 
     return Padding(
-      padding: AppResponsive.symmetricPadding(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.lg,
+      padding: MahafezResponsive.symmetricPadding(
+        horizontal: MahafezSpacing.lg,
+        vertical: MahafezSpacing.lg,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,7 +65,7 @@ class _HeaderActions extends StatelessWidget {
           count: invitationsCount,
           onTap: onOpenInvitations,
         ),
-        AppSpacing.xs.horizontalSpace,
+        MahafezSpacing.xs.horizontalSpace,
         _HeaderIconButton(icon: Icons.settings_outlined, onTap: onOpenSettings),
       ],
     );
@@ -155,7 +154,7 @@ class _UserAvatarAndName extends StatelessWidget {
             ),
           ),
         ),
-        AppSpacing.md.horizontalSpace,
+        MahafezSpacing.md.horizontalSpace,
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,

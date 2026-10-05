@@ -1,7 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../theme/app_responsive.dart';
 import '../utils/app_assets.dart';
 
 enum AppLogoShape { roundedRectangle, circle }
@@ -35,7 +35,7 @@ class AppLogo extends StatelessWidget {
         AppLogoShape.circle => ClipOval(child: logo),
         AppLogoShape.roundedRectangle => ClipRRect(
           borderRadius: BorderRadius.circular(
-            roundedRectangleRadius ?? AppResponsive.radius(24),
+            roundedRectangleRadius ?? MahafezResponsive.radius(24),
           ),
           child: logo,
         ),

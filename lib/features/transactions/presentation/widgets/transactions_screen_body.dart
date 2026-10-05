@@ -1,9 +1,8 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utils/extensions/failure_extension.dart';
-import '../../../../core/widgets/app_error_view.dart';
-import '../../../../core/widgets/app_snackbar.dart';
 import '../navigation/transactions_route_data.dart';
 import '../providers/transactions_controller.dart';
 import 'details/transaction_details_bottom_sheet.dart';
@@ -22,10 +21,10 @@ class TransactionsScreenBody extends ConsumerWidget {
     ref.listen(transactionsControllerProvider(routeData), (previous, next) {
       final nextError = next.error;
       if (nextError == null || previous?.error == nextError) return;
-      AppSnackbar.show(
+      MahafezSnackbar.show(
         context,
         message: nextError.toLocalizedString(context),
-        type: AppSnackbarType.error,
+        type: MahafezSnackbarType.error,
       );
     });
 
@@ -47,7 +46,7 @@ class _TransactionsContent extends ConsumerWidget {
     }
 
     if (state.error != null && state.transactions.isEmpty) {
-      return AppErrorView(error: state.error!);
+      return MahafezErrorView(error: state.error!);
     }
 
     if (state.transactions.isEmpty) {

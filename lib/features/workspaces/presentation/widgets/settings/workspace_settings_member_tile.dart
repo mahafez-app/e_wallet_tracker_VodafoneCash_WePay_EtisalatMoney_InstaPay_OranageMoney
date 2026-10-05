@@ -1,8 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../domain/entities/workspace_member_entity.dart';
 
@@ -40,7 +38,7 @@ class WorkspaceSettingsMemberTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
     final stripeColor = member.isOwner
         ? theme.colorScheme.primary
@@ -59,18 +57,18 @@ class WorkspaceSettingsMemberTile extends StatelessWidget {
         : theme.colorScheme.onSurfaceVariant;
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.lg),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
       decoration: BoxDecoration(
-        color: context.appColors.cardBackground,
-        borderRadius: BorderRadius.circular(AppSpacing.lg.responsiveRadius),
+        color: context.mahafezColors.cardBackground,
+        borderRadius: BorderRadius.circular(MahafezSpacing.lg.responsiveRadius),
         border: BorderDirectional(
-          end: BorderSide(color: stripeColor, width: AppSpacing.xs),
+          end: BorderSide(color: stripeColor, width: MahafezSpacing.xs),
         ),
         boxShadow: [
           BoxShadow(
             color: colors.cardShadow,
-            blurRadius: AppSpacing.md.responsiveRadius,
-            offset: Offset(0, AppSpacing.xs.responsiveHeight),
+            blurRadius: MahafezSpacing.md.responsiveRadius,
+            offset: Offset(0, MahafezSpacing.xs.responsiveHeight),
           ),
         ],
       ),
@@ -92,7 +90,7 @@ class WorkspaceSettingsMemberTile extends StatelessWidget {
               ),
             ),
           ),
-          AppSpacing.md.horizontalSpace,
+          MahafezSpacing.md.horizontalSpace,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,17 +112,17 @@ class WorkspaceSettingsMemberTile extends StatelessWidget {
               ],
             ),
           ),
-          AppSpacing.lg.horizontalSpace,
+          MahafezSpacing.lg.horizontalSpace,
           if (member.isOwner)
             Container(
-              padding: AppResponsive.symmetricPadding(
-                horizontal: AppSpacing.md,
-                vertical: AppSpacing.xs,
+              padding: MahafezResponsive.symmetricPadding(
+                horizontal: MahafezSpacing.md,
+                vertical: MahafezSpacing.xs,
               ),
               decoration: BoxDecoration(
                 color: badgeBackground,
                 borderRadius: BorderRadius.circular(
-                  AppSpacing.xl.responsiveRadius,
+                  MahafezSpacing.xl.responsiveRadius,
                 ),
               ),
               child: Text(
@@ -140,9 +138,9 @@ class WorkspaceSettingsMemberTile extends StatelessWidget {
               onPressed: isRemoving ? null : onRemove,
               child: isRemoving
                   ? SizedBox.square(
-                      dimension: AppSpacing.lg.responsiveWidth,
+                      dimension: MahafezSpacing.lg.responsiveWidth,
                       child: CircularProgressIndicator(
-                        strokeWidth: AppSpacing.xxs.responsiveWidth,
+                        strokeWidth: MahafezSpacing.xxs.responsiveWidth,
                         valueColor: AlwaysStoppedAnimation<Color>(
                           theme.colorScheme.error,
                         ),

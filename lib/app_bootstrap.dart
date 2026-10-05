@@ -1,13 +1,12 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'app.dart';
 import 'core/di/app_initializer.dart';
 import 'package:mahafez_core/mahafez_core.dart';
 import 'core/providers/cache_providers.dart';
-import 'core/theme/app_theme.dart';
 import 'features/settings/providers/settings_providers.dart';
 import 'features/splash/presentation/screens/startup_fallback_screen.dart';
 import 'generated/l10n.dart';
@@ -87,8 +86,8 @@ class StartupFallbackApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.light(),
-        darkTheme: AppTheme.dark(),
+        theme: MahafezTheme.light(),
+        darkTheme: MahafezTheme.dark(),
         themeMode: ThemeMode.system,
         localizationsDelegates: const [
           S.delegate,

@@ -1,12 +1,10 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wallet_tracker/core/router/app_routes.dart';
 import 'package:wallet_tracker/features/splash/presentation/widgets/app_logo_name.dart';
-
-import '../../../../core/theme/app_responsive.dart';
 import '../../../../core/widgets/app_logo.dart';
-
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 

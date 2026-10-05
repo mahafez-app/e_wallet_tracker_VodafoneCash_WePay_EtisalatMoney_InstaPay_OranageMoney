@@ -1,9 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:wallet_tracker/core/theme/app_responsive.dart';
-import 'package:wallet_tracker/core/theme/app_spacing.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
-
-import '../../theme/app_color_extension.dart';
 
 enum NoTransactionsCardVariant { preview, fullScreen }
 
@@ -23,17 +20,17 @@ class NoTransactionsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
     final isFullScreen = variant == NoTransactionsCardVariant.fullScreen;
-    final iconSize = isFullScreen ? AppSpacing.xxxl : AppSpacing.xxl;
-    final iconPadding = isFullScreen ? AppSpacing.xl : AppSpacing.lg;
+    final iconSize = isFullScreen ? MahafezSpacing.xxxl : MahafezSpacing.xxl;
+    final iconPadding = isFullScreen ? MahafezSpacing.xl : MahafezSpacing.lg;
     final titleStyle = isFullScreen
         ? theme.textTheme.headlineSmall
         : theme.textTheme.titleLarge;
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.xxl),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.xxl),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(32.responsiveRadius),
@@ -53,7 +50,7 @@ class NoTransactionsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            padding: AppResponsive.allPadding(iconPadding),
+            padding: MahafezResponsive.allPadding(iconPadding),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -75,13 +72,13 @@ class NoTransactionsCard extends StatelessWidget {
               color: theme.colorScheme.primary,
             ),
           ),
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
           Text(
             title,
             textAlign: TextAlign.center,
             style: titleStyle?.copyWith(fontWeight: FontWeight.w800),
           ),
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
           Text(
             description,
             textAlign: TextAlign.center,
@@ -89,7 +86,7 @@ class NoTransactionsCard extends StatelessWidget {
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
-          if (footer != null) ...[AppSpacing.xl.verticalSpace, footer!],
+          if (footer != null) ...[MahafezSpacing.xl.verticalSpace, footer!],
         ],
       ),
     );
@@ -101,24 +98,24 @@ class TransactionsEmptyHintCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.xl),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [colors.infoContainer, theme.colorScheme.surface],
           begin: AlignmentDirectional.topStart,
           end: AlignmentDirectional.bottomEnd,
         ),
-        borderRadius: BorderRadius.circular(AppSpacing.xxl.responsiveRadius),
+        borderRadius: BorderRadius.circular(MahafezSpacing.xxl.responsiveRadius),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: AppResponsive.allPadding(AppSpacing.sm),
+            padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
             decoration: BoxDecoration(
               color: theme.colorScheme.primary,
               shape: BoxShape.circle,
@@ -129,7 +126,7 @@ class TransactionsEmptyHintCard extends StatelessWidget {
               size: 20.responsiveRadius,
             ),
           ),
-          AppSpacing.md.horizontalSpace,
+          MahafezSpacing.md.horizontalSpace,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +137,7 @@ class TransactionsEmptyHintCard extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                AppSpacing.xs.verticalSpace,
+                MahafezSpacing.xs.verticalSpace,
                 Text(
                   context.l10n.transactions_emptyHintDescription,
                   style: theme.textTheme.bodyMedium?.copyWith(

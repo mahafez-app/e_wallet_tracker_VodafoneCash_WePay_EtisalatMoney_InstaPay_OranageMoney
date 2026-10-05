@@ -1,8 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/domain/enums/report_period.dart';
 import '../../domain/entities/report_filter_entity.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 
 class ReportPeriodSelector extends StatelessWidget {
@@ -18,7 +17,7 @@ class ReportPeriodSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -27,7 +26,7 @@ class ReportPeriodSelector extends StatelessWidget {
             final theme = Theme.of(context);
             
             return Padding(
-              padding: EdgeInsets.only(right: AppSpacing.sm.responsiveWidth),
+              padding: EdgeInsets.only(right: MahafezSpacing.sm.responsiveWidth),
               child: ChoiceChip(
                 label: Text(
                   _getPeriodName(context, period),

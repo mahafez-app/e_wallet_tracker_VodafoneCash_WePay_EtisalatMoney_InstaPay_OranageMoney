@@ -1,10 +1,8 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/app_dialog.dart';
 import '../../../domain/entities/invitation_entity.dart';
 import '../../providers/invitation_display_provider.dart';
 import '../../providers/invitations_controller.dart';
@@ -27,11 +25,11 @@ class InvitationsContent extends ConsumerWidget {
         onRefresh: controller.refresh,
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: AppSpacing.pagePadding,
+          padding: MahafezSpacing.pagePadding,
           children: [
             if (state.recentFeedbacks.isNotEmpty) ...[
               InvitationsFeedbackSection(feedbacks: state.recentFeedbacks),
-              AppSpacing.xl.verticalSpace,
+              MahafezSpacing.xl.verticalSpace,
             ],
             InvitationsEmptyContent(onRefresh: controller.refresh),
           ],
@@ -43,14 +41,14 @@ class InvitationsContent extends ConsumerWidget {
       onRefresh: controller.refresh,
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: AppSpacing.pagePadding,
+        padding: MahafezSpacing.pagePadding,
         children: [
           if (state.recentFeedbacks.isNotEmpty) ...[
             InvitationsFeedbackSection(feedbacks: state.recentFeedbacks),
-            AppSpacing.xl.verticalSpace,
+            MahafezSpacing.xl.verticalSpace,
           ],
           InvitationsOverviewCard(count: state.invitations.length),
-          AppSpacing.xl.verticalSpace,
+          MahafezSpacing.xl.verticalSpace,
           for (final invitation in state.invitations) ...[
             InvitationListItem(
               invitation: invitation,
@@ -61,7 +59,7 @@ class InvitationsContent extends ConsumerWidget {
               onDecline: () =>
                   _confirmDecline(context, ref, controller, invitation),
             ),
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
           ],
           const InvitationsInfoCard(),
         ],
@@ -91,13 +89,13 @@ class InvitationsContent extends ConsumerWidget {
         ? display.workspaceName
         : context.l10n.invitationsDeletedWorkspaceFallback;
 
-    final didConfirm = await AppDialog.show<bool>(
+    final didConfirm = await MahafezDialog.show<bool>(
       context,
       title: context.l10n.invitationDeclineConfirmTitle,
       message: context.l10n.invitationDeclineConfirmMessage(workspaceName),
       confirmLabel: context.l10n.invitationsDeclineAction,
       cancelLabel: MaterialLocalizations.of(context).cancelButtonLabel,
-      type: AppDialogType.error,
+      type: MahafezDialogType.error,
       onConfirm: () => Navigator.of(context).pop(true),
       onCancel: () => Navigator.of(context).pop(false),
     );

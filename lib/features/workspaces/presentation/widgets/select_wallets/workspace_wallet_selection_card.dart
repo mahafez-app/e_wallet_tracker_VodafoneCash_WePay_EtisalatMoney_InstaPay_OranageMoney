@@ -1,11 +1,9 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/domain/entities/wallet_entity.dart';
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/utils/extensions/phone_number_extension.dart';
@@ -29,7 +27,7 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final statusLabel = isLinked
         ? context.l10n.workspaceWalletAlreadyAdded
         : isSelected
@@ -51,7 +49,7 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(28.responsiveRadius),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        padding: AppResponsive.allPadding(AppSpacing.lg),
+        padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
         decoration: BoxDecoration(
           gradient: isSelected
               ? LinearGradient(
@@ -94,9 +92,9 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
               children: [
                 WalletProviderIcon(
                   provider: wallet.provider,
-                  size: AppSpacing.xxl.responsiveRadius,
+                  size: MahafezSpacing.xxl.responsiveRadius,
                 ),
-                AppSpacing.sm.horizontalSpace,
+                MahafezSpacing.sm.horizontalSpace,
                 Expanded(
                   child: Text(
                     wallet.provider.displayName(context),
@@ -107,7 +105,7 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: AppResponsive.symmetricPadding(
+                  padding: MahafezResponsive.symmetricPadding(
                     horizontal: 10.responsiveRadius,
                     vertical: 6.responsiveRadius,
                   ),
@@ -125,7 +123,7 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
                 ),
               ],
             ),
-            AppSpacing.sm.verticalSpace,
+            MahafezSpacing.sm.verticalSpace,
             Text(
               wallet.phoneNumber.formattedEgyptianPhoneNumber,
               style: theme.textTheme.bodyMedium?.copyWith(
@@ -135,7 +133,7 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            AppSpacing.md.verticalSpace,
+            MahafezSpacing.md.verticalSpace,
             Text(
               context.l10n.currentBalance,
               style: theme.textTheme.bodySmall?.copyWith(
@@ -143,7 +141,7 @@ class WorkspaceWalletSelectionCard extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            AppSpacing.xs.verticalSpace,
+            MahafezSpacing.xs.verticalSpace,
             Text(
               wallet.currentBalance.toCurrencyText(context),
               style: theme.textTheme.titleMedium?.copyWith(

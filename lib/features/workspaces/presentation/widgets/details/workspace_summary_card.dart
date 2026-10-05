@@ -1,9 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/widgets/balance_card.dart';
@@ -57,10 +56,10 @@ class _SummaryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
 
     return Container(
-      padding: AppResponsive.symmetricPadding(horizontal: 10, vertical: 6),
+      padding: MahafezResponsive.symmetricPadding(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: colors.statsOnGradient.withAlpha(25),
         borderRadius: BorderRadius.circular(999.responsiveRadius),

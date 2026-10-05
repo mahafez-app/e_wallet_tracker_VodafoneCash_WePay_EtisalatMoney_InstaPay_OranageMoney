@@ -1,9 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../navigation/transactions_route_data.dart';
 import '../widgets/transactions_filter_icon_button.dart';
 import '../widgets/transactions_screen_body.dart';
@@ -22,7 +21,7 @@ class TransactionsScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           TransactionsFilterIconButton(routeData: transactionsContext),
-          AppSpacing.lg.horizontalSpace,
+          MahafezSpacing.lg.horizontalSpace,
         ],
       ),
       body: SafeArea(

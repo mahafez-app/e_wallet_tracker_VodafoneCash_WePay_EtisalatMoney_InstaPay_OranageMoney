@@ -1,12 +1,10 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/app_snackbar.dart';
 import '../../../domain/entities/manual_wallet_transaction_assessment.dart';
 import '../../providers/manual_wallet_transaction_controller.dart';
 import '../../providers/manual_wallet_transaction_state.dart';
@@ -54,7 +52,7 @@ class _ManualWalletTransactionBottomSheetBodyState
             previous?.failure != next.failure &&
             next.status == ManualWalletTransactionStatus.failure;
         if (hasNewFailure && next.failure != null) {
-          AppSnackbar.showFailure(context, failure: next.failure!);
+          MahafezSnackbar.showFailure(context, failure: next.failure!);
 
           // If the manual transaction already exists, there is nothing more the user
           // can do in this bottom sheet. Pop it so they can see the error clearly.
@@ -72,10 +70,10 @@ class _ManualWalletTransactionBottomSheetBodyState
             next.status == ManualWalletTransactionStatus.success;
         if (hasSaved && context.mounted) {
           ref.invalidate(walletDetailsControllerProvider(widget.walletId));
-          AppSnackbar.show(
+          MahafezSnackbar.show(
             context,
             message: context.l10n.walletManualTransactionSaved,
-            type: AppSnackbarType.success,
+            type: MahafezSnackbarType.success,
           );
           Navigator.of(context).pop();
         }
@@ -87,7 +85,7 @@ class _ManualWalletTransactionBottomSheetBodyState
     );
 
     return SingleChildScrollView(
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       child: Form(
         key: _formKey,
         child: Column(
@@ -110,12 +108,12 @@ class _ManualWalletTransactionBottomSheetBodyState
                onPastePressed: _pasteFromClipboard,
              ),
             if (state.assessment != null) ...[
-              AppSpacing.lg.verticalSpace,
+              MahafezSpacing.lg.verticalSpace,
               ManualWalletTransactionAssessmentCard(
                 assessment: state.assessment!,
               ),
             ],
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             ManualWalletTransactionActionSection(
               primaryLabel: _primaryActionLabel(context, state),
               isLoading: state.isBusy,
@@ -125,7 +123,7 @@ class _ManualWalletTransactionBottomSheetBodyState
                   ? null
                   : () => Navigator.of(context).pop(),
             ),
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
           ],
         ),
       ),

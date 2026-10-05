@@ -1,8 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
-
-import '../theme/app_responsive.dart';
-import '../theme/app_spacing.dart';
 
 class NotFoundScreen extends StatelessWidget {
   const NotFoundScreen({super.key});
@@ -11,9 +9,9 @@ class NotFoundScreen extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
     body: SafeArea(
       child: Padding(
-        padding: AppResponsive.symmetricPadding(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.xl,
+        padding: MahafezResponsive.symmetricPadding(
+          horizontal: MahafezSpacing.lg,
+          vertical: MahafezSpacing.xl,
         ),
         child: Center(
           child: Column(
@@ -24,12 +22,12 @@ class NotFoundScreen extends StatelessWidget {
                 size: 64.responsiveWidth,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
-              AppSpacing.lg.verticalSpace,
+              MahafezSpacing.lg.verticalSpace,
               Text(
                 context.l10n.notFoundStatusCode,
                 style: Theme.of(context).textTheme.displaySmall,
               ),
-              AppSpacing.sm.verticalSpace,
+              MahafezSpacing.sm.verticalSpace,
               Text(
                 context.l10n.notFoundPageTitle,
                 style: Theme.of(context).textTheme.titleMedium,

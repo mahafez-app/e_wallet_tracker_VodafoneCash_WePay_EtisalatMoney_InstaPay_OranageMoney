@@ -1,5 +1,6 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
@@ -7,10 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/app_logo.dart';
-import '../../../../core/widgets/app_snackbar.dart';
 import '../providers/auth_controller.dart';
 import '../widgets/sign_up/sign_up_form.dart';
 
@@ -28,7 +26,7 @@ class SignUpScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const AppLogo(size: 32),
-            AppSpacing.sm.horizontalSpace,
+            MahafezSpacing.sm.horizontalSpace,
             Text(
               l10n.appName,
               style: theme.textTheme.titleLarge?.copyWith(
@@ -41,9 +39,9 @@ class SignUpScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppResponsive.symmetricPadding(
-            horizontal: AppSpacing.lg,
-            vertical: AppSpacing.xl,
+          padding: MahafezResponsive.symmetricPadding(
+            horizontal: MahafezSpacing.lg,
+            vertical: MahafezSpacing.xl,
           ),
           child: const _SignUpBody(),
         ),
@@ -59,7 +57,7 @@ class _SignUpBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AuthState>(authNotifierProvider, (_, next) {
       if (!next.isLoading && next.error != null) {
-        AppSnackbar.showFailure(context, failure: next.error!);
+        MahafezSnackbar.showFailure(context, failure: next.error!);
         ref.read(authNotifierProvider.notifier).clearError();
       }
     });
@@ -71,7 +69,7 @@ class _SignUpBody extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
 
           // Titles
           Text(
@@ -82,7 +80,7 @@ class _SignUpBody extends ConsumerWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
           Text(
             l10n.signUpSubtitle,
             textAlign: TextAlign.center,
@@ -91,12 +89,12 @@ class _SignUpBody extends ConsumerWidget {
             ),
           ),
 
-          AppSpacing.xxxl.verticalSpace,
+          MahafezSpacing.xxxl.verticalSpace,
 
           // Form
           const SignUpForm(),
 
-          AppSpacing.xxl.verticalSpace,
+          MahafezSpacing.xxl.verticalSpace,
 
           // Sign In Link
           const _SignInPrompt(),
@@ -127,14 +125,14 @@ class _SignInPrompt extends StatelessWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        AppSpacing.xs.horizontalSpace,
+        MahafezSpacing.xs.horizontalSpace,
         InkWell(
           onTap: () => _navigateToLogin(context),
-          borderRadius: BorderRadius.circular(AppSpacing.sm),
+          borderRadius: BorderRadius.circular(MahafezSpacing.sm),
           child: Padding(
-            padding: AppResponsive.symmetricPadding(
-              horizontal: AppSpacing.xs,
-              vertical: AppSpacing.xs,
+            padding: MahafezResponsive.symmetricPadding(
+              horizontal: MahafezSpacing.xs,
+              vertical: MahafezSpacing.xs,
             ),
             child: Text(
               l10n.signIn,

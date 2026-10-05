@@ -1,7 +1,5 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 
 class PaidStatusChip extends StatelessWidget {
   const PaidStatusChip({
@@ -26,9 +24,9 @@ class PaidStatusChip extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-        padding: AppResponsive.symmetricPadding(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.sm,
+        padding: MahafezResponsive.symmetricPadding(
+          horizontal: MahafezSpacing.lg,
+          vertical: MahafezSpacing.sm,
         ),
         decoration: BoxDecoration(
           gradient: isActive

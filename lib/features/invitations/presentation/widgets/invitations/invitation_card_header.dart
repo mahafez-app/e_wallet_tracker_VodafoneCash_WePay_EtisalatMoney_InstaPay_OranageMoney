@@ -1,8 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 
 class InvitationCardHeader extends StatelessWidget {
@@ -17,7 +15,7 @@ class InvitationCardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     return Row(
@@ -36,7 +34,7 @@ class InvitationCardHeader extends StatelessWidget {
             size: 24.responsiveRadius,
           ),
         ),
-        AppSpacing.md.horizontalSpace,
+        MahafezSpacing.md.horizontalSpace,
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +45,7 @@ class InvitationCardHeader extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              AppSpacing.xs.verticalSpace,
+              MahafezSpacing.xs.verticalSpace,
               Text(
                 context.l10n.invitationSentBy(inviterName),
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -58,9 +56,9 @@ class InvitationCardHeader extends StatelessWidget {
           ),
         ),
         Container(
-          padding: AppResponsive.symmetricPadding(
-            horizontal: AppSpacing.sm,
-            vertical: AppSpacing.xs,
+          padding: MahafezResponsive.symmetricPadding(
+            horizontal: MahafezSpacing.sm,
+            vertical: MahafezSpacing.xs,
           ),
           decoration: BoxDecoration(
             color: colors.infoContainer.withAlpha(90),

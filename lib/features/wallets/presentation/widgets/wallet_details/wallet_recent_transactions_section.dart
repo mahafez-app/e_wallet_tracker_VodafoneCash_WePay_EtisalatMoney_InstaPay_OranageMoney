@@ -1,9 +1,8 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/app_routes.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/widgets/transactions/no_transactions_card.dart';
 import '../../../../../core/widgets/transactions/transaction_card.dart';
@@ -56,7 +55,7 @@ class WalletRecentTransactionsSection extends StatelessWidget {
               ),
           ],
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         if (!hasTransactions)
           NoTransactionsCard(
             title: l10n.transactions_emptyTitle,

@@ -1,8 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 
 class InvitationsOverviewCard extends StatelessWidget {
@@ -12,11 +10,11 @@ class InvitationsOverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.xl),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withAlpha(80),
         borderRadius: BorderRadius.circular(32.responsiveRadius),
@@ -32,9 +30,9 @@ class InvitationsOverviewCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: AppResponsive.symmetricPadding(
-                  horizontal: AppSpacing.md,
-                  vertical: AppSpacing.xs,
+                padding: MahafezResponsive.symmetricPadding(
+                  horizontal: MahafezSpacing.md,
+                  vertical: MahafezSpacing.xs,
                 ),
                 decoration: BoxDecoration(
                   color: colors.info.withAlpha(30),
@@ -56,7 +54,7 @@ class InvitationsOverviewCard extends StatelessWidget {
               ),
             ],
           ),
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
           Text(
             context.l10n.invitationsPendingCount(count),
             style: theme.textTheme.headlineMedium?.copyWith(
@@ -65,7 +63,7 @@ class InvitationsOverviewCard extends StatelessWidget {
               letterSpacing: -0.5,
             ),
           ),
-          AppSpacing.xs.verticalSpace,
+          MahafezSpacing.xs.verticalSpace,
           Text(
             context.l10n.invitationsListDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
@@ -84,11 +82,11 @@ class InvitationsInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.xl),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -108,7 +106,7 @@ class InvitationsInfoCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: AppResponsive.allPadding(AppSpacing.sm),
+            padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [colors.info, colors.info.withAlpha(150)],
@@ -128,7 +126,7 @@ class InvitationsInfoCard extends StatelessWidget {
               size: 20.responsiveRadius,
             ),
           ),
-          AppSpacing.md.horizontalSpace,
+          MahafezSpacing.md.horizontalSpace,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +138,7 @@ class InvitationsInfoCard extends StatelessWidget {
                     fontWeight: FontWeight.w900,
                   ),
                 ),
-                AppSpacing.xxs.verticalSpace,
+                MahafezSpacing.xxs.verticalSpace,
                 Text(
                   context.l10n.invitationsHowItWorksDescription,
                   style: theme.textTheme.bodyMedium?.copyWith(

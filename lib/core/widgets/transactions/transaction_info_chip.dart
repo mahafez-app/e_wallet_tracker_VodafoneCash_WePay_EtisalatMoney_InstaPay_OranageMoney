@@ -1,7 +1,5 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../theme/app_responsive.dart';
-import '../../theme/app_spacing.dart';
 
 class TransactionInfoChip extends StatelessWidget {
   const TransactionInfoChip({
@@ -26,7 +24,7 @@ class TransactionInfoChip extends StatelessWidget {
         color: theme.colorScheme.onSurface.withAlpha(10),
         borderRadius: BorderRadius.circular(12.responsiveRadius),
       ),
-      padding: AppResponsive.symmetricPadding(horizontal: 10, vertical: 8),
+      padding: MahafezResponsive.symmetricPadding(horizontal: 10, vertical: 8),
       child: Row(
         children: [
           Container(
@@ -38,7 +36,7 @@ class TransactionInfoChip extends StatelessWidget {
             ),
             child: Center(child: leading),
           ),
-          AppSpacing.md.horizontalSpace,
+          MahafezSpacing.md.horizontalSpace,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

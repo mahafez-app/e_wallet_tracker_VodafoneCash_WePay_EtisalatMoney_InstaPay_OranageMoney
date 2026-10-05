@@ -1,9 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../domain/entities/transaction_history_entry_entity.dart';
@@ -24,7 +23,7 @@ class TransactionHistorySection extends StatelessWidget {
           title: context.l10n.transaction_history,
           icon: Icons.history_rounded,
         ),
-        AppSpacing.lg.verticalSpace,
+        MahafezSpacing.lg.verticalSpace,
         ...entries.asMap().entries.map(
           (entry) => _HistoryEntryTile(
             entry: entry.value,
@@ -53,7 +52,7 @@ class _SectionTitle extends StatelessWidget {
           size: 16.responsiveRadius,
           color: theme.colorScheme.primary,
         ),
-        AppSpacing.sm.horizontalSpace,
+        MahafezSpacing.sm.horizontalSpace,
         Text(
           title,
           style: theme.textTheme.titleSmall?.copyWith(
@@ -148,10 +147,10 @@ class _HistoryEntryTile extends StatelessWidget {
               ],
             ),
           ),
-          AppSpacing.sm.horizontalSpace,
+          MahafezSpacing.sm.horizontalSpace,
           Expanded(
             child: Padding(
-              padding: AppResponsive.onlyPadding(bottom: AppSpacing.xl),
+              padding: MahafezResponsive.onlyPadding(bottom: MahafezSpacing.xl),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -171,7 +170,7 @@ class _HistoryEntryTile extends StatelessWidget {
                       fontSize: 11.responsiveFont,
                     ),
                   ),
-                  AppSpacing.xs.verticalSpace,
+                  MahafezSpacing.xs.verticalSpace,
                   Text(
                     '${l10n.transaction_by(entry.actorName)} · $dateText · $timeText',
                     style: theme.textTheme.labelSmall?.copyWith(

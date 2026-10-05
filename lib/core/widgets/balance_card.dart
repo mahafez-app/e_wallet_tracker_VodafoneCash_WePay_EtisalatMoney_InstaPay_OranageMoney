@@ -1,11 +1,9 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/date_extensions.dart';
 
-import '../theme/app_color_extension.dart';
-import '../theme/app_responsive.dart';
-import '../theme/app_spacing.dart';
 import '../utils/extensions/amount_extension.dart';
 import '../utils/extensions/localization_extension.dart';
 
@@ -34,12 +32,12 @@ class BalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     return Container(
       width: double.infinity,
-      padding: AppResponsive.allPadding(AppSpacing.xl),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(32.responsiveRadius),
         gradient: LinearGradient(
@@ -69,7 +67,7 @@ class BalanceCard extends StatelessWidget {
                     onTap: onReset,
                     borderRadius: BorderRadius.circular(12.responsiveRadius),
                     child: Padding(
-                      padding: AppResponsive.symmetricPadding(horizontal: 10, vertical: 6),
+                      padding: MahafezResponsive.symmetricPadding(horizontal: 10, vertical: 6),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -78,7 +76,7 @@ class BalanceCard extends StatelessWidget {
                             size: 16.responsiveRadius,
                             color: colors.statsOnGradient,
                           ),
-                          AppSpacing.xs.horizontalSpace,
+                          MahafezSpacing.xs.horizontalSpace,
                           Text(
                             l10n.wallet_resetStatsAction,
                             style: theme.textTheme.labelMedium?.copyWith(
@@ -96,14 +94,14 @@ class BalanceCard extends StatelessWidget {
                 Icon(icon, color: colors.statsOnGradient),
             ],
           ),
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
           _BalanceDisplay(amount: balance),
-          if (subtitle != null) ...[AppSpacing.xs.verticalSpace, subtitle!],
+          if (subtitle != null) ...[MahafezSpacing.xs.verticalSpace, subtitle!],
           if (statsResetDate != null) ...[
-            AppSpacing.md.verticalSpace,
+            MahafezSpacing.md.verticalSpace,
             _StatsPeriodLabel(date: statsResetDate!),
           ],
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
           Row(
             children: [
               Expanded(
@@ -115,7 +113,7 @@ class BalanceCard extends StatelessWidget {
                   iconColor: colors.statsSentColor,
                 ),
               ),
-              AppSpacing.lg.horizontalSpace,
+              MahafezSpacing.lg.horizontalSpace,
               Expanded(
                 child: _StatBox(
                   title: l10n.totalIn,
@@ -141,7 +139,7 @@ class _BalanceDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     return Row(
@@ -155,9 +153,9 @@ class _BalanceDisplay extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        AppSpacing.xs.horizontalSpace,
+        MahafezSpacing.xs.horizontalSpace,
         Padding(
-          padding: AppResponsive.onlyPadding(bottom: 6),
+          padding: MahafezResponsive.onlyPadding(bottom: 6),
           child: Text(
             l10n.currency,
             style: theme.textTheme.titleMedium?.copyWith(
@@ -189,11 +187,11 @@ class _StatBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.md),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.md),
       decoration: BoxDecoration(
         color: Colors.white.withAlpha(20),
         borderRadius: BorderRadius.circular(20.responsiveRadius),
@@ -205,14 +203,14 @@ class _StatBox extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: AppResponsive.allPadding(2.responsiveRadius),
+                padding: MahafezResponsive.allPadding(2.responsiveRadius),
                 decoration: BoxDecoration(
                   color: iconColor.withAlpha(40),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, size: 14.responsiveRadius, color: iconColor),
               ),
-              AppSpacing.xs.horizontalSpace,
+              MahafezSpacing.xs.horizontalSpace,
               Text(
                 title,
                 style: theme.textTheme.labelSmall?.copyWith(
@@ -222,7 +220,7 @@ class _StatBox extends StatelessWidget {
               ),
             ],
           ),
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
           FittedBox(
             child: Text(
               amount,
@@ -247,11 +245,11 @@ class _StatsPeriodLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.symmetricPadding(horizontal: 8, vertical: 4),
+      padding: MahafezResponsive.symmetricPadding(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white.withAlpha(25),
         borderRadius: BorderRadius.circular(10.responsiveRadius),
@@ -264,7 +262,7 @@ class _StatsPeriodLabel extends StatelessWidget {
             size: 12.responsiveRadius,
             color: colors.statsOnGradient.withAlpha(180),
           ),
-          AppSpacing.xs.horizontalSpace,
+          MahafezSpacing.xs.horizontalSpace,
           Text(
             l10n.wallet_statsFrom(date.toFormattedDate(context)),
             style: theme.textTheme.labelSmall?.copyWith(

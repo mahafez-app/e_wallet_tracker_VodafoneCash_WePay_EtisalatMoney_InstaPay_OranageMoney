@@ -1,15 +1,13 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/providers/sms_providers.dart';
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/failure_extension.dart';
-import '../../../../core/widgets/app_error_view.dart';
-import '../../../../core/widgets/app_snackbar.dart';
 import '../../../settings/presentation/providers/sms_permission_controller.dart';
 import '../../domain/entities/home_dashboard_entity.dart';
 import '../providers/home_dashboard_provider.dart';
@@ -65,10 +63,10 @@ class _HomeBody extends ConsumerWidget {
     ) {
       if (next.error == null) return;
 
-      AppSnackbar.show(
+      MahafezSnackbar.show(
         context,
         message: next.error!.toLocalizedString(context),
-        type: AppSnackbarType.error,
+        type: MahafezSnackbarType.error,
       );
       smsPermissionController.clearError();
     });
@@ -82,7 +80,7 @@ class _HomeBody extends ConsumerWidget {
           await ref.read(homeDashboardProvider.future);
         },
       ),
-      AsyncError(:final error) => AppErrorView(error: error),
+      AsyncError(:final error) => MahafezErrorView(error: error),
     };
   }
 
@@ -116,10 +114,10 @@ class _HomeDataView extends StatelessWidget {
               onOpenSettings: () => context.push(AppRoutes.settings),
             ),
             Padding(
-              padding: AppSpacing.pagePadding,
+              padding: MahafezSpacing.pagePadding,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: AppSpacing.xxl,
+                spacing: MahafezSpacing.xxl,
                 children: [
                   HomeGlobalStatsWidget(
                     totalBalance: dashboard.totalBalance,

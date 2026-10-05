@@ -1,13 +1,9 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/app_dialog.dart';
 import '../../../../../core/widgets/balance_card.dart';
 import '../../../../auth/providers/auth_providers.dart';
 import '../../../domain/entities/wallet_details_entity.dart';
@@ -42,14 +38,14 @@ class WalletBalanceSection extends ConsumerWidget {
           subtitle: Text(
             '${l10n.lastActivity}: $localizedLastUpdate',
             style: theme.textTheme.labelMedium?.copyWith(
-              color: context.appColors.statsOnGradient.withAlpha(204),
+              color: context.mahafezColors.statsOnGradient.withAlpha(204),
             ),
           ),
           onReset: isOwner ? () => _handleReset(context, ref) : null,
         ),
         if (isOwner) ...[
-          AppSpacing.sm.verticalSpace,
-          AppButton(
+          MahafezSpacing.sm.verticalSpace,
+          MahafezButton(
             label: l10n.walletManualTransactionEntryAction,
             icon: const Icon(Icons.sms_rounded),
             onPressed: () => ManualWalletTransactionBottomSheet.show(
@@ -57,10 +53,10 @@ class WalletBalanceSection extends ConsumerWidget {
               walletId: wallet.id,
             ),
           ),
-          AppSpacing.sm.verticalSpace,
-          AppButton(
+          MahafezSpacing.sm.verticalSpace,
+          MahafezButton(
             label: l10n.walletBalanceEditAction,
-            type: AppButtonType.secondary,
+            type: MahafezButtonType.secondary,
             icon: const Icon(Icons.edit_outlined),
             onPressed: () => EditWalletBalanceBottomSheet.show(
               context,
@@ -76,13 +72,13 @@ class WalletBalanceSection extends ConsumerWidget {
 
   Future<void> _handleReset(BuildContext context, WidgetRef ref) async {
     final l10n = context.l10n;
-    final confirmed = await AppDialog.show<bool>(
+    final confirmed = await MahafezDialog.show<bool>(
       context,
       title: l10n.wallet_resetStats,
       message: l10n.wallet_resetStatsDescription,
       confirmLabel: l10n.wallet_resetStatsAction,
       cancelLabel: l10n.commonCancelAction,
-      type: AppDialogType.warning,
+      type: MahafezDialogType.warning,
       onConfirm: () => Navigator.pop(context, true),
     );
 

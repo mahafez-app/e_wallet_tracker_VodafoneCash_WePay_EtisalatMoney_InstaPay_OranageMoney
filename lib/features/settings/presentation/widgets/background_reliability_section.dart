@@ -1,9 +1,8 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/providers/service_providers.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import 'settings_section_title.dart';
 
@@ -23,7 +22,7 @@ class BackgroundReliabilitySection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SettingsSectionTitle(label: context.l10n.userSettingsBackgroundSection),
-        AppSpacing.sm.verticalSpace,
+        MahafezSpacing.sm.verticalSpace,
         const _XiaomiAutostartWarning(),
         const _BatteryOptimizationWarning(),
       ],
@@ -43,10 +42,10 @@ class _XiaomiAutostartWarning extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.lg),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
       decoration: BoxDecoration(
         color: theme.colorScheme.errorContainer.withAlpha(40),
-        borderRadius: BorderRadius.circular(AppSpacing.md.responsiveRadius),
+        borderRadius: BorderRadius.circular(MahafezSpacing.md.responsiveRadius),
         border: Border.all(
           color: theme.colorScheme.error.withAlpha(40),
         ),
@@ -61,7 +60,7 @@ class _XiaomiAutostartWarning extends ConsumerWidget {
                 color: theme.colorScheme.error,
                 size: 20.responsiveRadius,
               ),
-              AppSpacing.xs.horizontalSpace,
+              MahafezSpacing.xs.horizontalSpace,
               Expanded(
                 child: Text(
                   l10n.smsPermissionXiaomiTitle,
@@ -73,14 +72,14 @@ class _XiaomiAutostartWarning extends ConsumerWidget {
               ),
             ],
           ),
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
           Text(
             l10n.smsPermissionXiaomiDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onErrorContainer,
             ),
           ),
-          AppSpacing.md.verticalSpace,
+          MahafezSpacing.md.verticalSpace,
           InkWell(
             onTap: () =>
                 ref.read(powerManagerServiceProvider).openAutostartSettings(),
@@ -112,12 +111,12 @@ class _BatteryOptimizationWarning extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: EdgeInsets.only(top: AppSpacing.md.responsiveHeight),
+      padding: EdgeInsets.only(top: MahafezSpacing.md.responsiveHeight),
       child: Container(
-        padding: AppResponsive.allPadding(AppSpacing.lg),
+        padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
         decoration: BoxDecoration(
           color: theme.colorScheme.secondaryContainer.withAlpha(40),
-          borderRadius: BorderRadius.circular(AppSpacing.md.responsiveRadius),
+          borderRadius: BorderRadius.circular(MahafezSpacing.md.responsiveRadius),
           border: Border.all(
             color: theme.colorScheme.secondary.withAlpha(40),
           ),
@@ -132,7 +131,7 @@ class _BatteryOptimizationWarning extends ConsumerWidget {
                   color: theme.colorScheme.secondary,
                   size: 20.responsiveRadius,
                 ),
-                AppSpacing.xs.horizontalSpace,
+                MahafezSpacing.xs.horizontalSpace,
                 Expanded(
                   child: Text(
                     l10n.smsPermissionBatteryOptimizationTitle,
@@ -144,14 +143,14 @@ class _BatteryOptimizationWarning extends ConsumerWidget {
                 ),
               ],
             ),
-            AppSpacing.sm.verticalSpace,
+            MahafezSpacing.sm.verticalSpace,
             Text(
               l10n.smsPermissionBatteryOptimizationDescription,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSecondaryContainer,
               ),
             ),
-            AppSpacing.md.verticalSpace,
+            MahafezSpacing.md.verticalSpace,
             InkWell(
               onTap: () => ref
                   .read(powerManagerServiceProvider)

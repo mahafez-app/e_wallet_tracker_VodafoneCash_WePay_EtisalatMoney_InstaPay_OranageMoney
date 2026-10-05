@@ -1,8 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
 import '../../../../../core/widgets/wallets/wallet_provider_icon.dart';
 
@@ -30,8 +29,8 @@ class AddWalletProviderGrid extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: AppSpacing.sm.responsiveWidth,
-        mainAxisSpacing: AppSpacing.sm.responsiveHeight,
+        crossAxisSpacing: MahafezSpacing.sm.responsiveWidth,
+        mainAxisSpacing: MahafezSpacing.sm.responsiveHeight,
         childAspectRatio: 1.7,
       ),
       itemCount: providers.length,
@@ -90,7 +89,7 @@ class _ProviderCard extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: AppResponsive.allPadding(AppSpacing.sm),
+            padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -101,7 +100,7 @@ class _ProviderCard extends StatelessWidget {
                     size: 40.responsiveRadius,
                   ),
                 ),
-                AppSpacing.xs.verticalSpace,
+                MahafezSpacing.xs.verticalSpace,
                 Text(
                   provider.displayName(context),
                   style: isSelected

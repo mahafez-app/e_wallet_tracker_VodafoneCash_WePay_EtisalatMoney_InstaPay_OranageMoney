@@ -1,9 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../domain/entities/workspace_member_entity.dart';
 
@@ -43,7 +42,7 @@ class WorkspaceMembersSection extends StatelessWidget {
               ),
           ],
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         if (members.isEmpty)
           Text(
             l10n.workspaceMembersEmpty,
@@ -57,7 +56,7 @@ class WorkspaceMembersSection extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: members.length,
-              separatorBuilder: (_, _) => AppSpacing.lg.horizontalSpace,
+              separatorBuilder: (_, _) => MahafezSpacing.lg.horizontalSpace,
               itemBuilder: (context, index) =>
                   _WorkspaceMemberAvatar(member: members[index], index: index),
             ),
@@ -142,7 +141,7 @@ class _WorkspaceMemberAvatar extends StatelessWidget {
                 bottom: -2.responsiveHeight,
                 end: -2.responsiveWidth,
                 child: Container(
-                  padding: AppResponsive.symmetricPadding(
+                  padding: MahafezResponsive.symmetricPadding(
                     horizontal: 8.responsiveRadius,
                     vertical: 3.responsiveRadius,
                   ),
@@ -172,7 +171,7 @@ class _WorkspaceMemberAvatar extends StatelessWidget {
               ),
           ],
         ),
-        AppSpacing.sm.verticalSpace,
+        MahafezSpacing.sm.verticalSpace,
         Text(
           member.displayName,
           maxLines: 2,

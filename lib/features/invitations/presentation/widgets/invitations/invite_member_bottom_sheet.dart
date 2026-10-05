@@ -1,17 +1,12 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/app_validators.dart';
 import '../../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/app_snackbar.dart';
-import '../../../../../core/widgets/app_text_field.dart';
 import '../../providers/invite_member_controller.dart';
 
 class InviteMemberBottomSheet extends StatelessWidget {
@@ -76,10 +71,10 @@ class _InviteMemberBottomSheetBodyState
         if (previous?.submissionStatus !=
                 InviteMemberSubmissionStatus.success &&
             next.submissionStatus == InviteMemberSubmissionStatus.success) {
-          AppSnackbar.show(
+          MahafezSnackbar.show(
             context,
             message: context.l10n.invitationSentSuccess,
-            type: AppSnackbarType.success,
+            type: MahafezSnackbarType.success,
           );
           Navigator.of(context).pop(true);
         }
@@ -92,29 +87,29 @@ class _InviteMemberBottomSheetBodyState
     );
 
     return Padding(
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       child: Form(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppSpacing.sm.verticalSpace,
+            MahafezSpacing.sm.verticalSpace,
             Text(
               context.l10n.inviteMemberTitle,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
             ),
-            AppSpacing.sm.verticalSpace,
+            MahafezSpacing.sm.verticalSpace,
             Text(
               context.l10n.inviteMemberDescription,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
-            AppSpacing.lg.verticalSpace,
-            AppTextField(
+            MahafezSpacing.lg.verticalSpace,
+            MahafezTextField(
               label: context.l10n.inviteMemberEmailLabel,
               hintText: context.l10n.inviteMemberEmailHint,
               controller: _emailController,
@@ -123,15 +118,15 @@ class _InviteMemberBottomSheetBodyState
               validator: (value) => AppValidators.email(context, value),
             ),
             if (state.failure != null) ...[
-              AppSpacing.md.verticalSpace,
+              MahafezSpacing.md.verticalSpace,
               _InviteMemberFailureBanner(
                 message: state.failure!.toLocalizedString(context),
               ),
             ],
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             SizedBox(
               width: double.infinity,
-              child: AppButton(
+              child: MahafezButton(
                 label: context.l10n.inviteMemberSendAction,
                 isLoading: state.isSubmitting,
                 onPressed: state.isSubmitting
@@ -146,7 +141,7 @@ class _InviteMemberBottomSheetBodyState
                       },
               ),
             ),
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
           ],
         ),
       ),
@@ -161,11 +156,11 @@ class _InviteMemberFailureBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.md),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.md),
       decoration: BoxDecoration(
         color: colors.dangerContainer.withAlpha(70),
         borderRadius: BorderRadius.circular(16.responsiveRadius),
@@ -179,7 +174,7 @@ class _InviteMemberFailureBanner extends StatelessWidget {
             color: colors.danger,
             size: 18.responsiveRadius,
           ),
-          AppSpacing.sm.horizontalSpace,
+          MahafezSpacing.sm.horizontalSpace,
           Expanded(
             child: Text(
               message,

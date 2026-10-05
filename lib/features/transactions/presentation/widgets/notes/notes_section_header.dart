@@ -1,7 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_responsive.dart';
-import '../../../../../../core/theme/app_spacing.dart';
 import '../../../../../../core/utils/extensions/localization_extension.dart';
 
 /// Header row with a "Notes" title and an "Add" button.
@@ -22,7 +21,7 @@ class NotesSectionHeader extends StatelessWidget {
           size: 16.responsiveRadius,
           color: theme.colorScheme.primary,
         ),
-        AppSpacing.sm.horizontalSpace,
+        MahafezSpacing.sm.horizontalSpace,
         Text(
           l10n.transaction_notes,
           style: theme.textTheme.titleSmall?.copyWith(
@@ -34,9 +33,9 @@ class NotesSectionHeader extends StatelessWidget {
         GestureDetector(
           onTap: onAddTap,
           child: Container(
-            padding: AppResponsive.symmetricPadding(
-              horizontal: AppSpacing.md,
-              vertical: AppSpacing.xs,
+            padding: MahafezResponsive.symmetricPadding(
+              horizontal: MahafezSpacing.md,
+              vertical: MahafezSpacing.xs,
             ),
             decoration: BoxDecoration(
               color: theme.colorScheme.primary.withAlpha(20),
@@ -50,7 +49,7 @@ class NotesSectionHeader extends StatelessWidget {
                   size: 14.responsiveRadius,
                   color: theme.colorScheme.primary,
                 ),
-                AppSpacing.xs.horizontalSpace,
+                MahafezSpacing.xs.horizontalSpace,
                 Text(
                   l10n.transaction_addNote,
                   style: theme.textTheme.labelMedium?.copyWith(

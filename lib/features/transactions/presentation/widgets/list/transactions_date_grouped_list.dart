@@ -1,10 +1,9 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/widgets/transactions/transaction_card.dart';
 
@@ -30,7 +29,7 @@ class TransactionsDateGroupedList extends StatelessWidget {
     final days = groupedTransactions.keys.toList();
 
     return ListView.builder(
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       itemCount: days.length + 1, // +1 for footer
       itemBuilder: (context, index) {
         if (index == days.length) return footer;
@@ -67,7 +66,7 @@ class _DayGroup extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _DayHeader(day: day),
-        AppSpacing.sm.verticalSpace,
+        MahafezSpacing.sm.verticalSpace,
         ...transactions.map(
           (tx) => GestureDetector(
             onTap: () => onTap(tx),
@@ -77,7 +76,7 @@ class _DayGroup extends StatelessWidget {
             ),
           ),
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
       ],
     );
   }
@@ -95,10 +94,10 @@ class _DayHeader extends StatelessWidget {
     return Row(
       children: [
         Container(
-          margin: AppResponsive.symmetricPadding(vertical: AppSpacing.sm),
-          padding: AppResponsive.symmetricPadding(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.xs,
+          margin: MahafezResponsive.symmetricPadding(vertical: MahafezSpacing.sm),
+          padding: MahafezResponsive.symmetricPadding(
+            horizontal: MahafezSpacing.md,
+            vertical: MahafezSpacing.xs,
           ),
           decoration: BoxDecoration(
             color: theme.colorScheme.primary.withAlpha(20),
@@ -116,7 +115,7 @@ class _DayHeader extends StatelessWidget {
                 size: 12.responsiveRadius,
                 color: theme.colorScheme.primary,
               ),
-              AppSpacing.xs.horizontalSpace,
+              MahafezSpacing.xs.horizontalSpace,
               Text(
                 label,
                 style: theme.textTheme.labelMedium?.copyWith(

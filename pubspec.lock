@@ -769,11 +769,20 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v1.0.0"
+      ref: "v1.0.1"
       resolved-ref: "803a6e8af58b3b87b7954bde3ace74fdb8340379"
       url: "https://github.com/mahafez-app/mahafez_core.git"
     source: git
     version: "1.0.1"
+  mahafez_design_system:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "v1.0.2"
+      resolved-ref: d5469b27bd842b5d7c3d822944d33061c59c17eb
+      url: "https://github.com/mahafez-app/mahafez_design_system.git"
+    source: git
+    version: "1.0.2"
   matcher:
     dependency: transitive
     description:

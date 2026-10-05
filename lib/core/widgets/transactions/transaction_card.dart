@@ -1,12 +1,10 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/domain/entities/transaction_entity.dart';
 
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../theme/app_color_extension.dart';
-import '../../theme/app_responsive.dart';
-import '../../theme/app_spacing.dart';
 import '../../utils/extensions/amount_extension.dart';
 import '../../utils/extensions/date_extensions.dart';
 import '../../utils/extensions/localization_extension.dart';
@@ -29,7 +27,7 @@ class TransactionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
 
     final isReceive = transaction.type == TransactionType.receive;
     final typeColor = isReceive ? colors.success : colors.danger;
@@ -39,7 +37,7 @@ class TransactionCard extends StatelessWidget {
     );
 
     return Container(
-      margin: AppResponsive.onlyPadding(bottom: AppSpacing.md),
+      margin: MahafezResponsive.onlyPadding(bottom: MahafezSpacing.md),
       decoration: BoxDecoration(
         color: colors.cardBackground,
         borderRadius: BorderRadius.circular(28.responsiveRadius),
@@ -55,7 +53,7 @@ class TransactionCard extends StatelessWidget {
           ),
         ],
       ),
-      padding: AppResponsive.allPadding(AppSpacing.lg),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -78,7 +76,7 @@ class TransactionCard extends StatelessWidget {
               size: 24.responsiveRadius,
             ),
           ),
-          AppSpacing.md.horizontalSpace,
+          MahafezSpacing.md.horizontalSpace,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +109,7 @@ class TransactionCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                AppSpacing.xs.verticalSpace,
+                MahafezSpacing.xs.verticalSpace,
                 Row(
                   children: [
                     Icon(
@@ -119,7 +117,7 @@ class TransactionCard extends StatelessWidget {
                       size: 14.responsiveRadius,
                       color: theme.colorScheme.onSurfaceVariant.withAlpha(150),
                     ),
-                    AppSpacing.xs.horizontalSpace,
+                    MahafezSpacing.xs.horizontalSpace,
                     Text(
                       formattedDateTime,
                       style: theme.textTheme.labelMedium?.copyWith(
@@ -131,9 +129,9 @@ class TransactionCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                AppSpacing.md.verticalSpace,
+                MahafezSpacing.md.verticalSpace,
                 const Divider(height: 1, thickness: 0.5),
-                AppSpacing.md.verticalSpace,
+                MahafezSpacing.md.verticalSpace,
                 if (showProviderInfo) ...[
                   TransactionInfoChip(
                     leading: WalletProviderIcon(
@@ -147,7 +145,7 @@ class TransactionCard extends StatelessWidget {
                   ),
                 ],
                 if (counterparty != null) ...[
-                  AppSpacing.xs.verticalSpace,
+                  MahafezSpacing.xs.verticalSpace,
                   TransactionInfoChip(
                     leading: Icon(
                       Icons.person_rounded,
@@ -164,7 +162,7 @@ class TransactionCard extends StatelessWidget {
                   ),
                 ],
                 if (isReceive) ...[
-                  AppSpacing.xs.verticalSpace,
+                  MahafezSpacing.xs.verticalSpace,
                   TransactionInfoChip(
                     leading: Icon(
                       (transaction.isPaid ?? false)

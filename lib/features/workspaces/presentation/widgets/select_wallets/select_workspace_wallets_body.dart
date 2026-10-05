@@ -1,3 +1,4 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,9 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/utils/extensions/routes_extension.dart';
-import '../../../../../core/widgets/app_error_view.dart';
-import '../../../../../core/widgets/app_loader.dart';
-import '../../../../../core/widgets/app_snackbar.dart';
 import '../../providers/workspace_wallet_selection_controller.dart';
 import '../../providers/workspace_wallet_selection_state.dart';
 import 'workspace_wallet_selection_content.dart';
@@ -39,8 +37,8 @@ class SelectWorkspaceWalletsBody extends ConsumerWidget {
     final stateAsync = ref.watch(provider);
 
     return switch (stateAsync) {
-      AsyncLoading() => const AppLoader(),
-      AsyncError(:final error) => AppErrorView(
+      AsyncLoading() => const MahafezLoader(),
+      AsyncError(:final error) => MahafezErrorView(
         error: error,
         onRetry: () => ref.invalidate(provider),
       ),
@@ -105,6 +103,6 @@ class SelectWorkspaceWalletsBody extends ConsumerWidget {
   }
 
   void _showFailureSnackbar(BuildContext context, Failure failure) {
-    AppSnackbar.showFailure(context, failure: failure);
+    MahafezSnackbar.showFailure(context, failure: failure);
   }
 }

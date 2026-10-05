@@ -1,7 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import 'app_filter_chip.dart';
 
 class FilterRow extends StatelessWidget {
@@ -16,14 +15,14 @@ class FilterRow extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Padding(
-      padding: AppResponsive.onlyPadding(top: AppSpacing.sm),
+      padding: MahafezResponsive.onlyPadding(top: MahafezSpacing.sm),
       child: SizedBox(
         height: _kChipRowHeight.responsiveHeight,
         child: Row(
           children: [
             if (label != null)
               Container(
-                padding: AppResponsive.onlyPadding(start: AppSpacing.sm),
+                padding: MahafezResponsive.onlyPadding(start: MahafezSpacing.sm),
                 width: _kLabelColumnWidth.responsiveWidth,
                 alignment: AlignmentDirectional.centerStart,
                 child: FittedBox(
@@ -40,12 +39,12 @@ class FilterRow extends StatelessWidget {
             Expanded(
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding: AppResponsive.onlyPadding(
-                  start: AppSpacing.lg,
-                  end: label != null ? 0 : AppSpacing.lg,
+                padding: MahafezResponsive.onlyPadding(
+                  start: MahafezSpacing.lg,
+                  end: label != null ? 0 : MahafezSpacing.lg,
                 ),
                 itemCount: chips.length,
-                separatorBuilder: (_, _) => AppSpacing.sm.horizontalSpace,
+                separatorBuilder: (_, _) => MahafezSpacing.sm.horizontalSpace,
                 itemBuilder: (_, i) {
                   final chip = chips[i];
                   return AppFilterChip(

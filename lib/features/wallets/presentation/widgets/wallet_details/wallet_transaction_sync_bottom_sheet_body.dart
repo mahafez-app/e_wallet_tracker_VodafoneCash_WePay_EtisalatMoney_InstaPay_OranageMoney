@@ -1,20 +1,14 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/app_error_view.dart';
-import '../../../../../core/widgets/app_loader.dart';
-import '../../../../../core/widgets/app_snackbar.dart';
 import '../../../domain/entities/missing_wallet_transactions_preview.dart';
 import '../../providers/wallet_details_controller.dart';
 import '../../providers/wallet_transaction_sync_controller.dart';
@@ -54,7 +48,7 @@ class _WalletTransactionSyncBottomSheetBodyState
       (previous, next) {
         final hasNewFailure = previous?.failure != next.failure;
         if (hasNewFailure && next.failure != null && context.mounted) {
-          AppSnackbar.showFailure(context, failure: next.failure!);
+          MahafezSnackbar.showFailure(context, failure: next.failure!);
         }
 
         final wasSuccessful =
@@ -62,12 +56,12 @@ class _WalletTransactionSyncBottomSheetBodyState
             next.status == WalletTransactionSyncStatus.success;
         if (wasSuccessful) {
           ref.invalidate(walletDetailsControllerProvider(widget.walletId));
-          AppSnackbar.show(
+          MahafezSnackbar.show(
             context,
             message: context.l10n.walletSyncTransactionsSavedSuccess(
               next.syncedCount,
             ),
-            type: AppSnackbarType.success,
+            type: MahafezSnackbarType.success,
           );
           Navigator.of(context).pop();
         }
@@ -80,7 +74,7 @@ class _WalletTransactionSyncBottomSheetBodyState
     final preview = state.preview;
 
     return Padding(
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       child: SafeArea(child: _buildBody(state, preview)),
     );
   }
@@ -118,7 +112,7 @@ class _SyncLoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(height: 220, child: Center(child: AppLoader()));
+    return const SizedBox(height: 220, child: Center(child: MahafezLoader()));
   }
 }
 
@@ -137,20 +131,20 @@ class _SyncLoadFailureView extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        AppErrorView(error: failure),
-        AppSpacing.lg.verticalSpace,
+        MahafezErrorView(error: failure),
+        MahafezSpacing.lg.verticalSpace,
         Row(
           children: [
             Expanded(
-              child: AppButton(
+              child: MahafezButton(
                 label: context.l10n.commonCancelAction,
-                type: AppButtonType.secondary,
+                type: MahafezButtonType.secondary,
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
-            AppSpacing.md.horizontalSpace,
+            MahafezSpacing.md.horizontalSpace,
             Expanded(
-              child: AppButton(
+              child: MahafezButton(
                 label: context.l10n.startupFallbackRetryAction,
                 onPressed: onRetry,
               ),
@@ -192,7 +186,7 @@ class _SyncContent extends ConsumerWidget {
             fontWeight: FontWeight.w800,
           ),
         ),
-        AppSpacing.xs.verticalSpace,
+        MahafezSpacing.xs.verticalSpace,
         Text(
           context.l10n.walletSyncTransactionsFoundCount(resolvedPreview.count),
           style: theme.textTheme.bodyMedium?.copyWith(
@@ -200,7 +194,7 @@ class _SyncContent extends ConsumerWidget {
           ),
         ),
         if (resolvedPreview.fromDate != null) ...[
-          AppSpacing.xs.verticalSpace,
+          MahafezSpacing.xs.verticalSpace,
           Text(
             context.l10n.walletSyncTransactionsFromDate(
               resolvedPreview.fromDate!.toTransactionDateTimeLabel(context),
@@ -210,12 +204,12 @@ class _SyncContent extends ConsumerWidget {
             ),
           ),
         ],
-        AppSpacing.lg.verticalSpace,
+        MahafezSpacing.lg.verticalSpace,
         Flexible(
           child: ListView.separated(
             shrinkWrap: true,
             itemCount: resolvedPreview.transactions.length,
-            separatorBuilder: (_, _) => AppSpacing.sm.verticalSpace,
+            separatorBuilder: (_, _) => MahafezSpacing.sm.verticalSpace,
             itemBuilder: (context, index) {
               final transaction = resolvedPreview.transactions[index];
               final isSelected = state.selectedTransactionIds.contains(
@@ -235,7 +229,7 @@ class _SyncContent extends ConsumerWidget {
             },
           ),
         ),
-        AppSpacing.lg.verticalSpace,
+        MahafezSpacing.lg.verticalSpace,
         Text(
           context.l10n.walletSyncTransactionsSelectedCount(
             state.selectedTransactionIds.length,
@@ -244,21 +238,21 @@ class _SyncContent extends ConsumerWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         Row(
           children: [
             Expanded(
-              child: AppButton(
+              child: MahafezButton(
                 label: context.l10n.commonCancelAction,
-                type: AppButtonType.secondary,
+                type: MahafezButtonType.secondary,
                 onPressed: state.isBusy
                     ? null
                     : () => Navigator.of(context).pop(),
               ),
             ),
-            AppSpacing.md.horizontalSpace,
+            MahafezSpacing.md.horizontalSpace,
             Expanded(
-              child: AppButton(
+              child: MahafezButton(
                 label: context.l10n.walletSyncTransactionsSaveAction,
                 isLoading: state.status == WalletTransactionSyncStatus.saving,
                 onPressed: state.selectedTransactionIds.isEmpty || state.isBusy
@@ -299,7 +293,7 @@ class _SyncEmptyView extends StatelessWidget {
               fontWeight: FontWeight.w800,
             ),
           ),
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
           Text(
             fromDate == null
                 ? context.l10n.walletSyncTransactionsEmptyDescription
@@ -310,10 +304,10 @@ class _SyncEmptyView extends StatelessWidget {
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
-          AppSpacing.lg.verticalSpace,
-          AppButton(
+          MahafezSpacing.lg.verticalSpace,
+          MahafezButton(
             label: context.l10n.commonCancelAction,
-            type: AppButtonType.secondary,
+            type: MahafezButtonType.secondary,
             onPressed: () => Navigator.of(context).pop(),
           ),
         ],
@@ -337,7 +331,7 @@ class _SyncTransactionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final isReceive = transaction.type == TransactionType.receive;
     final typeLabel = isReceive
         ? context.l10n.transactionTypeReceive
@@ -348,7 +342,7 @@ class _SyncTransactionTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(20.responsiveRadius),
       onTap: onChanged,
       child: Container(
-        padding: AppResponsive.allPadding(AppSpacing.md),
+        padding: MahafezResponsive.allPadding(MahafezSpacing.md),
         decoration: BoxDecoration(
           color: colors.cardBackground,
           borderRadius: BorderRadius.circular(20.responsiveRadius),
@@ -362,7 +356,7 @@ class _SyncTransactionTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Checkbox(value: isSelected, onChanged: (_) => onChanged()),
-            AppSpacing.sm.horizontalSpace,
+            MahafezSpacing.sm.horizontalSpace,
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,7 +367,7 @@ class _SyncTransactionTile extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  AppSpacing.xs.verticalSpace,
+                  MahafezSpacing.xs.verticalSpace,
                   Text(
                     transaction.amount.toCurrencyText(
                       context,
@@ -384,7 +378,7 @@ class _SyncTransactionTile extends StatelessWidget {
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  AppSpacing.xs.verticalSpace,
+                  MahafezSpacing.xs.verticalSpace,
                   Text(
                     transaction.createdAt.toTransactionDateTimeLabel(context),
                     style: theme.textTheme.bodySmall?.copyWith(
@@ -392,7 +386,7 @@ class _SyncTransactionTile extends StatelessWidget {
                     ),
                   ),
                   if (transaction.counterpartyNumber != null) ...[
-                    AppSpacing.xs.verticalSpace,
+                    MahafezSpacing.xs.verticalSpace,
                     Text(
                       transaction.counterpartyNumber!,
                       style: theme.textTheme.bodySmall?.copyWith(

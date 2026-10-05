@@ -1,10 +1,10 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/app_snackbar.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../providers/app_preferences_controller.dart';
 import '../providers/app_preferences_state.dart';
@@ -40,7 +40,7 @@ class _AuthFeedbackListener extends ConsumerWidget {
 
     ref.listen<AuthState>(authNotifierProvider, (previous, next) {
       if (!next.isLoading && next.error != null) {
-        AppSnackbar.showFailure(context, failure: next.error!);
+        MahafezSnackbar.showFailure(context, failure: next.error!);
         authController.clearError();
         return;
       }
@@ -50,10 +50,10 @@ class _AuthFeedbackListener extends ConsumerWidget {
           next.loadingMethod == AuthLoadingMethod.none &&
           next.error == null;
       if (hasCompletedNameUpdate) {
-        AppSnackbar.show(
+        MahafezSnackbar.show(
           context,
           message: context.l10n.userSettingsNameUpdatedSuccess,
-          type: AppSnackbarType.success,
+          type: MahafezSnackbarType.success,
         );
       }
     });
@@ -78,7 +78,7 @@ class _SmsPermissionFeedbackListener extends ConsumerWidget {
       next,
     ) {
       if (next.error == null) return;
-      AppSnackbar.showFailure(context, failure: next.error!);
+      MahafezSnackbar.showFailure(context, failure: next.error!);
       smsPermissionController.clearError();
     });
 
@@ -102,7 +102,7 @@ class _AppPreferencesFeedbackListener extends ConsumerWidget {
       next,
     ) {
       if (next.failure == null) return;
-      AppSnackbar.showFailure(context, failure: next.failure!);
+      MahafezSnackbar.showFailure(context, failure: next.failure!);
       appPreferencesController.clearError();
     });
 
@@ -124,16 +124,16 @@ class _UserSettingsWalletsFeedbackListener extends ConsumerWidget {
       next,
     ) {
       if (next.error != null) {
-        AppSnackbar.showFailure(context, failure: next.error!);
+        MahafezSnackbar.showFailure(context, failure: next.error!);
         controller.clearError();
         return;
       }
 
       if (next.successMessage != null) {
-        AppSnackbar.show(
+        MahafezSnackbar.show(
           context,
           message: context.l10n.userSettingsWalletDeletedSuccess,
-          type: AppSnackbarType.success,
+          type: MahafezSnackbarType.success,
         );
         controller.clearSuccessMessage();
       }

@@ -1,3 +1,4 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,8 +8,6 @@ import '../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../../core/widgets/app_dialog.dart';
-import '../../../../core/widgets/app_snackbar.dart';
 import '../../../invitations/domain/entities/workspace_pending_invitation_entity.dart';
 import '../../../invitations/presentation/widgets/invitations/invite_member_bottom_sheet.dart';
 import '../../domain/entities/workspace_member_entity.dart';
@@ -26,34 +25,34 @@ void handleWorkspaceSettingsFeedback(
 
   switch (feedback.type) {
     case WorkspaceSettingsFeedbackType.workspaceNameUpdated:
-      AppSnackbar.show(
+      MahafezSnackbar.show(
         context,
         message: context.l10n.workspaceSettingsNameUpdatedSuccess,
-        type: AppSnackbarType.success,
+        type: MahafezSnackbarType.success,
       );
       controller.clearFeedback();
       return;
     case WorkspaceSettingsFeedbackType.memberRemoved:
-      AppSnackbar.show(
+      MahafezSnackbar.show(
         context,
         message: context.l10n.workspaceSettingsMemberRemovedSuccess,
-        type: AppSnackbarType.success,
+        type: MahafezSnackbarType.success,
       );
       controller.clearFeedback();
       return;
     case WorkspaceSettingsFeedbackType.invitationCancelled:
-      AppSnackbar.show(
+      MahafezSnackbar.show(
         context,
         message: context.l10n.workspaceSettingsInvitationCancelledSuccess,
-        type: AppSnackbarType.success,
+        type: MahafezSnackbarType.success,
       );
       controller.clearFeedback();
       return;
     case WorkspaceSettingsFeedbackType.walletRemoved:
-      AppSnackbar.show(
+      MahafezSnackbar.show(
         context,
         message: context.l10n.workspaceSettingsWalletRemovedSuccess,
-        type: AppSnackbarType.success,
+        type: MahafezSnackbarType.success,
       );
       controller.clearFeedback();
       return;
@@ -68,10 +67,10 @@ void handleWorkspaceSettingsFeedback(
         return;
       }
 
-      AppSnackbar.show(
+      MahafezSnackbar.show(
         context,
         message: failure.toLocalizedString(context),
-        type: AppSnackbarType.error,
+        type: MahafezSnackbarType.error,
       );
       controller.clearFeedback();
       return;
@@ -97,7 +96,7 @@ Future<void> showRemoveMemberDialog(
   WorkspaceSettingsController controller,
   WorkspaceMemberEntity member,
 ) {
-  return AppDialog.show<void>(
+  return MahafezDialog.show<void>(
     context,
     title: context.l10n.workspaceSettingsRemoveMemberConfirmTitle,
     message: context.l10n.workspaceSettingsRemoveMemberConfirmMessage(
@@ -105,7 +104,7 @@ Future<void> showRemoveMemberDialog(
     ),
     confirmLabel: context.l10n.workspaceSettingsRemoveMemberAction,
     cancelLabel: context.l10n.commonCancelAction,
-    type: AppDialogType.error,
+    type: MahafezDialogType.error,
     onConfirm: () {
       Navigator.of(context).pop();
       controller.removeMember(member);
@@ -118,7 +117,7 @@ Future<void> showCancelInvitationDialog(
   WorkspaceSettingsController controller,
   WorkspacePendingInvitationEntity invitation,
 ) {
-  return AppDialog.show<void>(
+  return MahafezDialog.show<void>(
     context,
     title: context.l10n.workspaceSettingsCancelInvitationConfirmTitle,
     message: context.l10n.workspaceSettingsCancelInvitationConfirmMessage(
@@ -126,7 +125,7 @@ Future<void> showCancelInvitationDialog(
     ),
     confirmLabel: context.l10n.workspaceSettingsCancelInvitationAction,
     cancelLabel: context.l10n.commonCancelAction,
-    type: AppDialogType.error,
+    type: MahafezDialogType.error,
     onConfirm: () {
       Navigator.of(context).pop();
       controller.cancelInvitation(invitation);
@@ -139,7 +138,7 @@ Future<void> showRemoveWalletDialog(
   WorkspaceSettingsController controller,
   WalletEntity wallet,
 ) {
-  return AppDialog.show<void>(
+  return MahafezDialog.show<void>(
     context,
     title: context.l10n.workspaceSettingsRemoveWalletConfirmTitle,
     message: context.l10n.workspaceSettingsRemoveWalletConfirmMessage(
@@ -148,7 +147,7 @@ Future<void> showRemoveWalletDialog(
     ),
     confirmLabel: context.l10n.workspaceSettingsRemoveWalletAction,
     cancelLabel: context.l10n.commonCancelAction,
-    type: AppDialogType.error,
+    type: MahafezDialogType.error,
     onConfirm: () {
       Navigator.of(context).pop();
       controller.removeWallet(wallet);
@@ -160,13 +159,13 @@ Future<void> showLeaveWorkspaceDialog(
   BuildContext context,
   WorkspaceSettingsController controller,
 ) {
-  return AppDialog.show<void>(
+  return MahafezDialog.show<void>(
     context,
     title: context.l10n.workspaceSettingsLeaveWorkspaceConfirmTitle,
     message: context.l10n.workspaceSettingsLeaveWorkspaceConfirmMessage,
     confirmLabel: context.l10n.workspaceSettingsLeaveWorkspaceAction,
     cancelLabel: context.l10n.commonCancelAction,
-    type: AppDialogType.error,
+    type: MahafezDialogType.error,
     onConfirm: () {
       Navigator.of(context).pop();
       controller.leaveWorkspace();
@@ -178,13 +177,13 @@ Future<void> showDeleteWorkspaceDialog(
   BuildContext context,
   WorkspaceSettingsController controller,
 ) {
-  return AppDialog.show<void>(
+  return MahafezDialog.show<void>(
     context,
     title: context.l10n.workspaceSettingsDeleteWorkspaceConfirmTitle,
     message: context.l10n.workspaceSettingsDeleteWorkspaceConfirmMessage,
     confirmLabel: context.l10n.commonDeleteAction,
     cancelLabel: context.l10n.commonCancelAction,
-    type: AppDialogType.error,
+    type: MahafezDialogType.error,
     onConfirm: () {
       Navigator.of(context).pop();
       controller.deleteWorkspace();

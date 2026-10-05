@@ -1,10 +1,7 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/widgets/skeleton/app_skeleton_box.dart';
 
 class HomeLoadingView extends StatelessWidget {
   const HomeLoadingView({super.key});
@@ -27,9 +24,9 @@ class _HomeLoadingHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppResponsive.symmetricPadding(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.lg,
+      padding: MahafezResponsive.symmetricPadding(
+        horizontal: MahafezSpacing.lg,
+        vertical: MahafezSpacing.lg,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,22 +43,22 @@ class _HomeLoadingIdentity extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        AppSkeletonBox(
+        MahafezSkeletonBox(
           width: 48.responsiveRadius,
           height: 48.responsiveRadius,
           shape: BoxShape.circle,
         ),
-        AppSpacing.md.horizontalSpace,
+        MahafezSpacing.md.horizontalSpace,
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppSkeletonBox(
+            MahafezSkeletonBox(
               width: 72.responsiveWidth,
               height: 12.responsiveHeight,
               borderRadius: BorderRadius.circular(999.responsiveRadius),
             ),
-            AppSpacing.sm.verticalSpace,
-            AppSkeletonBox(
+            MahafezSpacing.sm.verticalSpace,
+            MahafezSkeletonBox(
               width: 118.responsiveWidth,
               height: 20.responsiveHeight,
             ),
@@ -79,13 +76,13 @@ class _HomeLoadingActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        AppSkeletonBox(
+        MahafezSkeletonBox(
           width: 40.responsiveRadius,
           height: 40.responsiveRadius,
           shape: BoxShape.circle,
         ),
-        AppSpacing.xs.horizontalSpace,
-        AppSkeletonBox(
+        MahafezSpacing.xs.horizontalSpace,
+        MahafezSkeletonBox(
           width: 40.responsiveRadius,
           height: 40.responsiveRadius,
           shape: BoxShape.circle,
@@ -101,36 +98,36 @@ class _HomeLoadingContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppSkeletonBox(
+          MahafezSkeletonBox(
             width: double.infinity,
             height: 212.responsiveHeight,
             borderRadius: BorderRadius.circular(32.responsiveRadius),
           ),
-          AppSpacing.xxl.verticalSpace,
+          MahafezSpacing.xxl.verticalSpace,
           const _HomeLoadingSectionHeader(),
-          AppSpacing.md.verticalSpace,
+          MahafezSpacing.md.verticalSpace,
           SizedBox(
             height: 151.responsiveHeight,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: 2,
-              separatorBuilder: (_, _) => AppSpacing.md.horizontalSpace,
-              itemBuilder: (_, _) => AppSkeletonBox(
+              separatorBuilder: (_, _) => MahafezSpacing.md.horizontalSpace,
+              itemBuilder: (_, _) => MahafezSkeletonBox(
                 width: 250.responsiveWidth,
                 height: 151.responsiveHeight,
                 borderRadius: BorderRadius.circular(24.responsiveRadius),
               ),
             ),
           ),
-          AppSpacing.xxl.verticalSpace,
+          MahafezSpacing.xxl.verticalSpace,
           const _HomeLoadingSectionHeader(),
-          AppSpacing.md.verticalSpace,
+          MahafezSpacing.md.verticalSpace,
           const _HomeLoadingWorkspaceCard(),
-          AppSpacing.md.verticalSpace,
+          MahafezSpacing.md.verticalSpace,
           const _HomeLoadingWorkspaceCard(),
         ],
       ),
@@ -146,8 +143,8 @@ class _HomeLoadingSectionHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        AppSkeletonBox(width: 132.responsiveWidth, height: 20.responsiveHeight),
-        AppSkeletonBox(
+        MahafezSkeletonBox(width: 132.responsiveWidth, height: 20.responsiveHeight),
+        MahafezSkeletonBox(
           width: 92.responsiveWidth,
           height: 18.responsiveHeight,
           borderRadius: BorderRadius.circular(999.responsiveRadius),
@@ -162,7 +159,7 @@ class _HomeLoadingWorkspaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppSkeletonBox(
+    return MahafezSkeletonBox(
       width: double.infinity,
       height: 138.responsiveHeight,
       borderRadius: BorderRadius.circular(20.responsiveRadius),

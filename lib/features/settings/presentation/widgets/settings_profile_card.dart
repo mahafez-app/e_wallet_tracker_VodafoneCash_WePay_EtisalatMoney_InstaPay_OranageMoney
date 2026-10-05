@@ -1,10 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_color_extension.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../auth/domain/entities/user_entity.dart';
 import 'settings_card.dart';
@@ -23,7 +21,7 @@ class SettingsProfileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
 
     return SettingsCard(
       child: Container(
@@ -38,18 +36,18 @@ class SettingsProfileCard extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: AppResponsive.allPadding(AppSpacing.lg),
+          padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
           child: Row(
             children: [
               _ProfileAvatar(name: user.name),
-              AppSpacing.md.horizontalSpace,
+              MahafezSpacing.md.horizontalSpace,
               Expanded(
                 child: _ProfileDetails(
                   name: user.name,
                   emailLabel: _resolveEmailLabel(context),
                 ),
               ),
-              AppSpacing.lg.horizontalSpace,
+              MahafezSpacing.lg.horizontalSpace,
               _EditNameButton(
                 tooltip: context.l10n.userSettingsEditNameAction,
                 onPressed: onEditName,
@@ -98,7 +96,7 @@ class _ProfileDetails extends StatelessWidget {
             ),
           ),
         ),
-        AppSpacing.xs.verticalSpace,
+        MahafezSpacing.xs.verticalSpace,
         FittedBox(
           child: Text(
             emailLabel,

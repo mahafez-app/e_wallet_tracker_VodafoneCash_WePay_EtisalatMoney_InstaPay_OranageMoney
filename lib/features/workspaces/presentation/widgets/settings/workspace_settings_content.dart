@@ -1,8 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/domain/entities/wallet_entity.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../invitations/domain/entities/workspace_pending_invitation_entity.dart';
 import '../../../domain/entities/workspace_member_entity.dart';
 import '../../providers/workspace_settings_state.dart';
@@ -43,11 +42,11 @@ class WorkspaceSettingsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: AppResponsive.onlyPadding(
-        start: AppSpacing.lg,
-        top: AppSpacing.lg,
-        end: AppSpacing.lg,
-        bottom: AppSpacing.xxxl,
+      padding: MahafezResponsive.onlyPadding(
+        start: MahafezSpacing.lg,
+        top: MahafezSpacing.lg,
+        end: MahafezSpacing.lg,
+        bottom: MahafezSpacing.xxxl,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +56,7 @@ class WorkspaceSettingsContent extends StatelessWidget {
             canEdit: _canManageWorkspace,
             onEditTap: _canManageWorkspace ? onEditWorkspaceName : null,
           ),
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
           WorkspaceSettingsMembersSection(
             members: state.details.members,
             canManageWorkspace: _canManageWorkspace,
@@ -66,7 +65,7 @@ class WorkspaceSettingsContent extends StatelessWidget {
             onInviteMember: onInviteMember,
             onRemoveMember: onRemoveMember,
           ),
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
           WorkspaceSettingsWalletsSection(
             wallets: state.details.wallets,
             memberNamesByUid: {
@@ -82,7 +81,7 @@ class WorkspaceSettingsContent extends StatelessWidget {
             onRemoveWallet: onRemoveWallet,
           ),
           if (_canManageWorkspace) ...[
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             WorkspaceSettingsPendingInvitationsSection(
               invitations: state.pendingInvitations,
               cancellingInvitationId: state.activeTargetId,
@@ -91,13 +90,13 @@ class WorkspaceSettingsContent extends StatelessWidget {
             ),
           ],
           if (_canManageWorkspace) ...[
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             WorkspaceSettingsDangerZoneSection(
               isDeleting: state.isDeletingWorkspace,
               onDeleteWorkspace: onDeleteWorkspace,
             ),
           ] else ...[
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             WorkspaceSettingsAccessSection(
               isLeaving: state.isLeavingWorkspace,
               onLeaveWorkspace: onLeaveWorkspace,

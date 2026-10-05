@@ -1,11 +1,9 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/features/transactions/domain/entities/note_entity.dart';
 
-import '../../../../../../core/theme/app_color_extension.dart';
-import '../../../../../../core/theme/app_responsive.dart';
-import '../../../../../../core/theme/app_spacing.dart';
 import '../../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../../core/utils/extensions/localization_extension.dart';
 
@@ -38,7 +36,7 @@ class NoteReadView extends StatelessWidget {
           onEditTap: onEditTap,
           onDeleteTap: onDeleteTap,
         ),
-        AppSpacing.xs.verticalSpace,
+        MahafezSpacing.xs.verticalSpace,
         _NoteMetaRow(note: note, dateText: dateText, theme: theme),
       ],
     );
@@ -62,7 +60,7 @@ class _NoteTextRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +75,7 @@ class _NoteTextRow extends StatelessWidget {
           ),
         ),
         if (isOwner) ...[
-          AppSpacing.xs.horizontalSpace,
+          MahafezSpacing.xs.horizontalSpace,
           _ActionIconButton(
             icon: Icons.edit_outlined,
             onPressed: onEditTap,
@@ -112,7 +110,7 @@ class _ActionIconButton extends StatelessWidget {
       onPressed: onPressed,
       icon: Icon(icon, color: color),
       iconSize: 18.responsiveRadius,
-      padding: AppResponsive.allPadding(8),
+      padding: MahafezResponsive.allPadding(8),
       constraints: const BoxConstraints(),
     );
   }
@@ -141,7 +139,7 @@ class _NoteMetaRow extends StatelessWidget {
           ),
         ),
         if (note.wasEdited) ...[
-          AppSpacing.xs.horizontalSpace,
+          MahafezSpacing.xs.horizontalSpace,
           Text(
             context.l10n.transaction_edited,
             style: theme.textTheme.labelSmall?.copyWith(

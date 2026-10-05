@@ -1,14 +1,11 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../../core/domain/entities/transaction_entity.dart';
-import '../../../../../../core/theme/app_color_extension.dart';
-import '../../../../../../core/theme/app_responsive.dart';
-import '../../../../../../core/theme/app_spacing.dart';
 import '../../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../../core/widgets/app_dialog.dart';
 import '../../../domain/entities/note_entity.dart';
 import '../../providers/notes/notes_controller.dart';
 import 'note_input_field.dart';
@@ -80,13 +77,13 @@ class _NoteCardState extends ConsumerState<NoteCard> {
 
   Future<void> _confirmDelete() async {
     final l10n = context.l10n;
-    final didConfirm = await AppDialog.show<bool>(
+    final didConfirm = await MahafezDialog.show<bool>(
       context,
       title: l10n.transaction_deleteNoteTitle,
       message: l10n.transaction_deleteNoteMessage,
       confirmLabel: l10n.transaction_deleteAction,
       cancelLabel: MaterialLocalizations.of(context).cancelButtonLabel,
-      type: AppDialogType.error,
+      type: MahafezDialogType.error,
       onConfirm: () => Navigator.of(context).pop(true),
       onCancel: () => Navigator.of(context).pop(false),
     );
@@ -105,11 +102,11 @@ class _NoteCardState extends ConsumerState<NoteCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
 
     return Container(
-      margin: AppResponsive.onlyPadding(bottom: AppSpacing.md),
-      padding: AppResponsive.allPadding(AppSpacing.lg),
+      margin: MahafezResponsive.onlyPadding(bottom: MahafezSpacing.md),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
       decoration: BoxDecoration(
         color: colors.cardBackground,
         borderRadius: BorderRadius.circular(20.responsiveRadius),
@@ -172,7 +169,7 @@ class _EditingContent extends StatelessWidget {
           isBusy: isSaving,
           onSubmit: onSave,
         ),
-        AppSpacing.xs.verticalSpace,
+        MahafezSpacing.xs.verticalSpace,
         Align(
           alignment: AlignmentDirectional.centerEnd,
           child: TextButton(

@@ -1,10 +1,8 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/widgets/app_button.dart';
 import '../../../../../core/widgets/transactions/no_transactions_card.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../navigation/transactions_route_data.dart';
 import '../../providers/transactions_controller.dart';
@@ -27,12 +25,12 @@ class TransactionsEmptyView extends ConsumerWidget {
     final footer = hasActiveFilter
         ? SizedBox(
             width: double.infinity,
-            child: AppButton(
+            child: MahafezButton(
               label: context.l10n.transactions_clearFilters,
-              type: AppButtonType.secondary,
+              type: MahafezButtonType.secondary,
               icon: Icon(
                 Icons.filter_alt_off_rounded,
-                size: AppSpacing.lg.responsiveRadius,
+                size: MahafezSpacing.lg.responsiveRadius,
               ),
               onPressed: controller.clearAllFilters,
             ),
@@ -44,7 +42,7 @@ class TransactionsEmptyView extends ConsumerWidget {
         SliverFillRemaining(
           hasScrollBody: false,
           child: Padding(
-            padding: AppSpacing.pagePadding,
+            padding: MahafezSpacing.pagePadding,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -59,10 +57,10 @@ class TransactionsEmptyView extends ConsumerWidget {
                   footer: footer,
                 ),
                 if (!hasActiveFilter) ...[
-                  AppSpacing.xl.verticalSpace,
+                  MahafezSpacing.xl.verticalSpace,
                   const TransactionsEmptyHintCard(),
                 ],
-                AppSpacing.xxl.verticalSpace,
+                MahafezSpacing.xxl.verticalSpace,
               ],
             ),
           ),

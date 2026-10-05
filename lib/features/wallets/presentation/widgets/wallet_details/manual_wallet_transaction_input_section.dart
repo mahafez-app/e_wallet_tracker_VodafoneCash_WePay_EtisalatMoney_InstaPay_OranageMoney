@@ -1,11 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/app_text_field.dart';
-
 class ManualWalletTransactionInputSection extends StatelessWidget {
   const ManualWalletTransactionInputSection({
     super.key,
@@ -29,7 +25,7 @@ class ManualWalletTransactionInputSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppSpacing.sm.verticalSpace,
+        MahafezSpacing.sm.verticalSpace,
         Text(
           context.l10n.walletManualTransactionTitle,
           style: theme.textTheme.titleLarge?.copyWith(
@@ -37,17 +33,17 @@ class ManualWalletTransactionInputSection extends StatelessWidget {
           ),
         ),
         if (!isCompact) ...[
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
           Text(
             context.l10n.walletManualTransactionDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
         ] else
-          AppSpacing.md.verticalSpace,
-        AppTextField(
+          MahafezSpacing.md.verticalSpace,
+        MahafezTextField(
           label: context.l10n.walletManualTransactionFieldLabel,
           hintText: context.l10n.walletManualTransactionFieldHint,
           controller: messageController,
@@ -57,12 +53,12 @@ class ManualWalletTransactionInputSection extends StatelessWidget {
           validator: validator,
           onChanged: onChanged,
         ),
-        AppSpacing.sm.verticalSpace,
+        MahafezSpacing.sm.verticalSpace,
         Align(
           alignment: AlignmentDirectional.centerEnd,
-          child: AppButton(
+          child: MahafezButton(
             label: context.l10n.walletManualTransactionPasteAction,
-            type: AppButtonType.tertiary,
+            type: MahafezButtonType.tertiary,
             icon: const Icon(Icons.content_paste_rounded),
             onPressed: onPastePressed,
           ),

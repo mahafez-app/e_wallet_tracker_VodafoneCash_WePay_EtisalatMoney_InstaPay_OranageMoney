@@ -1,9 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import 'workspace_settings_section_title.dart';
 
@@ -28,18 +27,18 @@ class WorkspaceSettingsDangerZoneSection extends StatelessWidget {
           title: context.l10n.workspaceSettingsDangerZone,
           isDanger: true,
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(AppSpacing.lg.responsiveRadius),
+            borderRadius: BorderRadius.circular(MahafezSpacing.lg.responsiveRadius),
             onTap: isDeleting ? null : onDeleteWorkspace,
             child: Container(
-              padding: AppResponsive.allPadding(AppSpacing.lg),
+              padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
               decoration: BoxDecoration(
                 color: theme.colorScheme.errorContainer.withAlpha(25),
                 borderRadius: BorderRadius.circular(
-                  AppSpacing.lg.responsiveRadius,
+                  MahafezSpacing.lg.responsiveRadius,
                 ),
                 border: Border.all(
                   color: theme.colorScheme.error.withAlpha(25),
@@ -53,7 +52,7 @@ class WorkspaceSettingsDangerZoneSection extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: theme.colorScheme.errorContainer,
                       borderRadius: BorderRadius.circular(
-                        AppSpacing.md.responsiveRadius,
+                        MahafezSpacing.md.responsiveRadius,
                       ),
                     ),
                     alignment: Alignment.center,
@@ -62,7 +61,7 @@ class WorkspaceSettingsDangerZoneSection extends StatelessWidget {
                       color: theme.colorScheme.onErrorContainer,
                     ),
                   ),
-                  AppSpacing.lg.horizontalSpace,
+                  MahafezSpacing.lg.horizontalSpace,
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,9 +86,9 @@ class WorkspaceSettingsDangerZoneSection extends StatelessWidget {
                   ),
                   if (isDeleting)
                     SizedBox.square(
-                      dimension: AppSpacing.lg.responsiveWidth,
+                      dimension: MahafezSpacing.lg.responsiveWidth,
                       child: CircularProgressIndicator(
-                        strokeWidth: AppSpacing.xxs.responsiveWidth,
+                        strokeWidth: MahafezSpacing.xxs.responsiveWidth,
                         valueColor: AlwaysStoppedAnimation<Color>(
                           theme.colorScheme.error,
                         ),

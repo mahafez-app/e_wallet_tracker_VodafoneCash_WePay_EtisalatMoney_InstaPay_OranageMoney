@@ -1,7 +1,5 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 
 class SmsPermissionFeatureItem extends StatelessWidget {
   const SmsPermissionFeatureItem({
@@ -20,7 +18,7 @@ class SmsPermissionFeatureItem extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.md),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.md),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withAlpha(50),
         borderRadius: BorderRadius.circular(16.responsiveRadius),
@@ -28,14 +26,14 @@ class SmsPermissionFeatureItem extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding: AppResponsive.allPadding(AppSpacing.sm),
+            padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
             decoration: BoxDecoration(
               color: theme.colorScheme.primaryContainer,
               borderRadius: BorderRadius.circular(12.responsiveRadius),
             ),
             child: Icon(icon, color: theme.colorScheme.primary),
           ),
-          AppSpacing.md.horizontalSpace,
+          MahafezSpacing.md.horizontalSpace,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

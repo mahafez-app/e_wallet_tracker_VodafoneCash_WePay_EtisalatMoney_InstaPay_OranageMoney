@@ -1,7 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../navigation/transactions_route_data.dart';
 import 'transaction_date_filter_row.dart';
 import 'transaction_member_filter_row.dart';
@@ -39,7 +38,7 @@ class TransactionsFilterBar extends StatelessWidget {
             routeData: routeData as WorkspaceTransactionsRouteData,
           ),
         ],
-        AppSpacing.xs.verticalSpace,
+        MahafezSpacing.xs.verticalSpace,
         Divider(
           height: 1.responsiveHeight,
           thickness: 0.5.responsiveHeight,

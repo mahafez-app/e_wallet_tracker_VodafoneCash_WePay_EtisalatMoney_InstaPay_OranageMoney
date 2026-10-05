@@ -1,3 +1,4 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,8 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/app_dialog.dart';
-import '../../../../core/widgets/app_error_view.dart';
 import '../../domain/entities/workspace_details_entity.dart';
 import '../widgets/details/workspace_details_loading_view.dart';
 
@@ -34,11 +33,11 @@ Future<void> showWorkspaceUnavailableDialog(BuildContext context) {
   return showDialog<void>(
     context: context,
     barrierDismissible: false,
-    builder: (dialogContext) => AppDialog(
+    builder: (dialogContext) => MahafezDialog(
       title: context.l10n.workspaceUnavailableTitle,
       message: context.l10n.workspaceUnavailableMessage,
       confirmLabel: context.l10n.workspaceUnavailableAction,
-      type: AppDialogType.info,
+      type: MahafezDialogType.info,
       onConfirm: () {
         Navigator.of(dialogContext).pop();
         if (!context.mounted) return;
@@ -123,7 +122,7 @@ class _WorkspaceErrorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onResolved();
-    return AppErrorView(error: error);
+    return MahafezErrorView(error: error);
   }
 }
 

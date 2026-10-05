@@ -1,9 +1,8 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import 'details_card_section.dart';
 import 'sms_section.dart';
 import 'transaction_header_section.dart';
@@ -16,26 +15,26 @@ class TransactionReceiptImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final horizontalContentInset = transaction.type == TransactionType.send
-        ? AppSpacing.lg
+        ? MahafezSpacing.lg
         : 0.0;
 
     return Padding(
-      padding: AppSpacing.pagePadding.copyWith(
-        left: AppSpacing.pagePadding.left + horizontalContentInset,
-        right: AppSpacing.pagePadding.right + horizontalContentInset,
+      padding: MahafezSpacing.pagePadding.copyWith(
+        left: MahafezSpacing.pagePadding.left + horizontalContentInset,
+        right: MahafezSpacing.pagePadding.right + horizontalContentInset,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Center(child: TransactionHeaderSection(transaction: transaction)),
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
           DetailsCardSection(transaction: transaction, isReadOnly: true),
           if (transaction.message != null) ...[
-            AppSpacing.xl.verticalSpace,
+            MahafezSpacing.xl.verticalSpace,
             SmsSection(message: transaction.message!),
           ],
-          AppSpacing.xl.verticalSpace,
+          MahafezSpacing.xl.verticalSpace,
         ],
       ),
     );

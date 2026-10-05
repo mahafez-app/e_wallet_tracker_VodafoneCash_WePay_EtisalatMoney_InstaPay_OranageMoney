@@ -1,7 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../domain/value_objects/app_font_scale.dart';
 
@@ -21,7 +20,7 @@ class FontSizePreviewCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: AppResponsive.allPadding(AppSpacing.lg),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withAlpha(70),
         borderRadius: BorderRadius.circular(20.responsiveRadius),
@@ -43,14 +42,14 @@ class FontSizePreviewCard extends StatelessWidget {
                 fontWeight: FontWeight.w800,
               ),
             ),
-            AppSpacing.xs.verticalSpace,
+            MahafezSpacing.xs.verticalSpace,
             Text(
               context.l10n.userSettingsFontSizePreviewBody,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
-            AppSpacing.md.verticalSpace,
+            MahafezSpacing.md.verticalSpace,
             Text(
               fontScalePercent(previewScale),
               style: theme.textTheme.headlineSmall?.copyWith(
@@ -58,7 +57,7 @@ class FontSizePreviewCard extends StatelessWidget {
               ),
             ),
             if (previewScale != appliedScale) ...[
-              AppSpacing.xs.verticalSpace,
+              MahafezSpacing.xs.verticalSpace,
               Text(
                 context.l10n.userSettingsFontSizeCurrentValue(
                   fontScalePercent(appliedScale),

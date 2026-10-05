@@ -1,14 +1,12 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/widgets/app_snackbar.dart';
 import '../providers/auth_controller.dart';
 import '../widgets/login/google_sign_in_button.dart';
 import '../widgets/login/login_form.dart';
@@ -21,9 +19,9 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppResponsive.symmetricPadding(
-            horizontal: AppSpacing.lg,
-            vertical: AppSpacing.xl,
+          padding: MahafezResponsive.symmetricPadding(
+            horizontal: MahafezSpacing.lg,
+            vertical: MahafezSpacing.xl,
           ),
           child: _LoginBody(),
         ),
@@ -39,7 +37,7 @@ class _LoginBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AuthState>(authNotifierProvider, (_, next) {
       if (!next.isLoading && next.error != null) {
-        AppSnackbar.showFailure(context, failure: next.error!);
+        MahafezSnackbar.showFailure(context, failure: next.error!);
         ref.read(authNotifierProvider.notifier).clearError();
       }
     });
@@ -52,7 +50,7 @@ class _LoginBody extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
 
           // Logo & Header
           Center(
@@ -73,7 +71,7 @@ class _LoginBody extends ConsumerWidget {
                   ),
                 ),
                 Container(
-                  padding: AppResponsive.allPadding(AppSpacing.lg),
+                  padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
@@ -101,7 +99,7 @@ class _LoginBody extends ConsumerWidget {
               ],
             ),
           ),
-          AppSpacing.xl.verticalSpace,
+          MahafezSpacing.xl.verticalSpace,
           Text(
             l10n.appName.toUpperCase(),
             textAlign: TextAlign.center,
@@ -112,7 +110,7 @@ class _LoginBody extends ConsumerWidget {
               fontSize: 32.responsiveFont,
             ),
           ),
-          AppSpacing.xs.verticalSpace,
+          MahafezSpacing.xs.verticalSpace,
           Text(
             l10n.appTagline,
             textAlign: TextAlign.center,
@@ -123,19 +121,19 @@ class _LoginBody extends ConsumerWidget {
             ),
           ),
 
-          AppSpacing.xxl.verticalSpace,
+          MahafezSpacing.xxl.verticalSpace,
 
           // Google Button
           const GoogleSignInButton(),
 
-          AppSpacing.xl.verticalSpace,
+          MahafezSpacing.xl.verticalSpace,
 
           // Divider
           Row(
             children: [
               const Expanded(child: Divider()),
               Padding(
-                padding: AppResponsive.horizontalPadding(AppSpacing.md),
+                padding: MahafezResponsive.horizontalPadding(MahafezSpacing.md),
                 child: Text(
                   l10n.or,
                   style: theme.textTheme.labelLarge?.copyWith(
@@ -147,11 +145,11 @@ class _LoginBody extends ConsumerWidget {
             ],
           ),
 
-          AppSpacing.xl.verticalSpace,
+          MahafezSpacing.xl.verticalSpace,
 
           const LoginForm(),
 
-          AppSpacing.xxl.verticalSpace,
+          MahafezSpacing.xxl.verticalSpace,
 
           const _SignUpPrompt(),
         ],
@@ -177,14 +175,14 @@ class _SignUpPrompt extends StatelessWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        AppSpacing.xs.horizontalSpace,
+        MahafezSpacing.xs.horizontalSpace,
         InkWell(
           onTap: () => context.push(AppRoutes.register),
-          borderRadius: BorderRadius.circular(AppSpacing.sm.responsiveRadius),
+          borderRadius: BorderRadius.circular(MahafezSpacing.sm.responsiveRadius),
           child: Padding(
-            padding: AppResponsive.symmetricPadding(
-              horizontal: AppSpacing.xs,
-              vertical: AppSpacing.xs,
+            padding: MahafezResponsive.symmetricPadding(
+              horizontal: MahafezSpacing.xs,
+              vertical: MahafezSpacing.xs,
             ),
             child: Text(
               l10n.signUpNow,

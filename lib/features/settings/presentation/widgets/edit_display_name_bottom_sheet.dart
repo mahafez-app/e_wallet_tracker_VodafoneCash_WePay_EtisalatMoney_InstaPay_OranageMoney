@@ -1,14 +1,11 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/app_validators.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/app_text_field.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 
@@ -83,29 +80,29 @@ class _EditDisplayNameSheetBodyState
     final authState = ref.watch(authNotifierProvider);
 
     return Padding(
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       child: Form(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppSpacing.sm.verticalSpace,
+            MahafezSpacing.sm.verticalSpace,
             Text(
               context.l10n.userSettingsEditNameTitle,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
             ),
-            AppSpacing.sm.verticalSpace,
+            MahafezSpacing.sm.verticalSpace,
             Text(
               context.l10n.userSettingsEditNameDescription,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
-            AppSpacing.lg.verticalSpace,
-            AppTextField(
+            MahafezSpacing.lg.verticalSpace,
+            MahafezTextField(
               label: context.l10n.fullName,
               hintText: context.l10n.fullNamePlaceholder,
               controller: _nameController,
@@ -113,17 +110,17 @@ class _EditDisplayNameSheetBodyState
               onChanged: (_) {},
               validator: (value) => AppValidators.required(context, value),
             ),
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             SizedBox(
               width: double.infinity,
-              child: AppButton(
+              child: MahafezButton(
                 label: context.l10n.userSettingsEditNameSaveAction,
                 isLoading:
                     authState.loadingMethod == AuthLoadingMethod.confirmName,
                 onPressed: user == null ? null : () => _submit(user.uid),
               ),
             ),
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
           ],
         ),
       ),

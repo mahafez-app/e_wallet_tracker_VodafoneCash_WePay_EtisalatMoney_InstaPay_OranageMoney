@@ -1,12 +1,11 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wallet_tracker/generated/l10n.dart';
 
 import 'core/providers/sms_providers.dart';
 import 'core/router/app_router.dart';
-import 'core/theme/app_theme.dart';
 import 'features/settings/presentation/providers/app_preferences_controller.dart';
 
 class App extends ConsumerWidget {
@@ -28,8 +27,8 @@ class App extends ConsumerWidget {
       splitScreenMode: true,
       builder: (context, child) => MaterialApp.router(
         routerConfig: router,
-        theme: AppTheme.light(),
-        darkTheme: AppTheme.dark(),
+        theme: MahafezTheme.light(),
+        darkTheme: MahafezTheme.dark(),
         themeMode: themeMode,
         debugShowCheckedModeBanner: false,
         builder: (context, child) {

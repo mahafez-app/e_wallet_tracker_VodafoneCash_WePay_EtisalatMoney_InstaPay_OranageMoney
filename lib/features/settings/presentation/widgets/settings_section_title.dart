@@ -1,7 +1,5 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 
 class SettingsSectionTitle extends StatelessWidget {
   const SettingsSectionTitle({super.key, required this.label});
@@ -11,7 +9,7 @@ class SettingsSectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppResponsive.horizontalPadding(AppSpacing.sm),
+      padding: MahafezResponsive.horizontalPadding(MahafezSpacing.sm),
       child: Text(
         label,
         style: Theme.of(context).textTheme.labelLarge?.copyWith(

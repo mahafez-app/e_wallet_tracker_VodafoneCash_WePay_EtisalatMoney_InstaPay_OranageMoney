@@ -1,12 +1,9 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_logo.dart';
 import '../widgets/app_logo_name.dart';
-
 class StartupFallbackScreen extends StatelessWidget {
   const StartupFallbackScreen({
     super.key,
@@ -53,17 +50,17 @@ class _StartupFallbackBody extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AppLogo(
-            size: AppSpacing.xxxl.responsiveWidth * 3,
+            size: MahafezSpacing.xxxl.responsiveWidth * 3,
             shape: AppLogoShape.circle,
           ),
-          AppSpacing.xl.verticalSpace,
+          MahafezSpacing.xl.verticalSpace,
           const AppLogoName(),
-          AppSpacing.xxl.verticalSpace,
+          MahafezSpacing.xxl.verticalSpace,
           Text(
             context.l10n.startupFallbackTitle,
             textAlign: TextAlign.center,
@@ -71,7 +68,7 @@ class _StartupFallbackBody extends StatelessWidget {
               color: theme.colorScheme.onSurface,
             ),
           ),
-          AppSpacing.md.verticalSpace,
+          MahafezSpacing.md.verticalSpace,
           Text(
             context.l10n.startupFallbackMessage,
             textAlign: TextAlign.center,
@@ -79,8 +76,8 @@ class _StartupFallbackBody extends StatelessWidget {
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
-          AppSpacing.xxl.verticalSpace,
-          AppButton(
+          MahafezSpacing.xxl.verticalSpace,
+          MahafezButton(
             label: context.l10n.startupFallbackRetryAction,
             onPressed: onRetry == null ? null : () => onRetry!(),
             isLoading: isRetrying,

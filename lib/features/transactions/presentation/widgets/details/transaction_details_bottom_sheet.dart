@@ -1,5 +1,6 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'dart:async';
 import 'dart:developer';
 
@@ -10,13 +11,9 @@ import '../../../../../core/domain/entities/transaction_entity.dart';
 import '../../../../../core/error/failure_mapper.dart';
 import 'package:mahafez_core/mahafez_core.dart';
 import '../../../../../core/providers/transaction_events_provider.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/failure_extension.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/utils/extensions/transaction_share_extension.dart';
-import '../../../../../core/widgets/app_dialog.dart';
-import '../../../../../core/widgets/app_snackbar.dart';
 import '../../../../auth/providers/auth_providers.dart';
 import '../../providers/share_receipt/share_receipt_controller.dart';
 import '../../providers/transaction_details_controller.dart';
@@ -73,7 +70,7 @@ class TransactionDetailsBottomSheet extends ConsumerWidget {
                 ),
               ),
               _DetailsActionBar(transaction: transaction),
-              AppSpacing.lg.verticalSpace,
+              MahafezSpacing.lg.verticalSpace,
             ],
           ),
         ),
@@ -92,7 +89,7 @@ class _BottomSheetHandle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppResponsive.symmetricPadding(vertical: AppSpacing.md),
+      padding: MahafezResponsive.symmetricPadding(vertical: MahafezSpacing.md),
       child: Center(
         child: Container(
           width: 40.responsiveWidth,
@@ -129,10 +126,10 @@ class _DetailsScrollContent extends ConsumerWidget {
     ) {
       final actionError = next.actionError;
       if (actionError == null || previous?.actionError == actionError) return;
-      AppSnackbar.show(
+      MahafezSnackbar.show(
         context,
         message: actionError.toLocalizedString(context),
-        type: AppSnackbarType.error,
+        type: MahafezSnackbarType.error,
       );
     });
     ref.listen<TransactionEvent?>(transactionUpdatesProvider, (_, next) {
@@ -144,10 +141,10 @@ class _DetailsScrollContent extends ConsumerWidget {
             walletId == transaction.walletId && transactionId == transaction.id;
         if (!isCurrentTransaction) return;
 
-        AppSnackbar.show(
+        MahafezSnackbar.show(
           context,
           message: context.l10n.transaction_deletedSuccess,
-          type: AppSnackbarType.success,
+          type: MahafezSnackbarType.success,
         );
         Navigator.of(context).pop();
       }
@@ -155,24 +152,24 @@ class _DetailsScrollContent extends ConsumerWidget {
 
     return ListView(
       controller: scrollController,
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       children: [
         TransactionHeaderSection(transaction: state.transaction),
-        AppSpacing.lg.verticalSpace,
+        MahafezSpacing.lg.verticalSpace,
         DetailsCardSection(
           transaction: state.transaction,
           controllerTransaction: transaction,
         ),
-        AppSpacing.xl.verticalSpace,
+        MahafezSpacing.xl.verticalSpace,
         if (state.transaction.message != null) ...[
           SmsSection(message: state.transaction.message!),
-          AppSpacing.xl.verticalSpace,
+          MahafezSpacing.xl.verticalSpace,
         ],
         NotesSection(transaction: state.transaction),
-        AppSpacing.xl.verticalSpace,
+        MahafezSpacing.xl.verticalSpace,
         if (state.history.isNotEmpty)
           TransactionHistorySection(entries: state.history),
-        AppSpacing.xl.verticalSpace,
+        MahafezSpacing.xl.verticalSpace,
       ],
     );
   }
@@ -209,9 +206,9 @@ class _DetailsActionBar extends ConsumerWidget {
         TransactionDetailsAction.deletingTransaction;
 
     return Container(
-      padding: AppResponsive.symmetricPadding(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.md,
+      padding: MahafezResponsive.symmetricPadding(
+        horizontal: MahafezSpacing.lg,
+        vertical: MahafezSpacing.md,
       ),
       decoration: BoxDecoration(
         color: theme.scaffoldBackgroundColor,
@@ -241,8 +238,8 @@ class _DetailsActionBar extends ConsumerWidget {
                   : const Icon(Icons.share_rounded),
               label: Text(context.l10n.transaction_shareReceipt),
               style: FilledButton.styleFrom(
-                padding: AppResponsive.symmetricPadding(
-                  vertical: AppSpacing.md,
+                padding: MahafezResponsive.symmetricPadding(
+                  vertical: MahafezSpacing.md,
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16.responsiveRadius),
@@ -251,7 +248,7 @@ class _DetailsActionBar extends ConsumerWidget {
             ),
           ),
           if (canDelete) ...[
-            AppSpacing.sm.horizontalSpace,
+            MahafezSpacing.sm.horizontalSpace,
             _DeleteIconButton(
               isLoading: isDeletingTransaction,
               onPressed: isDeletingTransaction
@@ -298,7 +295,7 @@ class _DetailsActionBar extends ConsumerWidget {
         stackTrace: stackTrace,
       );
       if (!context.mounted) return;
-      AppSnackbar.showFailure(context, failure: failure);
+      MahafezSnackbar.showFailure(context, failure: failure);
     }
   }
 
@@ -317,17 +314,17 @@ class _DetailsActionBar extends ConsumerWidget {
     if (error is! Failure && error != null) {
       log('DetailsActionBar: $error', name: 'Presentation');
     }
-    AppSnackbar.showFailure(context, failure: failure);
+    MahafezSnackbar.showFailure(context, failure: failure);
   }
 
   Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
-    await AppDialog.show<void>(
+    await MahafezDialog.show<void>(
       context,
       title: context.l10n.transaction_deleteTitle,
       message: context.l10n.transaction_deleteMessage,
       confirmLabel: context.l10n.transaction_deleteAction,
       cancelLabel: context.l10n.transaction_cancel,
-      type: AppDialogType.error,
+      type: MahafezDialogType.error,
       onConfirm: () {
         Navigator.of(context).pop();
         ref

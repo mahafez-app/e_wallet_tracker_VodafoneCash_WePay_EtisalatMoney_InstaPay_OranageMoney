@@ -1,13 +1,10 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/app_error_view.dart';
-import '../../../../core/widgets/app_loader.dart';
 import '../../domain/entities/report_entity.dart';
 import '../providers/workspace_report_controller.dart';
 import '../widgets/report_period_selector.dart';
@@ -64,11 +61,11 @@ class _WorkspaceReportBody extends ConsumerWidget {
         WorkspaceWalletSelectorChips(workspaceId: workspaceId),
         Expanded(
           child: switch (state) {
-            AsyncLoading() => const Center(child: AppLoader()),
+            AsyncLoading() => const Center(child: MahafezLoader()),
             AsyncData(:final value) => _ReportDataView(report: value),
             AsyncError(:final error) => Padding(
-                padding: AppSpacing.pagePadding,
-                child: AppErrorView(error: error),
+                padding: MahafezSpacing.pagePadding,
+                child: MahafezErrorView(error: error),
               ),
           },
         ),
@@ -86,12 +83,12 @@ class _ReportDataView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ReportSummaryCard(report: report),
-          AppSpacing.xl.verticalSpace,
+          MahafezSpacing.xl.verticalSpace,
         ],
       ),
     );

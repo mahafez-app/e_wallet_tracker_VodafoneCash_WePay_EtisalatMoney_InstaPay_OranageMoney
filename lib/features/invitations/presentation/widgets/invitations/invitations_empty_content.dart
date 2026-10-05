@@ -1,9 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/app_button.dart';
 import 'invitations_sections.dart';
 
 class InvitationsEmptyContent extends StatelessWidget {
@@ -15,12 +13,12 @@ class InvitationsEmptyContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AppSpacing.xxxl.verticalSpace,
+        MahafezSpacing.xxxl.verticalSpace,
         const _InvitationsEmptyState(),
-        AppSpacing.xl.verticalSpace,
+        MahafezSpacing.xl.verticalSpace,
         SizedBox(
           width: double.infinity,
-          child: AppButton(
+          child: MahafezButton(
             label: context.l10n.invitationsRefreshAction,
             trailingIcon: Icon(
               Icons.refresh_rounded,
@@ -29,7 +27,7 @@ class InvitationsEmptyContent extends StatelessWidget {
             onPressed: () => onRefresh(),
           ),
         ),
-        AppSpacing.xl.verticalSpace,
+        MahafezSpacing.xl.verticalSpace,
         const InvitationsInfoCard(),
       ],
     );
@@ -44,7 +42,7 @@ class _InvitationsEmptyState extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.xl),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(32.responsiveRadius),
@@ -52,7 +50,7 @@ class _InvitationsEmptyState extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            padding: AppResponsive.allPadding(AppSpacing.xl),
+            padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
             decoration: BoxDecoration(
               color: theme.colorScheme.primaryContainer,
               borderRadius: BorderRadius.circular(28.responsiveRadius),
@@ -63,7 +61,7 @@ class _InvitationsEmptyState extends StatelessWidget {
               size: 52.responsiveRadius,
             ),
           ),
-          AppSpacing.xl.verticalSpace,
+          MahafezSpacing.xl.verticalSpace,
           Text(
             context.l10n.invitationsEmptyTitle,
             style: theme.textTheme.headlineSmall?.copyWith(
@@ -71,7 +69,7 @@ class _InvitationsEmptyState extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
           Text(
             context.l10n.invitationsEmptyDescription,
             style: theme.textTheme.bodyLarge?.copyWith(

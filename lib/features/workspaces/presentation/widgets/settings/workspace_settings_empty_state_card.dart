@@ -1,9 +1,7 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 
 class WorkspaceSettingsEmptyStateCard extends StatelessWidget {
   const WorkspaceSettingsEmptyStateCard({super.key, required this.message});
@@ -14,10 +12,10 @@ class WorkspaceSettingsEmptyStateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: AppResponsive.allPadding(AppSpacing.lg),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(AppSpacing.lg.responsiveRadius),
+        borderRadius: BorderRadius.circular(MahafezSpacing.lg.responsiveRadius),
       ),
       child: Text(
         message,

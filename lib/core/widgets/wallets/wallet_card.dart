@@ -1,11 +1,9 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../theme/app_color_extension.dart';
-import '../../theme/app_responsive.dart';
-import '../../theme/app_spacing.dart';
 import '../../utils/extensions/amount_extension.dart';
 import '../../utils/extensions/localization_extension.dart';
 import '../../utils/extensions/wallet_provider_ext.dart';
@@ -27,7 +25,7 @@ class WalletCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
 
     return Container(
       width: 290.responsiveWidth,
@@ -49,20 +47,20 @@ class WalletCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: AppResponsive.allPadding(AppSpacing.xl),
+        padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             WalletProviderInfo(provider: provider, phoneNumber: phoneNumber),
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             Text(
               l10n.currentBalance,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.outline,
               ),
             ),
-            AppSpacing.xs.verticalSpace,
+            MahafezSpacing.xs.verticalSpace,
             _WalletBalance(balance: balance),
           ],
         ),
@@ -92,9 +90,9 @@ class _WalletBalance extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        AppSpacing.xs.horizontalSpace,
+        MahafezSpacing.xs.horizontalSpace,
         Padding(
-          padding: AppResponsive.onlyPadding(bottom: 4),
+          padding: MahafezResponsive.onlyPadding(bottom: 4),
           child: FittedBox(
             child: Text(
               l10n.currency,

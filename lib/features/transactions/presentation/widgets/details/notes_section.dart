@@ -1,11 +1,10 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/domain/entities/transaction_entity.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../features/auth/providers/auth_providers.dart';
 import '../../providers/notes/notes_controller.dart';
 import '../../providers/transaction_details_controller.dart';
@@ -43,13 +42,13 @@ class _NotesSectionBody extends ConsumerWidget {
       children: [
         NotesSectionHeader(onAddTap: notifier.toggleAddField),
         if (notesState.showAddField) ...[
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
           _AddNoteRow(
             transaction: transaction,
             notifier: notifier,
             isAdding: notesState.isAdding,
           ),
-          AppSpacing.sm.verticalSpace,
+          MahafezSpacing.sm.verticalSpace,
         ],
         _NotesList(transaction: transaction, currentUserUid: currentUser?.uid),
       ],

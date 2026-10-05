@@ -1,8 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../navigation/transactions_route_data.dart';
 import '../../providers/draft_filters_controller.dart';
@@ -55,7 +54,7 @@ class _TransactionsFilterBottomSheetState
       decoration: BoxDecoration(
         color: theme.scaffoldBackgroundColor,
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppSpacing.xl.responsiveRadius),
+          top: Radius.circular(MahafezSpacing.xl.responsiveRadius),
         ),
       ),
       child: Column(
@@ -63,14 +62,14 @@ class _TransactionsFilterBottomSheetState
         children: [
           // ── Drag handle ────────────────────────────────────────────────────
           Padding(
-            padding: AppResponsive.symmetricPadding(vertical: AppSpacing.md),
+            padding: MahafezResponsive.symmetricPadding(vertical: MahafezSpacing.md),
             child: Center(
               child: Container(
                 width: 40.responsiveWidth,
-                height: AppSpacing.xs.responsiveHeight,
+                height: MahafezSpacing.xs.responsiveHeight,
                 decoration: BoxDecoration(
                   color: colors.outlineVariant.withAlpha(120),
-                  borderRadius: BorderRadius.circular(AppSpacing.xs.responsiveRadius),
+                  borderRadius: BorderRadius.circular(MahafezSpacing.xs.responsiveRadius),
                 ),
               ),
             ),
@@ -78,7 +77,7 @@ class _TransactionsFilterBottomSheetState
 
           // ── Title + Reset ──────────────────────────────────────────────────
           Padding(
-            padding: AppResponsive.horizontalPadding(AppSpacing.lg),
+            padding: MahafezResponsive.horizontalPadding(MahafezSpacing.lg),
             child: Row(
               children: [
                 Expanded(
@@ -114,7 +113,7 @@ class _TransactionsFilterBottomSheetState
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                AppSpacing.xs.verticalSpace,
+                MahafezSpacing.xs.verticalSpace,
                 TransactionSearchFilter(routeData: widget.routeData),
                 TransactionTypeFilterRow(routeData: widget.routeData),
                 TransactionPaidStatusFilterRow(routeData: widget.routeData),
@@ -129,27 +128,27 @@ class _TransactionsFilterBottomSheetState
                         widget.routeData as WorkspaceTransactionsRouteData,
                   ),
                 ],
-                AppSpacing.lg.verticalSpace,
+                MahafezSpacing.lg.verticalSpace,
               ],
             ),
           ),
 
           // ── Apply button ───────────────────────────────────────────────────
           Padding(
-            padding: AppResponsive.onlyPadding(
-              start: AppSpacing.lg,
-              top: AppSpacing.md,
-              end: AppSpacing.lg,
-              bottom: AppSpacing.xxl,
+            padding: MahafezResponsive.onlyPadding(
+              start: MahafezSpacing.lg,
+              top: MahafezSpacing.md,
+              end: MahafezSpacing.lg,
+              bottom: MahafezSpacing.xxl,
             ),
             child: SizedBox(
               width: double.infinity,
               child: FilledButton(
                 onPressed: _apply,
                 style: FilledButton.styleFrom(
-                  padding: AppResponsive.symmetricPadding(vertical: AppSpacing.md),
+                  padding: MahafezResponsive.symmetricPadding(vertical: MahafezSpacing.md),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppSpacing.lg.responsiveRadius),
+                    borderRadius: BorderRadius.circular(MahafezSpacing.lg.responsiveRadius),
                   ),
                 ),
                 child: Text(l10n.transactions_filterApply),

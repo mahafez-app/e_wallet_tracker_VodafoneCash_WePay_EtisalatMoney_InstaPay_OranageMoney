@@ -1,3 +1,4 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
@@ -5,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../../core/utils/app_assets.dart';
-import '../../../../../core/widgets/app_button.dart';
 import '../../providers/auth_controller.dart';
 
 class GoogleSignInButton extends ConsumerWidget {
@@ -17,8 +17,8 @@ class GoogleSignInButton extends ConsumerWidget {
     final theme = Theme.of(context);
     final authState = ref.watch(authNotifierProvider);
 
-    return AppButton(
-      type: AppButtonType.secondary,
+    return MahafezButton(
+      type: MahafezButtonType.secondary,
       label: l10n.continueWithGoogle,
       onPressed: () {
         ref.read(authNotifierProvider.notifier).signInWithGoogle();

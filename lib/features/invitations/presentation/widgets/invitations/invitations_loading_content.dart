@@ -1,10 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../core/widgets/skeleton/app_skeleton_box.dart';
 import 'invitation_card_skeleton.dart';
 
 class InvitationsLoadingContent extends StatelessWidget {
@@ -14,14 +12,14 @@ class InvitationsLoadingContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       children: [
         const _InvitationsOverviewSkeleton(),
-        AppSpacing.xl.verticalSpace,
+        MahafezSpacing.xl.verticalSpace,
         const InvitationCardSkeleton(),
-        AppSpacing.lg.verticalSpace,
+        MahafezSpacing.lg.verticalSpace,
         const InvitationCardSkeleton(),
-        AppSpacing.lg.verticalSpace,
+        MahafezSpacing.lg.verticalSpace,
         const InvitationCardSkeleton(),
       ],
     );
@@ -36,9 +34,9 @@ class _InvitationsOverviewSkeleton extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppSkeletonBox(width: 170.responsiveWidth, height: 18.responsiveHeight),
-        AppSpacing.md.verticalSpace,
-        AppSkeletonBox(
+        MahafezSkeletonBox(width: 170.responsiveWidth, height: 18.responsiveHeight),
+        MahafezSpacing.md.verticalSpace,
+        MahafezSkeletonBox(
           width: double.infinity,
           height: 96.responsiveHeight,
           borderRadius: BorderRadius.circular(24.responsiveRadius),

@@ -1,17 +1,14 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/app_routes.dart';
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../../../core/widgets/app_button.dart';
 import '../../../../../core/widgets/transactions/no_transactions_card.dart';
 import '../../../../transactions/presentation/navigation/transactions_route_data.dart';
 import '../../../domain/entities/workspace_details_entity.dart';
@@ -47,7 +44,7 @@ class WorkspaceTransactionsSection extends StatelessWidget {
               ),
           ],
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         if (!hasWallets)
           NoTransactionsCard(
             title: l10n.transactions_emptyTitle,
@@ -101,7 +98,7 @@ class _WorkspaceTransactionsActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
     final l10n = context.l10n;
     final latestActivity = details.latestActivityAt;
@@ -113,16 +110,16 @@ class _WorkspaceTransactionsActivityCard extends StatelessWidget {
         : '${l10n.lastActivity}: ${latestActivity.toTimeAgo(context)}';
 
     return Container(
-      padding: AppResponsive.allPadding(AppSpacing.xl),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(AppSpacing.xxl.responsiveRadius),
+        borderRadius: BorderRadius.circular(MahafezSpacing.xxl.responsiveRadius),
         border: Border.all(color: colors.cardBorder),
         boxShadow: [
           BoxShadow(
             color: colors.cardShadow,
-            blurRadius: AppSpacing.lg.responsiveRadius,
-            offset: Offset(0, AppSpacing.xs.responsiveHeight),
+            blurRadius: MahafezSpacing.lg.responsiveRadius,
+            offset: Offset(0, MahafezSpacing.xs.responsiveHeight),
           ),
         ],
       ),
@@ -133,20 +130,20 @@ class _WorkspaceTransactionsActivityCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: AppResponsive.allPadding(AppSpacing.md),
+                padding: MahafezResponsive.allPadding(MahafezSpacing.md),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(
-                    AppSpacing.lg.responsiveRadius,
+                    MahafezSpacing.lg.responsiveRadius,
                   ),
                 ),
                 child: Icon(
                   Icons.receipt_long_rounded,
                   color: theme.colorScheme.primary,
-                  size: AppSpacing.xl.responsiveRadius,
+                  size: MahafezSpacing.xl.responsiveRadius,
                 ),
               ),
-              AppSpacing.md.horizontalSpace,
+              MahafezSpacing.md.horizontalSpace,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +154,7 @@ class _WorkspaceTransactionsActivityCard extends StatelessWidget {
                         fontWeight: FontWeight.w800,
                       ),
                     ),
-                    AppSpacing.xs.verticalSpace,
+                    MahafezSpacing.xs.verticalSpace,
                     Text(
                       description,
                       style: theme.textTheme.bodyMedium?.copyWith(
@@ -169,10 +166,10 @@ class _WorkspaceTransactionsActivityCard extends StatelessWidget {
               ),
             ],
           ),
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
           Wrap(
-            spacing: AppSpacing.sm.responsiveWidth,
-            runSpacing: AppSpacing.sm.responsiveHeight,
+            spacing: MahafezSpacing.sm.responsiveWidth,
+            runSpacing: MahafezSpacing.sm.responsiveHeight,
             children: [
               _WorkspaceActivityChip(
                 icon: Icons.account_balance_wallet_outlined,
@@ -184,14 +181,14 @@ class _WorkspaceTransactionsActivityCard extends StatelessWidget {
               ),
             ],
           ),
-          AppSpacing.lg.verticalSpace,
-          AppButton(
+          MahafezSpacing.lg.verticalSpace,
+          MahafezButton(
             label: l10n.viewAllTransactions,
-            type: AppButtonType.secondary,
+            type: MahafezButtonType.secondary,
             onPressed: onViewAll,
             trailingIcon: Icon(
               Icons.arrow_forward_rounded,
-              size: AppSpacing.lg.responsiveRadius,
+              size: MahafezSpacing.lg.responsiveRadius,
             ),
           ),
         ],
@@ -212,13 +209,13 @@ class _WorkspaceActivityChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     return Container(
-      padding: AppResponsive.symmetricPadding(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.sm,
+      padding: MahafezResponsive.symmetricPadding(
+        horizontal: MahafezSpacing.md,
+        vertical: MahafezSpacing.sm,
       ),
       decoration: BoxDecoration(
         color: colors.infoContainer,
@@ -229,10 +226,10 @@ class _WorkspaceActivityChip extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: AppSpacing.md.responsiveRadius,
+            size: MahafezSpacing.md.responsiveRadius,
             color: theme.colorScheme.primary,
           ),
-          AppSpacing.xs.horizontalSpace,
+          MahafezSpacing.xs.horizontalSpace,
           Text(
             label,
             style: theme.textTheme.labelMedium?.copyWith(

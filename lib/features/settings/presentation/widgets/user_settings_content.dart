@@ -1,10 +1,8 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/app_loader.dart';
 import '../../../auth/presentation/providers/auth_controller.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../providers/sms_permission_controller.dart';
@@ -23,7 +21,7 @@ class UserSettingsContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
-    if (user == null) return const AppLoader();
+    if (user == null) return const MahafezLoader();
 
     final authState = ref.watch(authNotifierProvider);
     final smsPermissionState = ref.watch(smsPermissionControllerProvider);
@@ -32,11 +30,11 @@ class UserSettingsContent extends ConsumerWidget {
     );
 
     return SingleChildScrollView(
-      padding: AppResponsive.onlyPadding(
-        start: AppSpacing.lg,
-        top: AppSpacing.md,
-        end: AppSpacing.lg,
-        bottom: AppSpacing.xxxl,
+      padding: MahafezResponsive.onlyPadding(
+        start: MahafezSpacing.lg,
+        top: MahafezSpacing.md,
+        end: MahafezSpacing.lg,
+        bottom: MahafezSpacing.xxxl,
       ),
       child: Center(
         child: ConstrainedBox(
@@ -51,25 +49,25 @@ class UserSettingsContent extends ConsumerWidget {
                   currentName: user.name,
                 ),
               ),
-              AppSpacing.lg.verticalSpace,
+              MahafezSpacing.lg.verticalSpace,
               UserSettingsAppSection(
                 smsPermissionState: smsPermissionState,
                 onOpenSmsSettings: smsPermissionController.openSettings,
               ),
-              AppSpacing.lg.verticalSpace,
+              MahafezSpacing.lg.verticalSpace,
               const BackgroundReliabilitySection(),
-              AppSpacing.lg.verticalSpace,
+              MahafezSpacing.lg.verticalSpace,
               UserSettingsAccountSection(
                 isSigningOut:
                     authState.loadingMethod == AuthLoadingMethod.signOut,
               ),
-              AppSpacing.lg.verticalSpace,
+              MahafezSpacing.lg.verticalSpace,
               const UserSettingsWalletsSection(),
-              AppSpacing.lg.verticalSpace,
+              MahafezSpacing.lg.verticalSpace,
               SettingsSectionTitle(
                 label: context.l10n.userSettingsAboutSection,
               ),
-              AppSpacing.sm.verticalSpace,
+              MahafezSpacing.sm.verticalSpace,
               const SettingsAppVersionCard(),
             ],
           ),

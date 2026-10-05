@@ -1,12 +1,11 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/domain/entities/workspace_entity.dart';
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import 'home_section_header.dart';
 import 'workspaces/home_workspace_card.dart';
@@ -29,7 +28,7 @@ class HomeWorkspacesSection extends StatelessWidget {
           icon: Icons.add_business_outlined,
           onPressed: () => context.push(AppRoutes.addWorkspace),
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         if (workspaces.isEmpty)
           const _AddWorkspaceEmptyCard()
         else
@@ -37,7 +36,7 @@ class HomeWorkspacesSection extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: workspaces.length,
-            separatorBuilder: (_, _) => AppSpacing.md.verticalSpace,
+            separatorBuilder: (_, _) => MahafezSpacing.md.verticalSpace,
             itemBuilder: (context, index) =>
                 HomeWorkspaceCard(workspace: workspaces[index]),
           ),
@@ -58,7 +57,7 @@ class _AddWorkspaceEmptyCard extends StatelessWidget {
       onTap: () => context.push(AppRoutes.addWorkspace),
       child: Container(
         width: double.infinity,
-        padding: AppResponsive.allPadding(AppSpacing.xl),
+        padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
         decoration: BoxDecoration(
           color: theme.colorScheme.secondary.withAlpha(15),
           borderRadius: BorderRadius.circular(28.responsiveRadius),
@@ -70,7 +69,7 @@ class _AddWorkspaceEmptyCard extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              padding: AppResponsive.allPadding(AppSpacing.lg),
+              padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
               decoration: BoxDecoration(
                 color: theme.colorScheme.secondary.withAlpha(40),
                 shape: BoxShape.circle,
@@ -88,7 +87,7 @@ class _AddWorkspaceEmptyCard extends StatelessWidget {
                 size: 28.responsiveRadius,
               ),
             ),
-            AppSpacing.md.horizontalSpace,
+            MahafezSpacing.md.horizontalSpace,
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +101,7 @@ class _AddWorkspaceEmptyCard extends StatelessWidget {
                       fontSize: 10.responsiveFont,
                     ),
                   ),
-                  AppSpacing.xxs.verticalSpace,
+                  MahafezSpacing.xxs.verticalSpace,
                   Text(
                     l10n.createWorkspaceEmptyTitle,
                     style: theme.textTheme.titleSmall?.copyWith(

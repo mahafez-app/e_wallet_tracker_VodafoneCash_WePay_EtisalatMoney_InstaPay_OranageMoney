@@ -1,11 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
-import 'package:wallet_tracker/core/widgets/app_text_field.dart';
-
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
-
 class AddWalletPhoneNumberSection extends StatefulWidget {
   const AddWalletPhoneNumberSection({
     super.key,
@@ -54,7 +50,7 @@ class _AddWalletPhoneNumberSectionState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        AppTextField(
+        MahafezTextField(
           label: s.phoneNumber,
           hintText: s.phoneNumber,
           controller: _phoneController,
@@ -65,7 +61,7 @@ class _AddWalletPhoneNumberSectionState
           ],
           onChanged: widget.onPhoneNumberChanged,
         ),
-        AppSpacing.xs.verticalSpace,
+        MahafezSpacing.xs.verticalSpace,
       ],
     );
   }

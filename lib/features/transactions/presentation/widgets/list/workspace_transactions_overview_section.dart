@@ -1,15 +1,12 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../../../core/widgets/app_error_view.dart';
 import '../../../../../core/widgets/wallets/wallet_provider_icon.dart';
 import '../../../domain/entities/workspace_transactions_overview_entity.dart';
 import '../../navigation/transactions_route_data.dart';
@@ -32,15 +29,15 @@ class WorkspaceTransactionsOverviewSection extends ConsumerWidget {
     return overviewState.when(
       loading: () => const SizedBox.shrink(),
       error: (error, _) => Padding(
-        padding: AppResponsive.symmetricPadding(horizontal: AppSpacing.lg),
-        child: AppErrorView(error: error),
+        padding: MahafezResponsive.symmetricPadding(horizontal: MahafezSpacing.lg),
+        child: MahafezErrorView(error: error),
       ),
       data: (overview) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            padding: AppResponsive.symmetricPadding(horizontal: AppSpacing.lg),
+            padding: MahafezResponsive.symmetricPadding(horizontal: MahafezSpacing.lg),
             clipBehavior: Clip.none,
             child: Row(
               children: [
@@ -50,14 +47,14 @@ class WorkspaceTransactionsOverviewSection extends ConsumerWidget {
                   icon: Icons.add_chart_rounded,
                   type: _MetricCardType.collected,
                 ),
-                AppSpacing.md.horizontalSpace,
+                MahafezSpacing.md.horizontalSpace,
                 _MetricCard(
                   title: context.l10n.workspaceTransactionsTodaySent,
                   value: overview.todaySent.toCurrencyText(context),
                   icon: Icons.analytics_rounded,
                   type: _MetricCardType.sent,
                 ),
-                AppSpacing.md.horizontalSpace,
+                MahafezSpacing.md.horizontalSpace,
                 _MetricCard(
                   title: context.l10n.workspaceTransactionsUnpaidCount,
                   value: overview.unpaidCount.toString(),
@@ -67,9 +64,9 @@ class WorkspaceTransactionsOverviewSection extends ConsumerWidget {
               ],
             ),
           ),
-          AppSpacing.lg.verticalSpace,
+          MahafezSpacing.lg.verticalSpace,
           Padding(
-            padding: AppResponsive.symmetricPadding(horizontal: AppSpacing.lg),
+            padding: MahafezResponsive.symmetricPadding(horizontal: MahafezSpacing.lg),
             child: _LatestWalletsCard(overview: overview),
           ),
         ],
@@ -95,7 +92,7 @@ class _MetricCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final theme = Theme.of(context);
 
     final (baseColor, gradientData) = switch (type) {
@@ -118,7 +115,7 @@ class _MetricCard extends StatelessWidget {
 
     return Container(
       width: 156.responsiveWidth,
-      padding: AppResponsive.allPadding(AppSpacing.lg),
+      padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -153,14 +150,14 @@ class _MetricCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: AppResponsive.allPadding(AppSpacing.sm),
+                padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
                 decoration: BoxDecoration(
                   color: baseColor.withAlpha(30),
                   borderRadius: BorderRadius.circular(12.responsiveRadius),
                 ),
                 child: Icon(icon, color: baseColor, size: 20.responsiveRadius),
               ),
-              AppSpacing.md.verticalSpace,
+              MahafezSpacing.md.verticalSpace,
               Text(
                 title,
                 maxLines: 1,
@@ -170,7 +167,7 @@ class _MetricCard extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              AppSpacing.xs.verticalSpace,
+              MahafezSpacing.xs.verticalSpace,
               Text(
                 value,
                 style: theme.textTheme.titleLarge?.copyWith(
@@ -200,9 +197,9 @@ class _LatestWalletsCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: context.appColors.cardBackground,
+        color: context.mahafezColors.cardBackground,
         borderRadius: BorderRadius.circular(28.responsiveRadius),
-        border: Border.all(color: context.appColors.cardBorder),
+        border: Border.all(color: context.mahafezColors.cardBorder),
         boxShadow: [
           BoxShadow(
             color: theme.colorScheme.shadow.withAlpha(8),
@@ -215,11 +212,11 @@ class _LatestWalletsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: AppResponsive.allPadding(AppSpacing.lg),
+            padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
             child: Row(
               children: [
                 Container(
-                  padding: AppResponsive.allPadding(AppSpacing.sm),
+                  padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primaryContainer.withAlpha(100),
                     shape: BoxShape.circle,
@@ -230,7 +227,7 @@ class _LatestWalletsCard extends StatelessWidget {
                     size: 18.responsiveRadius,
                   ),
                 ),
-                AppSpacing.md.horizontalSpace,
+                MahafezSpacing.md.horizontalSpace,
                 Text(
                   context.l10n.workspaceTransactionsLatestWallets,
                   style: theme.textTheme.titleSmall?.copyWith(
@@ -244,7 +241,7 @@ class _LatestWalletsCard extends StatelessWidget {
           const Divider(height: 1),
           if (wallets.isEmpty)
             Padding(
-              padding: AppResponsive.allPadding(AppSpacing.xl),
+              padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
               child: Center(
                 child: Text(
                   context.l10n.workspaceTransactionsLatestWalletsEmpty,
@@ -258,13 +255,13 @@ class _LatestWalletsCard extends StatelessWidget {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: AppResponsive.allPadding(AppSpacing.sm),
+              padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
               itemCount: wallets.length,
-              separatorBuilder: (_, _) => AppSpacing.xs.verticalSpace,
+              separatorBuilder: (_, _) => MahafezSpacing.xs.verticalSpace,
               itemBuilder: (context, index) {
                 final wallet = wallets[index];
                 return Container(
-                  padding: AppResponsive.allPadding(AppSpacing.md),
+                  padding: MahafezResponsive.allPadding(MahafezSpacing.md),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surface.withAlpha(50),
                     borderRadius: BorderRadius.circular(18.responsiveRadius),
@@ -275,7 +272,7 @@ class _LatestWalletsCard extends StatelessWidget {
                         provider: wallet.provider,
                         size: 25.responsiveRadius,
                       ),
-                      AppSpacing.md.horizontalSpace,
+                      MahafezSpacing.md.horizontalSpace,
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,12 +302,12 @@ class _LatestWalletsCard extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          AppSpacing.xs.verticalSpace,
+                          MahafezSpacing.xs.verticalSpace,
                           Container(
                             width: 6.responsiveRadius,
                             height: 6.responsiveRadius,
                             decoration: BoxDecoration(
-                              color: context.appColors.success,
+                              color: context.mahafezColors.success,
                               shape: BoxShape.circle,
                             ),
                           ),

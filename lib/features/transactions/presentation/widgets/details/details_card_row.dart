@@ -1,7 +1,5 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 
 class DetailsCardRow extends StatelessWidget {
   const DetailsCardRow({super.key, required this.label, required this.child});
@@ -14,12 +12,12 @@ class DetailsCardRow extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: AppResponsive.symmetricPadding(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.md,
+      padding: MahafezResponsive.symmetricPadding(
+        horizontal: MahafezSpacing.lg,
+        vertical: MahafezSpacing.md,
       ),
       child: Row(
-        spacing: AppSpacing.lg,
+        spacing: MahafezSpacing.lg,
         children: [
           Expanded(
             flex: 1,
@@ -44,8 +42,8 @@ class DetailsCardDivider extends StatelessWidget {
   Widget build(BuildContext context) => Divider(
     height: 1,
     thickness: 0.5,
-    indent: AppSpacing.lg.responsiveWidth,
-    endIndent: AppSpacing.lg.responsiveWidth,
+    indent: MahafezSpacing.lg.responsiveWidth,
+    endIndent: MahafezSpacing.lg.responsiveWidth,
     color: Theme.of(context).colorScheme.outlineVariant.withAlpha(60),
   );
 }

@@ -1,8 +1,8 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_tracker/core/utils/extensions/localization_extension.dart';
 
 import 'package:mahafez_core/mahafez_core.dart';
-import '../../theme/app_colors.dart';
 import '../app_assets.dart';
 
 extension WalletProviderDisplay on WalletProvider {
@@ -16,12 +16,12 @@ extension WalletProviderDisplay on WalletProvider {
   };
 
   Color get brandColor => switch (this) {
-    WalletProvider.vodafoneCash => AppColors.vodafoneRed,
-    WalletProvider.orangeMoney => AppColors.orangeMoney,
-    WalletProvider.etisalatCash => AppColors.etisalatGreen,
-    WalletProvider.instaPay => AppColors.instaPayNavy,
-    WalletProvider.wePay => AppColors.wePayPurple,
-    WalletProvider.unknown => AppColors.providerUnknownNeutral,
+    WalletProvider.vodafoneCash => MahafezColors.vodafoneRed,
+    WalletProvider.orangeMoney => MahafezColors.orangeMoney,
+    WalletProvider.etisalatCash => MahafezColors.etisalatGreen,
+    WalletProvider.instaPay => MahafezColors.instaPayNavy,
+    WalletProvider.wePay => MahafezColors.wePayPurple,
+    WalletProvider.unknown => MahafezColors.providerUnknownNeutral,
   };
 
   String? get iconAssetPath => switch (this) {

@@ -1,8 +1,7 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../core/utils/extensions/wallet_provider_ext.dart';
 import '../../../../generated/l10n.dart';
@@ -30,16 +29,16 @@ class WorkspaceWalletSelectorChips extends ConsumerWidget {
     final allSelected = filter.selectedWalletIds.isEmpty;
 
     return Padding(
-      padding: AppSpacing.pagePadding.copyWith(
+      padding: MahafezSpacing.pagePadding.copyWith(
         top: 0,
-        bottom: AppSpacing.sm.responsiveHeight,
+        bottom: MahafezSpacing.sm.responsiveHeight,
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
             Padding(
-              padding: EdgeInsets.only(right: AppSpacing.sm.responsiveWidth),
+              padding: EdgeInsets.only(right: MahafezSpacing.sm.responsiveWidth),
               child: FilterChip(
                 label: Text(S.of(context).reports_all_wallets),
                 selected: allSelected,
@@ -58,7 +57,7 @@ class WorkspaceWalletSelectorChips extends ConsumerWidget {
             ...wallets.map((wallet) {
               final isSelected = filter.selectedWalletIds.contains(wallet.id);
               return Padding(
-                padding: EdgeInsets.only(right: AppSpacing.sm.responsiveWidth),
+                padding: EdgeInsets.only(right: MahafezSpacing.sm.responsiveWidth),
                 child: FilterChip(
                   label: Text(
                     '${wallet.provider.displayName(context)} ${wallet.phoneNumber.formattedEgyptianPhoneNumber}',

@@ -1,8 +1,6 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_color_extension.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../providers/sms_permission_controller.dart';
 import 'settings_card.dart';
@@ -21,18 +19,18 @@ class SettingsSmsPermissionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
 
     return SettingsCard(
       child: InkWell(
         onTap: state.isOpeningSettings ? null : onOpenSettings,
         borderRadius: BorderRadius.circular(24.responsiveRadius),
         child: Padding(
-          padding: AppResponsive.allPadding(AppSpacing.lg),
+          padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
           child: Row(
             children: [
               Container(
-                padding: AppResponsive.allPadding(AppSpacing.sm),
+                padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
                 decoration: BoxDecoration(
                   color: colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(14.responsiveRadius),
@@ -43,7 +41,7 @@ class SettingsSmsPermissionCard extends StatelessWidget {
                   size: 22.responsiveRadius,
                 ),
               ),
-              AppSpacing.md.horizontalSpace,
+              MahafezSpacing.md.horizontalSpace,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +53,7 @@ class SettingsSmsPermissionCard extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    AppSpacing.xs.verticalSpace,
+                    MahafezSpacing.xs.verticalSpace,
                     Text(
                       _statusLabel(context),
                       style: theme.textTheme.bodyMedium?.copyWith(
@@ -66,7 +64,7 @@ class SettingsSmsPermissionCard extends StatelessWidget {
                   ],
                 ),
               ),
-              AppSpacing.sm.horizontalSpace,
+              MahafezSpacing.sm.horizontalSpace,
               if (state.isOpeningSettings)
                 SizedBox.square(
                   dimension: 20.responsiveWidth,
@@ -93,7 +91,7 @@ class SettingsSmsPermissionCard extends StatelessWidget {
         : context.l10n.userSettingsSmsPermissionDisabledLabel;
   }
 
-  Color _statusColor(ColorScheme colorScheme, AppColorExtension colors) {
+  Color _statusColor(ColorScheme colorScheme, MahafezColorExtension colors) {
     if (state.isChecking) {
       return colorScheme.onSurfaceVariant;
     }

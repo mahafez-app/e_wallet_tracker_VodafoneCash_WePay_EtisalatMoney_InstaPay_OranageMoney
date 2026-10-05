@@ -1,7 +1,5 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 
 class SettingsOption<T> {
   const SettingsOption({
@@ -50,7 +48,7 @@ class SettingsOptionBottomSheet<T> extends StatelessWidget {
 
     return SafeArea(
       child: Padding(
-        padding: AppSpacing.pagePadding,
+        padding: MahafezSpacing.pagePadding,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,14 +59,14 @@ class SettingsOptionBottomSheet<T> extends StatelessWidget {
                 fontWeight: FontWeight.w800,
               ),
             ),
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             ...options.map(
               (option) => _SettingsOptionTile<T>(
                 option: option,
                 isSelected: option.value == selectedValue,
               ),
             ),
-            AppSpacing.sm.verticalSpace,
+            MahafezSpacing.sm.verticalSpace,
           ],
         ),
       ),
@@ -95,14 +93,14 @@ class _SettingsOptionTile<T> extends StatelessWidget {
       onTap: () => Navigator.of(context).pop(option.value),
       borderRadius: BorderRadius.circular(20.responsiveRadius),
       child: Padding(
-        padding: AppResponsive.symmetricPadding(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.md,
+        padding: MahafezResponsive.symmetricPadding(
+          horizontal: MahafezSpacing.lg,
+          vertical: MahafezSpacing.md,
         ),
         child: Row(
           children: [
             Container(
-              padding: AppResponsive.allPadding(AppSpacing.sm),
+              padding: MahafezResponsive.allPadding(MahafezSpacing.sm),
               decoration: BoxDecoration(
                 color: isSelected
                     ? colorScheme.primaryContainer
@@ -117,7 +115,7 @@ class _SettingsOptionTile<T> extends StatelessWidget {
                 size: 20.responsiveRadius,
               ),
             ),
-            AppSpacing.md.horizontalSpace,
+            MahafezSpacing.md.horizontalSpace,
             Expanded(
               child: Text(
                 option.label,
@@ -127,7 +125,7 @@ class _SettingsOptionTile<T> extends StatelessWidget {
                 ),
               ),
             ),
-            AppSpacing.sm.horizontalSpace,
+            MahafezSpacing.sm.horizontalSpace,
             Icon(
               isSelected
                   ? Icons.check_circle_rounded

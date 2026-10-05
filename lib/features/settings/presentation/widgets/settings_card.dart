@@ -1,7 +1,5 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_color_extension.dart';
-import '../../../../core/theme/app_responsive.dart';
 
 class SettingsCard extends StatelessWidget {
   const SettingsCard({super.key, required this.child});
@@ -10,7 +8,7 @@ class SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
 
     return Container(
       clipBehavior: Clip.antiAlias,

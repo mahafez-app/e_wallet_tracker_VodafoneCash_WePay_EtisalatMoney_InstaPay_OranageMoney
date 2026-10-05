@@ -1,18 +1,14 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../../core/theme/app_color_extension.dart';
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../core/widgets/skeleton/app_skeleton_box.dart';
 
 class InvitationCardSkeleton extends StatelessWidget {
   const InvitationCardSkeleton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final colors = context.mahafezColors;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -46,23 +42,23 @@ class InvitationCardSkeleton extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: AppResponsive.onlyPadding(
-              start: AppSpacing.xl,
-              top: AppSpacing.xl,
-              end: AppSpacing.xl,
-              bottom: AppSpacing.xl,
+            padding: MahafezResponsive.onlyPadding(
+              start: MahafezSpacing.xl,
+              top: MahafezSpacing.xl,
+              end: MahafezSpacing.xl,
+              bottom: MahafezSpacing.xl,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const _InvitationHeaderSkeleton(),
-                AppSpacing.lg.verticalSpace,
-                AppSkeletonBox(
+                MahafezSpacing.lg.verticalSpace,
+                MahafezSkeletonBox(
                   width: 140.responsiveWidth,
                   height: 14.responsiveHeight,
                   borderRadius: BorderRadius.circular(999.responsiveRadius),
                 ),
-                AppSpacing.xl.verticalSpace,
+                MahafezSpacing.xl.verticalSpace,
                 const _InvitationActionsSkeleton(),
               ],
             ),
@@ -81,9 +77,9 @@ class _InvitationHeaderSkeleton extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppSkeletonBox(width: 180.responsiveWidth, height: 20.responsiveHeight),
-        AppSpacing.sm.verticalSpace,
-        AppSkeletonBox(
+        MahafezSkeletonBox(width: 180.responsiveWidth, height: 20.responsiveHeight),
+        MahafezSpacing.sm.verticalSpace,
+        MahafezSkeletonBox(
           width: 128.responsiveWidth,
           height: 14.responsiveHeight,
           borderRadius: BorderRadius.circular(999.responsiveRadius),
@@ -101,14 +97,14 @@ class _InvitationActionsSkeleton extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: AppSkeletonBox(
+          child: MahafezSkeletonBox(
             height: 44.responsiveHeight,
             borderRadius: BorderRadius.circular(14.responsiveRadius),
           ),
         ),
-        AppSpacing.md.horizontalSpace,
+        MahafezSpacing.md.horizontalSpace,
         Expanded(
-          child: AppSkeletonBox(
+          child: MahafezSkeletonBox(
             height: 44.responsiveHeight,
             borderRadius: BorderRadius.circular(14.responsiveRadius),
           ),

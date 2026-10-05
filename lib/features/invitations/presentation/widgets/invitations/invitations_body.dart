@@ -1,3 +1,4 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -6,8 +7,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/utils/extensions/failure_extension.dart';
-import '../../../../../core/widgets/app_error_view.dart';
-import '../../../../../core/widgets/app_snackbar.dart';
 import '../../providers/invitations_controller.dart';
 import '../../providers/invitations_state.dart';
 import 'invitations_content.dart';
@@ -26,7 +25,7 @@ class InvitationsBody extends ConsumerWidget {
     final state = ref.watch(invitationsControllerProvider);
     return switch (state) {
       AsyncLoading() => const InvitationsLoadingContent(),
-      AsyncError(:final error) => AppErrorView(
+      AsyncError(:final error) => MahafezErrorView(
         error: error,
         onRetry: () => ref.invalidate(invitationsControllerProvider),
       ),
@@ -46,10 +45,10 @@ class InvitationsBody extends ConsumerWidget {
     }
 
     if (!feedback.isSuccess) {
-      AppSnackbar.show(
+      MahafezSnackbar.show(
         context,
         message: feedback.failure!.toLocalizedString(context),
-        type: AppSnackbarType.error,
+        type: MahafezSnackbarType.error,
       );
       return;
     }

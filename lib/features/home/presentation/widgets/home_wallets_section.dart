@@ -1,12 +1,11 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/domain/entities/wallet_entity.dart';
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/widgets/wallets/wallet_card.dart';
 import 'home_section_header.dart';
@@ -29,14 +28,14 @@ class HomeWalletsSection extends StatelessWidget {
           icon: Icons.add_card_outlined,
           onPressed: () => context.push(AppRoutes.addWallet),
         ),
-        AppSpacing.md.verticalSpace,
+        MahafezSpacing.md.verticalSpace,
         if (wallets.isEmpty)
           const _AddWalletEmptyCard()
         else
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              spacing: AppSpacing.md,
+              spacing: MahafezSpacing.md,
               children: wallets.map((wallet) {
                 return GestureDetector(
                   onTap: () => context.push(AppRoutes.walletDetailsPath(wallet.id)),
@@ -66,7 +65,7 @@ class _AddWalletEmptyCard extends StatelessWidget {
       onTap: () => context.push(AppRoutes.addWallet),
       child: Container(
         width: double.infinity,
-        padding: AppResponsive.allPadding(AppSpacing.xl),
+        padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
         decoration: BoxDecoration(
           color: theme.colorScheme.primary.withAlpha(15),
           borderRadius: BorderRadius.circular(28.responsiveRadius),
@@ -78,7 +77,7 @@ class _AddWalletEmptyCard extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              padding: AppResponsive.allPadding(AppSpacing.lg),
+              padding: MahafezResponsive.allPadding(MahafezSpacing.lg),
               decoration: BoxDecoration(
                 color: theme.colorScheme.primary.withAlpha(40),
                 shape: BoxShape.circle,
@@ -96,7 +95,7 @@ class _AddWalletEmptyCard extends StatelessWidget {
                 size: 28.responsiveRadius,
               ),
             ),
-            AppSpacing.md.horizontalSpace,
+            MahafezSpacing.md.horizontalSpace,
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +109,7 @@ class _AddWalletEmptyCard extends StatelessWidget {
                       fontSize: 10.responsiveFont,
                     ),
                   ),
-                  AppSpacing.xxs.verticalSpace,
+                  MahafezSpacing.xxs.verticalSpace,
                   Text(
                     l10n.createWalletEmptyTitle,
                     style: theme.textTheme.titleSmall?.copyWith(

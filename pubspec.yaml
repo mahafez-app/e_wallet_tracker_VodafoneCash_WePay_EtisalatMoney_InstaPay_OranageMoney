@@ -37,7 +37,11 @@ dependencies:
   mahafez_core:
     git:
       url: https://github.com/mahafez-app/mahafez_core.git
-      ref: v1.0.0
+      ref: v1.0.1
+  mahafez_design_system:
+    git:
+      url: https://github.com/mahafez-app/mahafez_design_system.git
+      ref: v1.0.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -97,15 +101,15 @@ flutter:
   fonts:
     - family: Cairo
       fonts:
-        - asset: assets/fonts/Cairo/Cairo-Regular.ttf
+        - asset: packages/mahafez_design_system/fonts/Cairo/Cairo-Regular.ttf
           weight: 400
-        - asset: assets/fonts/Cairo/Cairo-Medium.ttf
+        - asset: packages/mahafez_design_system/fonts/Cairo/Cairo-Medium.ttf
           weight: 500
-        - asset: assets/fonts/Cairo/Cairo-SemiBold.ttf
+        - asset: packages/mahafez_design_system/fonts/Cairo/Cairo-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/Cairo/Cairo-Bold.ttf
+        - asset: packages/mahafez_design_system/fonts/Cairo/Cairo-Bold.ttf
           weight: 700
-        - asset: assets/fonts/Cairo/Cairo-ExtraBold.ttf
+        - asset: packages/mahafez_design_system/fonts/Cairo/Cairo-ExtraBold.ttf
           weight: 800
 
 flutter_intl:

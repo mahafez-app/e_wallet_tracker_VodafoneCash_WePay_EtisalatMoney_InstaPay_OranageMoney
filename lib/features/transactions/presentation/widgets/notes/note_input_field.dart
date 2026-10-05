@@ -1,9 +1,8 @@
 // ignore_for_file: unused_element_parameter
 
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_responsive.dart';
-import '../../../../../../core/theme/app_spacing.dart';
 import '../../../../../../core/utils/extensions/localization_extension.dart';
 
 /// Reusable inline text-field used for both adding a new note and editing
@@ -29,7 +28,7 @@ class NoteInputField extends StatelessWidget {
         Expanded(
           child: _NoteTextField(controller: controller, onSubmit: onSubmit),
         ),
-        AppSpacing.sm.horizontalSpace,
+        MahafezSpacing.sm.horizontalSpace,
         _SubmitButton(isBusy: isBusy, onSubmit: onSubmit),
       ],
     );
@@ -58,9 +57,9 @@ class _NoteTextField extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.responsiveRadius),
         ),
-        contentPadding: AppResponsive.symmetricPadding(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
+        contentPadding: MahafezResponsive.symmetricPadding(
+          horizontal: MahafezSpacing.md,
+          vertical: MahafezSpacing.sm,
         ),
       ),
       onSubmitted: (_) => onSubmit(),

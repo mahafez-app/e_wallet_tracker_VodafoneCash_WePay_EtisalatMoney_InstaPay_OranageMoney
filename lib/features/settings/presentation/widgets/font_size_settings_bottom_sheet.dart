@@ -1,10 +1,8 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_responsive.dart';
-import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/app_button.dart';
 import '../../domain/entities/app_preferences_entity.dart';
 import '../providers/app_preferences_controller.dart';
 import 'font_size_settings_content.dart';
@@ -54,7 +52,7 @@ class _FontSizeSettingsBottomSheetState
 
     return SafeArea(
       child: Padding(
-        padding: AppSpacing.pagePadding,
+        padding: MahafezSpacing.pagePadding,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,19 +63,19 @@ class _FontSizeSettingsBottomSheetState
                 fontWeight: FontWeight.w800,
               ),
             ),
-            AppSpacing.xs.verticalSpace,
+            MahafezSpacing.xs.verticalSpace,
             Text(
               context.l10n.userSettingsFontSizeDescription,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             FontSizePreviewCard(
               previewScale: _selectedFontScale,
               appliedScale: currentScale,
             ),
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             FontSizeSliderControl(
               value: _selectedFontScale,
               onChanged: (value) {
@@ -87,21 +85,21 @@ class _FontSizeSettingsBottomSheetState
                 );
               },
             ),
-            AppSpacing.sm.verticalSpace,
+            MahafezSpacing.sm.verticalSpace,
             FontSizeSliderLabels(selectedFontScale: _selectedFontScale),
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             Row(
               children: [
                 Expanded(
-                  child: AppButton(
+                  child: MahafezButton(
                     label: context.l10n.commonCancelAction,
                     onPressed: () => Navigator.of(context).pop(),
-                    type: AppButtonType.secondary,
+                    type: MahafezButtonType.secondary,
                   ),
                 ),
-                AppSpacing.md.horizontalSpace,
+                MahafezSpacing.md.horizontalSpace,
                 Expanded(
-                  child: AppButton(
+                  child: MahafezButton(
                     label: context.l10n.userSettingsFontSizeSaveAction,
                     onPressed: _selectedFontScale == currentScale
                         ? null
@@ -115,7 +113,7 @@ class _FontSizeSettingsBottomSheetState
                 ),
               ],
             ),
-            AppSpacing.sm.verticalSpace,
+            MahafezSpacing.sm.verticalSpace,
           ],
         ),
       ),

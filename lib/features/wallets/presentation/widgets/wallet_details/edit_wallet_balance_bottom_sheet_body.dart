@@ -1,13 +1,9 @@
+import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/theme/app_responsive.dart';
-import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../../core/widgets/app_button.dart';
-import '../../../../../core/widgets/app_snackbar.dart';
-import '../../../../../core/widgets/app_text_field.dart';
 import '../../providers/wallet_balance_edit_controller.dart';
 import '../../providers/wallet_details_controller.dart';
 
@@ -53,15 +49,15 @@ class _EditWalletBalanceBottomSheetBodyState
       walletBalanceEditControllerProvider(widget.walletId),
       (previous, next) {
         if (_hasNewFailure(previous, next) && next.failure != null) {
-          AppSnackbar.showFailure(context, failure: next.failure!);
+          MahafezSnackbar.showFailure(context, failure: next.failure!);
         }
 
         if (_hasCompletedSuccess(previous, next) && context.mounted) {
           ref.invalidate(walletDetailsControllerProvider(widget.walletId));
-          AppSnackbar.show(
+          MahafezSnackbar.show(
             context,
             message: context.l10n.walletBalanceEditSuccess,
-            type: AppSnackbarType.success,
+            type: MahafezSnackbarType.success,
           );
           Navigator.of(context).pop();
         }
@@ -74,21 +70,21 @@ class _EditWalletBalanceBottomSheetBodyState
     final hasSuggestion = widget.suggestedBalance != widget.currentBalance;
 
     return Padding(
-      padding: AppSpacing.pagePadding,
+      padding: MahafezSpacing.pagePadding,
       child: Form(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppSpacing.sm.verticalSpace,
+            MahafezSpacing.sm.verticalSpace,
             Text(
               context.l10n.walletBalanceEditTitle,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
             ),
-            AppSpacing.sm.verticalSpace,
+            MahafezSpacing.sm.verticalSpace,
             Text(
               context.l10n.walletBalanceEditDescription,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -96,7 +92,7 @@ class _EditWalletBalanceBottomSheetBodyState
               ),
             ),
             if (hasSuggestion) ...[
-              AppSpacing.md.verticalSpace,
+              MahafezSpacing.md.verticalSpace,
               Text(
                 context.l10n.walletBalanceEditSuggested(
                   widget.suggestedBalance.toCurrencyText(context),
@@ -107,8 +103,8 @@ class _EditWalletBalanceBottomSheetBodyState
                 ),
               ),
             ],
-            AppSpacing.lg.verticalSpace,
-            AppTextField(
+            MahafezSpacing.lg.verticalSpace,
+            MahafezTextField(
               label: context.l10n.currentBalance,
               hintText: context.l10n.walletBalanceEditHint,
               controller: _balanceController,
@@ -118,16 +114,16 @@ class _EditWalletBalanceBottomSheetBodyState
               onChanged: (_) {},
               validator: _validateBalance,
             ),
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
             SizedBox(
               width: double.infinity,
-              child: AppButton(
+              child: MahafezButton(
                 label: context.l10n.walletBalanceEditAction,
                 isLoading: state.isSubmitting,
                 onPressed: state.isSubmitting ? null : _submit,
               ),
             ),
-            AppSpacing.lg.verticalSpace,
+            MahafezSpacing.lg.verticalSpace,
           ],
         ),
       ),

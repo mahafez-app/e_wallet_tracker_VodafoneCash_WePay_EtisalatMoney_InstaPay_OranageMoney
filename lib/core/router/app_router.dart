@@ -11,8 +11,6 @@ import '../../features/invitations/presentation/screens/invitations_screen.dart'
 import '../../features/settings/presentation/screens/sms_permissions_screen.dart';
 import '../../features/settings/presentation/screens/user_settings_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
-import '../../features/transactions/presentation/navigation/transactions_route_data.dart';
-import '../../features/transactions/presentation/screens/transactions_screen.dart';
 import 'package:wallet_product/wallet_product.dart';
 
 import '../../features/reports/presentation/screens/wallet_report_screen.dart';

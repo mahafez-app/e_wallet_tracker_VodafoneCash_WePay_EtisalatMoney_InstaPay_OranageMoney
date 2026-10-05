@@ -1,13 +1,12 @@
-import '../../../../core/utils/execute_and_handle_errors.dart';
 import 'package:mahafez_core/mahafez_core.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../domain/entities/report_entity.dart';
 import '../../domain/repositories/report_repository.dart';
-import '../datasources/report_remote_data_source.dart';
 
 class ReportRepositoryImpl implements ReportRepository {
-  const ReportRepositoryImpl(this._remoteDataSource);
+  const ReportRepositoryImpl(this._getTransactionsReportUseCase);
 
-  final ReportRemoteDataSource _remoteDataSource;
+  final GetTransactionsReportUseCase _getTransactionsReportUseCase;
 
   @override
   Future<Result<ReportEntity>> getWalletReport({
@@ -15,13 +14,7 @@ class ReportRepositoryImpl implements ReportRepository {
     required DateTime startDate,
     required DateTime endDate,
   }) =>
-      executeAndHandleErrors(
-          tag: 'ReportRepository.getWalletReport',
-          () => _remoteDataSource.getWalletReport(
-            walletId: walletId,
-            startDate: startDate,
-            endDate: endDate,
-          ));
+      _getReport(walletIds: [walletId], startDate: startDate, endDate: endDate);
 
   @override
   Future<Result<ReportEntity>> getWorkspaceReport({
@@ -30,12 +23,33 @@ class ReportRepositoryImpl implements ReportRepository {
     required DateTime startDate,
     required DateTime endDate,
   }) =>
-      executeAndHandleErrors(
-          tag: 'ReportRepository.getWorkspaceReport',
-          () => _remoteDataSource.getWorkspaceReport(
-            workspaceId: workspaceId,
-            walletIds: walletIds,
-            startDate: startDate,
-            endDate: endDate,
-          ));
+      _getReport(walletIds: walletIds, startDate: startDate, endDate: endDate);
+
+  Future<Result<ReportEntity>> _getReport({
+    required List<String> walletIds,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    final result = await _getTransactionsReportUseCase(
+      GetTransactionsReportParams(
+        walletIds: walletIds,
+        startDate: startDate,
+        endDate: endDate,
+      ),
+    );
+    return switch (result) {
+      Success(:final data) => Success(
+        ReportEntity(
+          totalIncome: data.totalIncome,
+          totalOutcome: data.totalOutcome,
+          balanceChange: data.balanceChange,
+          transactionCount: data.transactionCount,
+          transactionsByDay: data.transactionsByDay,
+          receivedTransactionCount: data.receivedTransactionCount,
+          sentTransactionCount: data.sentTransactionCount,
+        ),
+      ),
+      FailureResult(:final failure) => FailureResult(failure),
+    };
+  }
 }

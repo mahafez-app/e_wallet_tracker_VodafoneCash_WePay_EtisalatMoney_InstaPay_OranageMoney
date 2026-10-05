@@ -3,14 +3,12 @@
 import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wallet_product/wallet_product.dart';
 
 import '../../../../../core/router/app_routes.dart';
-import '../../../../../core/utils/extensions/date_extensions.dart';
 import '../../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../../core/utils/extensions/phone_number_extension.dart';
 import '../../../../../core/utils/extensions/wallet_provider_ext.dart';
-import '../../../../../core/widgets/transactions/no_transactions_card.dart';
-import '../../../../transactions/presentation/navigation/transactions_route_data.dart';
 import '../../../domain/entities/workspace_details_entity.dart';
 
 class WorkspaceTransactionsSection extends StatelessWidget {
@@ -65,17 +63,16 @@ class WorkspaceTransactionsSection extends StatelessWidget {
     };
     context.push(
       AppRoutes.transactionsPath(),
-      extra: WorkspaceTransactionsRouteData(
-        workspaceId: details.workspace.id,
-        workspaceName: details.workspace.name,
+      extra: MultiWalletTransactionsRouteData(
+        title: details.workspace.name,
         wallets: details.wallets
             .map(
-              (wallet) => WalletFilterOption(
+              (wallet) => TransactionWalletFilterOption(
                 walletId: wallet.id,
                 walletLabel:
                     '${wallet.provider.displayName(context)} · ${wallet.phoneNumber.formattedEgyptianPhoneNumber}',
-                ownerUid: wallet.ownerUid,
-                ownerName:
+                memberId: wallet.ownerUid,
+                memberName:
                     memberNamesByUid[wallet.ownerUid] ??
                     context.l10n.workspaceUnknownMember,
               ),
@@ -113,7 +110,9 @@ class _WorkspaceTransactionsActivityCard extends StatelessWidget {
       padding: MahafezResponsive.allPadding(MahafezSpacing.xl),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(MahafezSpacing.xxl.responsiveRadius),
+        borderRadius: BorderRadius.circular(
+          MahafezSpacing.xxl.responsiveRadius,
+        ),
         border: Border.all(color: colors.cardBorder),
         boxShadow: [
           BoxShadow(

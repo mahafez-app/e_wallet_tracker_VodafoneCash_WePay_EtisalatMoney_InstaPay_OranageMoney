@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/settings/providers/settings_providers.dart';
-import '../../features/transactions/providers/transactions_providers.dart';
 import 'package:wallet_product/wallet_product.dart';
 import 'package:sms_engine/sms_engine.dart'
     hide InboxSmsService, InboxSmsServiceImpl;

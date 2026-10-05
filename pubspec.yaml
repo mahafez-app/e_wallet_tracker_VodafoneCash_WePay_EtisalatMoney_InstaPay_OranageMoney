@@ -51,7 +51,9 @@ dependencies:
 
   # --- Layer 3 Products ---
   wallet_product:
-    path: ../wallet_product
+    git:
+      url: https://github.com/mahafez-app/wallet_product.git
+      ref: v1.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

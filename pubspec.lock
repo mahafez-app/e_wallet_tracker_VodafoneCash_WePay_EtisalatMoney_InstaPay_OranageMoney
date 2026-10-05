@@ -1368,10 +1368,12 @@ packages:
   wallet_product:
     dependency: "direct main"
     description:
-      path: "../wallet_product"
-      relative: true
-    source: path
-    version: "1.0.0"
+      path: "."
+      ref: "v1.1.0"
+      resolved-ref: d5708c3a3e9539982e5774519832daf00408ecc6
+      url: "https://github.com/mahafez-app/wallet_product.git"
+    source: git
+    version: "1.1.0"
   watcher:
     dependency: transitive
     description:

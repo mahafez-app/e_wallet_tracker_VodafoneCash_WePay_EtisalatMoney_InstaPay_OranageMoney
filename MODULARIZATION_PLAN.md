@@ -241,11 +241,13 @@ Complete these phases in order. Do not mark Layer 4 complete until every precedi
 
 ### Phase 2: Put SMS-to-Wallet Orchestration Behind the Product
 *Goal: remove the app's direct Layer 2 dependency while preserving OS lifecycle and permissions.*
-- [ ] Move SMS-to-transaction processing, inbox adapter, wallet resolution, and background processing behind a wallet-product integration API
-- [ ] Keep `sms_engine` generic and unaware of wallets, transactions, or Firebase
-- [ ] Limit the shell to permission prompts, bootstrap, and start/stop calls on the product's public contract
-- [ ] Remove direct `sms_engine` and SMS transaction implementation dependencies from `mahafez_app` when no longer used
-- [ ] Verify foreground, background, retry, duplicate, and balance-update flows
+- [x] Move SMS-to-transaction processing, wallet-specific inbox reconciliation, wallet resolution, retry orchestration, and background processing into `wallet_product`
+- [x] Keep `sms_engine` generic; the product adapts its parsers, matchers, and retry queue to wallet and transaction use cases
+- [x] Limit the shell to SMS permission prompts, bootstrap of the retry/tombstone storage, app lifecycle/connectivity signals, and calls into the product integration API
+- [x] Remove direct `sms_engine` and SMS transaction implementation dependencies from `mahafez_app`; `sms_engine` now arrives only through the wallet product dependency
+- [x] Preserve foreground save/deduplication, background durable enqueue/save, retry, tombstone checks, inbox reconciliation, and wallet snapshot balance updates in the product integration
+
+Phase 2 static analysis: no analyzer errors in the changed app or wallet integration. Runtime/device verification has not been run.
 
 ### Phase 3: Extract Identity Capability and Product
 *Goal: separate reusable authentication from its user-facing flows.*

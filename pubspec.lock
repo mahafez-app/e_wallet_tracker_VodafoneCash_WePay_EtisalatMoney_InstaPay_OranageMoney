@@ -26,7 +26,7 @@ packages:
     source: hosted
     version: "13.3.0"
   another_telephony:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: another_telephony
       sha256: "7dd16759099ea3e4ce762c4f5bbfa097940335555d5caa916aaa52eec6a70cb6"
@@ -1149,7 +1149,7 @@ packages:
     source: sdk
     version: "0.0.0"
   sms_engine:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: "."
       ref: "v1.0.1"
@@ -1369,11 +1369,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v2.0.0"
-      resolved-ref: eccc08b5733fd1d7258d174b6413ddcca8201f22
+      ref: "v2.1.0"
+      resolved-ref: "6d6425824e16c49caa12c72b1aa310913da20454"
       url: "https://github.com/mahafez-app/wallet_product.git"
     source: git
-    version: "2.0.0"
+    version: "2.1.0"
   watcher:
     dependency: transitive
     description:

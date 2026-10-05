@@ -15,15 +15,6 @@ final txFirstPageCacheBoxProvider = Provider<Box<String>>((_) {
   );
 });
 
-/// Hive box for pending SMS retry items.
-/// Injected via [ProviderScope.overrides] in [AppBootstrap].
-final pendingSmsRetryBoxProvider = Provider<Box<String>>((_) {
-  throw StateError(
-    'pendingSmsRetryBoxProvider was not overridden. '
-    'Ensure AppBootstrap passes the opened Hive box via ProviderScope.overrides.',
-  );
-});
-
 /// Hive box for locally deleted transaction tombstones.
 /// Injected via [ProviderScope.overrides] in [AppBootstrap].
 final deletedTransactionTombstonesBoxProvider = Provider<Box<String>>((_) {

@@ -3,11 +3,14 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../auth/providers/auth_providers.dart';
+import 'package:identity_product/identity_product.dart';
+
 import '../../../invitations/domain/entities/workspace_pending_invitation_entity.dart';
 import '../../../invitations/domain/usecases/watch_workspace_pending_invitations_usecase.dart';
 import '../../../invitations/providers/invitations_providers.dart';
+
 import 'package:mahafez_core/mahafez_core.dart';
+
 import '../../domain/entities/workspace_details_entity.dart';
 import '../../domain/usecases/watch_workspace_details_usecase.dart';
 import '../../providers/workspaces_providers.dart';
@@ -26,7 +29,7 @@ mixin WorkspaceSettingsControllerLiveSyncMixin
   String get workspaceId;
 
   void bindLiveState({required String ownerUid}) {
-    final currentUserId = ref.read(currentUserProvider)?.uid;
+    final currentUserId = ref.read(identityCurrentUserProvider)?.uid;
     final detailsStream = ref.read(watchWorkspaceDetailsUseCaseProvider)(
       WatchWorkspaceDetailsParams(workspaceId: workspaceId),
     );
@@ -71,8 +74,8 @@ mixin WorkspaceSettingsControllerLiveSyncMixin
       // If we are deleting or leaving the workspace, a 404 error is expected
       // because the document is removed from Firestore. We ignore it here
       // and let the mutation response handle the navigation.
-      final isDeletingOrLeaving = currentState.isDeletingWorkspace ||
-          currentState.isLeavingWorkspace;
+      final isDeletingOrLeaving =
+          currentState.isDeletingWorkspace || currentState.isLeavingWorkspace;
       final isNotFound = failure is ServerFailure && failure.code == '404';
 
       if (isDeletingOrLeaving && isNotFound) {

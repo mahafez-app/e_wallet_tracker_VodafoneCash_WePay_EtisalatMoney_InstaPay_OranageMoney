@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../auth/providers/auth_providers.dart';
+
+import 'package:identity_product/identity_product.dart';
+
 import '../providers/workspace_settings_controller.dart';
 import '../providers/workspace_settings_state.dart';
 import '../widgets/settings/edit_workspace_name_bottom_sheet.dart';
@@ -48,7 +50,7 @@ class _WorkspaceSettingsBody extends ConsumerWidget {
     );
 
     final state = ref.watch(workspaceSettingsControllerProvider(workspaceId));
-    final currentUserId = ref.watch(currentUserProvider)?.uid;
+    final currentUserId = ref.watch(identityCurrentUserProvider)?.uid;
     return WorkspaceUnavailableGuard<WorkspaceSettingsState>(
       state: state,
       currentUserId: currentUserId,

@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../auth/providers/auth_providers.dart';
+
+import 'package:identity_product/identity_product.dart';
+
 import '../../../invitations/presentation/widgets/invitations/invite_member_bottom_sheet.dart';
 import '../../domain/entities/workspace_details_entity.dart';
 import '../providers/workspace_details_controller.dart';
@@ -40,7 +42,7 @@ class _WorkspaceDetailsActions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentUserId = ref.watch(currentUserProvider)?.uid;
+    final currentUserId = ref.watch(identityCurrentUserProvider)?.uid;
     if (currentUserId == null) {
       return const SizedBox.shrink();
     }
@@ -48,7 +50,8 @@ class _WorkspaceDetailsActions extends ConsumerWidget {
     return Row(
       children: [
         IconButton(
-          onPressed: () => context.push(AppRoutes.workspaceReportsPath(workspaceId)),
+          onPressed: () =>
+              context.push(AppRoutes.workspaceReportsPath(workspaceId)),
           icon: const Icon(Icons.bar_chart_rounded),
         ),
         IconButton(
@@ -83,7 +86,7 @@ class _WorkspaceDetailsBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(workspaceDetailsControllerProvider(workspaceId));
-    final currentUserId = ref.watch(currentUserProvider)?.uid;
+    final currentUserId = ref.watch(identityCurrentUserProvider)?.uid;
     return WorkspaceUnavailableGuard<WorkspaceDetailsEntity>(
       state: state,
       currentUserId: currentUserId,
@@ -100,7 +103,7 @@ class _WorkspaceDetailsDataView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentUser = ref.watch(currentUserProvider);
+    final currentUser = ref.watch(identityCurrentUserProvider);
     final canInviteMembers = currentUser?.uid == details.workspace.ownerUid;
 
     return SingleChildScrollView(

@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/auth/presentation/screens/confirm_name_screen.dart';
-import '../../features/auth/presentation/screens/login_screen.dart';
-import '../../features/auth/presentation/screens/sign_up_screen.dart';
-import '../../features/auth/providers/auth_providers.dart';
+import 'package:identity_product/identity_product.dart';
+
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/invitations/presentation/screens/invitations_screen.dart';
 import '../../features/settings/presentation/screens/sms_permissions_screen.dart';
@@ -28,7 +26,7 @@ import 'app_routes.dart';
 // ---------------------------------------------------------------------------
 // Extends AsyncNotifier<void> so it can watch async providers.
 // Implements Listenable so GoRouter can subscribe to it via refreshListenable.
-// When either authStateChangesProvider or firestoreUserProfileProvider emits,
+// When identityAuthStateProvider emits,
 // GoRouter re-runs redirect() without recreating the router instance.
 // ---------------------------------------------------------------------------
 
@@ -42,7 +40,7 @@ class RouterNotifier extends AsyncNotifier<void> implements Listenable {
   @override
   Future<void> build() async {
     // Any auth change (sign in / sign out) triggers redirect re-evaluation.
-    ref.listen(authStateChangesProvider, (_, _) => _notify());
+    ref.listen(identityAuthStateProvider, (_, _) => _notify());
   }
 
   void _notify() => _routerListener?.call();
@@ -56,7 +54,7 @@ class RouterNotifier extends AsyncNotifier<void> implements Listenable {
   String? redirect(BuildContext context, GoRouterState state) {
     // Use ref.read — not ref.watch — inside redirect to avoid
     // accidentally creating subscriptions during redirect evaluation.
-    final authAsync = ref.read(authStateChangesProvider);
+    final authAsync = ref.read(identityAuthStateProvider);
 
     final location = state.matchedLocation;
     final isSplash = location == AppRoutes.splash;
@@ -114,15 +112,18 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.login,
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => IdentityLoginScreen(
+          onCreateAccount: () => context.push(AppRoutes.register),
+        ),
       ),
       GoRoute(
         path: AppRoutes.register,
-        builder: (context, state) => const SignUpScreen(),
+        builder: (context, state) =>
+            IdentitySignUpScreen(onSignIn: () => context.go(AppRoutes.login)),
       ),
       GoRoute(
         path: AppRoutes.confirmName,
-        builder: (context, state) => const ConfirmNameScreen(),
+        builder: (context, state) => const IdentityConfirmNameScreen(),
       ),
       GoRoute(
         path: AppRoutes.home,

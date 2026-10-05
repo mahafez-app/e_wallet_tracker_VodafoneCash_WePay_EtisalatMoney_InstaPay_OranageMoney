@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:identity_product/identity_product.dart';
 
 import '../../../core/providers/firebase_providers.dart';
 import '../data/datasources/invitations_remote_data_source.dart';
@@ -17,7 +18,7 @@ final invitationsRemoteDataSourceProvider =
     Provider<InvitationsRemoteDataSource>(
       (ref) => InvitationsRemoteDataSourceImpl(
         firestore: ref.watch(firestoreProvider),
-        auth: ref.watch(firebaseAuthProvider),
+        currentUserId: () => ref.read(identityCurrentUserProvider)?.uid,
       ),
     );
 

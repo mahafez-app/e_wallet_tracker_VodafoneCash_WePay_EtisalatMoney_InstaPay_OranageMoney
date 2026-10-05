@@ -1,19 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/data/models/workspace_dto.dart';
+
 import 'package:mahafez_core/mahafez_core.dart';
+
 import 'workspace_query_remote_service.dart';
 
 class WorkspaceCommandRemoteService {
   const WorkspaceCommandRemoteService({
     required this._firestore,
-    required this._auth,
+    required this._currentUserId,
     required this._queryService,
   });
 
   final FirebaseFirestore _firestore;
-  final FirebaseAuth _auth;
+  final String? Function() _currentUserId;
   final WorkspaceQueryRemoteService _queryService;
 
   CollectionReference<Map<String, dynamic>> get _workspacesCollection =>
@@ -22,35 +23,35 @@ class WorkspaceCommandRemoteService {
   CollectionReference<Map<String, dynamic>> get _invitesCollection =>
       _firestore.collection('invites');
 
-  User get _currentUser {
-    final user = _auth.currentUser;
-    if (user == null) {
+  String get _currentUserIdOrThrow {
+    final uid = _currentUserId();
+    if (uid == null) {
       throw const UnknownFailure(technicalMessage: 'User is not logged in.');
     }
 
-    return user;
+    return uid;
   }
 
   Future<WorkspaceDto> createWorkspace({required String name}) async {
-    final currentUser = _currentUser;
+    final currentUserId = _currentUserIdOrThrow;
     final trimmedName = _validateAndTrimName(name);
 
     final workspaceRef = _workspacesCollection.doc();
-    final memberRef = workspaceRef.collection('members').doc(currentUser.uid);
+    final memberRef = workspaceRef.collection('members').doc(currentUserId);
     final batch = _firestore.batch();
     final now = DateTime.now();
 
     final workspace = WorkspaceDto(
       id: workspaceRef.id,
       name: trimmedName,
-      ownerUid: currentUser.uid,
+      ownerUid: currentUserId,
       walletsCount: 0,
       createdAt: now,
     );
 
     batch.set(workspaceRef, workspace.toFirestore());
     batch.set(memberRef, {
-      'uid': currentUser.uid,
+      'uid': currentUserId,
       'role': 'owner',
       'joinedAt': Timestamp.fromDate(now),
     });
@@ -63,13 +64,13 @@ class WorkspaceCommandRemoteService {
     required String workspaceId,
     required String name,
   }) async {
-    final currentUser = _currentUser;
+    final currentUserId = _currentUserIdOrThrow;
     final trimmedName = _validateAndTrimName(name);
     final workspaceRef = _workspacesCollection.doc(workspaceId);
     final workspaceSnapshot = await workspaceRef.get();
     final workspaceData = _getWorkspaceDataOrThrow(workspaceSnapshot);
 
-    _ensureWorkspaceOwner(workspaceData, currentUser.uid);
+    _ensureWorkspaceOwner(workspaceData, currentUserId);
     await workspaceRef.update({'name': trimmedName});
 
     final updatedSnapshot = await workspaceRef.get();
@@ -80,7 +81,7 @@ class WorkspaceCommandRemoteService {
     required String workspaceId,
     required List<String> walletIds,
   }) async {
-    _currentUser;
+    _currentUserIdOrThrow;
 
     final uniqueWalletIds = walletIds.toSet().toList();
     if (uniqueWalletIds.isEmpty) {
@@ -125,7 +126,7 @@ class WorkspaceCommandRemoteService {
     required String workspaceId,
     required List<String> walletIds,
   }) async {
-    final currentUser = _currentUser;
+    final currentUserId = _currentUserIdOrThrow;
     final workspaceRef = _workspacesCollection.doc(workspaceId);
     final workspaceSnapshot = await workspaceRef.get();
     final workspaceData = _getWorkspaceDataOrThrow(workspaceSnapshot);
@@ -147,7 +148,7 @@ class WorkspaceCommandRemoteService {
 
       _ensureWalletRemovalAllowed(
         workspaceData: workspaceData,
-        currentUid: currentUser.uid,
+        currentUid: currentUserId,
         walletOwnerUid: wallet.ownerUid,
       );
       walletIdsToRemove.add(walletId);
@@ -170,15 +171,15 @@ class WorkspaceCommandRemoteService {
     required String workspaceId,
     required String memberUid,
   }) async {
-    final currentUser = _currentUser;
+    final currentUserId = _currentUserIdOrThrow;
     final workspaceRef = _workspacesCollection.doc(workspaceId);
     final workspaceSnapshot = await workspaceRef.get();
     final workspaceData = _getWorkspaceDataOrThrow(workspaceSnapshot);
     final ownerUid = workspaceData['ownerUid'] as String? ?? '';
-    final isSelfRemoval = memberUid == currentUser.uid;
+    final isSelfRemoval = memberUid == currentUserId;
 
     if (!isSelfRemoval) {
-      _ensureWorkspaceOwner(workspaceData, currentUser.uid);
+      _ensureWorkspaceOwner(workspaceData, currentUserId);
     }
 
     if (memberUid == ownerUid) {
@@ -208,12 +209,12 @@ class WorkspaceCommandRemoteService {
   }
 
   Future<void> deleteWorkspace({required String workspaceId}) async {
-    final currentUser = _currentUser;
+    final currentUserId = _currentUserIdOrThrow;
     final workspaceRef = _workspacesCollection.doc(workspaceId);
     final workspaceSnapshot = await workspaceRef.get();
     final workspaceData = _getWorkspaceDataOrThrow(workspaceSnapshot);
 
-    _ensureWorkspaceOwner(workspaceData, currentUser.uid);
+    _ensureWorkspaceOwner(workspaceData, currentUserId);
 
     final membersSnapshot = await workspaceRef.collection('members').get();
     final walletsSnapshot = await workspaceRef.collection('wallets').get();

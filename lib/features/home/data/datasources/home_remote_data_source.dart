@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:wallet_product/wallet_product.dart';
 
@@ -15,16 +14,16 @@ abstract interface class HomeRemoteDataSource {
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   const HomeRemoteDataSourceImpl({
     required this._firestore,
-    required this._auth,
+    required this._currentUserId,
     required this._walletQueries,
   });
 
   final FirebaseFirestore _firestore;
-  final FirebaseAuth _auth;
+  final String? Function() _currentUserId;
   final WalletQueries _walletQueries;
 
   String get _uid {
-    final uid = _auth.currentUser?.uid;
+    final uid = _currentUserId();
     if (uid == null) throw Exception('User not logged in');
     return uid;
   }
@@ -85,7 +84,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Stream<int> watchPendingInvitationsCount() {
-    final uid = _auth.currentUser?.uid;
+    final uid = _currentUserId();
     if (uid == null) return Stream.value(0);
 
     return _firestore

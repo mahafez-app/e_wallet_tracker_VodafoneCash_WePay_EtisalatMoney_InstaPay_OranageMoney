@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../auth/domain/usecases/get_user_profile_usecase.dart';
-import '../../../auth/providers/auth_providers.dart';
+import 'package:identity_product/identity_product.dart';
+
 import '../../../workspaces/domain/usecases/get_workspace_details_usecase.dart';
 import '../../../workspaces/providers/workspaces_providers.dart';
 import '../../domain/entities/invitation_entity.dart';
@@ -35,8 +35,8 @@ final invitationDisplayProvider = FutureProvider.autoDispose
           .read(getWorkspaceDetailsUseCaseProvider)
           .call(GetWorkspaceDetailsParams(workspaceId: invitation.workspaceId));
       final inviterFuture = ref
-          .read(getUserProfileUseCaseProvider)
-          .call(GetUserProfileParams(invitation.invitedByUid));
+          .read(identityServiceProvider)
+          .getUserProfile(invitation.invitedByUid);
       final workspaceResult = await workspaceFuture;
       final inviterResult = await inviterFuture;
       final workspaceName = workspaceResult.dataOrNull?.workspace.name;

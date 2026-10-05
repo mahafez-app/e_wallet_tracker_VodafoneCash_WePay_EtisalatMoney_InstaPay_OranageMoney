@@ -82,10 +82,10 @@ Each layer/module is extracted into an independent Git repository under the `mah
 | **`mahafez_core`** | **Layer 1** | Pure Dart | Generic failures/results, phone value objects, formatters, reusable validators and enums |
 | **`mahafez_design_system`** | **Layer 1** | Flutter | Typography, design tokens, and generic UI primitives |
 | **`sms_engine`** | **Layer 2** | Flutter (Headless) | SMS parsing, matching, telephony and retry capabilities; no product knowledge |
-| **`identity_service`** | **Layer 2** | Headless capability (planned) | Authentication and user-profile operations; no screens or routing |
+| **`identity_service`** | **Layer 2** | Headless capability | Authentication and user-profile operations; no screens or routing |
 | **`wallet_product`** | **Layer 3** | Flutter product | Wallets, transactions, reports, SMS integration, data and product UI |
 | **`workspace_product`** | **Layer 3** | Flutter product (planned) | Workspaces, members, invitations, settings, data and product UI; stores wallet IDs only |
-| **`identity_product`** | **Layer 3** | Flutter product (planned) | Authentication/account flows and UI, using `identity_service` |
+| **`identity_product`** | **Layer 3** | Flutter product | Authentication/account flows and UI, using `identity_service` |
 | **`mahafez_app`** | **Layer 4** | Deployable shell | Bootstrap, routing, permissions/lifecycle, home composition, and product integration |
 
 ---
@@ -251,10 +251,12 @@ Phase 2 static analysis: no analyzer errors in the changed app or wallet integra
 
 ### Phase 3: Extract Identity Capability and Product
 *Goal: separate reusable authentication from its user-facing flows.*
-- [ ] Create `identity_service` for headless authentication/profile operations, depending only on Layer 1
-- [ ] Create `identity_product` for sign-in, sign-up, profile completion, and account flows; depend on `identity_service`, not other products
-- [ ] Move app auth data sources/use cases into the appropriate package and route through exported product APIs
-- [ ] Remove direct Firebase Auth/profile business access from app features
+- [x] Create `identity_service` for headless authentication/profile operations, depending only on Layer 1
+- [x] Create `identity_product` for sign-in, sign-up, profile completion, and account flows; depend on `identity_service`, not other products
+- [x] Move app auth data sources/use cases into the appropriate package and route through exported product APIs
+- [x] Remove direct Firebase Auth/profile business access from app features
+
+Phase 3 static analysis: no Dart analyzer issues reported in the app, `identity_service`, or `identity_product`. The Dart CLI subsequently emitted an environment telemetry file permission error; runtime/device auth flows have not been run.
 
 ### Phase 4: Extract `workspace_product`
 *Goal: move workspace and invitation business behavior into an independent product.*

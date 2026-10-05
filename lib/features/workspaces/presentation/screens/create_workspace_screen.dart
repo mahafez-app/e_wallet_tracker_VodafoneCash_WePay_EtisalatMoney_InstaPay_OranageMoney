@@ -6,9 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:mahafez_core/mahafez_core.dart';
+
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../auth/providers/auth_providers.dart';
+
+import 'package:identity_product/identity_product.dart';
+
 import '../providers/create_workspace_controller.dart';
 import '../widgets/create_workspace/create_workspace_content.dart';
 
@@ -37,7 +40,7 @@ class _CreateWorkspaceBody extends ConsumerWidget {
 
     final state = ref.watch(createWorkspaceControllerProvider);
     final controller = ref.read(createWorkspaceControllerProvider.notifier);
-    final ownerName = ref.watch(currentUserProvider)?.name ?? '';
+    final ownerName = ref.watch(identityCurrentUserProvider)?.name ?? '';
 
     return CreateWorkspaceContent(
       state: state,

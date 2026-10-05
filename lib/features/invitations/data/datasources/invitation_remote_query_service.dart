@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:mahafez_core/mahafez_core.dart';
+
 import '../../domain/enums/invitation_status.dart';
 import '../models/invitation_dto.dart';
 import '../models/workspace_pending_invitation_dto.dart';
@@ -17,11 +17,11 @@ typedef UserContext = ({String uid, Map<String, dynamic> data});
 class InvitationRemoteQueryService {
   const InvitationRemoteQueryService({
     required this._firestore,
-    required this._auth,
+    required this._currentUserId,
   });
 
   final FirebaseFirestore _firestore;
-  final FirebaseAuth _auth;
+  final String? Function() _currentUserId;
 
   CollectionReference<Map<String, dynamic>> get _invitesCollection =>
       _firestore.collection('invites');
@@ -33,14 +33,14 @@ class InvitationRemoteQueryService {
       _firestore.collection('workspaces');
 
   String get currentUid {
-    final uid = _auth.currentUser?.uid;
+    final uid = _currentUserId();
     if (uid == null) {
       throw const UnknownFailure(technicalMessage: 'User is not logged in.');
     }
     return uid;
   }
 
-  String? get currentUidOrNull => _auth.currentUser?.uid;
+  String? get currentUidOrNull => _currentUserId();
 
   Future<List<InvitationDto>> getPendingInvitations() async {
     final uid = currentUidOrNull;
@@ -121,14 +121,13 @@ class InvitationRemoteQueryService {
       }
 
       final future =
-          Future.wait(snapshot.docs.map(_mapWorkspacePendingInvitation)).then((
-            invitations,
-          ) {
-            invitations.sort(
-              (left, right) => right.createdAt.compareTo(left.createdAt),
-            );
-            return invitations;
-          });
+          Future.wait(snapshot.docs.map(_mapWorkspacePendingInvitation))
+              .then((invitations) {
+                invitations.sort(
+                  (left, right) => right.createdAt.compareTo(left.createdAt),
+                );
+                return invitations;
+              });
 
       return Stream.fromFuture(future);
     });

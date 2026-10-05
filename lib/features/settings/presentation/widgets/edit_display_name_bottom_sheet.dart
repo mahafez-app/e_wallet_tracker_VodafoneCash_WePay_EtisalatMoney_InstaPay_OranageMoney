@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utils/app_validators.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../auth/providers/auth_providers.dart';
-import '../../../auth/presentation/providers/auth_controller.dart';
+
+import 'package:identity_product/identity_product.dart';
 
 class EditDisplayNameBottomSheet extends StatelessWidget {
   const EditDisplayNameBottomSheet({super.key, required this.currentName});
@@ -65,10 +65,13 @@ class _EditDisplayNameSheetBodyState
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AuthState>(authNotifierProvider, (previous, next) {
+    ref.listen<IdentityAuthState>(identityAuthControllerProvider, (
+      previous,
+      next,
+    ) {
       final hasCompletedUpdate =
-          previous?.loadingMethod == AuthLoadingMethod.confirmName &&
-          next.loadingMethod == AuthLoadingMethod.none &&
+          previous?.loadingMethod == IdentityLoadingMethod.confirmName &&
+          next.loadingMethod == IdentityLoadingMethod.none &&
           next.error == null;
 
       if (hasCompletedUpdate && context.mounted) {
@@ -76,8 +79,8 @@ class _EditDisplayNameSheetBodyState
       }
     });
 
-    final user = ref.watch(currentUserProvider);
-    final authState = ref.watch(authNotifierProvider);
+    final user = ref.watch(identityCurrentUserProvider);
+    final authState = ref.watch(identityAuthControllerProvider);
 
     return Padding(
       padding: MahafezSpacing.pagePadding,
@@ -90,9 +93,8 @@ class _EditDisplayNameSheetBodyState
             MahafezSpacing.sm.verticalSpace,
             Text(
               context.l10n.userSettingsEditNameTitle,
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+              style: Theme.of(context).textTheme.titleLarge
+                  ?.copyWith(fontWeight: FontWeight.w800),
             ),
             MahafezSpacing.sm.verticalSpace,
             Text(
@@ -116,7 +118,8 @@ class _EditDisplayNameSheetBodyState
               child: MahafezButton(
                 label: context.l10n.userSettingsEditNameSaveAction,
                 isLoading:
-                    authState.loadingMethod == AuthLoadingMethod.confirmName,
+                    authState.loadingMethod ==
+                    IdentityLoadingMethod.confirmName,
                 onPressed: user == null ? null : () => _submit(user.uid),
               ),
             ),
@@ -140,7 +143,7 @@ class _EditDisplayNameSheetBodyState
     }
 
     ref
-        .read(authNotifierProvider.notifier)
+        .read(identityAuthControllerProvider.notifier)
         .updateDisplayName(uid: uid, displayName: displayName);
   }
 }

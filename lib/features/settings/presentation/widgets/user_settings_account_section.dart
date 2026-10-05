@@ -1,9 +1,9 @@
 import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:identity_product/identity_product.dart';
 
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../auth/presentation/providers/auth_controller.dart';
 import 'settings_card.dart';
 import 'settings_compact_tile.dart';
 import 'settings_section_title.dart';
@@ -62,7 +62,7 @@ class UserSettingsAccountSection extends ConsumerWidget {
       type: MahafezDialogType.warning,
       onConfirm: () {
         Navigator.of(context).pop();
-        ref.read(authNotifierProvider.notifier).signOut();
+        ref.read(identityAuthControllerProvider.notifier).signOut();
       },
     );
   }

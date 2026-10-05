@@ -1,10 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../auth/providers/auth_providers.dart';
+import 'package:identity_product/identity_product.dart';
+
 import '../../../invitations/domain/entities/workspace_pending_invitation_entity.dart';
 import '../../../invitations/domain/usecases/get_workspace_pending_invitations_usecase.dart';
 import '../../../invitations/providers/invitations_providers.dart';
+
 import 'package:mahafez_core/mahafez_core.dart';
+
 import '../../domain/usecases/get_workspace_details_usecase.dart';
 import '../../providers/workspaces_providers.dart';
 import 'workspace_settings_state.dart';
@@ -22,7 +25,7 @@ mixin WorkspaceSettingsControllerInternalMixin
       return FailureResult(detailsResult.failureOrNull!);
     }
 
-    final currentUserId = ref.read(currentUserProvider)?.uid;
+    final currentUserId = ref.read(identityCurrentUserProvider)?.uid;
     final pendingInvitationsResult = await _loadPendingInvitationsResult(
       currentUserId: currentUserId,
       ownerUid: details.workspace.ownerUid,

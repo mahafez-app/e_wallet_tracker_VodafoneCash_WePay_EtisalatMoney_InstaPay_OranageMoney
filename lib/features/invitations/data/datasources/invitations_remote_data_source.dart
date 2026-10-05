@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/invitation_dto.dart';
 import '../models/workspace_pending_invitation_dto.dart';
@@ -34,11 +33,11 @@ abstract interface class InvitationsRemoteDataSource {
 class InvitationsRemoteDataSourceImpl implements InvitationsRemoteDataSource {
   factory InvitationsRemoteDataSourceImpl({
     required FirebaseFirestore firestore,
-    required FirebaseAuth auth,
+    required String? Function() currentUserId,
   }) {
     final queryService = InvitationRemoteQueryService(
       firestore: firestore,
-      auth: auth,
+      currentUserId: currentUserId,
     );
     return InvitationsRemoteDataSourceImpl._(
       queryService: queryService,

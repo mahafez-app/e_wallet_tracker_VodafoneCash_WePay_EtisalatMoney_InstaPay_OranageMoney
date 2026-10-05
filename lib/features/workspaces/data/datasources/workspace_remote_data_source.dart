@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:wallet_product/wallet_product.dart';
 
 import '../../../../core/data/models/workspace_dto.dart';
@@ -51,7 +49,7 @@ abstract interface class WorkspaceRemoteDataSource {
 class WorkspaceRemoteDataSourceImpl implements WorkspaceRemoteDataSource {
   factory WorkspaceRemoteDataSourceImpl({
     required FirebaseFirestore firestore,
-    required FirebaseAuth auth,
+    required String? Function() currentUserId,
     required WalletQueries walletQueries,
   }) {
     final queryService = WorkspaceQueryRemoteService(
@@ -61,7 +59,7 @@ class WorkspaceRemoteDataSourceImpl implements WorkspaceRemoteDataSource {
     return WorkspaceRemoteDataSourceImpl._(
       commandService: WorkspaceCommandRemoteService(
         firestore: firestore,
-        auth: auth,
+        currentUserId: currentUserId,
         queryService: queryService,
       ),
       queryService: queryService,

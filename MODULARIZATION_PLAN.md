@@ -8,45 +8,48 @@
 
 ## 1. Architectural Rationale: Why Are We Doing This?
 
-### 1.1 The Monolithic Problem
-The current `wallet_tracker` application is structured as a feature-based monolith. While it utilizes Clean Architecture principles internally within features, it suffers from critical architectural decay common to growing mobile codebases:
+### 1.1 Current Audit Findings
 
-1. **Circular & Inverted Dependencies:**
-   - The native SMS service (`lib/core/services/sms_transaction_service.dart`) in the Core layer directly imports `SaveTransactionUseCase` from `features/transactions`. A lower-level infrastructure service depends directly on a higher-level product feature.
-2. **Domain Impurity:**
-   - The domain entity enum `WalletProvider` (`lib/core/domain/enums/wallet_provider.dart`) imports Flutter presentation elements (`BuildContext`, `AppColors`, icons). This prevents domain models from being reused in headless background workers or pure Dart tests.
-3. **Core Layer Pollution:**
-   - `lib/core/widgets/` contains domain-specific UI widgets such as `balance_card.dart`, `wallets/`, and `transactions/`. Core should only contain generic, reusable Design System primitives.
-4. **Tight Cross-Feature Coupling:**
-   - `home` directly imports `wallets` and `workspaces`.
-   - Wallets and their ledger were initially split into separate feature domains even though transactions require wallet identity, metadata, and lifecycle operations.
-   - Extracting them as peer products would create a circular dependency or force a false boundary around one cohesive product.
+The original `wallet_tracker` monolith has been split into Layer 1 packages, the Layer 2 SMS engine, and the Layer 3 wallet/transactions product. The remaining gaps are:
+
+1. `mahafez_app` still contains home, auth, invitations, workspaces, settings, and reports implementations instead of acting only as the Layer 4 shell.
+2. App-owned SMS orchestration still directly connects `sms_engine` to wallet use cases.
+3. App features still read wallet Firestore documents and consume `WalletDto`, while `wallet_product.dart` exposes data-source and repository implementation types.
+4. Wallet transaction reports are split: querying lives in `wallet_product`, while report use cases, state, and screens remain in the app.
+5. App and wallet package Dart SDK constraints understate the minimum imposed by their current dependencies.
+
+The former separate wallet/transaction product split is resolved: wallets and their ledger are one product.
 
 ### 1.2 The 4-Layer Architecture Rules
 To establish an enterprise-grade standard, the codebase is being decoupled into isolated packages following four non-negotiable rules:
 
+```text
+Layer 4 — Experience
+  mahafez_app
+  ├── wallet_product
+  ├── workspace_product
+  └── identity_product
+
+Layer 3 — Products (no peer-product dependencies)
+  wallet_product       ──> sms_engine, mahafez_core, mahafez_design_system
+  workspace_product    ──> identity_service, mahafez_core, mahafez_design_system
+  identity_product     ──> identity_service, mahafez_core, mahafez_design_system
+
+Layer 2 — Reusable, headless capabilities
+  sms_engine           ──> mahafez_core
+  identity_service    ──> mahafez_core
+
+Layer 1 — Platform foundations
+  mahafez_core | mahafez_design_system
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                   LAYER 4: EXPERIENCE / APP SHELL                      │
-│   mahafez_mobile_app (Deployable Shell: main.dart, GoRouter, DI)       │
-└──────────────────┬───────────────────────────────┬─────────────────────┘
-                   │                               │
-        ┌─────────────────────────────────────────┐
-        │ wallet_product (Layer 3: Domain)        │
-        │ Wallets + their transactions/ledger     │
-        └────────────────────┬────────────────────┘
-┌──────────────────▼───────────────────────────────▼─────────────────────┐
-│                 LAYER 2: SERVICES / CAPABILITIES                       │
-│   mahafez_sms_engine  │  mahafez_auth_service  │  mahafez_workspace    │
-│   (Headless Logic, No UI, Reusable Business Capabilities)              │
-└──────────────────────────────────┬─────────────────────────────────────┘
-                                   │
-┌──────────────────────────────────▼─────────────────────────────────────┐
-│                    LAYER 1: CORE / PLATFORM                            │
-│   mahafez_core (Pure Dart)   │   mahafez_design_system (UI Primitives) │
-│   mahafez_storage (Cache/DB) │   (Zero Business Logic, Fully Stable)   │
-└────────────────────────────────────────────────────────────────────────┘
-```
+
+Layer ownership notes:
+- `wallet_product` owns wallet and transaction behavior, transaction reports, and SMS-to-wallet processing. Its product-specific Firestore data sources stay inside its Data layer.
+- `workspace_product` owns workspaces, memberships, invitations, and workspace settings. It stores wallet IDs and never imports `wallet_product`; the app composes the two products using generic IDs and display metadata.
+- `identity_service` owns headless authentication/profile capabilities. `identity_product` owns sign-in, sign-up, and account UI/flows. Other products use the service, never the identity product.
+- `sms_engine` remains product-agnostic. The wallet product adapts its events to wallet/transaction use cases; the app may grant platform permissions and start/stop the wallet product's public integration API.
+- Do not create a generic Firebase/Firestore service merely to relocate product-specific collections. Put shared identity capability in Layer 2 and product-owned persistence in the owning product's Data layer.
+- Layer 4 depends on Layer 3 products and Layer 1 foundations. It must not directly orchestrate Layer 2 capabilities or own reusable business repositories/use cases.
 
 1. **Strict Downward Dependencies ($L_4 \to L_3 \to L_2 \to L_1$):**
    - Higher layers can depend on lower layers.
@@ -60,13 +63,14 @@ To establish an enterprise-grade standard, the codebase is being decoupled into 
    - **Layer 2 (Services)** contains headless business logic, but **zero UI widgets** and no knowledge of specific products.
 4. **Shell as Pure Orchestrator ($L_4$):**
    - Contains no business logic or repository queries.
-   - Owns `main.dart`, `GoRouter`, Riverpod `ProviderContainer` setup, permissions, and embeds product screens.
+   - Owns `main.dart`, `GoRouter`, app bootstrap/configuration, platform permissions, lifecycle, and product composition.
+   - Does not directly depend on or orchestrate Layer 2 service packages; a product-facing API owns capability-to-product coordination.
 
 ### 1.3 Why Git Packages & GitHub Organization?
-Instead of a single local monorepo, each layer/module is extracted into an independent Git repository under the `mahafez-app` GitHub organization:
-* **True Isolation:** Ensures boundaries cannot be accidentally bypassed by relative file imports (`../../`).
-* **Semantic Versioning:** Consumers lock to Git tags (e.g., `ref: v1.0.0`), preventing unintended breaking changes.
-* **Mirrors Enterprise DevOps:** Exactly mirrors private Git repositories / package feeds in Azure DevOps/TFS.
+Each layer/module is extracted into an independent Git repository under the `mahafez-app` GitHub organization to provide the organization and release workflow chosen for this project. This is a project preference, not a requirement to use Azure DevOps/TFS.
+* **True Isolation:** Package boundaries reduce accidental relative imports across modules.
+* **Semantic Versioning:** Consumers lock to Git tags (for example, `ref: v1.1.0`) to avoid unintended dependency drift.
+* **Independent Ownership:** Repositories and releases make package ownership and change history explicit.
 * **Developer Ergonomics:** Uses `dependency_overrides` with local file paths during rapid feature development, switching back to Git tags for releases.
 
 ---
@@ -75,11 +79,14 @@ Instead of a single local monorepo, each layer/module is extracted into an indep
 
 | Repository | Layer | Type | Key Contents |
 | :--- | :--- | :--- | :--- |
-| **`mahafez_core`** | **Layer 1** | Pure Dart | `Failure`, `Result<T>`, `EgyptianPhoneNumber`, formatters, base validators, clean enums |
-| **`mahafez_design_system`** | **Layer 1** | Flutter | Cairo fonts, `AppColors`, `AppSpacing`, `AppResponsive`, buttons, inputs, loaders, dialogs |
-| **`mahafez_sms_engine`** | **Layer 2** | Flutter (Headless) | Android Telephony, 5 Egyptian wallet regex parsers, retry queue, background SMS stream |
-| **`wallet_product`** | **Layer 3** | Flutter (Product) | Wallet and transaction domains, DTOs, repositories, use cases, wallet screens, ledger/history/details UI, notes, filters, Riverpod controllers |
-| **`mahafez_mobile_app`** | **Layer 4** | Deployable App | `main.dart`, `GoRouter`, DI bootstrap, Firebase configuration, `HomeScreen` compositor |
+| **`mahafez_core`** | **Layer 1** | Pure Dart | Generic failures/results, phone value objects, formatters, reusable validators and enums |
+| **`mahafez_design_system`** | **Layer 1** | Flutter | Typography, design tokens, and generic UI primitives |
+| **`sms_engine`** | **Layer 2** | Flutter (Headless) | SMS parsing, matching, telephony and retry capabilities; no product knowledge |
+| **`identity_service`** | **Layer 2** | Headless capability (planned) | Authentication and user-profile operations; no screens or routing |
+| **`wallet_product`** | **Layer 3** | Flutter product | Wallets, transactions, reports, SMS integration, data and product UI |
+| **`workspace_product`** | **Layer 3** | Flutter product (planned) | Workspaces, members, invitations, settings, data and product UI; stores wallet IDs only |
+| **`identity_product`** | **Layer 3** | Flutter product (planned) | Authentication/account flows and UI, using `identity_service` |
+| **`mahafez_app`** | **Layer 4** | Deployable shell | Bootstrap, routing, permissions/lifecycle, home composition, and product integration |
 
 ---
 
@@ -212,20 +219,59 @@ Instead of a single local monorepo, each layer/module is extracted into an indep
 
 ---
 
-### Phase 6: Layer 4 — App Shell Composition & Finalization
-*Goal: Transform main repository into `mahafez_mobile_app` App Shell.*
-- [ ] Configure `app_router.dart`:
-  - [x] Connect exported wallet-product screens/configuration
-  - [ ] Eliminate direct imports to internal feature screens
-- [ ] Refactor `HomeScreen` into a pure Compositor:
-  - [ ] Embed `WalletCarouselWidget` from `wallet_product`
-  - [ ] Embed wallet-product transaction activity widgets
-- [ ] Refactor `app_bootstrap.dart`:
-  - [ ] Wire `mahafez_sms_engine` stream events to `SaveTransactionUseCase` and `UpdateWalletBalanceUseCase`
-- [ ] Audit remaining features (`auth`, `workspaces`, `settings`) for clean boundaries
-- [ ] Verify end-to-end functionality:
-  - [ ] App launches and splash screen transitions correctly
-  - [ ] Wallets render and can be added
-  - [ ] SMS parsing triggers balance updates and transaction creation
-  - [ ] All tests pass
-- [ ] Final architecture audit tag `v1.0.0`
+### Architecture Remediation Roadmap
+
+Complete these phases in order. Do not mark Layer 4 complete until every preceding product/capability boundary is closed and the dependency audit passes.
+
+### Phase 0: Lock the Architecture Contract and Toolchain
+*Goal: remove ambiguity before changing package contracts.*
+- [x] Record the package graph and enforce the rule that products never depend on peer products
+- [x] Confirm ownership: auth/profile capability in `identity_service`; auth UI in `identity_product`; workspaces/invitations in `workspace_product`; wallet reports and SMS processing in `wallet_product`
+- [x] Align all local package `environment.sdk` constraints to the current stable toolchain used for this project (Flutter 3.47.4 / Dart 3.13.3); `flutter pub get` succeeds for the app and wallet product
+- [x] No direct Layer 4 → Layer 2 exception is currently planned; platform permission/lifecycle calls into wallet-product public APIs
+
+### Phase 1: Close the `wallet_product` Boundary
+*Goal: make the wallet product independently consumable before extracting more app features.*
+- [ ] Define a small supported public API for wallet entities, wallet queries by ID, product screens/configuration, reports, and SMS integration
+- [ ] Stop exporting DTOs, Firestore data sources, repository implementations, and other persistence internals from `wallet_product.dart`
+- [ ] Replace app imports/usages of `WalletDto` and `TransactionDto` with supported domain/API contracts
+- [ ] Move report domain behavior, state, and wallet-report UI into `wallet_product`; app supplies generic wallet IDs and workspace display/filter metadata
+- [ ] Remove app-owned wallet Firestore reads; retain workspace-link reads only until `workspace_product` owns them
+- [ ] Publish the breaking API cleanup with an appropriate semantic version and update the app lockfile
+
+### Phase 2: Put SMS-to-Wallet Orchestration Behind the Product
+*Goal: remove the app's direct Layer 2 dependency while preserving OS lifecycle and permissions.*
+- [ ] Move SMS-to-transaction processing, inbox adapter, wallet resolution, and background processing behind a wallet-product integration API
+- [ ] Keep `sms_engine` generic and unaware of wallets, transactions, or Firebase
+- [ ] Limit the shell to permission prompts, bootstrap, and start/stop calls on the product's public contract
+- [ ] Remove direct `sms_engine` and SMS transaction implementation dependencies from `mahafez_app` when no longer used
+- [ ] Verify foreground, background, retry, duplicate, and balance-update flows
+
+### Phase 3: Extract Identity Capability and Product
+*Goal: separate reusable authentication from its user-facing flows.*
+- [ ] Create `identity_service` for headless authentication/profile operations, depending only on Layer 1
+- [ ] Create `identity_product` for sign-in, sign-up, profile completion, and account flows; depend on `identity_service`, not other products
+- [ ] Move app auth data sources/use cases into the appropriate package and route through exported product APIs
+- [ ] Remove direct Firebase Auth/profile business access from app features
+
+### Phase 4: Extract `workspace_product`
+*Goal: move workspace and invitation business behavior into an independent product.*
+- [ ] Move workspaces, memberships, invitations, workspace settings, repositories, use cases, and screens
+- [ ] Keep wallet references as IDs and generic display/filter contracts; do not import `wallet_product`
+- [ ] Move workspace-specific Firestore reads/writes out of the app
+- [ ] Have the app compose workspace and wallet APIs by passing IDs and product-neutral metadata
+
+### Phase 5: Complete the Layer 4 App Shell
+*Goal: leave the app with experience composition and platform hosting only.*
+- [ ] Replace home data/repository logic with composition of wallet, workspace, and identity product APIs
+- [ ] Keep only app-level routing, startup/configuration, platform permissions/lifecycle, and shell-specific preferences
+- [ ] Remove feature-owned repositories, DTOs, use cases, and direct Layer 2 dependencies from app modules
+- [ ] Ensure routes target public product entry points rather than internal feature screens
+
+### Phase 6: Architecture Gates and Release
+*Goal: prove the final package graph and ship reproducible versions.*
+- [ ] Add CI checks that reject Layer 2 → Layer 3, Layer 3 → peer Layer 3, and Layer 4 → Layer 2 imports/dependencies
+- [ ] Run analysis and tests in every package; run supported platform builds and the end-to-end wallet/workspace/auth flows
+- [ ] Review public barrels and confirm no app imports persistence DTOs or implementation classes
+- [ ] Pin app dependencies to released Git tags, verify lockfile resolved refs, and tag the app release
+- [ ] Update this plan with the audit result and any accepted exceptions

@@ -23,6 +23,13 @@ jobs:
           repository: mahafez-app/mahafez_app
           ref: ${{ inputs.target_package == 'mahafez_app' && inputs.target_ref || 'main' }}
           path: .architecture/gate
+      - name: Check out app package for dependency graph
+        uses: actions/checkout@v4
+        with:
+          repository: mahafez-app/mahafez_app
+          ref: main
+          path: .architecture/mahafez_app
+        if: inputs.target_package != 'mahafez_app'
       - name: Check out packages
         uses: actions/checkout@v4
         with:

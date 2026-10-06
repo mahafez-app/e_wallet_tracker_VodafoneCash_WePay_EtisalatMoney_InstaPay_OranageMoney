@@ -270,14 +270,19 @@ Phase 4 is complete: workspace and invitation screens/data/domain code live in `
 ### Phase 5: Complete the Layer 4 App Shell
 *Goal: leave the app with experience composition and platform hosting only.*
 - [x] Replace home data/repository logic with composition of wallet, workspace, and identity product APIs
-- [ ] Keep only app-level routing, startup/configuration, platform permissions/lifecycle, and shell-specific preferences
-- [ ] Remove feature-owned repositories, DTOs, use cases, and direct Layer 2 dependencies from app modules
-- [ ] Ensure routes target public product entry points rather than internal feature screens
+- [x] Keep app-level routing, startup/configuration, platform permissions/lifecycle, and shell-specific preferences in the app
+- [x] Remove product-owned repositories, DTOs, use cases, and direct Layer 2 package dependencies from app modules
+- [x] Ensure routes target public product entry points rather than internal feature screens
+
+Phase 5 boundary audit: the app retains only shell home composition, local settings preferences, platform permission prompts, startup, and routing. Wallet, identity, and workspace routes use their package public barrels. No app feature owns product persistence DTOs or product business repositories/use cases, and no Layer 2 package is a direct app dependency. Firebase and device/plugin integrations remain in the shell bootstrap and composition root where platform wiring is performed. Static analysis reports no code issues; runtime/device verification is part of Phase 6.
 
 ### Phase 6: Architecture Gates and Release
 *Goal: prove the final package graph and ship reproducible versions.*
-- [ ] Add CI checks that reject Layer 2 → Layer 3, Layer 3 → peer Layer 3, and Layer 4 → Layer 2 imports/dependencies
-- [ ] Run analysis and tests in every package; run supported platform builds and the end-to-end wallet/workspace/auth flows
-- [ ] Review public barrels and confirm no app imports persistence DTOs or implementation classes
-- [ ] Pin app dependencies to released Git tags, verify lockfile resolved refs, and tag the app release
-- [ ] Update this plan with the audit result and any accepted exceptions
+- [x] Add a CI architecture gate that rejects upward dependencies, peer product dependencies, Layer 4 → Layer 2 dependencies, and private product implementation imports
+- [ ] Run tests in every package; run supported platform builds and the end-to-end wallet/workspace/auth flows
+- [x] Analyze all eight packages; review app routes and confirm they use public product barrels without app imports of persistence DTOs or implementation classes
+- [x] Pin app dependencies to released Git tags and verify lockfile resolved refs
+- [ ] Tag the app release
+- [x] Update this plan with the audit result and any accepted exceptions
+
+Phase 6 progress: the reusable architecture gate passes locally for each of the eight repositories. Each repository now has a workflow caller; the shared workflow checks layer dependencies, private imports, locked dependency resolution, and Flutter analysis. App product dependencies resolve to released Git tags with commit hashes recorded in `pubspec.lock`; `identity_product` and `workspace_product` lockfiles also resolve `identity_service` v1.1.0. Static analysis reports no Dart code issues in all eight packages, though the local CLI exits after an environment telemetry file permission error. Tests, supported platform builds, end-to-end flows, and the app release tag remain pending. All Phase 6 edits are local and uncommitted.

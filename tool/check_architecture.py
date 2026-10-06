@@ -23,7 +23,7 @@ PRODUCTS = {name for name, layer in LAYERS.items() if layer == 3}
 APP_PRODUCT_PINS = {
     "wallet_product": "v2.1.0",
     "identity_product": "v1.0.2",
-    "workspace_product": "v1.0.0",
+    "workspace_product": "v2.0.0",
 }
 PACKAGE_GIT_PINS = {
     "identity_product": {"identity_service": "v1.1.0"},
@@ -124,6 +124,9 @@ def main() -> int:
             errors.append(f"{package}: missing {pubspec_path}")
             continue
         dependencies[package] = package_dependencies(pubspec_path.read_text())
+        source_layer = LAYERS[package]
+        if source_layer == 3 and "go_router" in dependencies[package]:
+            errors.append(f"{package}: Layer 3 products must not depend on go_router")
         for dependency in dependencies[package] & LAYERS.keys():
             source_layer = LAYERS[package]
             dependency_layer = LAYERS[dependency]
@@ -142,6 +145,15 @@ def main() -> int:
             continue
         for source in lib_dir.rglob("*.dart"):
             text = source.read_text(errors="replace")
+            if source_layer == 3:
+                code = re.sub(r"/\*.*?\*/|//[^\n]*", "", text, flags=re.DOTALL)
+                if re.search(r"package:go_router/", code):
+                    errors.append(f"{package}: Layer 3 products must not import go_router ({source})")
+                if re.search(
+                    r"\b(?:GoRouter|GoRouterState)\b|\bcontext\.(?:go|push|goNamed|pushNamed|replace|replaceNamed)\s*\(",
+                    code,
+                ):
+                    errors.append(f"{package}: Layer 3 product contains host-router usage ({source})")
             for imported in re.findall(r"package:([a-zA-Z0-9_]+)/([^'\"]+)", text):
                 dependency, path = imported
                 if dependency in LAYERS and dependency != package:

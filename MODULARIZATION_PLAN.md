@@ -265,7 +265,7 @@ Phase 3 static analysis: no Dart analyzer issues reported in the app, `identity_
 - [x] Move workspace-specific Firestore reads/writes out of the app
 - [x] Have the app compose workspace and wallet APIs by passing IDs and product-neutral metadata
 
-Phase 4 is complete: workspace and invitation screens/data/domain code live in `workspace_product`; the app consumes its public screens and stream APIs, and supplies wallet summaries plus identity capability access through composition contracts. App workspace and invitation Firestore queries have been removed. `workspace_product` is published at v1.0.0 and consumes `identity_service` v1.1.0 without depending on another product.
+Phase 4 is complete: workspace and invitation screens/data/domain code live in `workspace_product`; the app consumes its public screens and stream APIs, and supplies wallet summaries plus identity capability access through composition contracts. App workspace and invitation Firestore queries have been removed. `workspace_product` v2.0.0 is published with host-owned navigation callbacks and consumes `identity_service` v1.1.0 without depending on another product.
 
 ### Phase 5: Complete the Layer 4 App Shell
 *Goal: leave the app with experience composition and platform hosting only.*
@@ -279,10 +279,13 @@ Phase 5 boundary audit: the app retains only shell home composition, local setti
 ### Phase 6: Architecture Gates and Release
 *Goal: prove the final package graph and ship reproducible versions.*
 - [x] Add a CI architecture gate that rejects upward dependencies, peer product dependencies, Layer 4 → Layer 2 dependencies, and private product implementation imports
+- [x] Enforce Layer 4 ownership of application navigation; products request navigation through host-provided callbacks and must not depend on router packages
 - [ ] Run tests in every package; run supported platform builds and the end-to-end wallet/workspace/auth flows
 - [x] Analyze all eight packages; review app routes and confirm they use public product barrels without app imports of persistence DTOs or implementation classes
 - [x] Pin app dependencies to released Git tags and verify lockfile resolved refs
 - [ ] Tag the app release
 - [x] Update this plan with the audit result and any accepted exceptions
 
-Phase 6 progress: the reusable architecture gate passes locally for each of the eight repositories. Each repository now has a workflow caller; the shared workflow checks layer dependencies, private imports, locked dependency resolution, and Flutter analysis. App product dependencies resolve to released Git tags with commit hashes recorded in `pubspec.lock`; `identity_product` and `workspace_product` lockfiles also resolve `identity_service` v1.1.0. Static analysis reports no Dart code issues in all eight packages, though the local CLI exits after an environment telemetry file permission error. Tests, supported platform builds, end-to-end flows, and the app release tag remain pending. All Phase 6 edits are local and uncommitted.
+Phase 6 progress: the reusable architecture gate passes across the eight repositories and now rejects router usage in Layer 3 products. Each repository has a workflow caller; the shared workflow checks layer dependencies, private imports, locked dependency resolution, and Flutter analysis. App product dependencies resolve to released Git tags with commit hashes recorded in `pubspec.lock`, including `workspace_product` v2.0.0. Local app and workspace-product analyzers pass; all three existing app tests pass. `workspace_product` has no test directory. The Android debug APK builds successfully. Other supported platform builds, end-to-end flows, and the app release tag remain pending.
+
+Navigation remediation is merged and released: `workspace_product` requests host routing through `WorkspaceNavigation`, and `mahafez_app` implements those callbacks. The architecture checker rejects router dependencies and route API usage in Layer 3. `workspace_product` v2.0.0 is published, and the app manifest and lockfile resolve that tag. App and workspace-product analyzers pass; the app's three existing tests pass; the Android debug APK builds. Other supported platform builds and end-to-end wallet/workspace/auth flows remain to be completed before creating an app release tag.

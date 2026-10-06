@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:identity_product/identity_product.dart';
 import 'package:wallet_product/wallet_product.dart';
@@ -8,6 +9,78 @@ import 'package:mahafez_app/generated/l10n.dart';
 import '../router/app_routes.dart';
 import 'firebase_providers.dart';
 import '../utils/extensions/wallet_provider_ext.dart';
+
+final class AppWorkspaceNavigation implements WorkspaceNavigation {
+  const AppWorkspaceNavigation();
+
+  @override
+  void openWorkspaceDetails(BuildContext context, String workspaceId) =>
+      context.push(AppRoutes.workspaceDetailsPath(workspaceId));
+
+  @override
+  void skipWalletSelection(BuildContext context, String workspaceId) {
+    final location = AppRoutes.workspaceDetailsPath(workspaceId);
+    if (context.canPop()) {
+      context.pop();
+      context.push(location);
+    } else {
+      context.go(location);
+    }
+  }
+
+  @override
+  void openWorkspaceSettings(BuildContext context, String workspaceId) =>
+      context.push(AppRoutes.workspaceSettingsPath(workspaceId));
+
+  @override
+  void openWorkspaceReport(BuildContext context, String workspaceId) =>
+      context.push(AppRoutes.workspaceReportsPath(workspaceId));
+
+  @override
+  void openWalletSelection(
+    BuildContext context,
+    String workspaceId, {
+    bool fromCreation = false,
+  }) {
+    final location = AppRoutes.workspaceWalletSelectionPath(
+      workspaceId,
+      fromCreation: fromCreation,
+    );
+    if (fromCreation) {
+      if (context.canPop()) {
+        context.pop();
+        context.push(location);
+      } else {
+        context.go(location);
+      }
+    } else {
+      context.push(location);
+    }
+  }
+
+  @override
+  void completeWalletSelection(
+    BuildContext context, {
+    required String workspaceId,
+    required int linkedCount,
+    required bool fromCreation,
+  }) {
+    if (!fromCreation && context.canPop()) {
+      context.pop(linkedCount);
+      return;
+    }
+    context.go(AppRoutes.workspaceDetailsPath(workspaceId));
+  }
+
+  @override
+  void close(BuildContext context, {Object? result}) {
+    if (context.canPop()) {
+      context.pop(result);
+    } else {
+      context.go(AppRoutes.home);
+    }
+  }
+}
 
 final class AppWorkspaceWalletCatalog implements WorkspaceWalletCatalog {
   const AppWorkspaceWalletCatalog({
@@ -54,6 +127,7 @@ WorkspaceProductConfig createWorkspaceProductConfig(Ref ref) {
     identityService: ref.watch(identityServiceProvider),
     currentUserId: () => ref.read(identityCurrentUserProvider)?.uid,
     currentUser: () => ref.read(identityCurrentUserProvider),
+    navigation: const AppWorkspaceNavigation(),
     walletCatalog: AppWorkspaceWalletCatalog(
       queries: WalletQueries(
         firestore: firestore,

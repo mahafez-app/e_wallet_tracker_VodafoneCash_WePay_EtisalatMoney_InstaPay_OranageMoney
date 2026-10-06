@@ -2,25 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/auth/presentation/screens/confirm_name_screen.dart';
-import '../../features/auth/presentation/screens/login_screen.dart';
-import '../../features/auth/presentation/screens/sign_up_screen.dart';
-import '../../features/auth/providers/auth_providers.dart';
+import 'package:identity_product/identity_product.dart';
+
 import '../../features/home/presentation/screens/home_screen.dart';
-import '../../features/invitations/presentation/screens/invitations_screen.dart';
+
+import 'package:workspace_product/workspace_product.dart';
+
 import '../../features/settings/presentation/screens/sms_permissions_screen.dart';
 import '../../features/settings/presentation/screens/user_settings_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
-import '../../features/transactions/presentation/navigation/transactions_route_data.dart';
-import '../../features/transactions/presentation/screens/transactions_screen.dart';
-import '../../features/wallets/presentation/screens/add_wallet_screen.dart';
-import '../../features/wallets/presentation/screens/wallet_details_screen.dart';
-import '../../features/reports/presentation/screens/wallet_report_screen.dart';
-import '../../features/reports/presentation/screens/workspace_report_screen.dart';
-import '../../features/workspaces/presentation/screens/create_workspace_screen.dart';
-import '../../features/workspaces/presentation/screens/select_workspace_wallets_screen.dart';
-import '../../features/workspaces/presentation/screens/workspace_details_screen.dart';
-import '../../features/workspaces/presentation/screens/workspace_settings_screen.dart';
+import '../utils/extensions/localization_extension.dart';
+
+import 'package:wallet_product/wallet_product.dart';
+
 import '../widgets/not_found_screen.dart';
 import 'app_routes.dart';
 
@@ -29,7 +23,7 @@ import 'app_routes.dart';
 // ---------------------------------------------------------------------------
 // Extends AsyncNotifier<void> so it can watch async providers.
 // Implements Listenable so GoRouter can subscribe to it via refreshListenable.
-// When either authStateChangesProvider or firestoreUserProfileProvider emits,
+// When identityAuthStateProvider emits,
 // GoRouter re-runs redirect() without recreating the router instance.
 // ---------------------------------------------------------------------------
 
@@ -43,7 +37,7 @@ class RouterNotifier extends AsyncNotifier<void> implements Listenable {
   @override
   Future<void> build() async {
     // Any auth change (sign in / sign out) triggers redirect re-evaluation.
-    ref.listen(authStateChangesProvider, (_, _) => _notify());
+    ref.listen(identityAuthStateProvider, (_, _) => _notify());
   }
 
   void _notify() => _routerListener?.call();
@@ -57,7 +51,7 @@ class RouterNotifier extends AsyncNotifier<void> implements Listenable {
   String? redirect(BuildContext context, GoRouterState state) {
     // Use ref.read — not ref.watch — inside redirect to avoid
     // accidentally creating subscriptions during redirect evaluation.
-    final authAsync = ref.read(authStateChangesProvider);
+    final authAsync = ref.read(identityAuthStateProvider);
 
     final location = state.matchedLocation;
     final isSplash = location == AppRoutes.splash;
@@ -115,15 +109,18 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.login,
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => IdentityLoginScreen(
+          onCreateAccount: () => context.push(AppRoutes.register),
+        ),
       ),
       GoRoute(
         path: AppRoutes.register,
-        builder: (context, state) => const SignUpScreen(),
+        builder: (context, state) =>
+            IdentitySignUpScreen(onSignIn: () => context.go(AppRoutes.login)),
       ),
       GoRoute(
         path: AppRoutes.confirmName,
-        builder: (context, state) => const ConfirmNameScreen(),
+        builder: (context, state) => const IdentityConfirmNameScreen(),
       ),
       GoRoute(
         path: AppRoutes.home,
@@ -139,7 +136,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.addWallet,
-        builder: (context, state) => const AddWalletScreen(),
+        builder: (context, state) => AddWalletScreen(
+          onSuccess: () => context.go(AppRoutes.home),
+          onError: (_) {},
+        ),
       ),
       GoRoute(
         path: AppRoutes.addWorkspace,
@@ -180,7 +180,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.walletDetails,
         builder: (context, state) {
           final walletId = state.pathParameters['walletId']!;
-          return WalletDetailsScreen(walletId: walletId);
+          return DetailsScreen(
+            walletId: walletId,
+            onReportsPressed: () =>
+                context.push(AppRoutes.walletReportsPath(walletId)),
+          );
         },
       ),
       GoRoute(
@@ -204,7 +208,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.walletReports,
         builder: (context, state) {
           final walletId = state.pathParameters['walletId']!;
-          return WalletReportScreen(walletId: walletId);
+          return WalletTransactionReportScreen(
+            walletIds: [walletId],
+            title: context.l10n.reports_wallet_title,
+          );
         },
       ),
     ],

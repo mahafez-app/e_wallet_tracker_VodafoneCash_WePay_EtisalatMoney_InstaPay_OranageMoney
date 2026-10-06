@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../wallets/providers/wallets_providers.dart';
+import 'package:wallet_product/wallet_product.dart';
 import 'user_settings_wallets_state.dart';
 
 final userSettingsWalletsControllerProvider =

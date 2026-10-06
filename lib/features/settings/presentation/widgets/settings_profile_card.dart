@@ -2,9 +2,9 @@
 
 import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:identity_product/identity_product.dart';
 
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../auth/domain/entities/user_entity.dart';
 import 'settings_card.dart';
 
 class SettingsProfileCard extends StatelessWidget {
@@ -14,7 +14,7 @@ class SettingsProfileCard extends StatelessWidget {
     required this.onEditName,
   });
 
-  final UserEntity user;
+  final UserProfile user;
   final VoidCallback onEditName;
 
   @override
@@ -154,10 +154,7 @@ class _ProfileAvatar extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            colorScheme.primary,
-            colorScheme.primary.withAlpha(200),
-          ],
+          colors: [colorScheme.primary, colorScheme.primary.withAlpha(200)],
         ),
         shape: BoxShape.circle,
         boxShadow: [

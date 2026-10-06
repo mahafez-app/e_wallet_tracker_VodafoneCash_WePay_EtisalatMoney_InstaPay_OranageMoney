@@ -1,4 +1,4 @@
-name: wallet_tracker
+name: mahafez_app
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.1+3
 
 environment:
-  sdk: ^3.11.4
+  sdk: ^3.13.3
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -44,9 +44,19 @@ dependencies:
       ref: v1.0.2
 
   # --- Layer 2 Capabilities ---
-  mahafez_sms_engine:
+
+  # --- Layer 3 Products ---
+  wallet_product:
     git:
-      url: https://github.com/mahafez-app/mahafez_sms_engine.git
+      url: https://github.com/mahafez-app/wallet_product.git
+      ref: v2.1.0
+  identity_product:
+    git:
+      url: https://github.com/mahafez-app/identity_product.git
+      ref: v1.0.2
+  workspace_product:
+    git:
+      url: https://github.com/mahafez-app/workspace_product.git
       ref: v1.0.0
 
   # The following adds the Cupertino Icons font to your application.
@@ -58,7 +68,6 @@ dependencies:
   firebase_core: ^4.6.0
   firebase_auth: ^6.3.0
   cloud_firestore: ^6.2.0
-  google_sign_in: ^6.2.2
   json_annotation: ^4.11.0
   shared_preferences: ^2.5.5
   flutter_secure_storage: ^10.0.0
@@ -71,7 +80,6 @@ dependencies:
   permission_handler: ^12.0.1
   flutter_sms_inbox: ^1.0.4
   device_info_plus: ^12.4.0
-  another_telephony: ^0.4.1
   uuid: ^4.5.3
   share_plus: ^12.0.2
   screenshot: ^3.0.0
@@ -93,6 +101,7 @@ dev_dependencies:
   mocktail: ^1.0.4
   intl_utils: ^2.8.5
   flutter_launcher_icons: ^0.14.4
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -4,7 +4,8 @@ import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../core/domain/entities/workspace_entity.dart';
+import 'package:workspace_product/workspace_product.dart';
+
 import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/utils/extensions/amount_extension.dart';
 import '../../../../../core/utils/extensions/date_extensions.dart';

@@ -1,0 +1,86 @@
+name: Reusable architecture gate
+
+on:
+  workflow_call:
+    inputs:
+      target_repository:
+        required: true
+        type: string
+      target_ref:
+        required: true
+        type: string
+      target_package:
+        required: true
+        type: string
+
+jobs:
+  architecture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out architecture gate
+        uses: actions/checkout@v4
+        with:
+          repository: mahafez-app/mahafez_app
+          ref: ${{ inputs.target_package == 'mahafez_app' && inputs.target_ref || 'main' }}
+          path: .architecture/gate
+      - name: Check out packages
+        uses: actions/checkout@v4
+        with:
+          repository: mahafez-app/mahafez_core
+          path: .architecture/mahafez_core
+        if: inputs.target_package != 'mahafez_core'
+      - uses: actions/checkout@v4
+        with:
+          repository: mahafez-app/mahafez_design_system
+          path: .architecture/mahafez_design_system
+        if: inputs.target_package != 'mahafez_design_system'
+      - uses: actions/checkout@v4
+        with:
+          repository: mahafez-app/sms_engine
+          path: .architecture/sms_engine
+        if: inputs.target_package != 'sms_engine'
+      - uses: actions/checkout@v4
+        with:
+          repository: mahafez-app/identity_service
+          path: .architecture/identity_service
+        if: inputs.target_package != 'identity_service'
+      - uses: actions/checkout@v4
+        with:
+          repository: mahafez-app/wallet_product
+          path: .architecture/wallet_product
+        if: inputs.target_package != 'wallet_product'
+      - uses: actions/checkout@v4
+        with:
+          repository: mahafez-app/identity_product
+          path: .architecture/identity_product
+        if: inputs.target_package != 'identity_product'
+      - uses: actions/checkout@v4
+        with:
+          repository: mahafez-app/workspace_product
+          path: .architecture/workspace_product
+        if: inputs.target_package != 'workspace_product'
+      - name: Check out proposed package revision
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.target_repository }}
+          ref: ${{ inputs.target_ref }}
+          path: .architecture/${{ inputs.target_package }}
+      - name: Validate package graph and public boundaries
+        env:
+          TARGET_PACKAGE: ${{ inputs.target_package }}
+        run: |
+          python3 .architecture/gate/tool/check_architecture.py \
+            --root ".architecture/${TARGET_PACKAGE}" \
+            --target-package "${TARGET_PACKAGE}" \
+            --repos-dir .architecture
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Resolve locked dependencies
+        working-directory: .architecture/${{ inputs.target_package }}
+        run: flutter pub get --enforce-lockfile
+      - name: Analyze package
+        working-directory: .architecture/${{ inputs.target_package }}
+        run: flutter analyze --fatal-infos

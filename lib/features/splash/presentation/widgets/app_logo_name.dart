@@ -1,6 +1,6 @@
 import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:wallet_tracker/core/utils/app_constants.dart';
+import 'package:mahafez_app/core/utils/app_constants.dart';
 
 class AppLogoName extends StatelessWidget {
   const AppLogoName({super.key});

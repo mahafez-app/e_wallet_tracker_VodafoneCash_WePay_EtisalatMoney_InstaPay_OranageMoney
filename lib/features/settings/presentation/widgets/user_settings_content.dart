@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../auth/presentation/providers/auth_controller.dart';
-import '../../../auth/providers/auth_providers.dart';
+
+import 'package:identity_product/identity_product.dart';
+
 import '../providers/sms_permission_controller.dart';
 import 'background_reliability_section.dart';
 import 'edit_display_name_bottom_sheet.dart';
@@ -20,10 +21,10 @@ class UserSettingsContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(currentUserProvider);
+    final user = ref.watch(identityCurrentUserProvider);
     if (user == null) return const MahafezLoader();
 
-    final authState = ref.watch(authNotifierProvider);
+    final authState = ref.watch(identityAuthControllerProvider);
     final smsPermissionState = ref.watch(smsPermissionControllerProvider);
     final smsPermissionController = ref.read(
       smsPermissionControllerProvider.notifier,
@@ -59,7 +60,7 @@ class UserSettingsContent extends ConsumerWidget {
               MahafezSpacing.lg.verticalSpace,
               UserSettingsAccountSection(
                 isSigningOut:
-                    authState.loadingMethod == AuthLoadingMethod.signOut,
+                    authState.loadingMethod == IdentityLoadingMethod.signOut,
               ),
               MahafezSpacing.lg.verticalSpace,
               const UserSettingsWalletsSection(),

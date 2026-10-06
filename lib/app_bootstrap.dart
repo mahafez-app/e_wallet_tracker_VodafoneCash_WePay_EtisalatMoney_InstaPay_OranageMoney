@@ -2,12 +2,19 @@ import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wallet_product/wallet_product.dart';
+import 'package:identity_product/identity_product.dart';
+import 'package:workspace_product/workspace_product.dart';
 
 import 'app.dart';
 import 'core/di/app_initializer.dart';
+
 import 'package:mahafez_core/mahafez_core.dart';
+
 import 'core/providers/cache_providers.dart';
+import 'core/providers/service_providers.dart';
 import 'features/settings/providers/settings_providers.dart';
+import 'core/providers/workspace_product_adapter.dart';
 import 'features/splash/presentation/screens/startup_fallback_screen.dart';
 import 'generated/l10n.dart';
 
@@ -53,9 +60,39 @@ class _AppBootstrapState extends State<AppBootstrap> {
           txFirstPageCacheBoxProvider.overrideWithValue(
             data.txFirstPageCacheBox,
           ),
-          pendingSmsRetryBoxProvider.overrideWithValue(data.pendingSmsRetryBox),
+          walletSmsRetryQueueProvider.overrideWithValue(
+            data.pendingSmsRetryBox,
+          ),
           deletedTransactionTombstonesBoxProvider.overrideWithValue(
             data.deletedTransactionTombstonesBox,
+          ),
+          // Override the product's device-ID stub with the shell's real
+          // DeviceInfoService so AddWalletScreen persists correct device IDs.
+          walletDeviceIdProvider.overrideWith(
+            (ref) => ref.watch(deviceInfoServiceProvider).getDeviceId,
+          ),
+          walletDeletionHookProvider.overrideWith(
+            (ref) => (walletId) async {
+              final workspaceIds = await ref
+                  .read(workspaceRemoteDataSourceProvider)
+                  .getWorkspaceIdsContainingWallet(walletId);
+              for (final workspaceId in workspaceIds) {
+                final result =
+                    await ref.read(removeWalletsFromWorkspaceUseCaseProvider)(
+                      RemoveWalletsFromWorkspaceParams(
+                        workspaceId: workspaceId,
+                        walletIds: [walletId],
+                      ),
+                    );
+                result.fold((failure) => throw failure, (_) {});
+              }
+            },
+          ),
+          workspaceProductConfigProvider.overrideWith(
+            (ref) => createWorkspaceProductConfig(ref),
+          ),
+          workspaceCurrentUserProvider.overrideWith(
+            (ref) => ref.watch(identityCurrentUserProvider),
           ),
         ],
         child: const App(),

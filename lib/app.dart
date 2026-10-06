@@ -2,7 +2,9 @@ import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wallet_tracker/generated/l10n.dart';
+import 'package:wallet_product/wallet_product.dart';
+import 'package:workspace_product/workspace_product.dart';
+import 'package:mahafez_app/generated/l10n.dart';
 
 import 'core/providers/sms_providers.dart';
 import 'core/router/app_router.dart';
@@ -41,6 +43,8 @@ class App extends ConsumerWidget {
         },
         localizationsDelegates: const [
           S.delegate,
+          ...WalletLocalizations.localizationsDelegates,
+          ...WorkspaceLocalizations.localizationsDelegates,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

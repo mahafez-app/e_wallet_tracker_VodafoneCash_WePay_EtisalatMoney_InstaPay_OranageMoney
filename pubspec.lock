@@ -26,7 +26,7 @@ packages:
     source: hosted
     version: "13.3.0"
   another_telephony:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: another_telephony
       sha256: "7dd16759099ea3e4ce762c4f5bbfa097940335555d5caa916aaa52eec6a70cb6"
@@ -550,7 +550,7 @@ packages:
     source: hosted
     version: "0.3.3+1"
   google_sign_in:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: google_sign_in
       sha256: d0a2c3bcb06e607bb11e4daca48bd4b6120f0bbc4015ccebbe757d24ea60ed2a
@@ -653,6 +653,24 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.2"
+  identity_product:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: v1.0.2
+      resolved-ref: cc0e9c4eeb3321de07c3bdc2783470c34ad978e8
+      url: "https://github.com/mahafez-app/identity_product.git"
+    source: git
+    version: "1.0.2"
+  identity_service:
+    dependency: transitive
+    description:
+      path: "."
+      ref: v1.1.0
+      resolved-ref: 738ee4dcdf67481afd7d0d45cf93979736244bb2
+      url: "https://github.com/mahafez-app/identity_service.git"
+    source: git
+    version: "1.1.0"
   image:
     dependency: transitive
     description:
@@ -783,15 +801,6 @@ packages:
       url: "https://github.com/mahafez-app/mahafez_design_system.git"
     source: git
     version: "1.0.2"
-  mahafez_sms_engine:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: "v1.0.0"
-      resolved-ref: "25fa521de90b36b26ffc071e8b348f9ba8cafe6a"
-      url: "https://github.com/mahafez-app/mahafez_sms_engine.git"
-    source: git
-    version: "1.0.0"
   matcher:
     dependency: transitive
     description:
@@ -1157,6 +1166,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  sms_engine:
+    dependency: transitive
+    description:
+      path: "."
+      ref: "v1.0.1"
+      resolved-ref: "0323f60de5ae607bc6d5841d846b5d43e39d7187"
+      url: "https://github.com/mahafez-app/sms_engine.git"
+    source: git
+    version: "1.0.1"
   source_span:
     dependency: transitive
     description:
@@ -1365,6 +1383,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "15.3.0"
+  wallet_product:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "v2.1.0"
+      resolved-ref: "6d6425824e16c49caa12c72b1aa310913da20454"
+      url: "https://github.com/mahafez-app/wallet_product.git"
+    source: git
+    version: "2.1.0"
   watcher:
     dependency: transitive
     description:
@@ -1413,6 +1440,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  workspace_product:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: v1.0.0
+      resolved-ref: 7ccc0b1e0aa1733239d944d3c8a7ce2c8164b118
+      url: "https://github.com/mahafez-app/workspace_product.git"
+    source: git
+    version: "1.0.0"
   xdg_directories:
     dependency: transitive
     description:
@@ -1439,4 +1475,4 @@ packages:
     version: "3.1.4"
 sdks:
   dart: ">=3.13.3 <4.0.0"
-  flutter: ">=3.44.0"
+  flutter: ">=3.47.4"

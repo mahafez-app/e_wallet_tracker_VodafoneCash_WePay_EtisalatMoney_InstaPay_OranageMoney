@@ -4,10 +4,9 @@ import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/domain/entities/wallet_entity.dart';
+import 'package:wallet_product/wallet_product.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../../core/widgets/wallets/wallet_card.dart';
 import 'home_section_header.dart';
 
 class HomeWalletsSection extends StatelessWidget {
@@ -39,7 +38,7 @@ class HomeWalletsSection extends StatelessWidget {
               children: wallets.map((wallet) {
                 return GestureDetector(
                   onTap: () => context.push(AppRoutes.walletDetailsPath(wallet.id)),
-                  child: WalletCard(
+                  child: ProviderCard(
                     provider: wallet.provider,
                     phoneNumber: wallet.phoneNumber,
                     balance: wallet.currentBalance,

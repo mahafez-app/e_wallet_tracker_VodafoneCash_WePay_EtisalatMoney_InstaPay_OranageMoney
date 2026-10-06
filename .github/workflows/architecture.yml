@@ -1,0 +1,13 @@
+name: Architecture
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  architecture:
+    uses: ./.github/workflows/architecture-reusable.yml
+    with:
+      target_repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+      target_ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      target_package: mahafez_app

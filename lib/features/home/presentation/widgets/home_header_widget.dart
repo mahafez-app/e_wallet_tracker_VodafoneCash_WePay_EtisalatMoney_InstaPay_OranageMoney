@@ -6,7 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utils/extensions/localization_extension.dart';
 import '../../../../core/utils/extensions/name_extension.dart';
-import '../../../auth/providers/auth_providers.dart';
+
+import 'package:identity_product/identity_product.dart';
 
 class HomeHeaderWidget extends ConsumerWidget {
   const HomeHeaderWidget({
@@ -22,7 +23,7 @@ class HomeHeaderWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(currentUserProvider);
+    final user = ref.watch(identityCurrentUserProvider);
 
     return Padding(
       padding: MahafezResponsive.symmetricPadding(

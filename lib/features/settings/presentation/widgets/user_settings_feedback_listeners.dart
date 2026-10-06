@@ -3,9 +3,9 @@
 import 'package:mahafez_design_system/mahafez_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:identity_product/identity_product.dart';
 
 import '../../../../core/utils/extensions/localization_extension.dart';
-import '../../../auth/presentation/providers/auth_controller.dart';
 import '../providers/app_preferences_controller.dart';
 import '../providers/app_preferences_state.dart';
 import '../providers/sms_permission_controller.dart';
@@ -36,9 +36,12 @@ class _AuthFeedbackListener extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authController = ref.read(authNotifierProvider.notifier);
+    final authController = ref.read(identityAuthControllerProvider.notifier);
 
-    ref.listen<AuthState>(authNotifierProvider, (previous, next) {
+    ref.listen<IdentityAuthState>(identityAuthControllerProvider, (
+      previous,
+      next,
+    ) {
       if (!next.isLoading && next.error != null) {
         MahafezSnackbar.showFailure(context, failure: next.error!);
         authController.clearError();
@@ -46,8 +49,8 @@ class _AuthFeedbackListener extends ConsumerWidget {
       }
 
       final hasCompletedNameUpdate =
-          previous?.loadingMethod == AuthLoadingMethod.confirmName &&
-          next.loadingMethod == AuthLoadingMethod.none &&
+          previous?.loadingMethod == IdentityLoadingMethod.confirmName &&
+          next.loadingMethod == IdentityLoadingMethod.none &&
           next.error == null;
       if (hasCompletedNameUpdate) {
         MahafezSnackbar.show(
@@ -119,25 +122,25 @@ class _UserSettingsWalletsFeedbackListener extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(userSettingsWalletsControllerProvider.notifier);
 
-    ref.listen<UserSettingsWalletsState>(userSettingsWalletsControllerProvider, (
-      previous,
-      next,
-    ) {
-      if (next.error != null) {
-        MahafezSnackbar.showFailure(context, failure: next.error!);
-        controller.clearError();
-        return;
-      }
+    ref.listen<UserSettingsWalletsState>(
+      userSettingsWalletsControllerProvider,
+      (previous, next) {
+        if (next.error != null) {
+          MahafezSnackbar.showFailure(context, failure: next.error!);
+          controller.clearError();
+          return;
+        }
 
-      if (next.successMessage != null) {
-        MahafezSnackbar.show(
-          context,
-          message: context.l10n.userSettingsWalletDeletedSuccess,
-          type: MahafezSnackbarType.success,
-        );
-        controller.clearSuccessMessage();
-      }
-    });
+        if (next.successMessage != null) {
+          MahafezSnackbar.show(
+            context,
+            message: context.l10n.userSettingsWalletDeletedSuccess,
+            type: MahafezSnackbarType.success,
+          );
+          controller.clearSuccessMessage();
+        }
+      },
+    );
 
     return child;
   }

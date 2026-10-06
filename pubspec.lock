@@ -656,21 +656,17 @@ packages:
   identity_product:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "v1.0.1"
-      resolved-ref: "1920dfd98774abecf21620525d2b820dfe4e7701"
+      ref: v1.0.2
       url: "https://github.com/mahafez-app/identity_product.git"
     source: git
-    version: "1.0.1"
+    version: "1.0.2"
   identity_service:
     dependency: transitive
     description:
-      path: "."
-      ref: "v1.0.0"
-      resolved-ref: f1fc9f13539d87a6c8aede6a04279be99c52556f
+      ref: v1.1.0
       url: "https://github.com/mahafez-app/identity_service.git"
     source: git
-    version: "1.0.0"
+    version: "1.1.0"
   image:
     dependency: transitive
     description:
@@ -1440,6 +1436,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  workspace_product:
+    dependency: "direct main"
+    description:
+      ref: v1.0.0
+      url: "https://github.com/mahafez-app/workspace_product.git"
+    source: git
+    version: "1.0.0"
   xdg_directories:
     dependency: transitive
     description:

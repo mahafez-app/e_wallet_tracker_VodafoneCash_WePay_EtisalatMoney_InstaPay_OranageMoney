@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:identity_product/identity_product.dart';
 
 import '../../features/home/presentation/screens/home_screen.dart';
-import '../../features/invitations/presentation/screens/invitations_screen.dart';
+
+import 'package:workspace_product/workspace_product.dart';
+
 import '../../features/settings/presentation/screens/sms_permissions_screen.dart';
 import '../../features/settings/presentation/screens/user_settings_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
@@ -13,11 +15,6 @@ import '../utils/extensions/localization_extension.dart';
 
 import 'package:wallet_product/wallet_product.dart';
 
-import '../../features/workspaces/presentation/screens/workspace_report_screen.dart';
-import '../../features/workspaces/presentation/screens/create_workspace_screen.dart';
-import '../../features/workspaces/presentation/screens/select_workspace_wallets_screen.dart';
-import '../../features/workspaces/presentation/screens/workspace_details_screen.dart';
-import '../../features/workspaces/presentation/screens/workspace_settings_screen.dart';
 import '../widgets/not_found_screen.dart';
 import 'app_routes.dart';
 

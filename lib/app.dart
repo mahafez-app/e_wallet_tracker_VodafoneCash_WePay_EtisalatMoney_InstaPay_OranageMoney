@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wallet_product/wallet_product.dart';
+import 'package:workspace_product/workspace_product.dart';
 import 'package:mahafez_app/generated/l10n.dart';
 
 import 'core/providers/sms_providers.dart';
@@ -43,6 +44,7 @@ class App extends ConsumerWidget {
         localizationsDelegates: const [
           S.delegate,
           ...WalletLocalizations.localizationsDelegates,
+          ...WorkspaceLocalizations.localizationsDelegates,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

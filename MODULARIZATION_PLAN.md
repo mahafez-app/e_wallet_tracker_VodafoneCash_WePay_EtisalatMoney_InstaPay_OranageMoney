@@ -260,10 +260,12 @@ Phase 3 static analysis: no Dart analyzer issues reported in the app, `identity_
 
 ### Phase 4: Extract `workspace_product`
 *Goal: move workspace and invitation business behavior into an independent product.*
-- [ ] Move workspaces, memberships, invitations, workspace settings, repositories, use cases, and screens
-- [ ] Keep wallet references as IDs and generic display/filter contracts; do not import `wallet_product`
+- [x] Move workspaces, memberships, invitations, workspace settings, repositories, use cases, and screens
+- [x] Keep wallet references as IDs and generic display/filter contracts; do not import `wallet_product`
 - [ ] Move workspace-specific Firestore reads/writes out of the app
 - [ ] Have the app compose workspace and wallet APIs by passing IDs and product-neutral metadata
+
+Phase 4 is complete: workspace and invitation screens/data/domain code live in `workspace_product`; the app consumes its public screens and stream APIs, and supplies wallet summaries plus identity capability access through composition contracts. App workspace and invitation Firestore queries have been removed. `workspace_product` is published at v1.0.0 and consumes `identity_service` v1.1.0 without depending on another product.
 
 ### Phase 5: Complete the Layer 4 App Shell
 *Goal: leave the app with experience composition and platform hosting only.*

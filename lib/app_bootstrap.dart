@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wallet_product/wallet_product.dart';
+import 'package:identity_product/identity_product.dart';
+import 'package:workspace_product/workspace_product.dart';
 
 import 'app.dart';
 import 'core/di/app_initializer.dart';
@@ -12,8 +14,7 @@ import 'package:mahafez_core/mahafez_core.dart';
 import 'core/providers/cache_providers.dart';
 import 'core/providers/service_providers.dart';
 import 'features/settings/providers/settings_providers.dart';
-import 'features/workspaces/domain/usecases/remove_wallets_from_workspace_usecase.dart';
-import 'features/workspaces/providers/workspaces_providers.dart';
+import 'core/providers/workspace_product_adapter.dart';
 import 'features/splash/presentation/screens/startup_fallback_screen.dart';
 import 'generated/l10n.dart';
 
@@ -86,6 +87,12 @@ class _AppBootstrapState extends State<AppBootstrap> {
                 result.fold((failure) => throw failure, (_) {});
               }
             },
+          ),
+          workspaceProductConfigProvider.overrideWith(
+            (ref) => createWorkspaceProductConfig(ref),
+          ),
+          workspaceCurrentUserProvider.overrideWith(
+            (ref) => ref.watch(identityCurrentUserProvider),
           ),
         ],
         child: const App(),

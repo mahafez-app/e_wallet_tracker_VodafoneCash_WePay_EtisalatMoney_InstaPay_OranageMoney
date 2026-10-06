@@ -1,9 +1,7 @@
 import 'package:rxdart/rxdart.dart';
-
 import 'package:wallet_product/wallet_product.dart';
+import 'package:workspace_product/workspace_product.dart';
 
-import '../../../../core/data/models/workspace_dto.dart';
-import '../../../../core/domain/entities/workspace_entity.dart';
 import '../../../../core/error/failure_mapper.dart';
 
 import 'package:mahafez_core/mahafez_core.dart';
@@ -33,31 +31,26 @@ class HomeRepositoryImpl implements HomeRepository {
             HomeDashboardEntity
           >(
             _remote.watchUserWallets(),
-            _watchWorkspaceSummaries(),
+            _remote.watchUserWorkspaces(),
             _remote.watchPendingInvitationsCount(),
             (wallets, workspaces, invitesCount) {
-              final walletEntities = wallets;
-
-              final totalBalance = walletEntities.fold<double>(
-                0.0,
+              final totalBalance = wallets.fold<double>(
+                0,
                 (sum, wallet) => sum + wallet.currentBalance,
               );
-
-              final totalReceived = walletEntities.fold<double>(
-                0.0,
+              final totalReceived = wallets.fold<double>(
+                0,
                 (sum, wallet) => sum + wallet.totalReceived,
               );
-
-              final totalSent = walletEntities.fold<double>(
-                0.0,
+              final totalSent = wallets.fold<double>(
+                0,
                 (sum, wallet) => sum + wallet.totalSent,
               );
-
               return HomeDashboardEntity(
                 totalBalance: totalBalance,
                 totalReceived: totalReceived,
                 totalSent: totalSent,
-                wallets: walletEntities,
+                wallets: wallets,
                 workspaces: workspaces,
                 invitationsCount: invitesCount,
               );
@@ -65,58 +58,6 @@ class HomeRepositoryImpl implements HomeRepository {
           ),
       tag: 'HomeRepository.watchHomeDashboard',
       mapper: _mapper,
-    );
-  }
-
-  Stream<List<WorkspaceEntity>> _watchWorkspaceSummaries() {
-    return _remote.watchUserWorkspaces().switchMap((workspaces) {
-      if (workspaces.isEmpty) {
-        return Stream.value(const <WorkspaceEntity>[]);
-      }
-
-      final workspaceStreams = workspaces.map(
-        (workspace) => _remote
-            .watchWorkspaceWallets(workspace.id)
-            .map(
-              (wallets) => _buildWorkspaceSummary(
-                workspace: workspace,
-                wallets: wallets,
-              ),
-            ),
-      );
-
-      return Rx.combineLatestList(workspaceStreams);
-    });
-  }
-
-  WorkspaceEntity _buildWorkspaceSummary({
-    required WorkspaceDto workspace,
-    required List<WalletEntity> wallets,
-  }) {
-    final totalReceived = wallets.fold<double>(
-      0.0,
-      (sum, wallet) => sum + wallet.totalReceived,
-    );
-    final totalSent = wallets.fold<double>(
-      0.0,
-      (sum, wallet) => sum + wallet.totalSent,
-    );
-    final latestActivityAt = wallets.fold<DateTime?>(
-      workspace.latestActivityAt,
-      (latest, wallet) {
-        if (latest == null || wallet.lastBalanceAt.isAfter(latest)) {
-          return wallet.lastBalanceAt;
-        }
-
-        return latest;
-      },
-    );
-
-    return workspace.toEntity().copyWith(
-      walletsCount: wallets.length,
-      totalReceived: totalReceived,
-      totalSent: totalSent,
-      latestActivityAt: latestActivityAt,
     );
   }
 }

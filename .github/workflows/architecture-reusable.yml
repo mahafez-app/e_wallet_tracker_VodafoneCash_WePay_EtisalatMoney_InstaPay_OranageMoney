@@ -87,7 +87,12 @@ jobs:
           cache: true
       - name: Resolve locked dependencies
         working-directory: .architecture/${{ inputs.target_package }}
-        run: flutter pub get --enforce-lockfile
+        run: |
+          if [ -f pubspec.lock ]; then
+            flutter pub get --enforce-lockfile
+          else
+            flutter pub get
+          fi
       - name: Analyze package
         working-directory: .architecture/${{ inputs.target_package }}
         run: flutter analyze --fatal-infos

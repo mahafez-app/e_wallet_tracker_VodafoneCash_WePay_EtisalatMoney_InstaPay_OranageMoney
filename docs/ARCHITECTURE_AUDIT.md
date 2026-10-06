@@ -59,11 +59,11 @@ The gate now checks Layer 3 router dependency/import/API usage. It does not vali
 
 ## Remaining work before claiming the architecture is ready
 
-1. Complete and verify the Android debug build and any additional supported platform builds.
+1. Complete and verify any additional supported platform builds; the Android debug APK already builds successfully.
 2. Run end-to-end wallet/workspace/auth flows recorded as pending in `mahafez_app/MODULARIZATION_PLAN.md`.
 3. Create and verify the app release tag after API and runtime verification is complete.
 4. Review domain-to-data/presentation imports within each package if the required claim is full Clean Architecture compliance, rather than only four-layer package compliance.
 
 ## Overall assessment
 
-The four-layer package graph and product separation are correctly implemented under the graph rules checked. The workspace navigation boundary is merged and released through `workspace_product` v2.0.0, and the app now pins that release. The app's Android debug build and end-to-end flows remain the final runtime checks before an app release tag.
+The four-layer package graph and product separation are correctly implemented under the graph rules checked. The workspace navigation boundary is merged and released through `workspace_product` v2.0.0, and the app now pins that release. The Android debug build passes. Additional platform builds and end-to-end flows remain before an app release tag.
